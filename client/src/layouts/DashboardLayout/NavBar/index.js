@@ -56,17 +56,17 @@ const items = [
     title: 'FAQ'
   },
   {
-    href: '/feedback',
+    href: '/app/feedback',
     icon: FeedbackIcon,
     title: 'Feedback'
   },
   {
-    href: '/legal',
+    href: '/app/legal',
     icon: LegalIcon,
     title: 'Legal'
   },
   {
-    href: '/logout',
+    href: '/app/logout',
     icon: LogoutIcon,
     title: 'Logout'
   }
