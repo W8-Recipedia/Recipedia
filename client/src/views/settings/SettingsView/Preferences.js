@@ -68,55 +68,55 @@ const Preferences = ({ className, ...rest }) => {
                 control={(
                   <Checkbox/>
                 )}
-                label="Vegan"
+                label="Vegetarian"
               />
               <FormControlLabel
                 control={(
                   <Checkbox/>
                 )}
-                label="Vegan"
+                label="Paleo"
               />
               <FormControlLabel
                 control={(
                   <Checkbox/>
                 )}
-                label="Vegan"
+                label="Primal"
               />
               <FormControlLabel
                 control={(
                   <Checkbox/>
                 )}
-                label="Vegan"
+                label="Whole30"
               />
               <FormControlLabel
                 control={(
                   <Checkbox/>
                 )}
-                label="Vegan"
+                label="Lacto-vegeterian"
               />
               <FormControlLabel
                 control={(
                   <Checkbox/>
                 )}
-                label="Vegan"
+                label="Ovo-vegetarian"
               />
               <FormControlLabel
                 control={(
                   <Checkbox/>
                 )}
-                label="Vegan"
+                label="Pescetarian"
               />
               <FormControlLabel
                 control={(
                   <Checkbox/>
                 )}
-                label="Vegan"
+                label="Ketogenic"
               />
               <FormControlLabel
                 control={(
                   <Checkbox/>
                 )}
-                label="Vegan"
+                label="Gluten free"
               />
 
             </Grid>
