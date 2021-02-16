@@ -2,11 +2,14 @@ import React from 'react';
 import {
   Box,
   Container,
+  Grid,
   makeStyles
 } from '@material-ui/core';
 import Page from 'src/components/Page';
-import Notifications from './Notifications';
+import Preferences from './Preferences';
 import Password from './Password';
+import Profile from './Profile';
+import ProfileDetails from './ProfileDetails';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,7 +29,31 @@ const SettingsView = () => {
       title="Settings"
     >
       <Container maxWidth="lg">
-        <Notifications />
+        <Box mb={3}>
+          <Grid
+              container
+              spacing={3}
+            >
+              <Grid
+                item
+                lg={4}
+                md={6}
+                xs={12}
+              >
+                <Profile />
+              </Grid>
+          
+              <Grid
+                item
+                lg={8}
+                md={6}
+                xs={12}
+              >
+                <ProfileDetails />
+              </Grid>
+            </Grid>
+          </Box>
+        <Preferences />
         <Box mt={3}>
           <Password />
         </Box>
