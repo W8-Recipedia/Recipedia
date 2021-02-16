@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import TotalCustomers from 'src/views/reports/DashboardView/BMIChart';
 import {
   Box,
   Button,
@@ -142,6 +143,18 @@ const Preferences = ({ className, ...rest }) => {
               />
               <FormControlLabel
                 control={<Checkbox />}
+                label="Egg"
+              />
+              <FormControlLabel
+                control={(
+                  <Checkbox/>
+                )}
+                label="Gluten"
+              />
+              <FormControlLabel
+                control={(
+                  <Checkbox/>
+                )}
                 label="Grain"
               />
               <FormControlLabel
@@ -154,19 +167,13 @@ const Preferences = ({ className, ...rest }) => {
                 control={(
                   <Checkbox/>
                 )}
-                label="Shellfish"
-              />
-              <FormControlLabel
-                control={(
-                  <Checkbox/>
-                )}
                 label="Seafood"
               />
               <FormControlLabel
                 control={(
                   <Checkbox/>
                 )}
-                label="Soy"
+                label="Shellfish"
               />
               <FormControlLabel
                 control={(
@@ -178,19 +185,13 @@ const Preferences = ({ className, ...rest }) => {
                 control={(
                   <Checkbox/>
                 )}
-                label="Soy"
+                label="Tree nut"
               />
               <FormControlLabel
                 control={(
                   <Checkbox/>
                 )}
-                label="Soy"
-              />
-              <FormControlLabel
-                control={(
-                  <Checkbox/>
-                )}
-                label="Soy"
+                label="Wheat"
               />
             </Grid>
             <Grid
@@ -213,7 +214,7 @@ const Preferences = ({ className, ...rest }) => {
               >
                 <Grid
                   item
-                  md={12}
+                  xs={12}
                   >
                   <TextField
                     fullWidth
@@ -224,7 +225,7 @@ const Preferences = ({ className, ...rest }) => {
                 </Grid>
                 <Grid
                   item
-                  md={12}
+                  xs={12}
                   >
                   <TextField
                     fullWidth
@@ -232,6 +233,12 @@ const Preferences = ({ className, ...rest }) => {
                     type="number"
                     variant="outlined"
                   />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  >
+                  <TotalCustomers/>
                 </Grid>
               </Grid>
             </Grid>

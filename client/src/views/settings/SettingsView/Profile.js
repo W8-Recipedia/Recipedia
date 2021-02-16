@@ -49,6 +49,7 @@ const Profile = ({ className, ...rest }) => {
             className={classes.avatar}
             src={user.avatar}
           />
+          <br/>
           <Typography
             color="textPrimary"
             gutterBottom
