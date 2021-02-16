@@ -16,11 +16,11 @@ import {
 
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
+  city: 'London',
+  country: 'UK',
+  jobTitle: 'Recipedia Member',
   name: 'Katarina Smith',
-  timezone: 'GTM-7'
+  timezone: '(GMT)'
 };
 
 const useStyles = makeStyles(() => ({
@@ -49,6 +49,7 @@ const Profile = ({ className, ...rest }) => {
             className={classes.avatar}
             src={user.avatar}
           />
+          <br/>
           <Typography
             color="textPrimary"
             gutterBottom

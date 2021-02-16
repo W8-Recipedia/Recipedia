@@ -37,7 +37,7 @@ const Password = ({ className, ...rest }) => {
     >
       <Card>
         <CardHeader
-          subheader="Update password"
+          subheader="Update your password here"
           title="Password"
         />
         <Divider />
