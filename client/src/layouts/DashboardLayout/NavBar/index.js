@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
-  Button,
   Divider,
   Drawer,
   Hidden,
@@ -13,43 +12,38 @@ import {
   makeStyles
 } from '@material-ui/core';
 import {
-  AlertCircle as AlertCircleIcon,
-  BarChart as BarChartIcon,
-  Lock as LockIcon,
+  Home as HomeIcon,
+  Search as SearchIcon,
+  Star as StarIcon,
   Settings as SettingsIcon,
-  ShoppingBag as ShoppingBagIcon,
-  User as UserIcon,
-  UserPlus as UserPlusIcon,
-  Users as UsersIcon
+  HelpCircle as FAQIcon,
+  MessageCircle as FeedbackIcon,
+  LogOut as LogoutIcon,
+  AlertTriangle as LegalIcon,
 } from 'react-feather';
 import NavItem from './NavItem';
 
 const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith'
+  avatar: '/static/images/avatars/avatar.png',
+  jobTitle: '',
+  name: 'Not logged in'
 };
 
 const items = [
   {
-    href: '/app/dashboard',
-    icon: BarChartIcon,
-    title: 'Dashboard'
+    href: '/app/home',
+    icon: HomeIcon,
+    title: 'Home'
   },
   {
-    href: '/app/customers',
-    icon: UsersIcon,
-    title: 'Customers'
+    href: '/app/search',
+    icon: SearchIcon,
+    title: 'Search'
   },
   {
-    href: '/app/products',
-    icon: ShoppingBagIcon,
-    title: 'Products'
-  },
-  {
-    href: '/app/account',
-    icon: UserIcon,
-    title: 'Account'
+    href: '/app/favourites',
+    icon: StarIcon,
+    title: 'Favourites'
   },
   {
     href: '/app/settings',
@@ -57,19 +51,24 @@ const items = [
     title: 'Settings'
   },
   {
-    href: '/login',
-    icon: LockIcon,
-    title: 'Login'
+    href: '/app/faq',
+    icon: FAQIcon,
+    title: 'FAQ'
   },
   {
-    href: '/register',
-    icon: UserPlusIcon,
-    title: 'Register'
+    href: '/feedback',
+    icon: FeedbackIcon,
+    title: 'Feedback'
   },
   {
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'Error'
+    href: '/legal',
+    icon: LegalIcon,
+    title: 'Legal'
+  },
+  {
+    href: '/logout',
+    icon: LogoutIcon,
+    title: 'Logout'
   }
 ];
 
@@ -116,8 +115,9 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           className={classes.avatar}
           component={RouterLink}
           src={user.avatar}
-          to="/app/account"
+          to="/app/settings"
         />
+        <br/>
         <Typography
           className={classes.name}
           color="textPrimary"
@@ -144,40 +144,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             />
           ))}
         </List>
-      </Box>
-      <Box flexGrow={1} />
-      <Box
-        p={2}
-        m={2}
-        bgcolor="background.dark"
-      >
-        <Typography
-          align="center"
-          gutterBottom
-          variant="h4"
-        >
-          Need more?
-        </Typography>
-        <Typography
-          align="center"
-          variant="body2"
-        >
-          Upgrade to PRO version and access 20 more screens
-        </Typography>
-        <Box
-          display="flex"
-          justifyContent="center"
-          mt={2}
-        >
-          <Button
-            color="primary"
-            component="a"
-            href="https://react-material-kit.devias.io"
-            variant="contained"
-          >
-            See PRO version
-          </Button>
-        </Box>
       </Box>
     </Box>
   );
