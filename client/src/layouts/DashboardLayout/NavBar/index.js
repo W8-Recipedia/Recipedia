@@ -111,13 +111,16 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         flexDirection="column"
         p={2}
       >
-        <Avatar
-          className={classes.avatar}
-          component={RouterLink}
-          src={user.avatar}
-          to="/app/settings"
-        />
-        <br/>
+        <Box
+          pb={2}
+        >
+          <Avatar
+            className={classes.avatar}
+            component={RouterLink}
+            src={user.avatar}
+            to="/app/settings"
+          />
+        </Box>
         <Typography
           className={classes.name}
           color="textPrimary"
