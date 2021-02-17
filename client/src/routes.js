@@ -10,6 +10,7 @@ import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
 import FeedbackView from 'src/views/feedback/FeedbackView';
+import LandingView from 'src/views/landing/LandingView';
 
 const routes = [
   {
@@ -26,13 +27,11 @@ const routes = [
   },
   {
     path: '/',
-    element: <MainLayout />,
     children: [
       { path: 'login', element: <LoginView /> },
       { path: 'register', element: <RegisterView /> },
-      { path: '404', element: <NotFoundView /> },
-      { path: '/', element: <Navigate to="/app/dashboard" /> },
-      { path: '*', element: <Navigate to="/404" /> }
+      { path: '', element: <LandingView /> },
+      { path: '*', element: <NotFoundView /> }
     ]
   }
 ];
