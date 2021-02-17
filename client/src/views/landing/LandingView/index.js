@@ -27,14 +27,8 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 84
     }
   },
-  subtitle: {
-    fontSize: 84,
-    [theme.breakpoints.up("xs")]: {
-      fontSize: 64
-    },
-    [theme.breakpoints.up("md")]: {
-      fontSize: 84
-    }
+  buttonText: {
+    fontSize: 24
   }
 }));
 
@@ -86,6 +80,7 @@ const LandingView = () => {
                 fullWidth
                 variant="contained"
                 size="large"
+                className={classes.buttonText}
                 >
                 Sign up
               </Button>
@@ -102,6 +97,7 @@ const LandingView = () => {
                 fullWidth
                 variant="contained"
                 size="large"
+                className={classes.buttonText}
                 >
                 Log in
               </Button>
