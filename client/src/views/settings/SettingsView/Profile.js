@@ -45,11 +45,14 @@ const Profile = ({ className, ...rest }) => {
           display="flex"
           flexDirection="column"
         >
-          <Avatar
-            className={classes.avatar}
-            src={user.avatar}
-          />
-          <br/>
+          <Box
+            pb={2}
+          >
+            <Avatar
+              className={classes.avatar}
+              src={user.avatar}
+            />
+          </Box>
           <Typography
             color="textPrimary"
             gutterBottom

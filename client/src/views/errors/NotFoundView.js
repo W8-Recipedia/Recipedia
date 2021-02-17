@@ -55,10 +55,7 @@ const NotFoundView = () => {
             />
           </Box>
         </Container>
-        <br/>
-        <br/>
-        <br/>
-        <Box textAlign="center">
+        <Box textAlign="center" pt={6}>
           <Link to="/app/dashboard">
             <Button
               color="primary"
