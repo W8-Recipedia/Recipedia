@@ -1,11 +1,14 @@
 import React from 'react';
 import {
   Box,
+  Button,
   Container,
   Typography,
   makeStyles
 } from '@material-ui/core';
 import Page from 'src/components/Page';
+import { Link } from 'react-router-dom'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,15 +45,7 @@ const NotFoundView = () => {
             color="textPrimary"
             variant="h1"
           >
-            404: The page you are looking for isn’t here
-          </Typography>
-          <Typography
-            align="center"
-            color="textPrimary"
-            variant="subtitle2"
-          >
-            You either tried some shady route or you came here by mistake.
-            Whichever it is, try using the navigation
+            Oops! We can't find that page.
           </Typography>
           <Box textAlign="center">
             <img
@@ -60,6 +55,20 @@ const NotFoundView = () => {
             />
           </Box>
         </Container>
+        <br/>
+        <br/>
+        <br/>
+        <Box textAlign="center">
+          <Link to="/app/dashboard">
+            <Button
+              color="primary"
+              variant="contained"
+              size="large"
+              >
+              Go home
+            </Button>
+          </Link>
+        </Box>
       </Box>
     </Page>
   );
