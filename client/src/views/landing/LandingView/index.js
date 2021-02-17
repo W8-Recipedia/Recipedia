@@ -82,7 +82,7 @@ const LandingView = () => {
                 size="large"
                 className={classes.buttonText}
                 >
-                Sign up
+                Register
               </Button>
             </Link>
           </Grid>
