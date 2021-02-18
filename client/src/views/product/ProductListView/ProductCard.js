@@ -9,10 +9,12 @@ import {
   Divider,
   Grid,
   Typography,
-  makeStyles
+  makeStyles,
+  Button,
 } from '@material-ui/core';
-import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import GetAppIcon from '@material-ui/icons/GetApp';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,9 +24,6 @@ const useStyles = makeStyles((theme) => ({
   statsItem: {
     alignItems: 'center',
     display: 'flex'
-  },
-  statsIcon: {
-    marginRight: theme.spacing(1)
   }
 }));
 
@@ -39,7 +38,7 @@ const ProductCard = ({ className, product, ...rest }) => {
       <CardContent>
         <Box
           display="flex"
-          justifyContent="center"
+          justifyContent="left"
           mb={3}
         >
           <Avatar
@@ -49,7 +48,7 @@ const ProductCard = ({ className, product, ...rest }) => {
           />
         </Box>
         <Typography
-          align="center"
+          align="left"
           color="textPrimary"
           gutterBottom
           variant="h4"
@@ -57,7 +56,7 @@ const ProductCard = ({ className, product, ...rest }) => {
           {product.title}
         </Typography>
         <Typography
-          align="center"
+          align="left"
           color="textPrimary"
           variant="body1"
         >
@@ -76,34 +75,17 @@ const ProductCard = ({ className, product, ...rest }) => {
             className={classes.statsItem}
             item
           >
-            <AccessTimeIcon
-              className={classes.statsIcon}
-              color="action"
+		  <IconButton component="span">
+            <FavoriteBorderIcon
+              style={{ color: 'red' }}
             />
+		  </IconButton>
             <Typography
               color="textSecondary"
               display="inline"
               variant="body2"
             >
-              Updated 2hr ago
-            </Typography>
-          </Grid>
-          <Grid
-            className={classes.statsItem}
-            item
-          >
-            <GetAppIcon
-              className={classes.statsIcon}
-              color="action"
-            />
-            <Typography
-              color="textSecondary"
-              display="inline"
-              variant="body2"
-            >
-              {product.totalDownloads}
-              {' '}
-              Downloads
+              Favourite
             </Typography>
           </Grid>
         </Grid>
