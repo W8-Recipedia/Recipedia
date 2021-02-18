@@ -13,34 +13,20 @@ import {
   makeStyles
 } from '@material-ui/core';
 
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
 
 const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-const ProfileDetails = ({ className, ...rest }) => {
+const FeedbackForm = ({ className, ...rest }) => {
   const classes = useStyles();
   const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
+    firstName: '',
+    lastName: '',
+    email: '',
     phone: '',
-    state: 'Alabama',
-    country: 'USA'
+    state: '',
+    feedback: ''
   });
 
   const handleChange = (event) => {
@@ -59,8 +45,8 @@ const ProfileDetails = ({ className, ...rest }) => {
     >
       <Card>
         <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
+          title="Feedback"
+          subheader="We would love to hear your thoughts on Recipedia! Feel free to fill out this form and help us improve the app."
         />
         <Divider />
         <CardContent>
@@ -75,7 +61,6 @@ const ProfileDetails = ({ className, ...rest }) => {
             >
               <TextField
                 fullWidth
-                helperText="Please specify the first name"
                 label="First name"
                 name="firstName"
                 onChange={handleChange}
@@ -106,7 +91,7 @@ const ProfileDetails = ({ className, ...rest }) => {
             >
               <TextField
                 fullWidth
-                label="Email Address"
+                label="Email address"
                 name="email"
                 onChange={handleChange}
                 required
@@ -121,56 +106,33 @@ const ProfileDetails = ({ className, ...rest }) => {
             >
               <TextField
                 fullWidth
-                label="Phone Number"
+                label="Phone number"
                 name="phone"
                 onChange={handleChange}
-                type="number"
+                required
                 value={values.phone}
                 variant="outlined"
               />
             </Grid>
             <Grid
               item
-              md={6}
+              md={12}
               xs={12}
             >
               <TextField
+                // InputLabelProps={{ required: false }}
                 fullWidth
-                label="Country"
-                name="country"
+                label="Feedback"
+                name="feedback"
                 onChange={handleChange}
                 required
-                value={values.country}
+                multiline
+                rows={8}
+                value={values.feedback}
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Select State"
-                name="state"
-                onChange={handleChange}
-                required
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
-              >
-                {states.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid>
-          </Grid>
+           </Grid>
         </CardContent>
         <Divider />
         <Box
@@ -182,7 +144,7 @@ const ProfileDetails = ({ className, ...rest }) => {
             color="primary"
             variant="contained"
           >
-            Save details
+            Send
           </Button>
         </Box>
       </Card>
@@ -190,8 +152,8 @@ const ProfileDetails = ({ className, ...rest }) => {
   );
 };
 
-ProfileDetails.propTypes = {
+FeedbackForm.propTypes = {
   className: PropTypes.string
 };
 
-export default ProfileDetails;
+export default FeedbackForm;

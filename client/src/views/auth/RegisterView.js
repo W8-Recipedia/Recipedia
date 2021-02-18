@@ -8,12 +8,15 @@ import {
   Checkbox,
   Container,
   FormHelperText,
+  Grid,
   Link,
   TextField,
   Typography,
   makeStyles
 } from '@material-ui/core';
 import Page from 'src/components/Page';
+import FacebookIcon from 'src/icons/Facebook';
+import GoogleIcon from 'src/icons/Google';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,7 +56,7 @@ const RegisterView = () => {
                 email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                 firstName: Yup.string().max(255).required('First name is required'),
                 lastName: Yup.string().max(255).required('Last name is required'),
-                password: Yup.string().max(255).required('password is required'),
+                password: Yup.string().max(255).required('Password is required'),
                 policy: Yup.boolean().oneOf([true], 'This field must be checked')
               })
             }
@@ -76,14 +79,54 @@ const RegisterView = () => {
                     color="textPrimary"
                     variant="h2"
                   >
-                    Create new account
+                    Create a new account
                   </Typography>
-                  <Typography
-                    color="textSecondary"
-                    gutterBottom
-                    variant="body2"
+                </Box>
+                <Grid
+                  container
+                  spacing={3}
+                >
+                <Grid
+                    item
+                    xs={12}
+                    md={6}
                   >
-                    Use your email to create new account
+                <Button
+                      color="primary"
+                      fullWidth
+                      startIcon={<FacebookIcon />}
+                      size="large"
+                      variant="contained"
+                    >
+                      Sign up with Facebook
+                    </Button>
+                    </Grid>
+
+                    <Grid
+                    item
+                    xs={12}
+                    md={6}
+                  >
+                    <Button
+                      fullWidth
+                      startIcon={<GoogleIcon />}
+                      size="large"
+                      variant="contained"
+                    >
+                      Sign up with Google
+                    </Button>
+                    </Grid>
+                    </Grid>
+                    <Box
+                  mt={3}
+                  mb={1}
+                >
+                  <Typography
+                    align="center"
+                    color="textSecondary"
+                    variant="body1"
+                  >
+                    or sign up with your email address
                   </Typography>
                 </Box>
                 <TextField
@@ -177,7 +220,7 @@ const RegisterView = () => {
                     type="submit"
                     variant="contained"
                   >
-                    Sign up now
+                    Sign up
                   </Button>
                 </Box>
                 <Typography
@@ -191,7 +234,7 @@ const RegisterView = () => {
                     to="/login"
                     variant="h6"
                   >
-                    Sign in
+                    Log in
                   </Link>
                 </Typography>
               </form>
