@@ -155,7 +155,7 @@ const RegisterView = () => {
                     <Link
                       color="primary"
                       component={RouterLink}
-                      to="#"
+                      to="/legal"
                       underline="always"
                       variant="h6"
                     >
