@@ -43,7 +43,7 @@ const Searchbar = ({ className, ...rest }) => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Search Favourites"
+                placeholder="Search favourites"
                 variant="outlined"
               />
             </Box>
