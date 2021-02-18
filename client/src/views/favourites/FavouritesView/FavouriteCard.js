@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ProductCard = ({ className, product, ...rest }) => {
+const FavouriteCard = ({ className, product, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -75,18 +75,20 @@ const ProductCard = ({ className, product, ...rest }) => {
             className={classes.statsItem}
             item
           >
-		  <IconButton component="span">
-            <FavoriteBorderIcon
-              style={{ color: 'red' }}
-            />
-		  </IconButton>
-            <Typography
-              color="textSecondary"
-              display="inline"
-              variant="body2"
-            >
-              Favourite
-            </Typography>
+            <IconButton component="span" color="red">
+                  <FavoriteBorderIcon
+                    style={{ color: 'red' }}
+                  />
+            </IconButton>
+            <Box pl={1}>
+                <Typography
+                  color="textSecondary"
+                  display="inline"
+                  variant="body2"
+                >
+                  Remove from favourites
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
       </Box>
@@ -94,9 +96,9 @@ const ProductCard = ({ className, product, ...rest }) => {
   );
 };
 
-ProductCard.propTypes = {
+FavouriteCard.propTypes = {
   className: PropTypes.string,
   product: PropTypes.object.isRequired
 };
 
-export default ProductCard;
+export default FavouriteCard;

@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   root: {},
 }));
 
-const Toolbar = ({ className, ...rest }) => {
+const Searchbar = ({ className, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -25,9 +25,9 @@ const Toolbar = ({ className, ...rest }) => {
       className={clsx(classes.root, className)}
       {...rest}
     >
-      
+
       <Box mt={3}>
-        
+
             <Box>
               <TextField
                 fullWidth
@@ -47,14 +47,14 @@ const Toolbar = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Box>
-          
+
       </Box>
     </div>
   );
 };
 
-Toolbar.propTypes = {
+Searchbar.propTypes = {
   className: PropTypes.string
 };
 
-export default Toolbar;
+export default Searchbar;
