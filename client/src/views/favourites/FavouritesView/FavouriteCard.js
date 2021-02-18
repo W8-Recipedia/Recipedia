@@ -76,7 +76,7 @@ const FavouriteCard = ({ className, product, ...rest }) => {
             item
           >
             <IconButton component="span" color="red">
-                  <FavoriteBorderIcon
+                  <FavoriteIcon
                     style={{ color: 'red' }}
                   />
             </IconButton>
