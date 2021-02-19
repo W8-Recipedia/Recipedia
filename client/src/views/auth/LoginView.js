@@ -32,7 +32,7 @@ const LoginView = () => {
   return (
     <Page
       className={classes.root}
-      title="Login"
+      title="Log in"
     >
       <Box
         display="flex"
@@ -43,8 +43,8 @@ const LoginView = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: 'demo@devias.io',
-              password: 'Password123'
+              email: '',
+              password: ''
             }}
             validationSchema={Yup.object().shape({
               email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
@@ -69,14 +69,7 @@ const LoginView = () => {
                     color="textPrimary"
                     variant="h2"
                   >
-                    Sign in
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    gutterBottom
-                    variant="body2"
-                  >
-                    Sign in on the internal platform
+                    Log in
                   </Typography>
                 </Box>
                 <Grid
@@ -96,7 +89,7 @@ const LoginView = () => {
                       size="large"
                       variant="contained"
                     >
-                      Login with Facebook
+                      Log in with Facebook
                     </Button>
                   </Grid>
                   <Grid
@@ -111,7 +104,7 @@ const LoginView = () => {
                       size="large"
                       variant="contained"
                     >
-                      Login with Google
+                      Log in with Google
                     </Button>
                   </Grid>
                 </Grid>
@@ -124,7 +117,7 @@ const LoginView = () => {
                     color="textSecondary"
                     variant="body1"
                   >
-                    or login with email address
+                    or log in with your email address
                   </Typography>
                 </Box>
                 <TextField
@@ -162,7 +155,7 @@ const LoginView = () => {
                     type="submit"
                     variant="contained"
                   >
-                    Sign in now
+                    Log in
                   </Button>
                 </Box>
                 <Typography
