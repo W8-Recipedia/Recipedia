@@ -9,6 +9,7 @@ import NotFoundView from 'src/views/errors/NotFoundView';
 import FavouritesView from 'src/views/favourites/FavouritesView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
+import HomeView from 'src/views/home/HomeView';
 import LegalView from 'src/views/legal/LegalView';
 import FAQView from 'src/views/faq/FAQView';
 import FeedbackView from 'src/views/feedback/FeedbackView';
@@ -26,6 +27,7 @@ const routes = [
       { path: 'feedback', element: <FeedbackView /> },
       { path: 'faq', element: <FAQView /> },
       { path: 'settings', element: <SettingsView /> },
+      { path: 'home', element: <HomeView /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
