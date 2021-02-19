@@ -4,10 +4,8 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
-  Avatar,
   Box,
   Card,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -15,9 +13,14 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  IconButton,
   makeStyles
 } from '@material-ui/core';
-import getInitials from 'src/utils/getInitials';
+
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import Rating from '@material-ui/lab/Rating';
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -26,42 +29,42 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Results = ({ className, customers, ...rest }) => {
+const Results = ({ className, recipes, ...rest }) => {
   const classes = useStyles();
-  const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
+  const [selectedRecipeIds, setSelectedRecipeIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
 
   const handleSelectAll = (event) => {
-    let newSelectedCustomerIds;
+    let newSelectedRecipeIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
+      newSelectedRecipeIds = recipes.map((recipe) => recipe.id);
     } else {
-      newSelectedCustomerIds = [];
+      newSelectedRecipeIds = [];
     }
 
-    setSelectedCustomerIds(newSelectedCustomerIds);
+    setSelectedRecipeIds(newSelectedRecipeIds);
   };
 
   const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedCustomerIds.indexOf(id);
-    let newSelectedCustomerIds = [];
+    const selectedIndex = selectedRecipeIds.indexOf(id);
+    let newSelectedRecipeIds = [];
 
     if (selectedIndex === -1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
+      newSelectedRecipeIds = newSelectedRecipeIds.concat(selectedRecipeIds, id);
     } else if (selectedIndex === 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
-    } else if (selectedIndex === selectedCustomerIds.length - 1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
+      newSelectedRecipeIds = newSelectedRecipeIds.concat(selectedRecipeIds.slice(1));
+    } else if (selectedIndex === selectedRecipeIds.length - 1) {
+      newSelectedRecipeIds = newSelectedRecipeIds.concat(selectedRecipeIds.slice(0, -1));
     } else if (selectedIndex > 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(
-        selectedCustomerIds.slice(0, selectedIndex),
-        selectedCustomerIds.slice(selectedIndex + 1)
+      newSelectedRecipeIds = newSelectedRecipeIds.concat(
+        selectedRecipeIds.slice(0, selectedIndex),
+        selectedRecipeIds.slice(selectedIndex + 1)
       );
     }
 
-    setSelectedCustomerIds(newSelectedCustomerIds);
+    setSelectedRecipeIds(newSelectedRecipeIds);
   };
 
   const handleLimitChange = (event) => {
@@ -82,78 +85,61 @@ const Results = ({ className, customers, ...rest }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
-                    color="primary"
-                    indeterminate={
-                      selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
-                    }
-                    onChange={handleSelectAll}
-                  />
+                <TableCell>
+
                 </TableCell>
                 <TableCell>
-                  Name
+                  Recipe name
                 </TableCell>
                 <TableCell>
-                  Email
+                  Description
                 </TableCell>
                 <TableCell>
-                  Location
+                  Cuisine
                 </TableCell>
                 <TableCell>
-                  Phone
+                  Type
                 </TableCell>
                 <TableCell>
-                  Registration date
+                  Rating
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {recipes.slice(0, limit).map((recipe) => (
                 <TableRow
                   hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  key={recipe.id}
+                  selected={selectedRecipeIds.indexOf(recipe.id) !== -1}
                 >
                   <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
-                      value="true"
-                    />
+                    <IconButton component="span" color="red">
+                      <FavoriteBorderIcon
+                        style={{ color: 'red' }}
+                      />
+                    </IconButton>
                   </TableCell>
                   <TableCell>
                     <Box
                       alignItems="center"
                       display="flex"
                     >
-                      <Avatar
-                        className={classes.avatar}
-                        src={customer.avatarUrl}
-                      >
-                        {getInitials(customer.name)}
-                      </Avatar>
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {recipe.name}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
                   </TableCell>
                   <TableCell>
-                    {customer.phone}
                   </TableCell>
                   <TableCell>
-                    {moment(customer.createdAt).format('DD/MM/YYYY')}
+                      <Rating name="read-only" value={recipe.rating} readOnly />
                   </TableCell>
                 </TableRow>
               ))}
@@ -163,7 +149,7 @@ const Results = ({ className, customers, ...rest }) => {
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={customers.length}
+        count={recipes.length}
         onChangePage={handlePageChange}
         onChangeRowsPerPage={handleLimitChange}
         page={page}
@@ -176,7 +162,7 @@ const Results = ({ className, customers, ...rest }) => {
 
 Results.propTypes = {
   className: PropTypes.string,
-  customers: PropTypes.array.isRequired
+  recipes: PropTypes.array.isRequired
 };
 
 export default Results;

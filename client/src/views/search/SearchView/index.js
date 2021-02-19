@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 import Results from './Results';
-import Toolbar from './Toolbar';
+import Searchbar from './Searchbar';
 import data from './data';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,23 +18,23 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const CustomerListView = () => {
+const SearchView = () => {
   const classes = useStyles();
-  const [customers] = useState(data);
+  const [recipes] = useState(data);
 
   return (
     <Page
       className={classes.root}
-      title="Customers"
+      title="Search"
     >
       <Container maxWidth={false}>
-        <Toolbar />
+        <Searchbar />
         <Box mt={3}>
-          <Results customers={customers} />
+          <Results recipes={recipes} />
         </Box>
       </Container>
     </Page>
   );
 };
 
-export default CustomerListView;
+export default SearchView;
