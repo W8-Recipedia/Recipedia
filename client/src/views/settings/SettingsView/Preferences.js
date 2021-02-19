@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import TotalCustomers from 'src/views/reports/DashboardView/BMIChart';
+import TotalCustomers from 'src/views/settings/SettingsView/BMIChart';
 import {
   Box,
   Button,

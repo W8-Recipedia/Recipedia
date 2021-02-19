@@ -1,13 +1,11 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import DashboardLayout from 'src/layouts/DashboardLayout';
-import MainLayout from 'src/layouts/MainLayout';
-import CustomerListView from 'src/views/customer/CustomerListView';
-import DashboardView from 'src/views/reports/DashboardView';
-import LoginView from 'src/views/auth/LoginView';
-import NotFoundView from 'src/views/errors/NotFoundView';
+import DashboardLayout from 'src/dashboard/DashboardLayout';
+import SearchView from 'src/views/search/SearchView';
+import LoginView from 'src/views/login/LoginView/LoginView';
+import NotFoundView from 'src/views/error/ErrorView';
 import FavouritesView from 'src/views/favourites/FavouritesView';
-import RegisterView from 'src/views/auth/RegisterView';
+import RegisterView from 'src/views/register/RegisterView/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
 import HomeView from 'src/views/home/HomeView';
 import LegalView from 'src/views/legal/LegalView';
@@ -20,8 +18,7 @@ const routes = [
     path: 'app',
     element: <DashboardLayout />,
     children: [
-      { path: 'customers', element: <CustomerListView /> },
-      { path: 'dashboard', element: <DashboardView /> },
+      { path: 'search', element: <SearchView /> },
       { path: 'favourites', element: <FavouritesView /> },
       { path: 'legal', element: <LegalView /> },
       { path: 'feedback', element: <FeedbackView /> },
