@@ -127,7 +127,7 @@ const FeedbackForm = ({ className, ...rest }) => {
                 onChange={handleChange}
                 required
                 multiline
-                rows={8}
+                rows={14}
                 value={values.feedback}
                 variant="outlined"
               />
