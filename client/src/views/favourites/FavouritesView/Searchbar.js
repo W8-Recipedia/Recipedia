@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
   Box,
-  Button,
-  Card,
-  CardContent,
   TextField,
   InputAdornment,
   SvgIcon,
@@ -25,9 +22,7 @@ const Searchbar = ({ className, ...rest }) => {
       className={clsx(classes.root, className)}
       {...rest}
     >
-
       <Box mt={3}>
-
             <Box>
               <TextField
                 fullWidth
@@ -47,7 +42,6 @@ const Searchbar = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Box>
-
       </Box>
     </div>
   );
