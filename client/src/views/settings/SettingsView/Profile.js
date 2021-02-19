@@ -16,11 +16,11 @@ import {
 
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
+  city: 'London',
+  country: 'UK',
+  jobTitle: 'Recipedia Member',
   name: 'Katarina Smith',
-  timezone: 'GTM-7'
+  timezone: '(GMT)'
 };
 
 const useStyles = makeStyles(() => ({
@@ -45,10 +45,14 @@ const Profile = ({ className, ...rest }) => {
           display="flex"
           flexDirection="column"
         >
-          <Avatar
-            className={classes.avatar}
-            src={user.avatar}
-          />
+          <Box
+            pb={2}
+          >
+            <Avatar
+              className={classes.avatar}
+              src={user.avatar}
+            />
+          </Box>
           <Typography
             color="textPrimary"
             gutterBottom

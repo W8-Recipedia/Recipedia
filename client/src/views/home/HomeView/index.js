@@ -5,10 +5,8 @@ import {
   Grid,
   makeStyles
 } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
 import Page from 'src/components/Page';
-import Toolbar from './Toolbar';
-import ProductCard from './ProductCard';
+import HomeCard from './HomeCard';
 import data from './data';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,38 +16,37 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3)
   },
-  productCard: {
+  homeCard: {
     height: '100%'
   }
 }));
 
-const ProductList = () => {
+const Home = () => {
   const classes = useStyles();
-  const [products] = useState(data);
+  const [recipes] = useState(data);
 
   return (
     <Page
       className={classes.root}
-      title="Products"
+      title="Home"
     >
       <Container maxWidth={false}>
-        <Toolbar />
         <Box mt={3}>
           <Grid
             container
             spacing={3}
           >
-            {products.map((product) => (
+            {recipes.map((recipe) => (
               <Grid
                 item
-                key={product.id}
+                key={recipe.id}
                 lg={4}
                 md={6}
                 xs={12}
               >
-                <ProductCard
-                  className={classes.productCard}
-                  product={product}
+                <HomeCard
+                  className={classes.homeCard}
+                  recipe={recipe}
                 />
               </Grid>
             ))}
@@ -60,15 +57,10 @@ const ProductList = () => {
           display="flex"
           justifyContent="center"
         >
-          <Pagination
-            color="primary"
-            count={3}
-            size="small"
-          />
         </Box>
       </Container>
     </Page>
   );
 };
 
-export default ProductList;
+export default Home;
