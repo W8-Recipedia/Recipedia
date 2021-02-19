@@ -10,7 +10,7 @@ import LatestOrders from './LatestOrders';
 import LatestProducts from './LatestProducts';
 import Sales from './Sales';
 import TasksProgress from './TasksProgress';
-import TotalCustomers from './TotalCustomers';
+import TotalCustomers from './BMIChart';
 import TotalProfit from './TotalProfit';
 import TrafficByDevice from './TrafficByDevice';
 

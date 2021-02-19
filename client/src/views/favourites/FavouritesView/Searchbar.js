@@ -15,15 +15,9 @@ import { Search as SearchIcon } from 'react-feather';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
-  importButton: {
-    marginRight: theme.spacing(1)
-  },
-  exportButton: {
-    marginRight: theme.spacing(1)
-  }
 }));
 
-const Toolbar = ({ className, ...rest }) => {
+const Searchbar = ({ className, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -31,27 +25,10 @@ const Toolbar = ({ className, ...rest }) => {
       className={clsx(classes.root, className)}
       {...rest}
     >
-      <Box
-        display="flex"
-        justifyContent="flex-end"
-      >
-        <Button className={classes.importButton}>
-          Import
-        </Button>
-        <Button className={classes.exportButton}>
-          Export
-        </Button>
-        <Button
-          color="primary"
-          variant="contained"
-        >
-          Add product
-        </Button>
-      </Box>
+
       <Box mt={3}>
-        <Card>
-          <CardContent>
-            <Box maxWidth={500}>
+
+            <Box>
               <TextField
                 fullWidth
                 InputProps={{
@@ -66,19 +43,18 @@ const Toolbar = ({ className, ...rest }) => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Search product"
+                placeholder="Search favourites"
                 variant="outlined"
               />
             </Box>
-          </CardContent>
-        </Card>
+
       </Box>
     </div>
   );
 };
 
-Toolbar.propTypes = {
+Searchbar.propTypes = {
   className: PropTypes.string
 };
 
-export default Toolbar;
+export default Searchbar;
