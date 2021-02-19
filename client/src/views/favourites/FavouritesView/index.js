@@ -7,8 +7,8 @@ import {
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import Page from 'src/components/Page';
-import Toolbar from './Toolbar';
-import ProductCard from './ProductCard';
+import Toolbar from './Searchbar';
+import ProductCard from './FavouriteCard';
 import data from './data';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ProductList = () => {
+const Favourites = () => {
   const classes = useStyles();
   const [products] = useState(data);
 
@@ -60,15 +60,10 @@ const ProductList = () => {
           display="flex"
           justifyContent="center"
         >
-          <Pagination
-            color="primary"
-            count={3}
-            size="small"
-          />
         </Box>
       </Container>
     </Page>
   );
 };
 
-export default ProductList;
+export default Favourites;

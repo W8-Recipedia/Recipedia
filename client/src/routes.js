@@ -6,7 +6,7 @@ import CustomerListView from 'src/views/customer/CustomerListView';
 import DashboardView from 'src/views/reports/DashboardView';
 import LoginView from 'src/views/auth/LoginView';
 import NotFoundView from 'src/views/errors/NotFoundView';
-import ProductListView from 'src/views/product/ProductListView';
+import FavouritesView from 'src/views/favourites/FavouritesView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
 import LegalView from 'src/views/legal/LegalView';
@@ -21,9 +21,9 @@ const routes = [
     children: [
       { path: 'customers', element: <CustomerListView /> },
       { path: 'dashboard', element: <DashboardView /> },
+      { path: 'favourites', element: <FavouritesView /> },
       { path: 'legal', element: <LegalView /> },
       { path: 'feedback', element: <FeedbackView /> },
-      { path: 'products', element: <ProductListView /> },
       { path: 'faq', element: <FAQView /> },
       { path: 'settings', element: <SettingsView /> },
       { path: '*', element: <Navigate to="/404" /> }
