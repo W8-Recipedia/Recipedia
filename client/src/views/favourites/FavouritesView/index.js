@@ -5,10 +5,9 @@ import {
   Grid,
   makeStyles
 } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
 import Page from 'src/components/Page';
 import Toolbar from './Searchbar';
-import ProductCard from './FavouriteCard';
+import FavouriteCard from './FavouriteCard';
 import data from './data';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,14 +17,14 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3)
   },
-  productCard: {
+  favouriteCard: {
     height: '100%'
   }
 }));
 
 const Favourites = () => {
   const classes = useStyles();
-  const [products] = useState(data);
+  const [favourites] = useState(data);
 
   return (
     <Page
@@ -39,17 +38,17 @@ const Favourites = () => {
             container
             spacing={3}
           >
-            {products.map((product) => (
+            {favourites.map((favourite) => (
               <Grid
                 item
-                key={product.id}
+                key={favourite.id}
                 lg={4}
                 md={6}
                 xs={12}
               >
-                <ProductCard
-                  className={classes.productCard}
-                  product={product}
+                <FavouriteCard
+                  className={classes.favouriteCard}
+                  favourite={favourite}
                 />
               </Grid>
             ))}

@@ -14,7 +14,7 @@ import {
 import {
   Home as HomeIcon,
   Search as SearchIcon,
-  Star as StarIcon,
+  Heart as HeartIcon,
   Settings as SettingsIcon,
   HelpCircle as FAQIcon,
   MessageCircle as FeedbackIcon,
@@ -42,7 +42,7 @@ const items = [
   },
   {
     href: '/app/favourites',
-    icon: StarIcon,
+    icon: HeartIcon,
     title: 'Favourites'
   },
   {

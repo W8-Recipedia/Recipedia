@@ -10,10 +10,8 @@ import {
   Grid,
   Typography,
   makeStyles,
-  Button,
 } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const FavouriteCard = ({ className, product, ...rest }) => {
+const FavouriteCard = ({ className, favourite, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -43,7 +41,7 @@ const FavouriteCard = ({ className, product, ...rest }) => {
         >
           <Avatar
             alt="Product"
-            src={product.media}
+            src={favourite.media}
             variant="square"
           />
         </Box>
@@ -53,14 +51,14 @@ const FavouriteCard = ({ className, product, ...rest }) => {
           gutterBottom
           variant="h4"
         >
-          {product.title}
+          {favourite.title}
         </Typography>
         <Typography
           align="left"
           color="textPrimary"
           variant="body1"
         >
-          {product.description}
+          {favourite.description}
         </Typography>
       </CardContent>
       <Box flexGrow={1} />
@@ -98,7 +96,7 @@ const FavouriteCard = ({ className, product, ...rest }) => {
 
 FavouriteCard.propTypes = {
   className: PropTypes.string,
-  product: PropTypes.object.isRequired
+  favourite: PropTypes.object.isRequired
 };
 
 export default FavouriteCard;
