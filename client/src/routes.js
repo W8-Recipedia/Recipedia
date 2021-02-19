@@ -28,6 +28,7 @@ const routes = [
       { path: 'faq', element: <FAQView /> },
       { path: 'settings', element: <SettingsView /> },
       { path: 'home', element: <HomeView /> },
+      { path: '', element: <Navigate to="/app/home" /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

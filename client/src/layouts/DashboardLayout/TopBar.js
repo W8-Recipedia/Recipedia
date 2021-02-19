@@ -16,6 +16,10 @@ import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import Logo from 'src/components/Logo';
 
+import {
+  LogOut as LogoutIcon,
+} from 'react-feather';
+
 const useStyles = makeStyles(() => ({
   root: {},
   avatar: {
@@ -45,16 +49,7 @@ const TopBar = ({
         <Box flexGrow={1} />
         <Hidden mdDown>
           <IconButton color="inherit">
-            <Badge
-              badgeContent={notifications.length}
-              color="primary"
-              variant="dot"
-            >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <IconButton color="inherit">
-            <InputIcon />
+            <LogoutIcon />
           </IconButton>
         </Hidden>
         <Hidden lgUp>
