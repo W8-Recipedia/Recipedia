@@ -40,7 +40,7 @@ const HomeCard = ({ className, recipe, ...rest }) => {
           mb={3}
         >
           <Avatar
-            alt="recipe"
+            alt="Recipe"
             src={recipe.media}
             variant="square"
           />

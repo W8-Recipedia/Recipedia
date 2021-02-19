@@ -6,7 +6,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import Page from 'src/components/Page';
-import Toolbar from './Searchbar';
+import Searchbar from './Searchbar';
 import FavouriteCard from './FavouriteCard';
 import data from './data';
 
@@ -29,10 +29,10 @@ const Favourites = () => {
   return (
     <Page
       className={classes.root}
-      title="Products"
+      title="Favourites"
     >
       <Container maxWidth={false}>
-        <Toolbar />
+        <Searchbar />
         <Box mt={3}>
           <Grid
             container
