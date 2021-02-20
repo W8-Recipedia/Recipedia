@@ -4,12 +4,8 @@ import {
   Box,
   CardHeader,
   Container,
-  CardContent,
-  Typography,
-  Divider,
   makeStyles
 } from '@material-ui/core';
-import { typography } from '@material-ui/system';
 import Page from 'src/components/Page';
 
 const useStyles = makeStyles((theme) => ({
