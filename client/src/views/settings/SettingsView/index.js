@@ -6,10 +6,10 @@ import {
   makeStyles
 } from '@material-ui/core';
 import Page from 'src/components/Page';
-import Preferences from './Preferences';
-import Password from './Password';
-import Profile from './Profile';
-import ProfileDetails from './ProfileDetails';
+import Preferences from 'src/views/settings/SettingsView/components/Preferences';
+import Password from 'src/views/settings/SettingsView/components/Password';
+import ProfileCard from 'src/views/settings/SettingsView/components/ProfileCard';
+import ProfileDetails from 'src/views/settings/SettingsView/components/ProfileDetails';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,9 +40,9 @@ const SettingsView = () => {
                 md={6}
                 xs={12}
               >
-                <Profile />
+                <ProfileCard />
               </Grid>
-          
+
               <Grid
                 item
                 lg={8}

@@ -20,12 +20,12 @@ const useStyles = makeStyles(() => ({
 const ProfileDetails = ({ className, ...rest }) => {
   const classes = useStyles();
   const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'email@example.com',
+    firstName: '',
+    lastName: '',
+    email: '',
     phone: '',
-    state: 'London',
-    country: 'UK'
+    state: '',
+    country: ''
   });
 
   const handleChange = (event) => {
@@ -106,7 +106,6 @@ const ProfileDetails = ({ className, ...rest }) => {
               <TextField
                 fullWidth
                 label="Country"
-                helperText="Please enter your residing country (optional)"
                 name="country"
                 onChange={handleChange}
                 value={values.country}
