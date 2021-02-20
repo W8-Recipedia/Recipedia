@@ -6,8 +6,8 @@ import {
   makeStyles
 } from '@material-ui/core';
 import Page from 'src/components/Page';
-import HomeCard from './HomeCard';
-import data from './data';
+import HomeCard from 'src/views/home/HomeView/components/HomeCard';
+import data from 'src/views/home/HomeView/data/data';
 
 const useStyles = makeStyles((theme) => ({
   root: {

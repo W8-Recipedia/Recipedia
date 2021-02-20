@@ -13,12 +13,11 @@ import {
   makeStyles
 } from '@material-ui/core';
 
-
 const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-const FeedbackForm = ({ className, ...rest }) => {
+const ProfileDetails = ({ className, ...rest }) => {
   const classes = useStyles();
   const [values, setValues] = useState({
     firstName: '',
@@ -26,7 +25,7 @@ const FeedbackForm = ({ className, ...rest }) => {
     email: '',
     phone: '',
     state: '',
-    feedback: ''
+    country: ''
   });
 
   const handleChange = (event) => {
@@ -45,8 +44,8 @@ const FeedbackForm = ({ className, ...rest }) => {
     >
       <Card>
         <CardHeader
-          title="Feedback"
-          subheader="We would love to hear your thoughts on Recipedia! Feel free to fill out this form and help us improve the app."
+          subheader="Manage your account settings here"
+          title="Profile"
         />
         <Divider />
         <CardContent>
@@ -91,7 +90,7 @@ const FeedbackForm = ({ className, ...rest }) => {
             >
               <TextField
                 fullWidth
-                label="Email address"
+                label="Email Address"
                 name="email"
                 onChange={handleChange}
                 required
@@ -106,33 +105,20 @@ const FeedbackForm = ({ className, ...rest }) => {
             >
               <TextField
                 fullWidth
-                label="Phone number"
-                name="phone"
+                label="Country"
+                name="country"
                 onChange={handleChange}
-                required
-                value={values.phone}
+                value={values.country}
                 variant="outlined"
               />
             </Grid>
             <Grid
               item
-              md={12}
+              md={6}
               xs={12}
             >
-              <TextField
-                // InputLabelProps={{ required: false }}
-                fullWidth
-                label="Feedback"
-                name="feedback"
-                onChange={handleChange}
-                required
-                multiline
-                rows={8}
-                value={values.feedback}
-                variant="outlined"
-              />
             </Grid>
-           </Grid>
+          </Grid>
         </CardContent>
         <Divider />
         <Box
@@ -144,7 +130,7 @@ const FeedbackForm = ({ className, ...rest }) => {
             color="primary"
             variant="contained"
           >
-            Send
+            Save details
           </Button>
         </Box>
       </Card>
@@ -152,8 +138,8 @@ const FeedbackForm = ({ className, ...rest }) => {
   );
 };
 
-FeedbackForm.propTypes = {
+ProfileDetails.propTypes = {
   className: PropTypes.string
 };
 
-export default FeedbackForm;
+export default ProfileDetails;

@@ -6,9 +6,9 @@ import {
   makeStyles
 } from '@material-ui/core';
 import Page from 'src/components/Page';
-import Searchbar from './Searchbar';
-import FavouriteCard from './FavouriteCard';
-import data from './data';
+import Searchbar from 'src/views/favourites/FavouritesView/components/Searchbar';
+import FavouriteCard from 'src/views/favourites/FavouritesView/components/FavouriteCard';
+import data from 'src/views/favourites/FavouritesView/data/data';
 
 const useStyles = makeStyles((theme) => ({
   root: {

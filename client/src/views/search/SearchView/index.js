@@ -5,9 +5,9 @@ import {
   makeStyles
 } from '@material-ui/core';
 import Page from 'src/components/Page';
-import Results from './Results';
-import Searchbar from './Searchbar';
-import data from './data';
+import Results from 'src/views/search/SearchView/components/Results';
+import Searchbar from 'src/views/search/SearchView/components/Searchbar';
+import data from 'src/views/search/SearchView/data/data';
 
 const useStyles = makeStyles((theme) => ({
   root: {

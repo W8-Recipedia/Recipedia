@@ -16,11 +16,11 @@ import {
 
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',
-  city: 'London',
-  country: 'UK',
+  city: '',
+  country: '',
   jobTitle: 'Recipedia Member',
-  name: 'Katarina Smith',
-  timezone: '(GMT)'
+  name: 'Not logged in',
+  timezone: ''
 };
 
 const useStyles = makeStyles(() => ({
@@ -31,7 +31,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Profile = ({ className, ...rest }) => {
+const ProfileCard = ({ className, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -66,13 +66,6 @@ const Profile = ({ className, ...rest }) => {
           >
             {`${user.city} ${user.country}`}
           </Typography>
-          <Typography
-            className={classes.dateText}
-            color="textSecondary"
-            variant="body1"
-          >
-            {`${moment().format('hh:mm A')} ${user.timezone}`}
-          </Typography>
         </Box>
       </CardContent>
       <Divider />
@@ -89,8 +82,8 @@ const Profile = ({ className, ...rest }) => {
   );
 };
 
-Profile.propTypes = {
+ProfileCard.propTypes = {
   className: PropTypes.string
 };
 
-export default Profile;
+export default ProfileCard;
