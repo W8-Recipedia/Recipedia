@@ -19,7 +19,7 @@ const SearchView = () => {
   const [recipes] = useState(data);
 
   return (
-    <Page className={classes.root} title="Search">
+    <Page className={classes.root} title="Recipedia | Search">
       <Container maxWidth={false}>
         <Searchbar />
         <Box mt={3}>

@@ -33,7 +33,7 @@ const RegisterView = () => {
   return (
     <Page
       className={classes.root}
-      title="Register"
+      title="Recipedia | Register"
     >
       <Box
         display="flex"

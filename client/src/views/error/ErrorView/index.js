@@ -28,7 +28,7 @@ const NotFoundView = () => {
   const classes = useStyles();
 
   return (
-    <Page className={classes.root} title="404">
+    <Page className={classes.root} title="Recipedia | Page Not Found">
       <Box
         display="flex"
         flexDirection="column"
