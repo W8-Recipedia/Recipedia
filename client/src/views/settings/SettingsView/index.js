@@ -26,7 +26,7 @@ const SettingsView = () => {
   return (
     <Page
       className={classes.root}
-      title="Settings"
+      title="Recipedia | Settings"
     >
       <Container maxWidth="lg">
         <Box mb={3}>

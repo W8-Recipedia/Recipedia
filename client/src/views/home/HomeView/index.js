@@ -28,7 +28,7 @@ const Home = () => {
   return (
     <Page
       className={classes.root}
-      title="Home"
+      title="Recipedia | Home"
     >
       <Container maxWidth={false}>
         <Box mt={3}>

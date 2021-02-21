@@ -29,7 +29,7 @@ const Favourites = () => {
   return (
     <Page
       className={classes.root}
-      title="Favourites"
+      title="Recipedia | Favourites"
     >
       <Container maxWidth={false}>
         <Searchbar />

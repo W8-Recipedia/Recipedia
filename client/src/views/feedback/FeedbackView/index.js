@@ -45,7 +45,7 @@ const FeedbackView = ({ className, ...rest }) => {
   return (
     <Page
       className={classes.root}
-      title="Account"
+      title="Recipedia | Account"
     >
       <Container maxWidth="lg">
         <form

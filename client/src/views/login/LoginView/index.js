@@ -31,7 +31,7 @@ const LoginView = () => {
   return (
     <Page
       className={classes.root}
-      title="Log in"
+      title="Recipedia | Log in"
     >
       <Box
         display="flex"

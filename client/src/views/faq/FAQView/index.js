@@ -27,7 +27,7 @@ const FAQView = () => {
   return (
     <Page
       className={classes.root}
-      title="FAQ"
+      title="Recipedia | FAQ"
     >
       <Container maxWidth="lg">
         <Box mb={3}>

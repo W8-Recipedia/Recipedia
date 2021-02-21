@@ -24,7 +24,7 @@ const LegalView = () => {
   const classes = useStyles();
 
   return (
-    <Page className={classes.root} title="Legal">
+    <Page className={classes.root} title="Recipedia | Legal">
       <Container maxWidth="lg">
         <Card>
           <CardHeader title="Terms and Conditions" />

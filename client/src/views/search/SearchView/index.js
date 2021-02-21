@@ -25,7 +25,7 @@ const SearchView = () => {
   return (
     <Page
       className={classes.root}
-      title="Search"
+      title="Recipedia | Search"
     >
       <Container maxWidth={false}>
         <Searchbar />
