@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React, { useEffect } from "react";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 import {
   Avatar,
   Box,
@@ -9,8 +9,8 @@ import {
   Hidden,
   List,
   Typography,
-  makeStyles
-} from '@material-ui/core';
+  makeStyles,
+} from "@material-ui/core";
 import {
   Home as HomeIcon,
   Search as SearchIcon,
@@ -20,72 +20,72 @@ import {
   MessageCircle as FeedbackIcon,
   LogOut as LogoutIcon,
   AlertTriangle as LegalIcon,
-} from 'react-feather';
-import NavItem from './NavItem';
+} from "react-feather";
+import NavItem from "./NavItem";
 
 const user = {
-  avatar: '/static/images/avatars/avatar.png',
-  jobTitle: '',
-  name: 'Not logged in'
+  avatar: "/static/images/avatars/avatar.png",
+  jobTitle: "",
+  name: "Not logged in",
 };
 
 const items = [
   {
-    href: '/app/home',
+    href: "/app/home",
     icon: HomeIcon,
-    title: 'Home'
+    title: "Home",
   },
   {
-    href: '/app/search',
+    href: "/app/search",
     icon: SearchIcon,
-    title: 'Search'
+    title: "Search",
   },
   {
-    href: '/app/favourites',
+    href: "/app/favourites",
     icon: HeartIcon,
-    title: 'Favourites'
+    title: "Favourites",
   },
   {
-    href: '/app/settings',
+    href: "/app/settings",
     icon: SettingsIcon,
-    title: 'Settings'
+    title: "Settings",
   },
   {
-    href: '/app/faq',
+    href: "/app/faq",
     icon: FAQIcon,
-    title: 'FAQ'
+    title: "FAQ",
   },
   {
-    href: '/app/feedback',
+    href: "/app/feedback",
     icon: FeedbackIcon,
-    title: 'Feedback'
+    title: "Feedback",
   },
   {
-    href: '/app/legal',
+    href: "/app/legal",
     icon: LegalIcon,
-    title: 'Legal'
+    title: "Legal",
   },
   {
-    href: '/app/logout',
+    href: "/app/logout",
     icon: LogoutIcon,
-    title: 'Logout'
-  }
+    title: "Logout",
+  },
 ];
 
 const useStyles = makeStyles(() => ({
   mobileDrawer: {
-    width: 256
+    width: 256,
   },
   desktopDrawer: {
     width: 256,
     top: 64,
-    height: 'calc(100% - 64px)'
+    height: "calc(100% - 64px)",
   },
   avatar: {
-    cursor: 'pointer',
+    cursor: "pointer",
     width: 64,
-    height: 64
-  }
+    height: 64,
+  },
 }));
 
 const NavBar = ({ onMobileClose, openMobile }) => {
@@ -100,20 +100,9 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   }, [location.pathname]);
 
   const content = (
-    <Box
-      height="100%"
-      display="flex"
-      flexDirection="column"
-    >
-      <Box
-        alignItems="center"
-        display="flex"
-        flexDirection="column"
-        p={2}
-      >
-        <Box
-          pb={2}
-        >
+    <Box height="100%" display="flex" flexDirection="column">
+      <Box alignItems="center" display="flex" flexDirection="column" p={2}>
+        <Box pb={2}>
           <Avatar
             className={classes.avatar}
             component={RouterLink}
@@ -121,17 +110,10 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             to="/app/settings"
           />
         </Box>
-        <Typography
-          className={classes.name}
-          color="textPrimary"
-          variant="h5"
-        >
+        <Typography className={classes.name} color="textPrimary" variant="h5">
           {user.name}
         </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body2"
-        >
+        <Typography color="textSecondary" variant="body2">
           {user.jobTitle}
         </Typography>
       </Box>
@@ -180,12 +162,12 @@ const NavBar = ({ onMobileClose, openMobile }) => {
 
 NavBar.propTypes = {
   onMobileClose: PropTypes.func,
-  openMobile: PropTypes.bool
+  openMobile: PropTypes.bool,
 };
 
 NavBar.defaultProps = {
   onMobileClose: () => {},
-  openMobile: false
+  openMobile: false,
 };
 
 export default NavBar;
