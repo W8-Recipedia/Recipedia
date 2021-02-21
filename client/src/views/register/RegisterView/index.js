@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { Formik } from "formik";
+import { Formik, Form } from "formik";
+import Axios from "axios";
 import {
   Box,
   Button,
@@ -28,7 +29,17 @@ const useStyles = makeStyles((theme) => ({
 
 const RegisterView = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
+  const handleSubmit = (values, actions) => {
+    actions.setSubmitting(false);
+    Axios.post("http://localhost:3001/register", {
+      firstname: values.firstName,
+      lastname: values.lastName,
+      email: values.email,
+      password: values.password,
+    }).then((response) => {
+      console.log(response);
+    });
+  };
 
   return (
     <Page className={classes.root} title="Recipedia | Register">
@@ -56,23 +67,27 @@ const RegisterView = () => {
                 .max(255)
                 .required("First name is required"),
               lastName: Yup.string().max(255).required("Last name is required"),
-              password: Yup.string().max(255).required("Password is required"),
+              password: Yup.string()
+                .max(255)
+                .required("Password is required")
+                .matches(
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+                  "Password must contain at least one uppercase character, number and symbol"
+                )
+                .min(8, "Password must be at least 8 characters"),
               policy: Yup.boolean().oneOf([true], "This field must be checked"),
             })}
-            onSubmit={() => {
-              navigate("/app/dashboard", { replace: true });
-            }}
+            onSubmit={handleSubmit}
           >
             {({
               errors,
               handleBlur,
               handleChange,
-              handleSubmit,
               isSubmitting,
               touched,
               values,
             }) => (
-              <form onSubmit={handleSubmit}>
+              <Form>
                 <Box mb={3}>
                   <Typography color="textPrimary" variant="h2">
                     Create a new account
@@ -209,7 +224,7 @@ const RegisterView = () => {
                     Log in
                   </Link>
                 </Typography>
-              </form>
+              </Form>
             )}
           </Formik>
         </Container>
