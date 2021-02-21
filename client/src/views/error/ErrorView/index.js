@@ -1,38 +1,34 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Button,
   Container,
   Typography,
-  makeStyles
-} from '@material-ui/core';
-import Page from 'src/components/Page';
-import { Link } from 'react-router-dom'
-
+  makeStyles,
+} from "@material-ui/core";
+import Page from "src/components/Page";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
-    height: '100%',
+    height: "100%",
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
   },
   image: {
     marginTop: 50,
-    display: 'inline-block',
-    maxWidth: '100%',
-    width: 560
-  }
+    display: "inline-block",
+    maxWidth: "100%",
+    width: 560,
+  },
 }));
 
 const NotFoundView = () => {
   const classes = useStyles();
 
   return (
-    <Page
-      className={classes.root}
-      title="Recipedia | Page Not Found"
-    >
+    <Page className={classes.root} title="Recipedia | Page Not Found">
       <Box
         display="flex"
         flexDirection="column"
@@ -40,11 +36,7 @@ const NotFoundView = () => {
         justifyContent="center"
       >
         <Container maxWidth="md">
-          <Typography
-            align="center"
-            color="textPrimary"
-            variant="h1"
-          >
+          <Typography align="center" color="textPrimary" variant="h1">
             Oops! We can't find that page.
           </Typography>
           <Box textAlign="center">
@@ -57,11 +49,7 @@ const NotFoundView = () => {
         </Container>
         <Box textAlign="center" pt={6}>
           <Link to="/app/home">
-            <Button
-              color="primary"
-              variant="contained"
-              size="large"
-              >
+            <Button color="primary" variant="contained" size="large">
               Go home
             </Button>
           </Link>

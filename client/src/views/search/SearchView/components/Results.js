@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import moment from 'moment';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import React, { useState } from "react";
+import clsx from "clsx";
+import PropTypes from "prop-types";
+import moment from "moment";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import {
   Box,
   Card,
@@ -14,19 +14,17 @@ import {
   TableRow,
   Typography,
   IconButton,
-  makeStyles
-} from '@material-ui/core';
+  makeStyles,
+} from "@material-ui/core";
 
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import Rating from '@material-ui/lab/Rating';
-
-
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import Rating from "@material-ui/lab/Rating";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   avatar: {
-    marginRight: theme.spacing(2)
-  }
+    marginRight: theme.spacing(2),
+  },
 }));
 
 const Results = ({ className, recipes, ...rest }) => {
@@ -54,9 +52,13 @@ const Results = ({ className, recipes, ...rest }) => {
     if (selectedIndex === -1) {
       newSelectedRecipeIds = newSelectedRecipeIds.concat(selectedRecipeIds, id);
     } else if (selectedIndex === 0) {
-      newSelectedRecipeIds = newSelectedRecipeIds.concat(selectedRecipeIds.slice(1));
+      newSelectedRecipeIds = newSelectedRecipeIds.concat(
+        selectedRecipeIds.slice(1)
+      );
     } else if (selectedIndex === selectedRecipeIds.length - 1) {
-      newSelectedRecipeIds = newSelectedRecipeIds.concat(selectedRecipeIds.slice(0, -1));
+      newSelectedRecipeIds = newSelectedRecipeIds.concat(
+        selectedRecipeIds.slice(0, -1)
+      );
     } else if (selectedIndex > 0) {
       newSelectedRecipeIds = newSelectedRecipeIds.concat(
         selectedRecipeIds.slice(0, selectedIndex),
@@ -76,33 +78,18 @@ const Results = ({ className, recipes, ...rest }) => {
   };
 
   return (
-    <Card
-      className={clsx(classes.root, className)}
-      {...rest}
-    >
+    <Card className={clsx(classes.root, className)} {...rest}>
       <PerfectScrollbar>
         <Box minWidth={1050}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>
-
-                </TableCell>
-                <TableCell>
-                  Recipe name
-                </TableCell>
-                <TableCell>
-                  Description
-                </TableCell>
-                <TableCell>
-                  Cuisine
-                </TableCell>
-                <TableCell>
-                  Type
-                </TableCell>
-                <TableCell>
-                  Rating
-                </TableCell>
+                <TableCell></TableCell>
+                <TableCell>Recipe name</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Cuisine</TableCell>
+                <TableCell>Type</TableCell>
+                <TableCell>Rating</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -114,32 +101,21 @@ const Results = ({ className, recipes, ...rest }) => {
                 >
                   <TableCell padding="checkbox">
                     <IconButton component="span" color="red">
-                      <FavoriteBorderIcon
-                        style={{ color: 'red' }}
-                      />
+                      <FavoriteBorderIcon style={{ color: "red" }} />
                     </IconButton>
                   </TableCell>
                   <TableCell>
-                    <Box
-                      alignItems="center"
-                      display="flex"
-                    >
-                      <Typography
-                        color="textPrimary"
-                        variant="body1"
-                      >
+                    <Box alignItems="center" display="flex">
+                      <Typography color="textPrimary" variant="body1">
                         {recipe.name}
                       </Typography>
                     </Box>
                   </TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
                   <TableCell>
-                  </TableCell>
-                  <TableCell>
-                  </TableCell>
-                  <TableCell>
-                  </TableCell>
-                  <TableCell>
-                      <Rating name="read-only" value={recipe.rating} readOnly />
+                    <Rating name="read-only" value={recipe.rating} readOnly />
                   </TableCell>
                 </TableRow>
               ))}
@@ -162,7 +138,7 @@ const Results = ({ className, recipes, ...rest }) => {
 
 Results.propTypes = {
   className: PropTypes.string,
-  recipes: PropTypes.array.isRequired
+  recipes: PropTypes.array.isRequired,
 };
 
 export default Results;

@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import React from "react";
+import PropTypes from "prop-types";
+import clsx from "clsx";
 import {
   Avatar,
   Box,
@@ -10,81 +10,52 @@ import {
   Grid,
   Typography,
   makeStyles,
-} from '@material-ui/core';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import IconButton from '@material-ui/core/IconButton';
+} from "@material-ui/core";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    flexDirection: 'column'
+    display: "flex",
+    flexDirection: "column",
   },
   statsItem: {
-    alignItems: 'center',
-    display: 'flex'
-  }
+    alignItems: "center",
+    display: "flex",
+  },
 }));
 
 const FavouriteCard = ({ className, favourite, ...rest }) => {
   const classes = useStyles();
 
   return (
-    <Card
-      className={clsx(classes.root, className)}
-      {...rest}
-    >
+    <Card className={clsx(classes.root, className)} {...rest}>
       <CardContent>
-        <Box
-          display="flex"
-          justifyContent="left"
-          mb={3}
-        >
-          <Avatar
-            alt="Product"
-            src={favourite.media}
-            variant="square"
-          />
+        <Box display="flex" justifyContent="left" mb={3}>
+          <Avatar alt="Product" src={favourite.media} variant="square" />
         </Box>
-        <Typography
-          align="left"
-          color="textPrimary"
-          gutterBottom
-          variant="h4"
-        >
+        <Typography align="left" color="textPrimary" gutterBottom variant="h4">
           {favourite.title}
         </Typography>
-        <Typography
-          align="left"
-          color="textPrimary"
-          variant="body1"
-        >
+        <Typography align="left" color="textPrimary" variant="body1">
           {favourite.description}
         </Typography>
       </CardContent>
       <Box flexGrow={1} />
       <Divider />
       <Box p={2}>
-        <Grid
-          container
-          justify="space-between"
-          spacing={2}
-        >
-          <Grid
-            className={classes.statsItem}
-            item
-          >
+        <Grid container justify="space-between" spacing={2}>
+          <Grid className={classes.statsItem} item>
             <IconButton component="span" color="red">
-                  <FavoriteIcon
-                    style={{ color: 'red' }}
-                  />
+              <FavoriteIcon style={{ color: "red" }} />
             </IconButton>
             <Box pl={1}>
-                <Typography
-                  color="textSecondary"
-                  display="inline"
-                  variant="body2"
-                >
-                  Remove from favourites
+              <Typography
+                color="textSecondary"
+                display="inline"
+                variant="body2"
+              >
+                Remove from favourites
               </Typography>
             </Box>
           </Grid>
@@ -96,7 +67,7 @@ const FavouriteCard = ({ className, favourite, ...rest }) => {
 
 FavouriteCard.propTypes = {
   className: PropTypes.string,
-  favourite: PropTypes.object.isRequired
+  favourite: PropTypes.object.isRequired,
 };
 
 export default FavouriteCard;
