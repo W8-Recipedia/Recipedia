@@ -43,7 +43,7 @@ const FeedbackView = ({ className, ...rest }) => {
   };
 
   return (
-    <Page className={classes.root} title="Account">
+    <Page className={classes.root} title="Recipedia | Feedback">
       <Container maxWidth="lg">
         <form
           autoComplete="off"

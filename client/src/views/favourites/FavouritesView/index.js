@@ -22,7 +22,7 @@ const Favourites = () => {
   const [favourites] = useState(data);
 
   return (
-    <Page className={classes.root} title="Favourites">
+    <Page className={classes.root} title="Recipedia | Favourites">
       <Container maxWidth={false}>
         <Searchbar />
         <Box mt={3}>

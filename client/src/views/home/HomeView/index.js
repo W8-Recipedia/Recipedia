@@ -21,7 +21,7 @@ const Home = () => {
   const [recipes] = useState(data);
 
   return (
-    <Page className={classes.root} title="Home">
+    <Page className={classes.root} title="Recipedia | Home">
       <Container maxWidth={false}>
         <Box mt={3}>
           <Grid container spacing={3}>

@@ -21,7 +21,7 @@ const FAQView = () => {
   const classes = useStyles();
 
   return (
-    <Page className={classes.root} title="FAQ">
+    <Page className={classes.root} title="Recipedia | FAQ">
       <Container maxWidth="lg">
         <Box mb={3}>
           <Card>

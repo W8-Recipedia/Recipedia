@@ -19,7 +19,7 @@ const SettingsView = () => {
   const classes = useStyles();
 
   return (
-    <Page className={classes.root} title="Settings">
+    <Page className={classes.root} title="Recipedia | Settings">
       <Container maxWidth="lg">
         <Box mb={3}>
           <Grid container spacing={3}>
