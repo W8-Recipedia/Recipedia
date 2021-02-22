@@ -37,11 +37,11 @@ const NotFoundView = () => {
       >
         <Container maxWidth="md">
           <Typography align="center" color="textPrimary" variant="h1">
-            Oops! We can't find that page.
+            Oops! We couldn't find that page.
           </Typography>
           <Box textAlign="center">
             <img
-              alt="Under development"
+              alt="Not found"
               className={classes.image}
               src="/static/images/undraw_page_not_found_su7k.svg"
             />

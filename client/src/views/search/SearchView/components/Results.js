@@ -85,10 +85,12 @@ const Results = ({ className, recipes, ...rest }) => {
             <TableHead>
               <TableRow>
                 <TableCell></TableCell>
-                <TableCell>Recipe name</TableCell>
-                <TableCell>Description</TableCell>
+                <TableCell>Name</TableCell>
                 <TableCell>Cuisine</TableCell>
-                <TableCell>Type</TableCell>
+                <TableCell>Servings</TableCell>
+                <TableCell>Time</TableCell>
+                <TableCell>Calories</TableCell>
+
                 <TableCell>Rating</TableCell>
               </TableRow>
             </TableHead>
@@ -111,6 +113,7 @@ const Results = ({ className, recipes, ...rest }) => {
                       </Typography>
                     </Box>
                   </TableCell>
+                  <TableCell></TableCell>
                   <TableCell></TableCell>
                   <TableCell></TableCell>
                   <TableCell></TableCell>
