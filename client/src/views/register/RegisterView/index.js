@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { Formik } from "formik";
+import { Formik, Form } from "formik";
+import Axios from "axios";
 import {
   Box,
   Button,
@@ -28,10 +29,20 @@ const useStyles = makeStyles((theme) => ({
 
 const RegisterView = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
+  const handleSubmit = (values, actions) => {
+    actions.setSubmitting(false);
+    Axios.post("http://localhost:3001/register", {
+      firstname: values.firstName,
+      lastname: values.lastName,
+      email: values.email,
+      password: values.password,
+    }).then((response) => {
+      console.log(response);
+    });
+  };
 
   return (
-    <Page className={classes.root} title="Recipedia | Register">
+    <Page className={classes.root} title="Recipedia | Sign Up">
       <Box
         display="flex"
         flexDirection="column"
@@ -56,23 +67,31 @@ const RegisterView = () => {
                 .max(255)
                 .required("First name is required"),
               lastName: Yup.string().max(255).required("Last name is required"),
-              password: Yup.string().max(255).required("Password is required"),
+              password: Yup.string()
+                .max(255)
+                .required("Password is required")
+                .matches(
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+                  "Password must contain an uppercase letter, a number, and a symbol"
+                )
+                .min(8, "Password must be at least 8 characters"),
+              confirmPassword: Yup.string().oneOf(
+                [Yup.ref("password"), null],
+                "Passwords must match"
+              ),
               policy: Yup.boolean().oneOf([true], "This field must be checked"),
             })}
-            onSubmit={() => {
-              navigate("/app/dashboard", { replace: true });
-            }}
+            onSubmit={handleSubmit}
           >
             {({
               errors,
               handleBlur,
               handleChange,
-              handleSubmit,
               isSubmitting,
               touched,
               values,
             }) => (
-              <form onSubmit={handleSubmit}>
+              <Form>
                 <Box mb={3}>
                   <Typography color="textPrimary" variant="h2">
                     Create a new account
@@ -119,35 +138,41 @@ const RegisterView = () => {
                     or sign up with your email address
                   </Typography>
                 </Box>
-                <TextField
-                  error={Boolean(touched.firstName && errors.firstName)}
-                  fullWidth
-                  helperText={touched.firstName && errors.firstName}
-                  label="First name"
-                  margin="normal"
-                  name="firstName"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.firstName}
-                  variant="outlined"
-                />
-                <TextField
-                  error={Boolean(touched.lastName && errors.lastName)}
-                  fullWidth
-                  helperText={touched.lastName && errors.lastName}
-                  label="Last name"
-                  margin="normal"
-                  name="lastName"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.lastName}
-                  variant="outlined"
-                />
+                <Grid container spacing={3}>
+                  <Grid item xs={6}>
+                    <TextField
+                      error={Boolean(touched.firstName && errors.firstName)}
+                      fullWidth
+                      helperText={touched.firstName && errors.firstName}
+                      label="First name"
+                      margin="normal"
+                      name="firstName"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.firstName}
+                      variant="outlined"
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      error={Boolean(touched.lastName && errors.lastName)}
+                      fullWidth
+                      helperText={touched.lastName && errors.lastName}
+                      label="Last name"
+                      margin="normal"
+                      name="lastName"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.lastName}
+                      variant="outlined"
+                    />
+                  </Grid>
+                </Grid>
                 <TextField
                   error={Boolean(touched.email && errors.email)}
                   fullWidth
                   helperText={touched.email && errors.email}
-                  label="Email Address"
+                  label="Email address"
                   margin="normal"
                   name="email"
                   onBlur={handleBlur}
@@ -167,6 +192,21 @@ const RegisterView = () => {
                   onChange={handleChange}
                   type="password"
                   value={values.password}
+                  variant="outlined"
+                />
+                <TextField
+                  error={Boolean(
+                    touched.confirmPassword && errors.confirmPassword
+                  )}
+                  fullWidth
+                  helperText={touched.confirmPassword && errors.confirmPassword}
+                  label="Confirm password"
+                  margin="normal"
+                  name="confirmPassword"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  type="password"
+                  value={values.confirmPassword}
                   variant="outlined"
                 />
                 <Box alignItems="center" display="flex" ml={-1}>
@@ -209,7 +249,7 @@ const RegisterView = () => {
                     Log in
                   </Link>
                 </Typography>
-              </form>
+              </Form>
             )}
           </Formik>
         </Container>

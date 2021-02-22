@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
-import moment from "moment";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import {
   Box,
@@ -32,42 +31,6 @@ const Results = ({ className, recipes, ...rest }) => {
   const [selectedRecipeIds, setSelectedRecipeIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
-
-  const handleSelectAll = (event) => {
-    let newSelectedRecipeIds;
-
-    if (event.target.checked) {
-      newSelectedRecipeIds = recipes.map((recipe) => recipe.id);
-    } else {
-      newSelectedRecipeIds = [];
-    }
-
-    setSelectedRecipeIds(newSelectedRecipeIds);
-  };
-
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedRecipeIds.indexOf(id);
-    let newSelectedRecipeIds = [];
-
-    if (selectedIndex === -1) {
-      newSelectedRecipeIds = newSelectedRecipeIds.concat(selectedRecipeIds, id);
-    } else if (selectedIndex === 0) {
-      newSelectedRecipeIds = newSelectedRecipeIds.concat(
-        selectedRecipeIds.slice(1)
-      );
-    } else if (selectedIndex === selectedRecipeIds.length - 1) {
-      newSelectedRecipeIds = newSelectedRecipeIds.concat(
-        selectedRecipeIds.slice(0, -1)
-      );
-    } else if (selectedIndex > 0) {
-      newSelectedRecipeIds = newSelectedRecipeIds.concat(
-        selectedRecipeIds.slice(0, selectedIndex),
-        selectedRecipeIds.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelectedRecipeIds(newSelectedRecipeIds);
-  };
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
