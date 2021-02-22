@@ -1,9 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const port = 3001;
 const app = express();
 
 require("dotenv").config();
@@ -12,10 +12,10 @@ app.use(express.json());
 app.use(cors());
 
 var con = mysql.createConnection({
-  host: process.env.host,
-  user: process.env.user,
-  password: process.env.password,
-  database: process.env.database,
+  host: process.env.HOST,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE
 });
 
 app.post("/register", (req, res) => {
@@ -24,47 +24,50 @@ app.post("/register", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  bcrypt.hash(password, saltRounds, function (err, hash) {
-    console.log(hash);
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) {
+      console.log(err);
+    }
     con.query(
       "INSERT INTO users (firstname, lastname, email, password) VALUES (?,?,?,?)",
       [firstname, lastname, email, hash],
       (err, result) => {
         if (err) {
-          console.log("DB(E): " + err);
+          res.send({ err: err });
         } else {
-          console.log("DB(R): " + result);
+          res.send({ result: result });
         }
       }
     );
-    console.log("BCRYPT(E): " + err);
   });
 });
 
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  con.query(
-    "SELECT * FROM users (email, password) VALUES (?,?)",
-    [email, hash],
-    (err, result) => {
-      if (err) {
-        console.log("DB(E): " + err);
-      } else {
-        console.log("DB(R): " + result);
-      }
-    }
-  );
 
-  bcrypt.compare(password, hash, function (err, res) {
+  con.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
     if (err) {
-      console.log("BCRYPT(E): " + err);
+      res.send({ err: err });
+    }
+    if (result.length > 0) {
+      bcrypt.compare(password, result[0].password, (error, response) => {
+        if (response) {
+          const id = result[0].id;
+          const token = jwt.sign({ id }, process.env.SECRET, {
+            expiresIn: 300,
+          });
+          // req.session.user = result;
+          // console.log(req.session.user);
+          res.json({ auth: true, token: token, result: result });
+        } else {
+          res.send({ message: "Wrong email/password!" });
+        }
+      });
     } else {
-      console.log("BCRYPT(R): " + res);
+      res.send({ message: "Email not found! Please sign up first." });
     }
   });
 });
 
-app.listen(port, () => {
-  console.log("Server is running...");
-});
+app.listen(3001, () => {});
