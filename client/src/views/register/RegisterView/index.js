@@ -139,7 +139,7 @@ const RegisterView = () => {
                   </Typography>
                 </Box>
                 <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={6}>
                     <TextField
                       error={Boolean(touched.firstName && errors.firstName)}
                       fullWidth
@@ -153,7 +153,7 @@ const RegisterView = () => {
                       variant="outlined"
                     />
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={6}>
                     <TextField
                       error={Boolean(touched.lastName && errors.lastName)}
                       fullWidth
