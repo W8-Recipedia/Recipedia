@@ -34,9 +34,9 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
           <Logo />
         </RouterLink>
         <Box flexGrow={1} />
-          <IconButton color="inherit" onClick={userLogOut} href="/">
-            <LogoutIcon />
-          </IconButton>
+        <IconButton color="inherit" onClick={userLogOut} href="/">
+          <LogoutIcon />
+        </IconButton>
         <Hidden lgUp>
           <IconButton color="inherit" onClick={onMobileNavOpen}>
             <MenuIcon />

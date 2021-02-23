@@ -88,7 +88,7 @@ const LandingView = () => {
           </Grid>
         </Container>
       </Box>
-      <Box pt={2}>
+      {/* <Box pt={2}>
         <Grid container justify="center">
           <Link to="/app/home">
             <Button
@@ -101,7 +101,7 @@ const LandingView = () => {
             </Button>
           </Link>
         </Grid>
-      </Box>
+      </Box> */}
     </Page>
   );
 };
