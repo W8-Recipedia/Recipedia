@@ -76,10 +76,10 @@ const Results = ({ className, recipes, ...rest }) => {
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
+                  <TableCell>{recipe.cuisine}</TableCell>
+                  <TableCell>{recipe.servings}</TableCell>
+                  <TableCell>{recipe.time}</TableCell>
+                  <TableCell>{recipe.calories}</TableCell>
                   <TableCell>
                     <Rating name="read-only" value={recipe.rating} readOnly />
                   </TableCell>
