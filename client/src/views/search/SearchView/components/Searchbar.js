@@ -103,8 +103,7 @@ const Searchbar = ({ className, props, ...rest }) => {
   };
 
   const onSubmit = (event) => {
-    event.preventDefault();
-    props.onSubmit(formState.query);
+    onSubmit(formState.query);
   };
 
   return (
