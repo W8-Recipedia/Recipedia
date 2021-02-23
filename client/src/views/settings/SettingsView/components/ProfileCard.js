@@ -1,7 +1,3 @@
-import React from "react";
-import PropTypes from "prop-types";
-import clsx from "clsx";
-import moment from "moment";
 import {
   Avatar,
   Box,
@@ -13,15 +9,11 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 
-const user = {
-  avatar: "/static/images/avatars/avatar_6.png",
-  city: "",
-  country: "",
-  jobTitle: "Recipedia Member",
-  name: "Not logged in",
-  timezone: "",
-};
+import Axios from "axios";
+import PropTypes from "prop-types";
+import clsx from "clsx";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -33,19 +25,29 @@ const useStyles = makeStyles(() => ({
 
 const ProfileCard = ({ className, ...rest }) => {
   const classes = useStyles();
+  const [userName, setUserName] = useState("Not logged in");
 
+  useEffect(() => {
+    Axios.get("http://localhost:3001/login").then((response) => {
+      if (response.data.loggedIn == true) {
+        setUserName(
+          response.data.user[0].firstname + " " + response.data.user[0].lastname
+        );
+      }
+    });
+  }, []);
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <CardContent>
         <Box alignItems="center" display="flex" flexDirection="column">
           <Box pb={2}>
-            <Avatar className={classes.avatar} src={user.avatar} />
+            <Avatar className={classes.avatar} src={"/static/images/avatars/avatar_6.png"} />
           </Box>
           <Typography color="textPrimary" gutterBottom variant="h3">
-            {user.name}
+            {userName}
           </Typography>
           <Typography color="textSecondary" variant="body1">
-            {`${user.city} ${user.country}`}
+            {""}
           </Typography>
         </Box>
       </CardContent>

@@ -35,7 +35,6 @@ const LoginView = () => {
   const navigate = useNavigate();
 
   const [loginError, setLoginError] = useState("");
-  const [loginStatus, setLoginStatus] = useState("");
 
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
@@ -44,7 +43,6 @@ const LoginView = () => {
       password: values.password,
     }).then((response) => {
       if (response.data.auth == true) {
-        setLoginStatus(response.data.result[0].userid);
         navigate("/app/home");
       } else {
         setLoginError(response.data.message);
@@ -55,12 +53,9 @@ const LoginView = () => {
   useEffect(() => {
     Axios.get("http://localhost:3001/login").then((response) => {
       if (response.data.loggedIn == true) {
-        setLoginStatus(response.data.user[0].userid);
-
         navigate("/app/home");
       }
     });
-            console.log(loginStatus);
   }, []);
 
   return (

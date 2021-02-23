@@ -41,6 +41,22 @@ var con = mysql.createConnection({
   database: process.env.DATABASE,
 });
 
+const verifyJWT = (req, res, next) => {
+  const token = req.header["x-access-token"];
+  if (!token) {
+    res.send("No token");
+  } else {
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      if (err) {
+        res.json({ auth: false, message: "Auth failed" });
+      } else {
+        req.userid = decoded.id;
+        next();
+      }
+    });
+  }
+};
+
 app.post("/register", (req, res) => {
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
@@ -73,6 +89,14 @@ app.get("/login", (req, res) => {
   }
 });
 
+app.get("/userinfo", verifyJWT, (req, res) => {
+  if (req.session.user) {
+    res.send({ loggedIn: true, user: req.session.user });
+  } else {
+    res.send({ loggedIn: false });
+  }
+});
+
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -84,12 +108,12 @@ app.post("/login", (req, res) => {
     if (result.length > 0) {
       bcrypt.compare(password, result[0].password, (error, response) => {
         if (response) {
-          req.session.user = result;
-          const id = result[0].id;
-          const token = jwt.sign({ id }, process.env.JWT_SECRET, {
+          const userid = result[0].userid;
+          const token = jwt.sign({ userid }, process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRES_IN,
           });
-          res.json({ auth: true, token: token, result: result });
+          req.session.user = result;
+          res.json({ auth: true, token: token });
         } else {
           res.send({ message: "wrongPassword" });
         }
