@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import {
@@ -16,9 +16,6 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { Search as SearchIcon } from "react-feather";
-import Axios from "axios";
-
-var API_KEY = process.env.RECIPE_API_KEY;
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -81,7 +78,12 @@ const typeNames = [
   "Drink",
 ];
 
-const Searchbar = ({ className, ...rest }) => {
+const initialFormData = Object.freeze({
+  query: "",
+});
+
+const Searchbar = ({ className, props, ...rest }) => {
+  const [formState, setFormState] = useState(initialFormData);
   const classes = useStyles();
   const [cuisineName, setCuisineName] = React.useState([]);
   const [typeName, setTypeName] = React.useState([]);
@@ -93,26 +95,42 @@ const Searchbar = ({ className, ...rest }) => {
     setTypeName(event.target.value);
   };
 
+  const handleChange = (event) => {
+    setFormState({
+      ...formState,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    props.onSubmit(formState.query);
+  };
+
   return (
     <div className={clsx(classes.root, className)} {...rest}>
       <Box mt={1}>
         <Grid container spacing={3}>
           <Grid item md={6} xs={12}>
-          <TextField
-            variant="outlined"
-            name="query"
-            placeholder="Search recipes"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton type="submit">
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            fullWidth
-          />
+          <form noValidate autoComplete="off" onSubmit={onSubmit}>
+            <TextField
+              variant="outlined"
+              name="query"
+              onChange={handleChange}
+              value={formState.query}
+              placeholder="Search recipes"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton type="submit">
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              fullWidth
+            />
+          </form>
           </Grid>
           <Grid item md={3} xs={12}>
             <InputLabel id="type-label">Type</InputLabel>
@@ -164,6 +182,7 @@ const Searchbar = ({ className, ...rest }) => {
 
 Searchbar.propTypes = {
   className: PropTypes.string,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default Searchbar;
