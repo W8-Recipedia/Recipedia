@@ -1,4 +1,4 @@
-import Axios from "Axios";
+import Axios from "axios";
 const root = process.env.API_ROOT;
 
 export const getRecipesComplex = async (
