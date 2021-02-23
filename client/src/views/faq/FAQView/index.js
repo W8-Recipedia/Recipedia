@@ -38,7 +38,7 @@ const FAQView = () => {
         <Box mb={3}>
           <Card>
             <CardHeader
-              title="What is recipedia?"
+              title="What is Recipedia?"
               subheader="Recipedia is a web application that seeks to revolutionize the way that people find personalised recipes. It recommends the most suitable recipes to users based on their dietary preferences, allergies, and much more. It also has a search function, which allows users to filter recipes by cuisine, diet, or calories."
             />
           </Card>
@@ -47,7 +47,7 @@ const FAQView = () => {
         <Box mb={3}>
           <Card>
             <CardHeader
-              title="Who built Recipedia"
+              title="Who built Recipedia?"
               subheader="Just a bunch of university students struggling with a horrible pandemic."
             />
           </Card>
@@ -56,8 +56,8 @@ const FAQView = () => {
         <Box mb={3}>
           <Card>
             <CardHeader
-              title="Will Recipedia reccommend food that will kill me?"
-              subheader="Probably not, unless you are alergic to shellfish that is."
+              title="Will Recipedia recommend food that will kill me?"
+              subheader="Probably not, unless you are allergic to shellfish that is."
             />
           </Card>
         </Box>
@@ -65,8 +65,8 @@ const FAQView = () => {
         <Box mb={3}>
           <Card>
             <CardHeader
-              title="How can I submit an inquiry about features?"
-              subheader="Use the feedback page, however, don't expect an answer as we are soo done with this."
+              title="How can I submit an enquiry about features?"
+              subheader="Use the feedback page, but don't expect an answer as we are soo done with this."
             />
           </Card>
         </Box>
@@ -83,8 +83,8 @@ const FAQView = () => {
         <Box mb={3}>
           <Card>
             <CardHeader
-              title="Can I use google to log into recipedia?"
-              subheader="Yes but only if you use darkmode."
+              title="Can I use Google to log into Recipedia?"
+              subheader="Yes, but only if you use darkmode."
             />
           </Card>
         </Box>
@@ -92,7 +92,7 @@ const FAQView = () => {
         <Box mb={3}>
           <Card>
             <CardHeader
-              title="Will we ever hear Yuxuan's voice"
+              title="Will we ever hear Yuxuan's voice?"
               subheader="Yes. No. Maybe. Well, we hope so..."
             />
           </Card>
