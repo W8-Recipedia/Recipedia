@@ -3,6 +3,7 @@ import { Box, Container, Grid, makeStyles } from "@material-ui/core";
 import Page from "src/components/Page";
 import HomeCard from "src/views/home/HomeView/components/HomeCard";
 import data from "src/views/home/HomeView/data/data";
+import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,20 +22,22 @@ const Home = () => {
   const [recipes] = useState(data);
 
   return (
-    <Page className={classes.root} title="Recipedia | Home">
-      <Container maxWidth={false}>
-        <Box mt={3}>
-          <Grid container spacing={3}>
-            {recipes.map((recipe) => (
-              <Grid item key={recipe.id} lg={4} md={6} xs={12}>
-                <HomeCard className={classes.homeCard} recipe={recipe} />
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-        <Box mt={3} display="flex" justifyContent="center"></Box>
-      </Container>
-    </Page>
+    <Scrollbars>
+      <Page className={classes.root} title="Recipedia | Home">
+        <Container maxWidth={false}>
+          <Box mt={3}>
+            <Grid container spacing={3}>
+              {recipes.map((recipe) => (
+                <Grid item key={recipe.id} lg={4} md={6} xs={12}>
+                  <HomeCard className={classes.homeCard} recipe={recipe} />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+          <Box mt={3} display="flex" justifyContent="center"></Box>
+        </Container>
+      </Page>
+    </Scrollbars>
   );
 };
 

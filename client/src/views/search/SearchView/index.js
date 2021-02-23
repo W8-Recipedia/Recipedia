@@ -4,6 +4,7 @@ import Page from "src/components/Page";
 import Results from "src/views/search/SearchView/components/Results";
 import Searchbar from "src/views/search/SearchView/components/Searchbar";
 import data from "src/views/search/SearchView/data/data";
+import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,14 +20,16 @@ const SearchView = () => {
   const [recipes] = useState(data);
 
   return (
-    <Page className={classes.root} title="Recipedia | Search">
-      <Container maxWidth={false}>
-        <Searchbar />
-        <Box mt={3}>
-          <Results recipes={recipes} />
-        </Box>
-      </Container>
-    </Page>
+    <Scrollbars>
+      <Page className={classes.root} title="Recipedia | Search">
+        <Container maxWidth={false}>
+          <Searchbar />
+          <Box mt={3}>
+            <Results recipes={recipes} />
+          </Box>
+        </Container>
+      </Page>
+    </Scrollbars>
   );
 };
 

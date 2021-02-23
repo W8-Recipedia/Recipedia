@@ -3,6 +3,7 @@ import { Box, Container, Grid, makeStyles } from "@material-ui/core";
 import Page from "src/components/Page";
 import FavouriteCard from "src/views/favourites/FavouritesView/components/FavouriteCard";
 import data from "src/views/favourites/FavouritesView/data/data";
+import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,23 +22,25 @@ const Favourites = () => {
   const [favourites] = useState(data);
 
   return (
-    <Page className={classes.root} title="Recipedia | Favourites">
-      <Container maxWidth={false}>
-        <Box mt={3}>
-          <Grid container spacing={3}>
-            {favourites.map((favourite) => (
-              <Grid item key={favourite.id} lg={4} md={6} xs={12}>
-                <FavouriteCard
-                  className={classes.favouriteCard}
-                  favourite={favourite}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-        <Box mt={3} display="flex" justifyContent="center"></Box>
-      </Container>
-    </Page>
+    <Scrollbars>
+      <Page className={classes.root} title="Recipedia | Favourites">
+        <Container maxWidth={false}>
+          <Box mt={3}>
+            <Grid container spacing={3}>
+              {favourites.map((favourite) => (
+                <Grid item key={favourite.id} lg={4} md={6} xs={12}>
+                  <FavouriteCard
+                    className={classes.favouriteCard}
+                    favourite={favourite}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+          <Box mt={3} display="flex" justifyContent="center"></Box>
+        </Container>
+      </Page>
+    </Scrollbars>
   );
 };
 

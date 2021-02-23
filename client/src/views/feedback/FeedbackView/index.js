@@ -14,6 +14,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import Page from "src/components/Page";
+import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,92 +44,94 @@ const FeedbackView = ({ className, ...rest }) => {
   };
 
   return (
-    <Page className={classes.root} title="Recipedia | Feedback">
-      <Container maxWidth="lg">
-        <form
-          autoComplete="off"
-          noValidate
-          className={clsx(classes.root, className)}
-          {...rest}
-        >
-          <Card>
-            <CardHeader
-              title="Feedback"
-              subheader="We would love to hear your thoughts on Recipedia! Feel free to fill out this form and help us improve the app."
-            />
-            <Divider />
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    fullWidth
-                    label="First name"
-                    name="firstName"
-                    onChange={handleChange}
-                    required
-                    value={values.firstName}
-                    variant="outlined"
-                  />
+    <Scrollbars>
+      <Page className={classes.root} title="Recipedia | Feedback">
+        <Container maxWidth="lg">
+          <form
+            autoComplete="off"
+            noValidate
+            className={clsx(classes.root, className)}
+            {...rest}
+          >
+            <Card>
+              <CardHeader
+                title="Feedback"
+                subheader="We would love to hear your thoughts on Recipedia! Feel free to fill out this form and help us improve the app."
+              />
+              <Divider />
+              <CardContent>
+                <Grid container spacing={3}>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      fullWidth
+                      label="First name"
+                      name="firstName"
+                      onChange={handleChange}
+                      required
+                      value={values.firstName}
+                      variant="outlined"
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Last name"
+                      name="lastName"
+                      onChange={handleChange}
+                      required
+                      value={values.lastName}
+                      variant="outlined"
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Email address"
+                      name="email"
+                      onChange={handleChange}
+                      required
+                      value={values.email}
+                      variant="outlined"
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Phone number"
+                      name="phone"
+                      onChange={handleChange}
+                      required
+                      value={values.phone}
+                      variant="outlined"
+                    />
+                  </Grid>
+                  <Grid item md={12} xs={12}>
+                    <TextField
+                      // InputLabelProps={{ required: false }}
+                      fullWidth
+                      label="Feedback"
+                      name="feedback"
+                      onChange={handleChange}
+                      required
+                      multiline
+                      rows={8}
+                      value={values.feedback}
+                      variant="outlined"
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Last name"
-                    name="lastName"
-                    onChange={handleChange}
-                    required
-                    value={values.lastName}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Email address"
-                    name="email"
-                    onChange={handleChange}
-                    required
-                    value={values.email}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Phone number"
-                    name="phone"
-                    onChange={handleChange}
-                    required
-                    value={values.phone}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={12} xs={12}>
-                  <TextField
-                    // InputLabelProps={{ required: false }}
-                    fullWidth
-                    label="Feedback"
-                    name="feedback"
-                    onChange={handleChange}
-                    required
-                    multiline
-                    rows={8}
-                    value={values.feedback}
-                    variant="outlined"
-                  />
-                </Grid>
-              </Grid>
-            </CardContent>
-            <Divider />
-            <Box display="flex" justifyContent="flex-end" p={2}>
-              <Button color="primary" variant="contained">
-                Send
-              </Button>
-            </Box>
-          </Card>
-        </form>
-      </Container>
-    </Page>
+              </CardContent>
+              <Divider />
+              <Box display="flex" justifyContent="flex-end" p={2}>
+                <Button color="primary" variant="contained">
+                  Send
+                </Button>
+              </Box>
+            </Card>
+          </form>
+        </Container>
+      </Page>
+    </Scrollbars>
   );
 };
 
