@@ -54,18 +54,16 @@ app.post("/login", (req, res) => {
       bcrypt.compare(password, result[0].password, (error, response) => {
         if (response) {
           const id = result[0].id;
-          const token = jwt.sign({ id }, process.env.SECRET, {
-            expiresIn: 300,
+          const token = jwt.sign({ id }, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN,
           });
-          // req.session.user = result;
-          // console.log(req.session.user);
           res.json({ auth: true, token: token, result: result });
         } else {
-          res.send({ message: "Wrong email/password!" });
+          res.send({ message: "wrongPassword" });
         }
       });
     } else {
-      res.send({ message: "Email not found! Please sign up first." });
+      res.send({ message: "noEmail" });
     }
   });
 });
