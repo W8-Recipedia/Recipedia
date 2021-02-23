@@ -20,8 +20,8 @@ import {
 } from "react-feather";
 import React, { useEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
+import { getUserCredentials } from "src/components/auth/userAuth";
 
-import Axios from "axios";
 import NavItem from "./NavItem";
 import PropTypes from "prop-types";
 
@@ -61,11 +61,12 @@ const items = [
     icon: LegalIcon,
     title: "Legal",
   },
-  {
-    href: "/app/logout",
-    icon: LogoutIcon,
-    title: "Logout",
-  },
+  // {
+  //   href: "/logout",
+  //   href: "/",
+  //   icon: LogoutIcon,
+  //   title: "Log out",
+  // },
 ];
 
 const useStyles = makeStyles(() => ({
@@ -87,13 +88,17 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
-  const [userName, setUserName] = useState("Not logged in");
-
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/login").then((response) => {
-      if (response.data.loggedIn == true) {
-          setUserName(response.data.user[0].firstname + " " +response.data.user[0].lastname);
+    getUserCredentials().then((authResponse) => {
+      console.log(authResponse);
+      if (authResponse.data.loggedIn) {
+        setUserName(
+          authResponse.data.user[0].firstname +
+            " " +
+            authResponse.data.user[0].lastname
+        );
       }
     });
   }, []);
@@ -131,6 +136,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
               key={item.title}
               title={item.title}
               icon={item.icon}
+              // onClick={item.icon == "LogoutIcon" ? userLogOut : ""}
             />
           ))}
         </List>

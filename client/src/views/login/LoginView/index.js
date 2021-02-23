@@ -16,8 +16,7 @@ import {
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-
-import Axios from "axios";
+import { userLogin, getUserCredentials } from "src/components/auth/userAuth";
 import Page from "src/components/Page";
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoginView = () => {
-  Axios.defaults.withCredentials = true;
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -38,21 +36,18 @@ const LoginView = () => {
 
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
-    Axios.post("http://localhost:3001/login", {
-      email: values.email,
-      password: values.password,
-    }).then((response) => {
-      if (response.data.auth == true) {
+    userLogin(values.email, values.password).then((authResponse) => {
+      if (authResponse == "Success") {
         navigate("/app/home");
       } else {
-        setLoginError(response.data.message);
+        setLoginError(authResponse);
       }
     });
   };
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/login").then((response) => {
-      if (response.data.loggedIn == true) {
+    getUserCredentials().then((authResponse) => {
+      if (authResponse.data.loggedIn) {
         navigate("/app/home");
       }
     });

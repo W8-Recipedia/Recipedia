@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 
-import Axios from "axios";
+import { getUserCredentials } from "src/components/auth/userAuth";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 
@@ -27,15 +27,14 @@ const ProfileDetails = ({ className, ...rest }) => {
     email: "",
   });
   useEffect(() => {
-    Axios.get("http://localhost:3001/login").then((response) => {
-      if (response.data.loggedIn == true) {
-        setValues(
-          {
-            firstName: response.data.user[0].firstname,
-            lastName: response.data.user[0].lastname,
-            email: response.data.user[0].email,
-          },
-        );
+    getUserCredentials().then((authResponse) => {
+      console.log(authResponse);
+      if (authResponse.data.loggedIn) {
+        setValues({
+          firstName: authResponse.data.user[0].firstname,
+          lastName: authResponse.data.user[0].lastname,
+          email: authResponse.data.user[0].email,
+        });
       }
     });
   }, []);

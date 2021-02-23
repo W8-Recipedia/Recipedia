@@ -42,15 +42,14 @@ var con = mysql.createConnection({
 });
 
 const verifyJWT = (req, res, next) => {
-  const token = req.header["x-access-token"];
+  const token = req.headers["x-access-token"];
   if (!token) {
     res.send("No token");
   } else {
-    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         res.json({ auth: false, message: "Auth failed" });
       } else {
-        req.userid = decoded.id;
         next();
       }
     });
@@ -81,14 +80,6 @@ app.post("/register", (req, res) => {
   });
 });
 
-app.get("/login", (req, res) => {
-  if (req.session.user) {
-    res.send({ loggedIn: true, user: req.session.user });
-  } else {
-    res.send({ loggedIn: false });
-  }
-});
-
 app.get("/userinfo", verifyJWT, (req, res) => {
   if (req.session.user) {
     res.send({ loggedIn: true, user: req.session.user });
@@ -109,17 +100,24 @@ app.post("/login", (req, res) => {
       bcrypt.compare(password, result[0].password, (error, response) => {
         if (response) {
           const userid = result[0].userid;
-          const token = jwt.sign({ userid }, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRES_IN,
-          });
+          const token = jwt.sign(
+            { userid },
+            process.env.JWT_SECRET
+            //   {
+            //   expiresIn: 300,
+            // }
+          );
           req.session.user = result;
-          res.json({ auth: true, token: token });
+          res.json({
+            auth: true,
+            token: token,
+          });
         } else {
-          res.send({ message: "wrongPassword" });
+          res.send({ auth: false, message: "wrongPassword" });
         }
       });
     } else {
-      res.send({ message: "noEmail" });
+      res.send({ auth: false, message: "noEmail" });
     }
   });
 });

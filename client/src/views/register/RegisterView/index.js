@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import Axios from "axios";
+import { userRegister } from "src/components/auth/userAuth";
 import {
   Box,
   Button,
@@ -31,14 +31,12 @@ const RegisterView = () => {
   const classes = useStyles();
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
-    Axios.post("http://localhost:3001/register", {
-      firstname: values.firstName,
-      lastname: values.lastName,
-      email: values.email,
-      password: values.password,
-    }).then((response) => {
-      console.log(response);
-    });
+    userRegister(
+      values.firstName,
+      values.lastName,
+      values.email,
+      values.password
+    );
   };
 
   return (

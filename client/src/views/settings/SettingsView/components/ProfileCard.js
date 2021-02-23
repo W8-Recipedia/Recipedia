@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 
-import Axios from "axios";
+import { getUserCredentials } from "src/components/auth/userAuth";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 
@@ -25,23 +25,30 @@ const useStyles = makeStyles(() => ({
 
 const ProfileCard = ({ className, ...rest }) => {
   const classes = useStyles();
-  const [userName, setUserName] = useState("Not logged in");
+  const [userName, setUserName] = useState(" ");
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/login").then((response) => {
-      if (response.data.loggedIn == true) {
+    getUserCredentials().then((authResponse) => {
+      console.log(authResponse);
+      if (authResponse.data.loggedIn) {
         setUserName(
-          response.data.user[0].firstname + " " + response.data.user[0].lastname
+          authResponse.data.user[0].firstname +
+            " " +
+            authResponse.data.user[0].lastname
         );
       }
     });
   }, []);
+
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <CardContent>
         <Box alignItems="center" display="flex" flexDirection="column">
           <Box pb={2}>
-            <Avatar className={classes.avatar} src={"/static/images/avatars/avatar_6.png"} />
+            <Avatar
+              className={classes.avatar}
+              src={"/static/images/avatars/avatar.png"}
+            />
           </Box>
           <Typography color="textPrimary" gutterBottom variant="h3">
             {userName}
@@ -51,12 +58,12 @@ const ProfileCard = ({ className, ...rest }) => {
           </Typography>
         </Box>
       </CardContent>
-      <Divider />
+      {/* <Divider />
       <CardActions>
         <Button color="primary" fullWidth variant="text">
           Upload picture
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 };
