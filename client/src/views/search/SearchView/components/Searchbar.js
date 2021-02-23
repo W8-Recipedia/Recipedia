@@ -3,11 +3,10 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import {
   Box,
-  Button,
+  IconButton,
   TextField,
   Grid,
   InputAdornment,
-  SvgIcon,
   Select,
   InputLabel,
   Input,
@@ -17,6 +16,9 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { Search as SearchIcon } from "react-feather";
+import Axios from "axios";
+
+var API_KEY = process.env.RECIPE_API_KEY;
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -96,20 +98,21 @@ const Searchbar = ({ className, ...rest }) => {
       <Box mt={1}>
         <Grid container spacing={3}>
           <Grid item md={6} xs={12}>
-            <TextField
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SvgIcon fontSize="small" color="action">
-                      <SearchIcon />
-                    </SvgIcon>
-                  </InputAdornment>
-                ),
-              }}
-              placeholder="Search recipes"
-              variant="outlined"
-            />
+          <TextField
+            variant="outlined"
+            name="query"
+            placeholder="Search recipes"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton type="submit">
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            fullWidth
+          />
           </Grid>
           <Grid item md={3} xs={12}>
             <InputLabel id="type-label">Type</InputLabel>
