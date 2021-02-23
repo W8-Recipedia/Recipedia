@@ -1,4 +1,4 @@
-import {  } from "react-router-dom";
+import {} from "react-router-dom";
 
 import * as Yup from "yup";
 
@@ -14,8 +14,8 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { Form, Formik } from "formik";
-import { Navigate, Link as RouterLink } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 import Axios from "axios";
 import Page from "src/components/Page";
@@ -30,9 +30,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoginView = () => {
+  Axios.defaults.withCredentials = true;
   const classes = useStyles();
+  const navigate = useNavigate();
 
   const [loginError, setLoginError] = useState("");
+  const [loginStatus, setLoginStatus] = useState("");
 
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
@@ -40,15 +43,25 @@ const LoginView = () => {
       email: values.email,
       password: values.password,
     }).then((response) => {
-      console.log(response.data.auth);
       if (response.data.auth == true) {
-        console.log(response);
+        setLoginStatus(response.data.result[0].userid);
+        navigate("/app/home");
       } else {
         setLoginError(response.data.message);
       }
-
     });
   };
+
+  useEffect(() => {
+    Axios.get("http://localhost:3001/login").then((response) => {
+      if (response.data.loggedIn == true) {
+        setLoginStatus(response.data.user[0].userid);
+
+        navigate("/app/home");
+      }
+    });
+            console.log(loginStatus);
+  }, []);
 
   return (
     <Page className={classes.root} title="Recipedia | Log in">
@@ -144,7 +157,9 @@ const LoginView = () => {
                   value={values.email}
                   variant="outlined"
                   helperText={
-                    loginError == "noEmail" ? "Please sign up before logging in!" : ""
+                    loginError == "noEmail"
+                      ? "Please sign up before logging in!"
+                      : ""
                   }
                 />
                 <TextField
