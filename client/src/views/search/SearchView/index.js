@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Box, Container, makeStyles } from "@material-ui/core";
 import Page from "src/components/Page";
-import Results from "src/views/search/SearchView/components/Results";
+import RecipeCardList from "src/views/search/SearchView/components/RecipeCardList";
 import Searchbar from "src/views/search/SearchView/components/Searchbar";
-import data from "src/views/search/SearchView/data/data";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,14 +15,15 @@ const useStyles = makeStyles((theme) => ({
 
 const SearchView = () => {
   const classes = useStyles();
-  const [recipes] = useState(data);
+  const [recipes] = useState("");
+  const [selectedRecipeIds, setSelectedRecipeIds] = useState([]);
 
   return (
     <Page className={classes.root} title="Recipedia | Search">
       <Container maxWidth={false}>
         <Searchbar />
         <Box mt={3}>
-          <Results recipes={recipes} />
+          <RecipeCardList recipes={recipes} />
         </Box>
       </Container>
     </Page>
