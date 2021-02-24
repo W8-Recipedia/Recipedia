@@ -15,13 +15,27 @@ export const userLogin = async (email, password) => {
   }
 };
 
-export const userRegister = (firstname, lastname, email, password) => {
-  Axios.post("http://localhost:3001/register", {
+export const userRegister = async (firstname, lastname, email, password) => {
+  const response = await Axios.post("http://localhost:3001/register", {
     firstname: firstname,
     lastname: lastname,
     email: email,
     password: password,
   });
+  if (response.data.result) {
+    const response = await Axios.post("http://localhost:3001/login", {
+      email: email,
+      password: password,
+    });
+    if (response.data.token) {
+      localStorage.setItem("token", response.data.token);
+      return "Success";
+    } else {
+      return response.data.message;
+    }
+  } else {
+    return response.data.err;
+  }
 };
 
 export const getUserCredentials = async () => {
