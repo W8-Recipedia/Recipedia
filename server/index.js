@@ -94,10 +94,7 @@ app.post("/login", (req, res) => {
       bcrypt.compare(password, result[0].password, (error, response) => {
         if (response) {
           const userid = result[0].userid;
-          const token = jwt.sign(
-            { userid },
-            process.env.JWT_SECRET
-          );
+          const token = jwt.sign({ userid }, process.env.JWT_SECRET);
           req.session.user = result;
           res.json({
             token: token,
