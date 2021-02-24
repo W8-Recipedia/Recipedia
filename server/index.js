@@ -28,9 +28,6 @@ app.use(
     secret: "s%3Al3ozSdvQ83TtC5RvJ.CibaQoHtaY0H3QOB1kqR8H2A",
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      expires: 60 * 60 * 24,
-    },
   })
 );
 
@@ -48,7 +45,7 @@ const verifyJWT = (req, res, next) => {
   } else {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
-        res.json({ auth: false, message: "Auth failed" });
+        res.json({ loggedIn: false });
       } else {
         next();
       }
@@ -63,9 +60,6 @@ app.post("/register", (req, res) => {
   const password = req.body.password;
 
   bcrypt.hash(password, saltRounds, (err, hash) => {
-    if (err) {
-      console.log(err);
-    }
     con.query(
       "INSERT INTO users (firstname, lastname, email, password) VALUES (?,?,?,?)",
       [firstname, lastname, email, hash],
@@ -103,21 +97,17 @@ app.post("/login", (req, res) => {
           const token = jwt.sign(
             { userid },
             process.env.JWT_SECRET
-            //   {
-            //   expiresIn: 300,
-            // }
           );
           req.session.user = result;
           res.json({
-            auth: true,
             token: token,
           });
         } else {
-          res.send({ auth: false, message: "wrongPassword" });
+          res.send({ message: "wrongPassword" });
         }
       });
     } else {
-      res.send({ auth: false, message: "noEmail" });
+      res.send({ message: "noEmail" });
     }
   });
 });

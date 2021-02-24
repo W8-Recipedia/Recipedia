@@ -1,8 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import DashboardLayout from "src/dashboard/DashboardLayout";
 import SearchView from "src/views/search/SearchView";
-import LoginCheck from "src/components/auth/LoginCheck";
+import LoginCheck, { AccessCheck } from "src/components/auth/AuthCheck";
 import NotFoundView from "src/views/error/ErrorView";
 import FavouritesView from "src/views/favourites/FavouritesView";
 import RegisterView from "src/views/register/RegisterView";
@@ -15,7 +14,7 @@ import FeedbackView from "src/views/feedback/FeedbackView";
 const routes = [
   {
     path: "app",
-    element: <DashboardLayout />,
+    element: <AccessCheck />,
     children: [
       { path: "search", element: <SearchView /> },
       { path: "favourites", element: <FavouritesView /> },

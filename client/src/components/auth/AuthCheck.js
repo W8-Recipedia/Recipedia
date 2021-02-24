@@ -5,21 +5,37 @@ import LandingView from "src/views/landing/LandingView";
 import LoginView from "src/views/login/LoginView";
 import DashboardLayout from "src/dashboard/DashboardLayout";
 
-
-const LoginCheck = () => {
+export const LoginCheck = () => {
   const navigate = useNavigate();
   const pathname = window.location.pathname;
   const [isloggedIn, setIsLoggedIn] = useState(() => {
     getUserCredentials().then((authResponse) => {
+      setIsLoggedIn(authResponse.data.loggedIn);
       if (authResponse.data.loggedIn) {
         navigate("/app/home");
       }
-      else {
-        setIsLoggedIn("false");
+    });
+  });
+  return isloggedIn == false ? (
+    pathname == "/login" ? (
+      <LoginView />
+    ) : (
+      <LandingView />
+    )
+  ) : null;
+};
+
+export const AccessCheck = () => {
+  const navigate = useNavigate();
+  const [isloggedIn, setIsLoggedIn] = useState(() => {
+    getUserCredentials().then((authResponse) => {
+      setIsLoggedIn(authResponse.data.loggedIn);
+      if (!authResponse.data.loggedIn) {
+        navigate("/");
       }
     });
   });
-  return isloggedIn == "false" ? (pathname == "/login" ? <LoginView/>: <LandingView />  ) : null;
+  return isloggedIn ? <DashboardLayout /> : null;
 };
 
 export default LoginCheck;
