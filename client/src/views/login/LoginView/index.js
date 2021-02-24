@@ -43,8 +43,6 @@ const LoginView = () => {
     });
   };
 
-
-
   return (
     <Page className={classes.root} title="Recipedia | Log in">
       <Box
