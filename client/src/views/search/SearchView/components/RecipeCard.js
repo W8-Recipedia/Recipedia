@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {
-    Card,
-    CardContent,
-    Typography,
-    CardActions,
-    makeStyles,
-  } from "@material-ui/core";
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+  makeStyles,
+} from "@material-ui/core";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import IconButton from "@material-ui/core/IconButton";
@@ -31,14 +31,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "space-between",
     maxWidth: 400,
-    "&:hover": {
-      "& img": {
-        opacity: 0.2,
-      },
-      "& div": {
-        visibility: "visible",
-      },
-    },
   },
 }));
 
@@ -46,10 +38,7 @@ const RecipeCard = ({ recipe, ...props }) => {
   const classes = useStyles();
 
   return (
-    <Card
-      className={classes.root}
-      elevation={4}
-    >
+    <Card className={classes.root} elevation={4}>
       <CardContent>
         <Typography
           variant="h6"
@@ -60,7 +49,7 @@ const RecipeCard = ({ recipe, ...props }) => {
           {recipe.title}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
+      <CardActions>
         <div
           style={{ display: "flex", alignItems: "center" }}
           title="Prep time"
@@ -72,10 +61,10 @@ const RecipeCard = ({ recipe, ...props }) => {
         </div>
         <div
           style={{ display: "flex", alignItems: "center" }}
-          title="Prep time"
+          title="Favourite me!"
         >
           <IconButton component="span">
-              <FavoriteBorderIcon style={{ color: "red" }} />
+            <FavoriteBorderIcon style={{ color: "red" }} />
           </IconButton>
           <Typography variant="subtitle2" color="textSecondary">
             Favourite
