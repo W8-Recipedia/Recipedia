@@ -24,7 +24,6 @@ const ProfileCard = ({ className, ...rest }) => {
   const classes = useStyles();
   const [userName, setUserName] = useState(() => {
     getUserCredentials().then((authResponse) => {
-      console.log(authResponse);
       if (authResponse.data.loggedIn) {
         setUserName(
           authResponse.data.user[0].firstname +

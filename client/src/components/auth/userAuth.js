@@ -7,8 +7,7 @@ export const userLogin = async (email, password) => {
     email: email,
     password: password,
   });
-  if (response.data.auth) {
-    console.log(response);
+  if (response.data.token) {
     localStorage.setItem("token", response.data.token);
     return "Success";
   } else {

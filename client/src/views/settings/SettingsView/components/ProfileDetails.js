@@ -28,7 +28,6 @@ const ProfileDetails = ({ className, ...rest }) => {
   });
   useLayoutEffect(() => {
     getUserCredentials().then((authResponse) => {
-      console.log(authResponse);
       if (authResponse.data.loggedIn) {
         setValues({
           firstName: authResponse.data.user[0].firstname,
