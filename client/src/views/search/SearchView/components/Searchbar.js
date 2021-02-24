@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import {
@@ -103,6 +103,7 @@ const Searchbar = ({ className, props, ...rest }) => {
   };
 
   const onSubmit = (event) => {
+    event.preventDefault();
     onSubmit(formState.query);
   };
 
@@ -111,25 +112,25 @@ const Searchbar = ({ className, props, ...rest }) => {
       <Box mt={1}>
         <Grid container spacing={3}>
           <Grid item md={6} xs={12}>
-          <form noValidate autoComplete="off" onSubmit={onSubmit}>
-            <TextField
-              variant="outlined"
-              name="query"
-              onChange={handleChange}
-              value={formState.query}
-              placeholder="Search recipes"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton type="submit">
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              fullWidth
-            />
-          </form>
+            <form noValidate autoComplete="off" onSubmit={(event) => onSubmit}>
+              <TextField
+                variant="outlined"
+                name="query"
+                onChange={handleChange}
+                value={formState.query}
+                placeholder="Search recipes"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton type="submit">
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                fullWidth
+              />
+            </form>
           </Grid>
           <Grid item md={3} xs={12}>
             <InputLabel id="type-label">Type</InputLabel>
