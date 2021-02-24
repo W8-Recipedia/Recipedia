@@ -283,7 +283,7 @@ const RegisterView = () => {
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
                 There is already an account linked to this email address! Please
-                sign in to use Recipedia.
+                log in to use Recipedia.
               </DialogContentText>
             </DialogContent>
             <DialogActions className={classes.loginbutton}>

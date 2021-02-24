@@ -60,12 +60,6 @@ const items = [
     icon: LegalIcon,
     title: "Legal",
   },
-  // {
-  //   href: "/logout",
-  //   href: "/",
-  //   icon: LogoutIcon,
-  //   title: "Log out",
-  // },
 ];
 
 const useStyles = makeStyles(() => ({
@@ -132,7 +126,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
               key={item.title}
               title={item.title}
               icon={item.icon}
-              // onClick={item.icon == "LogoutIcon" ? userLogOut : ""}
             />
           ))}
         </List>
