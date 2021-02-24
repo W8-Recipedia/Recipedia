@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Route } from "react-router-dom";
 import { Box, Container, makeStyles } from "@material-ui/core";
 import Page from "src/components/Page";
 // import { getExampleRecipes } from "src/api/mockAPI";
@@ -26,8 +25,6 @@ const SearchView = () => {
   const [intolerances] = useState([]);
   
   const handleQuerySearch = (query) => {
-    console.log("Hasdffsdfi");
-    console.log(query);
     setSearchQuery(query);
     loadRecipes([], ingredients, intolerances, 0, query);
   };
