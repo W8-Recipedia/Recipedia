@@ -13,13 +13,8 @@ import {
   Checkbox,
   MenuItem,
   ListItemText,
-  makeStyles,
 } from "@material-ui/core";
 import { Search as SearchIcon } from "react-feather";
-
-const useStyles = makeStyles((theme) => ({
-  root: {},
-}));
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -82,9 +77,8 @@ const initialFormData = Object.freeze({
   query: "",
 });
 
-const Searchbar = ({ className, props, ...rest }) => {
+  export default function Searchbar(props) {
   const [formState, setFormState] = useState(initialFormData);
-  const classes = useStyles();
   const [cuisineName, setCuisineName] = React.useState([]);
   const [typeName, setTypeName] = React.useState([]);
 
@@ -104,15 +98,15 @@ const Searchbar = ({ className, props, ...rest }) => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    onSubmit(formState.query);
+    props.onSubmit(formState.query);
   };
 
   return (
-    <div className={clsx(classes.root, className)} {...rest}>
+
       <Box mt={1}>
         <Grid container spacing={3}>
           <Grid item md={6} xs={12}>
-            <form noValidate autoComplete="off" onSubmit={(event) => onSubmit}>
+            <form noValidate autoComplete="off" onSubmit={onSubmit}>
               <TextField
                 variant="outlined"
                 name="query"
@@ -176,13 +170,10 @@ const Searchbar = ({ className, props, ...rest }) => {
           </Grid>
         </Grid>
       </Box>
-    </div>
   );
-};
+}
 
 Searchbar.propTypes = {
   className: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
 };
-
-export default Searchbar;
