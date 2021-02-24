@@ -1,27 +1,16 @@
-import React from "react";
-import PropTypes from "prop-types";
-import clsx from "clsx";
-import moment from "moment";
 import {
   Avatar,
   Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
-  Divider,
   Typography,
   makeStyles,
 } from "@material-ui/core";
+import React, { useState } from "react";
 
-const user = {
-  avatar: "/static/images/avatars/avatar_6.png",
-  city: "",
-  country: "",
-  jobTitle: "Recipedia Member",
-  name: "Not logged in",
-  timezone: "",
-};
+import { getUserCredentials } from "src/components/auth/UserAuth";
+import PropTypes from "prop-types";
+import clsx from "clsx";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -33,28 +22,42 @@ const useStyles = makeStyles(() => ({
 
 const ProfileCard = ({ className, ...rest }) => {
   const classes = useStyles();
+  const [userName, setUserName] = useState(() => {
+    getUserCredentials().then((authResponse) => {
+      if (authResponse.data.loggedIn) {
+        setUserName(
+          authResponse.data.user[0].firstname +
+            " " +
+            authResponse.data.user[0].lastname
+        );
+      }
+    });
+  });
 
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <CardContent>
         <Box alignItems="center" display="flex" flexDirection="column">
           <Box pb={2}>
-            <Avatar className={classes.avatar} src={user.avatar} />
+            <Avatar
+              className={classes.avatar}
+              src={"/static/images/avatars/avatar.png"}
+            />
           </Box>
           <Typography color="textPrimary" gutterBottom variant="h3">
-            {user.name}
+            {userName}
           </Typography>
           <Typography color="textSecondary" variant="body1">
-            {`${user.city} ${user.country}`}
+            {""}
           </Typography>
         </Box>
       </CardContent>
-      <Divider />
+      {/* <Divider />
       <CardActions>
         <Button color="primary" fullWidth variant="text">
           Upload picture
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 };

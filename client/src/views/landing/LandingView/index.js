@@ -88,20 +88,6 @@ const LandingView = () => {
           </Grid>
         </Container>
       </Box>
-      <Box pt={2}>
-        <Grid container justify="center">
-          <Link to="/app/home">
-            <Button
-              color="primary"
-              variant="contained"
-              size="large"
-              className={classes.buttonText}
-            >
-              Go to Homepage
-            </Button>
-          </Link>
-        </Grid>
-      </Box>
     </Page>
   );
 };

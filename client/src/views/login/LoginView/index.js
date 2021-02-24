@@ -1,19 +1,20 @@
-import React from "react";
-import { Link as RouterLink } from "react-router-dom";
 import * as Yup from "yup";
-import { Formik, Form } from "formik";
-import Axios from "axios";
+
 import {
   Box,
   Button,
   Container,
   Grid,
   Link,
+  SvgIcon,
   TextField,
   Typography,
   makeStyles,
-  SvgIcon,
 } from "@material-ui/core";
+import { Form, Formik } from "formik";
+import React, { useState } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { userLogin } from "src/components/auth/UserAuth";
 import Page from "src/components/Page";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,16 +28,22 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginView = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
+
+  const [loginError, setLoginError] = useState("");
 
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
-    Axios.post("http://localhost:3001/login", {
-      email: values.email,
-      password: values.password,
-    }).then((response) => {
-      console.log(response);
+    userLogin(values.email, values.password).then((authResponse) => {
+      if (authResponse == "Success") {
+        navigate("/app/home");
+      } else {
+        setLoginError(authResponse);
+      }
     });
   };
+
+
 
   return (
     <Page className={classes.root} title="Recipedia | Log in">
@@ -116,7 +123,11 @@ const LoginView = () => {
                   </Typography>
                 </Box>
                 <TextField
-                  error={Boolean(touched.email && errors.email)}
+                  error={
+                    loginError == "noEmail" || loginError == "wrongPassword"
+                      ? Boolean(true)
+                      : Boolean(touched.password && errors.password)
+                  }
                   fullWidth
                   helperText={touched.email && errors.email}
                   label="Email Address"
@@ -127,9 +138,18 @@ const LoginView = () => {
                   type="email"
                   value={values.email}
                   variant="outlined"
+                  helperText={
+                    loginError == "noEmail"
+                      ? "Please sign up before logging in!"
+                      : ""
+                  }
                 />
                 <TextField
-                  error={Boolean(touched.password && errors.password)}
+                  error={
+                    loginError == "wrongPassword"
+                      ? Boolean(true)
+                      : Boolean(touched.password && errors.password)
+                  }
                   fullWidth
                   helperText={touched.password && errors.password}
                   label="Password"
@@ -140,6 +160,11 @@ const LoginView = () => {
                   type="password"
                   value={values.password}
                   variant="outlined"
+                  helperText={
+                    loginError == "wrongPassword"
+                      ? "Incorrect email and/or password"
+                      : ""
+                  }
                 />
                 <Box my={2}>
                   <Button

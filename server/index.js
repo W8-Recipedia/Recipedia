@@ -1,5 +1,8 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
 const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -9,14 +12,46 @@ const app = express();
 require("dotenv").config();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(
+  session({
+    key: "user",
+    secret: "s%3Al3ozSdvQ83TtC5RvJ.CibaQoHtaY0H3QOB1kqR8H2A",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 var con = mysql.createConnection({
   host: process.env.HOST,
   user: process.env.USER,
   password: process.env.PASSWORD,
-  database: process.env.DATABASE
+  database: process.env.DATABASE,
 });
+
+const verifyJWT = (req, res, next) => {
+  const token = req.headers["x-access-token"];
+  if (!token) {
+    res.send("No token");
+  } else {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        res.json({ loggedIn: false });
+      } else {
+        next();
+      }
+    });
+  }
+};
 
 app.post("/register", (req, res) => {
   const firstname = req.body.firstname;
@@ -25,9 +60,6 @@ app.post("/register", (req, res) => {
   const password = req.body.password;
 
   bcrypt.hash(password, saltRounds, (err, hash) => {
-    if (err) {
-      console.log(err);
-    }
     con.query(
       "INSERT INTO users (firstname, lastname, email, password) VALUES (?,?,?,?)",
       [firstname, lastname, email, hash],
@@ -42,6 +74,14 @@ app.post("/register", (req, res) => {
   });
 });
 
+app.get("/userinfo", verifyJWT, (req, res) => {
+  if (req.session.user) {
+    res.send({ loggedIn: true, user: req.session.user });
+  } else {
+    res.send({ loggedIn: false });
+  }
+});
+
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -53,19 +93,21 @@ app.post("/login", (req, res) => {
     if (result.length > 0) {
       bcrypt.compare(password, result[0].password, (error, response) => {
         if (response) {
-          const id = result[0].id;
-          const token = jwt.sign({ id }, process.env.SECRET, {
-            expiresIn: 300,
+          const userid = result[0].userid;
+          const token = jwt.sign(
+            { userid },
+            process.env.JWT_SECRET
+          );
+          req.session.user = result;
+          res.json({
+            token: token,
           });
-          // req.session.user = result;
-          // console.log(req.session.user);
-          res.json({ auth: true, token: token, result: result });
         } else {
-          res.send({ message: "Wrong email/password!" });
+          res.send({ message: "wrongPassword" });
         }
       });
     } else {
-      res.send({ message: "Email not found! Please sign up first." });
+      res.send({ message: "noEmail" });
     }
   });
 });

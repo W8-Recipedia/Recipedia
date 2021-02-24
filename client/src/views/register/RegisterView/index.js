@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import Axios from "axios";
+import { userRegister } from "src/components/auth/UserAuth";
 import {
   Box,
   Button,
@@ -12,6 +12,10 @@ import {
   Grid,
   Link,
   TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
   Typography,
   makeStyles,
   SvgIcon,
@@ -25,19 +29,34 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
+  loginbutton: {
+    display: "flex",
+    flexDirection: "column",
+    margin: "auto",
+    paddingBottom: theme.spacing(3),
+    paddingTop: theme.spacing(3),
+  },
 }));
 
 const RegisterView = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+
+  const [signupError, setSignUpError] = useState("");
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
-    Axios.post("http://localhost:3001/register", {
-      firstname: values.firstName,
-      lastname: values.lastName,
-      email: values.email,
-      password: values.password,
-    }).then((response) => {
-      console.log(response);
+    userRegister(
+      values.firstName,
+      values.lastName,
+      values.email,
+      values.password
+    ).then((authResponse) => {
+      if (authResponse == "Success") {
+        navigate("/app/home");
+      } else {
+        setOpen(true);
+      }
     });
   };
 
@@ -79,7 +98,10 @@ const RegisterView = () => {
                 [Yup.ref("password"), null],
                 "Passwords must match"
               ),
-              policy: Yup.boolean().oneOf([true], "This field must be checked"),
+              policy: Yup.boolean().oneOf(
+                [true],
+                "Please accept the Terms and Conditions"
+              ),
             })}
             onSubmit={handleSubmit}
           >
@@ -252,6 +274,29 @@ const RegisterView = () => {
               </Form>
             )}
           </Formik>
+          <Dialog
+            open={open}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                There is already an account linked to this email address! Please
+                log in to use Recipedia.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions className={classes.loginbutton}>
+              <Button
+                onClick={() => {
+                  navigate("/login");
+                }}
+                color="primary"
+                variant="contained"
+              >
+                Log in
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Container>
       </Box>
     </Page>

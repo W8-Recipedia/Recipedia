@@ -1,6 +1,3 @@
-import React, { useState } from "react";
-import clsx from "clsx";
-import PropTypes from "prop-types";
 import {
   Box,
   Button,
@@ -12,6 +9,11 @@ import {
   TextField,
   makeStyles,
 } from "@material-ui/core";
+import React, { useLayoutEffect, useState } from "react";
+
+import { getUserCredentials } from "src/components/auth/UserAuth";
+import PropTypes from "prop-types";
+import clsx from "clsx";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -23,10 +25,18 @@ const ProfileDetails = ({ className, ...rest }) => {
     firstName: "",
     lastName: "",
     email: "",
-    phone: "",
-    state: "",
-    country: "",
   });
+  useLayoutEffect(() => {
+    getUserCredentials().then((authResponse) => {
+      if (authResponse.data.loggedIn) {
+        setValues({
+          firstName: authResponse.data.user[0].firstname,
+          lastName: authResponse.data.user[0].lastname,
+          email: authResponse.data.user[0].email,
+        });
+      }
+    });
+  }, []);
 
   const handleChange = (event) => {
     setValues({
@@ -72,7 +82,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item md={6} xs={12}>
+            <Grid item md={12} xs={12}>
               <TextField
                 fullWidth
                 label="Email Address"
@@ -80,16 +90,6 @@ const ProfileDetails = ({ className, ...rest }) => {
                 onChange={handleChange}
                 required
                 value={values.email}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Country"
-                name="country"
-                onChange={handleChange}
-                value={values.country}
                 variant="outlined"
               />
             </Grid>

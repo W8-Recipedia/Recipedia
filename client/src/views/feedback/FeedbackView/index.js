@@ -105,7 +105,6 @@ const FeedbackView = ({ className, ...rest }) => {
                 </Grid>
                 <Grid item md={12} xs={12}>
                   <TextField
-                    // InputLabelProps={{ required: false }}
                     fullWidth
                     label="Feedback"
                     name="feedback"
