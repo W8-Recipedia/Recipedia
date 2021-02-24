@@ -31,6 +31,36 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "space-between",
     maxWidth: 400,
+    "&:hover": {
+      "& img": {
+        opacity: 0.2,
+      },
+      "& div": {
+        visibility: "visible",
+      },
+    },
+  },
+  media: {
+    overflow: "hidden",
+    height: 190,
+    position: "relative",
+  },
+  recipeButton: {
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    padding: 8,
+    visibility: "hidden",
+  },
+  image: {
+    width: "100%",
+    transition: "opacity 250ms ease",
+    backfaceVisibility: "hidden",
   },
 }));
 
@@ -39,9 +69,21 @@ const RecipeCard = ({ recipe, ...props }) => {
 
   return (
     <Card className={classes.root} elevation={4}>
+      <div className={classes.media}>
+        <img
+          className={classes.image}
+          src={`https://spoonacular.com/recipeImages/${recipe.id}-636x393.${recipe.imageType}`}
+          alt={recipe.title}
+        />
+        <div className={classes.recipeButton}>
+          <Typography variant="button">
+            Click for the recipe!
+          </Typography>
+        </div>
+      </div>
       <CardContent>
         <Typography
-          variant="h6"
+          variant="h3"
           component="h3"
           color="textPrimary"
           align="center"
@@ -54,7 +96,7 @@ const RecipeCard = ({ recipe, ...props }) => {
           style={{ display: "flex", alignItems: "center" }}
           title="Prep time"
         >
-          <ScheduleIcon color="primary" style={{ marginRight: 6 }} />{" "}
+          <ScheduleIcon color="primary" style={{ marginRight: 8 }} />{" "}
           <Typography variant="subtitle2" color="textSecondary">
             {convertTime(recipe.readyInMinutes)}
           </Typography>
@@ -63,7 +105,7 @@ const RecipeCard = ({ recipe, ...props }) => {
           style={{ display: "flex", alignItems: "center" }}
           title="Favourite me!"
         >
-          <IconButton component="span">
+          <IconButton component="span" style={{ marginLeft: 8 }}>
             <FavoriteBorderIcon style={{ color: "red" }} />
           </IconButton>
           <Typography variant="subtitle2" color="textSecondary">
