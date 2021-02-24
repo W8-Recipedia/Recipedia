@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import DashboardLayout from "src/dashboard/DashboardLayout";
 import SearchView from "src/views/search/SearchView";
-import LoginView from "src/views/login/LoginView";
+import LoginCheck from "src/components/auth/LoginCheck";
 import NotFoundView from "src/views/error/ErrorView";
 import FavouritesView from "src/views/favourites/FavouritesView";
 import RegisterView from "src/views/register/RegisterView";
@@ -11,7 +11,6 @@ import HomeView from "src/views/home/HomeView";
 import LegalView from "src/views/legal/LegalView";
 import FAQView from "src/views/faq/FAQView";
 import FeedbackView from "src/views/feedback/FeedbackView";
-import LandingView from "src/views/landing/LandingView";
 
 const routes = [
   {
@@ -32,10 +31,10 @@ const routes = [
   {
     path: "/",
     children: [
-      { path: "login", element: <LoginView /> },
+      { path: "login", element: <LoginCheck /> },
       { path: "register", element: <RegisterView /> },
       { path: "legal", element: <LegalView /> },
-      { path: "", element: <LandingView /> },
+      { path: "", element: <LoginCheck /> },
       { path: "*", element: <NotFoundView /> },
     ],
   },

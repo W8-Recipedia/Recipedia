@@ -9,9 +9,9 @@ import {
   TextField,
   makeStyles,
 } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 
-import { getUserCredentials } from "src/components/auth/userAuth";
+import { getUserCredentials } from "src/components/auth/UserAuth";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 
@@ -26,7 +26,7 @@ const ProfileDetails = ({ className, ...rest }) => {
     lastName: "",
     email: "",
   });
-  useEffect(() => {
+  useLayoutEffect(() => {
     getUserCredentials().then((authResponse) => {
       console.log(authResponse);
       if (authResponse.data.loggedIn) {

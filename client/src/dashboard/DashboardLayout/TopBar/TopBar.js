@@ -14,7 +14,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Logo from "src/components/Logo";
 
 import { LogOut as LogoutIcon } from "react-feather";
-import { userLogOut } from "src/components/auth/userAuth";
+import { userLogOut } from "src/components/auth/UserAuth";
 
 const useStyles = makeStyles(() => ({
   root: {},

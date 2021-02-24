@@ -14,9 +14,9 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { Form, Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { userLogin, getUserCredentials } from "src/components/auth/userAuth";
+import { userLogin } from "src/components/auth/UserAuth";
 import Page from "src/components/Page";
 
 const useStyles = makeStyles((theme) => ({
@@ -45,13 +45,7 @@ const LoginView = () => {
     });
   };
 
-  useEffect(() => {
-    getUserCredentials().then((authResponse) => {
-      if (authResponse.data.loggedIn) {
-        navigate("/app/home");
-      }
-    });
-  }, []);
+
 
   return (
     <Page className={classes.root} title="Recipedia | Log in">

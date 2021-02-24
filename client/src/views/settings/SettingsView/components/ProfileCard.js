@@ -1,17 +1,14 @@
 import {
   Avatar,
   Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
-  Divider,
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import { getUserCredentials } from "src/components/auth/userAuth";
+import { getUserCredentials } from "src/components/auth/UserAuth";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 
@@ -25,9 +22,7 @@ const useStyles = makeStyles(() => ({
 
 const ProfileCard = ({ className, ...rest }) => {
   const classes = useStyles();
-  const [userName, setUserName] = useState(" ");
-
-  useEffect(() => {
+  const [userName, setUserName] = useState(() => {
     getUserCredentials().then((authResponse) => {
       console.log(authResponse);
       if (authResponse.data.loggedIn) {
@@ -38,7 +33,7 @@ const ProfileCard = ({ className, ...rest }) => {
         );
       }
     });
-  }, []);
+  });
 
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
