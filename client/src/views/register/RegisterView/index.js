@@ -16,7 +16,6 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
   Typography,
   makeStyles,
   SvgIcon,
