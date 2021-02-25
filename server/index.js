@@ -126,7 +126,6 @@ app.get("/guserinfo", (req, res) => {
 });
 
 app.post("/glogin", (req, res) => {
-  console.log(req.body.userprofile.email);
   con.query(
     "SELECT * FROM users WHERE email = ?",
     req.body.userprofile.email,
