@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -9,11 +11,11 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const app = express();
 const { OAuth2Client } = require("google-auth-library");
-require("dotenv").config();
-
 const gclient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 app.use(express.json());
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: ["http://localhost:3000"],
@@ -21,9 +23,6 @@ app.use(
     credentials: true,
   })
 );
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(
   session({
     key: "user",
@@ -33,7 +32,7 @@ app.use(
   })
 );
 
-var con = mysql.createConnection({
+const con = mysql.createConnection({
   host: process.env.HOST,
   user: process.env.USER,
   password: process.env.PASSWORD,
@@ -111,20 +110,6 @@ app.get("/userinfo", verifyJWT, (req, res) => {
   }
 });
 
-app.get("/guserinfo", (req, res) => {
-  gclient
-    .verifyIdToken({
-      idToken: req.headers["x-access-token"],
-      audience: process.env.GOOGLE_CLIENT_ID,
-    })
-    .catch(console.error);
-  if (req.session.user) {
-    res.send({ loggedIn: true, user: req.session.user });
-  } else {
-    res.send({ loggedIn: false });
-  }
-});
-
 app.post("/glogin", (req, res) => {
   con.query(
     "SELECT * FROM users WHERE email = ?",
@@ -160,6 +145,20 @@ app.post("/gsignup", (req, res) => {
       }
     );
   });
+});
+
+app.get("/guserinfo", (req, res) => {
+  gclient
+    .verifyIdToken({
+      idToken: req.headers["x-access-token"],
+      audience: process.env.GOOGLE_CLIENT_ID,
+    })
+    .catch(console.error);
+  if (req.session.user) {
+    res.send({ loggedIn: true, user: req.session.user });
+  } else {
+    res.send({ loggedIn: false });
+  }
 });
 
 app.listen(3001, () => {});

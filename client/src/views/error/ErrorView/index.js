@@ -43,7 +43,7 @@ const NotFoundView = () => {
             <img
               alt="Not found"
               className={classes.image}
-              src="/static/images/undraw_page_not_found_su7k.svg"
+              src="/static/images/errorimage.svg"
             />
           </Box>
         </Container>
