@@ -3,23 +3,27 @@ import PropTypes from "prop-types";
 import {
   Card,
   CardContent,
+  CardMedia,
   Typography,
   CardActions,
+  Box,
+  Grid,
   makeStyles,
 } from "@material-ui/core";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import IconButton from "@material-ui/core/IconButton";
+import LocalDiningIcon from "@material-ui/icons/LocalDining";
 
 function convertTime(num) {
   if (num <= 60) {
-    return `${num} minutes`;
+    return `${num}m`;
   }
   let hours = num / 60;
   let rHours = Math.floor(hours);
   let minutes = (hours - rHours) * 60;
   let rMinutes = Math.round(minutes);
-  return `${rHours} hour${rHours > 1 ? "s" : ""} ${rMinutes} minutes`;
+  return `${rHours}h ${rMinutes}m`;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -68,7 +72,11 @@ const RecipeCard = ({ recipe, ...props }) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root} elevation={4} onClick={() => props.onClick(recipe.id)}>
+    <Card
+      className={classes.root}
+      elevation={4}
+      onClick={() => props.onClick(recipe.id)}
+    >
       <div className={classes.media}>
         <img
           className={classes.image}
@@ -76,9 +84,7 @@ const RecipeCard = ({ recipe, ...props }) => {
           alt={recipe.title}
         />
         <div className={classes.recipeButton}>
-          <Typography variant="button">
-            Click for the recipe!
-          </Typography>
+          <Typography variant="button">Click for the recipe!</Typography>
         </div>
       </div>
       <CardContent>
@@ -92,26 +98,30 @@ const RecipeCard = ({ recipe, ...props }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <div
-          style={{ display: "flex", alignItems: "center" }}
-          title="Prep time"
-        >
-          <ScheduleIcon color="primary" style={{ marginRight: 8 }} />{" "}
-          <Typography variant="subtitle2" color="textSecondary">
-            {convertTime(recipe.readyInMinutes)}
-          </Typography>
-        </div>
-        <div
-          style={{ display: "flex", alignItems: "center" }}
-          title="Favourite me!"
-        >
-          <IconButton component="span" style={{ marginLeft: 8 }}>
-            <FavoriteBorderIcon style={{ color: "red" }} />
-          </IconButton>
-          <Typography variant="subtitle2" color="textSecondary">
-            Favourite
-          </Typography>
-        </div>
+        <Grid container justify="center">
+          <Grid className={classes.statsItem} item md={6}>
+            <IconButton>
+              <LocalDiningIcon color="primary" />
+            </IconButton>
+            <Typography color="textSecondary" display="inline" variant="body2">
+              Servings: {recipe.servings}
+            </Typography>
+          </Grid>
+          <Grid className={classes.statsItem} item md={6}>
+            <IconButton>
+              <ScheduleIcon color="primary" />
+            </IconButton>
+            <Typography color="textSecondary" display="inline" variant="body2">
+              Time: {convertTime(recipe.readyInMinutes)}
+            </Typography>
+          </Grid>
+
+          <Grid className={classes.statsItem} item>
+            <IconButton>
+              <FavoriteBorderIcon style={{ color: "red" }} />
+            </IconButton>
+          </Grid>
+        </Grid>
       </CardActions>
     </Card>
   );
