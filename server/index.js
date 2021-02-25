@@ -11,7 +11,9 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const app = express();
 const { OAuth2Client } = require("google-auth-library");
-const gclient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const gclient = new OAuth2Client(
+  ("265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com")
+);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -26,7 +28,7 @@ app.use(
 app.use(
   session({
     key: "user",
-    secret: "s%3Al3ozSdvQ83TtC5RvJ.CibaQoHtaY0H3QOB1kqR8H2A",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
   })
@@ -151,7 +153,7 @@ app.get("/guserinfo", (req, res) => {
   gclient
     .verifyIdToken({
       idToken: req.headers["x-access-token"],
-      audience: process.env.GOOGLE_CLIENT_ID,
+      audience: "265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com",
     })
     .catch(console.error);
   if (req.session.user) {
