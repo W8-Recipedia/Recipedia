@@ -21,7 +21,7 @@ import React, { useEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { getUserCredentials } from "src/components/auth/UserAuth";
 
-import NavItem from "./NavItem";
+import NavItem from "src/views/dashboard/DashboardView/components/NavItem";
 import PropTypes from "prop-types";
 
 const items = [

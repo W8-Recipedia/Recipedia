@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { getUserCredentials } from "src/components/auth/UserAuth";
 import LandingView from "src/views/landing/LandingView";
 import LoginView from "src/views/login/LoginView";
-import DashboardLayout from "src/dashboard/DashboardLayout";
+import DashboardView from "src/views/dashboard/DashboardView";
 
 export const LoginCheck = () => {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ export const AccessCheck = () => {
       }
     });
   });
-  return isloggedIn ? <DashboardLayout /> : null;
+  return isloggedIn ? <DashboardView /> : null;
 };
 
 export default LoginCheck;
