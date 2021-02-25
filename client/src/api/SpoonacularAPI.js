@@ -1,5 +1,4 @@
 import Axios from "axios";
-require("dotenv").config();
 
 export const getRecipesComplex = async (
   ingredients,

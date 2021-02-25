@@ -141,6 +141,7 @@ const RecipeInfoDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
                 <ListItem
                   key={item}
                   onClick={handleToggle(item)}
+                  // title={`Metric: ${item.measures?.metric?.amount} ${item.measures?.metric?.unitShort} / US: ${item.measures?.us?.amount} ${item.measures?.us?.unitShort}`}
                   style={{
                     textDecoration:
                       checked.indexOf(item) !== -1 ? "line-through" : "none",
@@ -189,7 +190,7 @@ const RecipeInfoDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              '{recipeInfo.sourceName || "source"}'.
+              {recipeInfo.sourceName || "source"}
             </Link>
           </Typography>
         </Box>
