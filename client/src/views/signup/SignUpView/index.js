@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import { userRegister, googleSignUp } from "src/components/auth/UserAuth";
+import { userSignUp, googleSignUp } from "src/components/auth/UserAuth";
 
 import {
   Box,
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RegisterView = () => {
+const SignUpView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
@@ -50,7 +50,7 @@ const RegisterView = () => {
   const [signupError, setSignUpError] = useState("");
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
-    userRegister(
+    userSignUp(
       values.firstName,
       values.lastName,
       values.email,
@@ -429,4 +429,4 @@ const RegisterView = () => {
   );
 };
 
-export default RegisterView;
+export default SignUpView;

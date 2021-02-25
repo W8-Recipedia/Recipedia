@@ -4,7 +4,7 @@ import SearchView from "src/views/search/SearchView";
 import LoginCheck, { AccessCheck } from "src/components/auth/AuthCheck";
 import NotFoundView from "src/views/error/ErrorView";
 import FavouritesView from "src/views/favourites/FavouritesView";
-import RegisterView from "src/views/register/RegisterView";
+import SignUpView from "src/views/signup/SignUpView";
 import SettingsView from "src/views/settings/SettingsView";
 import HomeView from "src/views/home/HomeView";
 import LegalView from "src/views/legal/LegalView";
@@ -31,7 +31,7 @@ const routes = [
     path: "/",
     children: [
       { path: "login", element: <LoginCheck /> },
-      { path: "register", element: <RegisterView /> },
+      { path: "signup", element: <SignUpView /> },
       { path: "legal", element: <LegalView /> },
       { path: "", element: <LoginCheck /> },
       { path: "*", element: <NotFoundView /> },

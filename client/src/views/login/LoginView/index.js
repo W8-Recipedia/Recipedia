@@ -195,7 +195,7 @@ const LoginView = () => {
                 </Box>
                 <Typography color="textSecondary" variant="body1">
                   Don&apos;t have an account?{" "}
-                  <Link component={RouterLink} to="/register" variant="h6">
+                  <Link component={RouterLink} to="/signup" variant="h6">
                     Sign up
                   </Link>
                 </Typography>
@@ -215,7 +215,7 @@ const LoginView = () => {
             <DialogActions className={classes.signupbutton}>
               <Button
                 onClick={() => {
-                  navigate("/register");
+                  navigate("/signup");
                 }}
                 color="primary"
                 variant="contained"

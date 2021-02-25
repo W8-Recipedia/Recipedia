@@ -82,7 +82,7 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.post("/register", (req, res) => {
+app.post("/signup", (req, res) => {
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
   const email = req.body.email;
@@ -140,7 +140,7 @@ app.post("/glogin", (req, res) => {
   );
 });
 
-app.post("/gregister", (req, res) => {
+app.post("/gsignup", (req, res) => {
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
     con.query(
       "INSERT INTO users (firstname, lastname, email, password) VALUES (?,?,?,?)",
