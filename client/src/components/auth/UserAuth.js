@@ -3,10 +3,13 @@ import Axios from "axios";
 Axios.defaults.withCredentials = true;
 
 export const userLogin = async (email, password) => {
-  const response = await Axios.post("http://localhost:3001/login", {
-    email: email,
-    password: password,
-  });
+  const response = await Axios.post(
+    process.env.REACT_APP_SERVER_URL + "/login",
+    {
+      email: email,
+      password: password,
+    }
+  );
   if (response.data.token) {
     localStorage.setItem("token", response.data.token);
     localStorage.removeItem("gtoken");
@@ -17,17 +20,23 @@ export const userLogin = async (email, password) => {
 };
 
 export const userSignUp = async (firstname, lastname, email, password) => {
-  const response = await Axios.post("http://localhost:3001/signup", {
-    firstname: firstname,
-    lastname: lastname,
-    email: email,
-    password: password,
-  });
-  if (response.data.result) {
-    const response = await Axios.post("http://localhost:3001/login", {
+  const response = await Axios.post(
+    process.env.REACT_APP_SERVER_URL + "/signup",
+    {
+      firstname: firstname,
+      lastname: lastname,
       email: email,
       password: password,
-    });
+    }
+  );
+  if (response.data.result) {
+    const response = await Axios.post(
+      process.env.REACT_APP_SERVER_URL + "/login",
+      {
+        email: email,
+        password: password,
+      }
+    );
     if (response.data.token) {
       localStorage.setItem("token", response.data.token);
       return "Success";
@@ -44,9 +53,12 @@ export const googleLogin = async (token, userprofile) => {
     localStorage.setItem("gtoken", token);
     localStorage.removeItem("token");
 
-    const response = await Axios.post("http://localhost:3001/glogin", {
-      userprofile,
-    });
+    const response = await Axios.post(
+      process.env.REACT_APP_SERVER_URL + "/glogin",
+      {
+        userprofile,
+      }
+    );
     if (response.data.message == "noAccount") {
       return response.data.message;
     } else {
@@ -60,10 +72,13 @@ export const googleSignUp = async (token, userprofile, password) => {
     localStorage.setItem("gtoken", token);
     localStorage.removeItem("token");
 
-    const response = await Axios.post("http://localhost:3001/gsignup", {
-      user: userprofile,
-      password: password,
-    });
+    const response = await Axios.post(
+      process.env.REACT_APP_SERVER_URL + "/gsignup",
+      {
+        user: userprofile,
+        password: password,
+      }
+    );
     if (response.data.message == "yesAccount") {
       localStorage.removeItem("gtoken");
       return response.data.message;
@@ -75,18 +90,24 @@ export const googleSignUp = async (token, userprofile, password) => {
 
 export const getUserCredentials = async () => {
   if (localStorage.getItem("gtoken")) {
-    const response = await Axios.get("http://localhost:3001/guserinfo", {
-      headers: { "x-access-token": localStorage.getItem("gtoken") },
-    });
+    const response = await Axios.get(
+      process.env.REACT_APP_SERVER_URL + "/guserinfo",
+      {
+        headers: { "x-access-token": localStorage.getItem("gtoken") },
+      }
+    );
     if (response.data.user) {
       response.data.user[0].firstname = response.data.user[0].givenName;
       response.data.user[0].lastname = response.data.user[0].familyName;
     }
     return response;
   } else {
-    const response = await Axios.get("http://localhost:3001/userinfo", {
-      headers: { "x-access-token": localStorage.getItem("token") },
-    });
+    const response = await Axios.get(
+      process.env.REACT_APP_SERVER_URL + "/userinfo",
+      {
+        headers: { "x-access-token": localStorage.getItem("token") },
+      }
+    );
     return response;
   }
 };
