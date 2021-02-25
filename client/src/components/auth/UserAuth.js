@@ -10,7 +10,6 @@ export const userLogin = async (email, password) => {
   if (response.data.token) {
     localStorage.setItem("token", response.data.token);
     localStorage.removeItem("gtoken");
-
     return "Success";
   } else {
     return response.data.message;
