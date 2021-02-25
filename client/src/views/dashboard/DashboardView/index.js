@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { makeStyles } from "@material-ui/core";
-import NavBar from "src/dashboard/DashboardLayout/NavBar/NavBar";
-import TopBar from "src/dashboard/DashboardLayout/TopBar/TopBar";
+import NavBar from "src/views/dashboard/DashboardView/components/NavBar";
+import TopBar from "src/views/dashboard/DashboardView/components/TopBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DashboardLayout = () => {
+const DashboardView = () => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
 
@@ -55,4 +55,4 @@ const DashboardLayout = () => {
   );
 };
 
-export default DashboardLayout;
+export default DashboardView;

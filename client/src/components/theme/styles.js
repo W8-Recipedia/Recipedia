@@ -30,10 +30,10 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const GlobalStyles = () => {
+const Styles = () => {
   useStyles();
 
   return null;
 };
 
-export default GlobalStyles;
+export default Styles;
