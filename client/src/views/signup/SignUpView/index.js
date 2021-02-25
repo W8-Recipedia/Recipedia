@@ -309,44 +309,46 @@ const SignUpView = () => {
             open={googleRegOpen}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
+            fullWidth
           >
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                <Formik
-                  innerRef={googleref}
-                  initialValues={{
-                    gpassword: "",
-                    gconfirmPassword: "",
-                    gpolicy: false,
-                  }}
-                  validationSchema={Yup.object().shape({
-                    gpassword: Yup.string()
-                      .max(255)
-                      .required("Password is required")
-                      .matches(
-                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
-                        "Password must contain an uppercase letter, a number, and a symbol"
-                      )
-                      .min(8, "Password must be at least 8 characters"),
-                    gconfirmPassword: Yup.string().oneOf(
-                      [Yup.ref("gpassword"), null],
-                      "Passwords must match"
-                    ),
-                    gpolicy: Yup.boolean().oneOf(
-                      [true],
-                      "Please accept the Terms and Conditions"
-                    ),
-                  })}
-                >
-                  {({
-                    errors,
-                    handleBlur,
-                    handleChange,
-                    isSubmitting,
-                    touched,
-                    values,
-                  }) => (
-                    <Form>
+            <Formik
+              innerRef={googleref}
+              initialValues={{
+                gpassword: "",
+                gconfirmPassword: "",
+                gpolicy: false,
+              }}
+              validationSchema={Yup.object().shape({
+                gpassword: Yup.string()
+                  .max(255)
+                  .required("Password is required")
+                  .matches(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+                    "Password must contain an uppercase letter, a number, and a symbol"
+                  )
+                  .min(8, "Password must be at least 8 characters"),
+                gconfirmPassword: Yup.string().oneOf(
+                  [Yup.ref("gpassword"), null],
+                  "Passwords must match"
+                ),
+                gpolicy: Yup.boolean().oneOf(
+                  [true],
+                  "Please accept the Terms and Conditions"
+                ),
+              })}
+            >
+              {({
+                errors,
+                handleBlur,
+                handleChange,
+                touched,
+                values,
+                isValid,
+                dirty,
+              }) => (
+                <Form>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
                       <Typography color="textSecondary" variant="body1">
                         Please enter a password:
                       </Typography>
@@ -399,29 +401,35 @@ const SignUpView = () => {
                           </Link>
                         </Typography>
                       </Box>
-                    </Form>
-                  )}
-                </Formik>
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions className={classes.loginbutton}>
-              <GoogleLogin
-                clientId="265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
-                buttonText="Log in with Google"
-                onSuccess={handleGoogleSubmit}
-                onFailure={handleGoogleSubmit}
-                render={(renderProps) => (
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    disabled={renderProps.disabled}
-                    onClick={renderProps.onClick}
-                  >
-                    Submit
-                  </Button>
-                )}
-              />
-            </DialogActions>
+                      {Boolean(touched.gpolicy && errors.gpolicy) && (
+                        <FormHelperText error>{errors.gpolicy}</FormHelperText>
+                      )}
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions className={classes.loginbutton}>
+                    <GoogleLogin
+                      clientId="265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
+                      buttonText="Log in with Google"
+                      onSuccess={handleGoogleSubmit}
+                      onFailure={handleGoogleSubmit}
+                      render={(renderProps) => (
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          disabled={renderProps.disabled}
+                          onClick={
+                            isValid && dirty ? renderProps.onClick : null
+                          }
+                          type="submit"
+                        >
+                          Submit
+                        </Button>
+                      )}
+                    />
+                  </DialogActions>
+                </Form>
+              )}
+            </Formik>
           </Dialog>
         </Container>
       </Box>
