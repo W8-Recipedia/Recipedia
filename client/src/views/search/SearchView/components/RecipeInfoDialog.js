@@ -10,6 +10,8 @@ import {
   ListItemIcon,
   IconButton,
   AppBar,
+  Checkbox,
+  Box,
   Toolbar,
   Grid,
   Link,
@@ -17,30 +19,29 @@ import {
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 
 function convertTime(num) {
-    if (num <= 60) {
-      return `${num} minutes`;
-    }
-    let hours = num / 60;
-    let rHours = Math.floor(hours);
-    let minutes = (hours - rHours) * 60;
-    let rMinutes = Math.round(minutes);
-    return `${rHours} hour${rHours > 1 ? "s" : ""} ${rMinutes} minutes`;
+  if (num <= 60) {
+    return `${num} minutes`;
   }
+  let hours = num / 60;
+  let rHours = Math.floor(hours);
+  let minutes = (hours - rHours) * 60;
+  let rMinutes = Math.round(minutes);
+  return `${rHours} hour${rHours > 1 ? "s" : ""} ${rMinutes} minutes`;
+}
 
 const useStyles = makeStyles((theme) => ({
   extraInfo: {
     padding: `4px 0`,
     marginBottom: theme.spacing(2),
   },
-  imgContainer: {
-    maxHeight: 400,
-    overflow: "hidden",
-  },
   image: {
     width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     flexGrow: 1,
@@ -54,13 +55,30 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     position: "relative",
   },
+  dialog: {
+    padding: theme.spacing(0),
+  },
 }));
-
 
 const RecipeInfoDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const classes = useStyles();
+  const [checked, setChecked] = React.useState([0]);
+
+  const handleToggle = (value) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
+
   return (
     <Dialog
       open={open}
@@ -68,6 +86,7 @@ const RecipeInfoDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
       onClose={handleClose}
       aria-labelledby="recipe-dialog"
       fullScreen={fullScreen}
+      scroll="body"
     >
       <AppBar className={classes.appBar}>
         <Toolbar>
@@ -84,45 +103,64 @@ const RecipeInfoDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
           </IconButton>
         </Toolbar>
       </AppBar>
+      <DialogContent className={classes.dialog}>
+        <img
+          className={classes.image}
+          src={`https://spoonacular.com/recipeImages/${recipeId}-636x393.${recipeInfo.imageType}`}
+          alt={recipeInfo.title}
+        />
+      </DialogContent>
       <DialogContent>
-        <div className={classes.imgContainer}>
-          <img
-            className={classes.image}
-            src={`https://spoonacular.com/recipeImages/${recipeId}-636x393.${recipeInfo.imageType}`}
-            alt={recipeInfo.title}
-          />
-        </div>
         <Grid container className={classes.extraInfo}>
-          <Grid item xs={8} sm={6}>
-            <Typography variant="subtitle2" color="textPrimary">
-              <span style={{ color: "#3f51b5" }}>You can prepare this recipe in </span>
-              {convertTime(recipeInfo.readyInMinutes)}!
+          <Grid item>
+            <Typography
+              inline
+              variant="subtitle2"
+              color="textPrimary"
+              align="left"
+            >
+              Servings: {recipeInfo.servings}
             </Typography>
-            <Typography variant="subtitle2" color="textPrimary">
-              <span style={{ color: "#3f51b5" }}>This recipe serves </span>
-              {recipeInfo.servings} person(s).
+            <Typography
+              inline
+              variant="subtitle2"
+              color="textPrimary"
+              align="right"
+            >
+              Time: {convertTime(recipeInfo.readyInMinutes)}
             </Typography>
-          </Grid>
-          <Grid item xs={4} sm={6} className={classes.iconContainer}>
           </Grid>
         </Grid>
-        <Typography variant="h4">
-            Ingredients
-          </Typography>
+        <Typography variant="h4">Ingredients</Typography>
+
         <List className={classes.list} dense>
           {recipeInfo.extendedIngredients &&
-            recipeInfo.extendedIngredients.map((item) => (
-              <ListItem
-                key={item.original}
-                title={`metric: ${item.measures?.metric?.amount} ${item.measures?.metric?.unitShort} / US: ${item.measures?.us?.amount} ${item.measures?.us?.unitShort}`}
-              >
-                <ListItemIcon style={{ minWidth: 32 }}>
-                  <FiberManualRecordIcon fontSize="small" />
-                </ListItemIcon> 
-                <ListItemText primary={item.original} />
-              </ListItem>
-            ))}
+            recipeInfo.extendedIngredients.map((item) => {
+              const labelId = `checkbox-list-label-${item}`;
+              return (
+                <ListItem
+                  key={item}
+                  onClick={handleToggle(item)}
+                  style={{
+                    textDecoration:
+                      checked.indexOf(item) !== -1 ? "line-through" : "none",
+                  }}
+                >
+                  <ListItemIcon style={{ minWidth: 32 }}>
+                    <Checkbox
+                      edge="start"
+                      checked={checked.indexOf(item) !== -1}
+                      tabIndex={-1}
+                      disableRipple
+                      inputProps={{ "aria-labelledby": labelId }}
+                    />{" "}
+                  </ListItemIcon>
+                  <ListItemText primary={item.original} />
+                </ListItem>
+              );
+            })}
         </List>
+
         <Typography variant="h4">Instructions</Typography>
         <List className={classes.list} dense>
           {recipeInfo.analyzedInstructions &&
@@ -133,22 +171,28 @@ const RecipeInfoDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
                 key={`step_${step.number}_${recipeId}`}
               >
                 <ListItemIcon style={{ minWidth: 32 }}>
+                            <Typography>
+
                   {step.number})
+                            </Typography>
+
                 </ListItemIcon>
                 <ListItemText primary={step.step} />
               </ListItem>
             ))}
         </List>
-        <Typography variant="caption" gutterBottom>
-          This recipe is courtesy of {" "}
-          <Link
-            href={recipeInfo.sourceUrl || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            '{recipeInfo.sourceName || "source"}'.
-          </Link>
-        </Typography>
+        <Box pb={1}>
+          <Typography variant="caption">
+            This recipe is courtesy of{" "}
+            <Link
+              href={recipeInfo.sourceUrl || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              '{recipeInfo.sourceName || "source"}'.
+            </Link>
+          </Typography>
+        </Box>
       </DialogContent>
     </Dialog>
   );
