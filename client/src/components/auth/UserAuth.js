@@ -49,22 +49,19 @@ export const userSignUp = async (firstname, lastname, email, password) => {
 };
 
 export const googleLogin = async (token, userprofile) => {
-  if (token) {
-    localStorage.setItem("gtoken", token);
-    localStorage.removeItem("token");
-
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/glogin",
       {
         userprofile,
       }
     );
+    localStorage.setItem("gtoken", token);
+    localStorage.removeItem("token");
     if (response.data.message == "noAccount") {
       return response.data.message;
     } else {
       return "Success";
     }
-  }
 };
 
 export const googleSignUp = async (token, userprofile, password) => {
