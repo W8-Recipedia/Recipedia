@@ -16,7 +16,7 @@ export const getRecipesComplex = async (
       instructionsRequired: true,
       addRecipeInformation: true,
       fillIngredients: true,
-      number: process.env.REACT_APP_MAX_AUTOCOMPLETE_NUMBER,
+      number: process.env.REACT_APP_MAX_RECIPE_NUMBER,
       includeIngredients: ingredients,
       diet: diet || undefined,
       intolerances: intolerances || undefined,
@@ -33,7 +33,7 @@ export const getRecipesByIngredients = async (ingredients) => {
     params: {
       apiKey: process.env.REACT_APP_RECIPE_API_KEY,
       ingredients,
-      number: process.env.REACT_APP_MAX_AUTOCOMPLETE_NUMBER,
+      number: process.env.REACT_APP_MAX_RECIPE_NUMBER,
       ranking: 1,
       ignorePantry: true,
     },
