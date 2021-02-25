@@ -68,7 +68,7 @@ const RecipeCard = ({ recipe, ...props }) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root} elevation={4}>
+    <Card className={classes.root} elevation={4} onClick={() => props.onClick(recipe.id)}>
       <div className={classes.media}>
         <img
           className={classes.image}
@@ -119,6 +119,7 @@ const RecipeCard = ({ recipe, ...props }) => {
 
 RecipeCard.propTypes = {
   recipe: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default RecipeCard;
