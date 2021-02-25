@@ -8,7 +8,7 @@ export const getRecipesComplex = async (
   query,
   maxReadyTime
 ) => {
-  let url = "https://api.spoonacular.com/recipes/complexSearch";
+  let url = "/recipes/complexSearch";
   return await Axios.get(url, {
     params: {
       apiKey: process.env.REACT_APP_RECIPE_API_KEY,
@@ -27,7 +27,7 @@ export const getRecipesComplex = async (
 };
 
 export const getRecipesByIngredients = async (ingredients) => {
-  let url = "https://api.spoonacular.com/recipes/findByIngredients";
+  let url = "/recipes/findByIngredients";
   return await Axios.get(url, {
     params: {
       apiKey: process.env.REACT_APP_RECIPE_API_KEY,
@@ -40,7 +40,7 @@ export const getRecipesByIngredients = async (ingredients) => {
 };
 
 export const getIngredients = async (query) => {
-  let url = "https://api.spoonacular.com/food/ingredients/autocomplete";
+  let url = "/food/ingredients/autocomplete";
   return await Axios.get(url, {
     params: {
       apiKey: process.env.REACT_APP_RECIPE_API_KEY,
@@ -51,7 +51,7 @@ export const getIngredients = async (query) => {
 };
 
 export const getRecipeInfoById = async (id) => {
-  let url = `https://api.spoonacular.com/recipes/${id}/information`;
+  let url = `/recipes/${id}/information`;
   return await Axios.get(url, {
     params: {
       apiKey: process.env.REACT_APP_RECIPE_API_KEY,
@@ -60,7 +60,7 @@ export const getRecipeInfoById = async (id) => {
 };
 
 export const getInstructions = async (id) => {
-  let url = `https://api.spoonacular.com/recipes/${id}/analyzedInstructions`;
+  let url = `/recipes/${id}/analyzedInstructions`;
   return await Axios.get(url, {
     params: {
       apiKey: process.env.REACT_APP_RECIPE_API_KEY,
