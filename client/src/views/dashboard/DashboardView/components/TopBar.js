@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import clsx from "clsx";
 import PropTypes from "prop-types";
@@ -11,9 +11,9 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import Logo from "src/components/Logo";
 
 import { LogOut as LogoutIcon } from "react-feather";
+import { userLogOut } from "src/components/auth/UserAuth";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -25,20 +25,17 @@ const useStyles = makeStyles(() => ({
 
 const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
   const classes = useStyles();
-  const [notifications] = useState([]);
 
   return (
     <AppBar className={clsx(classes.root, className)} elevation={0} {...rest}>
       <Toolbar>
-        <RouterLink to="/">
-          <Logo />
+        <RouterLink to="/app/home">
+          <img alt="Logo" src="/static/images/logo.svg"/>
         </RouterLink>
         <Box flexGrow={1} />
-        <Hidden mdDown>
-          <IconButton color="inherit">
-            <LogoutIcon />
-          </IconButton>
-        </Hidden>
+        <IconButton color="inherit" onClick={userLogOut} href="/">
+          <LogoutIcon />
+        </IconButton>
         <Hidden lgUp>
           <IconButton color="inherit" onClick={onMobileNavOpen}>
             <MenuIcon />

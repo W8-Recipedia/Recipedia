@@ -60,7 +60,7 @@ const LandingView = () => {
         <Container maxWidth="sm">
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <Link to="/register">
+              <Link to="/signup">
                 <Button
                   color="primary"
                   fullWidth
@@ -68,7 +68,7 @@ const LandingView = () => {
                   size="large"
                   className={classes.buttonText}
                 >
-                  Register
+                  Sign Up
                 </Button>
               </Link>
             </Grid>
@@ -87,20 +87,6 @@ const LandingView = () => {
             </Grid>
           </Grid>
         </Container>
-      </Box>
-      <Box pt={2}>
-        <Grid container justify="center">
-          <Link to="/app/home">
-            <Button
-              color="primary"
-              variant="contained"
-              size="large"
-              className={classes.buttonText}
-            >
-              Go to Homepage
-            </Button>
-          </Link>
-        </Grid>
       </Box>
     </Page>
   );

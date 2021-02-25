@@ -1,6 +1,3 @@
-import React, { useEffect } from "react";
-import { Link as RouterLink, useLocation } from "react-router-dom";
-import PropTypes from "prop-types";
 import {
   Avatar,
   Box,
@@ -12,22 +9,20 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import {
-  Home as HomeIcon,
-  Search as SearchIcon,
-  Heart as HeartIcon,
-  Settings as SettingsIcon,
   HelpCircle as FAQIcon,
   MessageCircle as FeedbackIcon,
-  LogOut as LogoutIcon,
+  Heart as HeartIcon,
+  Home as HomeIcon,
   AlertTriangle as LegalIcon,
+  Search as SearchIcon,
+  Settings as SettingsIcon,
 } from "react-feather";
-import NavItem from "./NavItem";
+import React, { useEffect, useState } from "react";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+import { getUserCredentials } from "src/components/auth/UserAuth";
 
-const user = {
-  avatar: "/static/images/avatars/avatar.png",
-  jobTitle: "",
-  name: "Not logged in",
-};
+import NavItem from "src/views/dashboard/DashboardView/components/NavItem";
+import PropTypes from "prop-types";
 
 const items = [
   {
@@ -65,11 +60,6 @@ const items = [
     icon: LegalIcon,
     title: "Legal",
   },
-  {
-    href: "/app/logout",
-    icon: LogoutIcon,
-    title: "Logout",
-  },
 ];
 
 const useStyles = makeStyles(() => ({
@@ -91,12 +81,26 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
+  const [imageURL, setImageURL] = useState("/static/images/avatars/avatar.png");
+  const [userName, setUserName] = useState(() => {
+    getUserCredentials().then((authResponse) => {
+      if (authResponse.data.loggedIn) {
+        setUserName(
+          authResponse.data.user[0].firstname +
+            " " +
+            authResponse.data.user[0].lastname
+        );
+      }
+      if (authResponse.data.user[0].imageUrl) {
+        setImageURL(authResponse.data.user[0].imageUrl);
+      }
+    });
+  });
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   const content = (
@@ -106,15 +110,15 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           <Avatar
             className={classes.avatar}
             component={RouterLink}
-            src={user.avatar}
+            src={imageURL}
             to="/app/settings"
           />
         </Box>
         <Typography className={classes.name} color="textPrimary" variant="h5">
-          {user.name}
+          {userName}
         </Typography>
         <Typography color="textSecondary" variant="body2">
-          {user.jobTitle}
+          {""}
         </Typography>
       </Box>
       <Divider />

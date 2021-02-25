@@ -1,6 +1,3 @@
-import React, { useState } from "react";
-import clsx from "clsx";
-import PropTypes from "prop-types";
 import {
   Box,
   Button,
@@ -12,6 +9,11 @@ import {
   TextField,
   makeStyles,
 } from "@material-ui/core";
+import React, { useLayoutEffect, useState } from "react";
+
+import { getUserCredentials } from "src/components/auth/UserAuth";
+import PropTypes from "prop-types";
+import clsx from "clsx";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -19,14 +21,27 @@ const useStyles = makeStyles(() => ({
 
 const ProfileDetails = ({ className, ...rest }) => {
   const classes = useStyles();
+
+  const [googleAccount, setGoogleAccount] = useState(false);
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    phone: "",
-    state: "",
-    country: "",
   });
+  useLayoutEffect(() => {
+    getUserCredentials().then((authResponse) => {
+      if (authResponse.data.loggedIn) {
+        setValues({
+          firstName: authResponse.data.user[0].firstname,
+          lastName: authResponse.data.user[0].lastname,
+          email: authResponse.data.user[0].email,
+        });
+      }
+      if (authResponse.data.user[0].googleId) {
+        setGoogleAccount(true);
+      }
+    });
+  }, []);
 
   const handleChange = (event) => {
     setValues({
@@ -59,6 +74,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 required
                 value={values.firstName}
                 variant="outlined"
+                disabled={googleAccount}
               />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -70,9 +86,10 @@ const ProfileDetails = ({ className, ...rest }) => {
                 required
                 value={values.lastName}
                 variant="outlined"
+                disabled={googleAccount}
               />
             </Grid>
-            <Grid item md={6} xs={12}>
+            <Grid item md={12} xs={12}>
               <TextField
                 fullWidth
                 label="Email Address"
@@ -81,16 +98,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 required
                 value={values.email}
                 variant="outlined"
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Country"
-                name="country"
-                onChange={handleChange}
-                value={values.country}
-                variant="outlined"
+                disabled={googleAccount}
               />
             </Grid>
             <Grid item md={6} xs={12}></Grid>
@@ -98,7 +106,7 @@ const ProfileDetails = ({ className, ...rest }) => {
         </CardContent>
         <Divider />
         <Box display="flex" justifyContent="flex-end" p={2}>
-          <Button color="primary" variant="contained">
+          <Button color="primary" variant="contained" disabled={googleAccount}>
             Save details
           </Button>
         </Box>
