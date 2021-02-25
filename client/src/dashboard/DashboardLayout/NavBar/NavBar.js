@@ -81,6 +81,7 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
+  const [imageURL, setImageURL] = useState("/static/images/avatars/avatar.png");
   const [userName, setUserName] = useState(() => {
     getUserCredentials().then((authResponse) => {
       if (authResponse.data.loggedIn) {
@@ -89,6 +90,9 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             " " +
             authResponse.data.user[0].lastname
         );
+      }
+      if (authResponse.data.user[0].imageUrl) {
+        setImageURL(authResponse.data.user[0].imageUrl);
       }
     });
   });
@@ -106,7 +110,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           <Avatar
             className={classes.avatar}
             component={RouterLink}
-            src={"/static/images/avatars/avatar.png"}
+            src={imageURL}
             to="/app/settings"
           />
         </Box>

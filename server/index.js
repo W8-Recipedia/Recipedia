@@ -8,8 +8,10 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const app = express();
-
+const { OAuth2Client } = require("google-auth-library");
 require("dotenv").config();
+
+const gclient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 app.use(express.json());
 app.use(
@@ -53,6 +55,33 @@ const verifyJWT = (req, res, next) => {
   }
 };
 
+app.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  con.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
+    if (err) {
+      res.send({ err: err });
+    }
+    if (result.length > 0) {
+      bcrypt.compare(password, result[0].password, (error, response) => {
+        if (response) {
+          const userid = result[0].userid;
+          const token = jwt.sign({ userid }, process.env.JWT_SECRET);
+          req.session.user = result;
+          res.json({
+            token: token,
+          });
+        } else {
+          res.send({ message: "wrongPassword" });
+        }
+      });
+    } else {
+      res.send({ message: "noEmail" });
+    }
+  });
+});
+
 app.post("/register", (req, res) => {
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
@@ -82,30 +111,55 @@ app.get("/userinfo", verifyJWT, (req, res) => {
   }
 });
 
-app.post("/login", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
+app.get("/guserinfo", (req, res) => {
+  gclient
+    .verifyIdToken({
+      idToken: req.headers["x-access-token"],
+      audience: process.env.GOOGLE_CLIENT_ID,
+    })
+    .catch(console.error);
+  if (req.session.user) {
+    res.send({ loggedIn: true, user: req.session.user });
+  } else {
+    res.send({ loggedIn: false });
+  }
+});
 
-  con.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
-    if (err) {
-      res.send({ err: err });
+app.post("/glogin", (req, res) => {
+  console.log(req.body.userprofile.email);
+  con.query(
+    "SELECT * FROM users WHERE email = ?",
+    req.body.userprofile.email,
+    (err, result) => {
+      if (result.length == 0) {
+        res.send({ message: "noAccount" });
+      } else {
+        req.session.user = [req.body.userprofile];
+        res.json({});
+      }
     }
-    if (result.length > 0) {
-      bcrypt.compare(password, result[0].password, (error, response) => {
-        if (response) {
-          const userid = result[0].userid;
-          const token = jwt.sign({ userid }, process.env.JWT_SECRET);
-          req.session.user = result;
-          res.json({
-            token: token,
-          });
+  );
+});
+
+app.post("/gregister", (req, res) => {
+  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+    con.query(
+      "INSERT INTO users (firstname, lastname, email, password) VALUES (?,?,?,?)",
+      [
+        req.body.user.givenName,
+        req.body.user.familyName,
+        req.body.user.email,
+        hash,
+      ],
+      (err, result) => {
+        if (err) {
+          res.send({ message: "yesAccount" });
         } else {
-          res.send({ message: "wrongPassword" });
+          req.session.user = [req.body.user];
+          res.json({ result: result });
         }
-      });
-    } else {
-      res.send({ message: "noEmail" });
-    }
+      }
+    );
   });
 });
 

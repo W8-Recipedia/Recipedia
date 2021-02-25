@@ -22,6 +22,8 @@ const useStyles = makeStyles(() => ({
 
 const ProfileCard = ({ className, ...rest }) => {
   const classes = useStyles();
+  const [imageURL, setImageURL] = useState("/static/images/avatars/avatar.png");
+
   const [userName, setUserName] = useState(() => {
     getUserCredentials().then((authResponse) => {
       if (authResponse.data.loggedIn) {
@@ -31,6 +33,9 @@ const ProfileCard = ({ className, ...rest }) => {
             authResponse.data.user[0].lastname
         );
       }
+      if (authResponse.data.user[0].imageUrl) {
+        setImageURL(authResponse.data.user[0].imageUrl);
+      }
     });
   });
 
@@ -39,10 +44,7 @@ const ProfileCard = ({ className, ...rest }) => {
       <CardContent>
         <Box alignItems="center" display="flex" flexDirection="column">
           <Box pb={2}>
-            <Avatar
-              className={classes.avatar}
-              src={"/static/images/avatars/avatar.png"}
-            />
+            <Avatar className={classes.avatar} src={imageURL} />
           </Box>
           <Typography color="textPrimary" gutterBottom variant="h3">
             {userName}

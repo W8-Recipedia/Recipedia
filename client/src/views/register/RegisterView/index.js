@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import { userRegister } from "src/components/auth/UserAuth";
+import { userRegister, googleSignUp } from "src/components/auth/UserAuth";
+
 import {
   Box,
   Button,
@@ -21,6 +22,7 @@ import {
   SvgIcon,
 } from "@material-ui/core";
 import Page from "src/components/Page";
+import GoogleLogin from "react-google-login";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,6 +44,8 @@ const RegisterView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+  const [googleRegOpen, setGoogleRegOpen] = React.useState(false);
+  const googleref = useRef(null);
 
   const [signupError, setSignUpError] = useState("");
   const handleSubmit = (values, actions) => {
@@ -55,6 +59,25 @@ const RegisterView = () => {
       if (authResponse == "Success") {
         navigate("/app/home");
       } else {
+        setOpen(true);
+      }
+    });
+  };
+
+  const responseGoogle = (response) => {
+    setGoogleRegOpen(true);
+  };
+
+  const handleGoogleSubmit = (response) => {
+    googleSignUp(
+      response.tokenId,
+      response.profileObj,
+      googleref.current.values.gpassword
+    ).then((authResponse) => {
+      if (authResponse == "Success") {
+        navigate("/app/home");
+      } else {
+        setGoogleRegOpen(false);
         setOpen(true);
       }
     });
@@ -120,23 +143,7 @@ const RegisterView = () => {
                   </Typography>
                 </Box>
                 <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
-                    <Button
-                      color="primary"
-                      fullWidth
-                      startIcon={
-                        <SvgIcon>
-                          <path d="M9.53144612,22.005 L9.53144612,13.0552149 L6.44166667,13.0552149 L6.44166667,9.49875 L9.53144612,9.49875 L9.53144612,6.68484375 C9.53144612,5.19972656 9.95946769,4.04680661 10.8155103,3.22608401 C11.6715529,2.4053613 12.808485,1.995 14.2263057,1.995 C15.3766134,1.995 16.3129099,2.04710915 17.0351961,2.15132812 L17.0351961,5.3169726 L15.1090998,5.3169726 C14.3868137,5.3169726 13.8919142,5.47330073 13.6244006,5.78595698 C13.4103902,6.04650407 13.3033846,6.46337874 13.3033846,7.03658198 L13.3033846,9.49875 L16.71418,9.49875 L16.2326559,13.0552149 L13.3033846,13.0552149 L13.3033846,22.005 L9.53144612,22.005 Z" />
-                        </SvgIcon>
-                      }
-                      size="large"
-                      variant="contained"
-                    >
-                      Sign up with Facebook
-                    </Button>
-                  </Grid>
-
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12}>
                     <Button
                       fullWidth
                       startIcon={
@@ -146,6 +153,7 @@ const RegisterView = () => {
                       }
                       size="large"
                       variant="contained"
+                      onClick={responseGoogle}
                     >
                       Sign up with Google
                     </Button>
@@ -295,6 +303,124 @@ const RegisterView = () => {
               >
                 Log in
               </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog
+            open={googleRegOpen}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                <Formik
+                  innerRef={googleref}
+                  initialValues={{
+                    gpassword: "",
+                    gconfirmPassword: "",
+                    gpolicy: false,
+                  }}
+                  validationSchema={Yup.object().shape({
+                    gpassword: Yup.string()
+                      .max(255)
+                      .required("Password is required")
+                      .matches(
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+                        "Password must contain an uppercase letter, a number, and a symbol"
+                      )
+                      .min(8, "Password must be at least 8 characters"),
+                    gconfirmPassword: Yup.string().oneOf(
+                      [Yup.ref("gpassword"), null],
+                      "Passwords must match"
+                    ),
+                    gpolicy: Yup.boolean().oneOf(
+                      [true],
+                      "Please accept the Terms and Conditions"
+                    ),
+                  })}
+                >
+                  {({
+                    errors,
+                    handleBlur,
+                    handleChange,
+                    isSubmitting,
+                    touched,
+                    values,
+                  }) => (
+                    <Form>
+                      <Typography color="textSecondary" variant="body1">
+                        Please enter a password:
+                      </Typography>
+                      <TextField
+                        error={Boolean(touched.gpassword && errors.gpassword)}
+                        fullWidth
+                        helperText={touched.gpassword && errors.gpassword}
+                        label="Password"
+                        margin="normal"
+                        name="gpassword"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        type="password"
+                        value={values.gpassword}
+                        variant="outlined"
+                      />
+                      <TextField
+                        error={Boolean(
+                          touched.gconfirmPassword && errors.gconfirmPassword
+                        )}
+                        fullWidth
+                        helperText={
+                          touched.gconfirmPassword && errors.gconfirmPassword
+                        }
+                        label="Confirm password"
+                        margin="normal"
+                        name="gconfirmPassword"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        type="password"
+                        value={values.gconfirmPassword}
+                        variant="outlined"
+                      />
+                      <Box alignItems="center" display="flex" ml={-1}>
+                        <Checkbox
+                          checked={values.gpolicy}
+                          name="gpolicy"
+                          onChange={handleChange}
+                        />
+                        <Typography color="textSecondary" variant="body1">
+                          I have read the{" "}
+                          <Link
+                            color="primary"
+                            component={RouterLink}
+                            to="/legal"
+                            underline="always"
+                            variant="h6"
+                          >
+                            Terms and Conditions
+                          </Link>
+                        </Typography>
+                      </Box>
+                    </Form>
+                  )}
+                </Formik>
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions className={classes.loginbutton}>
+              <GoogleLogin
+                clientId="265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
+                buttonText="Log in with Google"
+                onSuccess={handleGoogleSubmit}
+                onFailure={handleGoogleSubmit}
+                render={(renderProps) => (
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    disabled={renderProps.disabled}
+                    onClick={renderProps.onClick}
+                  >
+                    Submit
+                  </Button>
+                )}
+              />
             </DialogActions>
           </Dialog>
         </Container>

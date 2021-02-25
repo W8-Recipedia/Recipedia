@@ -21,6 +21,8 @@ const useStyles = makeStyles(() => ({
 
 const ProfileDetails = ({ className, ...rest }) => {
   const classes = useStyles();
+
+  const [googleAccount, setGoogleAccount] = useState(false);
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
@@ -34,6 +36,9 @@ const ProfileDetails = ({ className, ...rest }) => {
           lastName: authResponse.data.user[0].lastname,
           email: authResponse.data.user[0].email,
         });
+      }
+      if (authResponse.data.user[0].googleId) {
+        setGoogleAccount(true);
       }
     });
   }, []);
@@ -69,6 +74,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 required
                 value={values.firstName}
                 variant="outlined"
+                disabled={googleAccount}
               />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -80,6 +86,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 required
                 value={values.lastName}
                 variant="outlined"
+                disabled={googleAccount}
               />
             </Grid>
             <Grid item md={12} xs={12}>
@@ -91,6 +98,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 required
                 value={values.email}
                 variant="outlined"
+                disabled={googleAccount}
               />
             </Grid>
             <Grid item md={6} xs={12}></Grid>
@@ -98,7 +106,7 @@ const ProfileDetails = ({ className, ...rest }) => {
         </CardContent>
         <Divider />
         <Box display="flex" justifyContent="flex-end" p={2}>
-          <Button color="primary" variant="contained">
+          <Button color="primary" variant="contained" disabled={googleAccount}>
             Save details
           </Button>
         </Box>
