@@ -5,6 +5,7 @@ import Preferences from "src/views/settings/SettingsView/components/Preferences"
 import Password from "src/views/settings/SettingsView/components/Password";
 import ProfileCard from "src/views/settings/SettingsView/components/ProfileCard";
 import ProfileDetails from "src/views/settings/SettingsView/components/ProfileDetails";
+import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,25 +20,27 @@ const SettingsView = () => {
   const classes = useStyles();
 
   return (
-    <Page className={classes.root} title="Recipedia | Settings">
-      <Container maxWidth="lg">
-        <Box mb={3}>
-          <Grid container spacing={3}>
-            <Grid item lg={4} md={6} xs={12}>
-              <ProfileCard />
-            </Grid>
+    <Scrollbars>
+      <Page className={classes.root} title="Recipedia | Settings">
+        <Container maxWidth="lg">
+          <Box mb={3}>
+            <Grid container spacing={3}>
+              <Grid item lg={4} md={6} xs={12}>
+                <ProfileCard />
+              </Grid>
 
-            <Grid item lg={8} md={6} xs={12}>
-              <ProfileDetails />
+              <Grid item lg={8} md={6} xs={12}>
+                <ProfileDetails />
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
-        <Preferences />
-        <Box mt={3}>
-          <Password />
-        </Box>
-      </Container>
-    </Page>
+          </Box>
+          <Preferences />
+          <Box mt={3}>
+            <Password />
+          </Box>
+        </Container>
+      </Page>
+    </Scrollbars>
   );
 };
 

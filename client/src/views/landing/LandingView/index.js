@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import Page from "src/components/Page";
 import { Link } from "react-router-dom";
+import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,60 +36,62 @@ const LandingView = () => {
   const classes = useStyles();
 
   return (
-    <Page className={classes.root} title="Recipedia">
-      <Box
-        display="flex"
-        flexDirection="column"
-        height="50%"
-        justifyContent="center"
-      >
-        <Container maxWidth="md">
-          <Typography align="center" color="textSecondary" variant="h2">
-            Eat smarter with
-          </Typography>
-          <Typography
-            align="center"
-            color="textPrimary"
-            variant="h1"
-            className={classes.title}
-          >
-            Recipedia
-          </Typography>
-        </Container>
-      </Box>
-      <Box>
-        <Container maxWidth="sm">
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <Link to="/signup">
-                <Button
-                  color="primary"
-                  fullWidth
-                  variant="contained"
-                  size="large"
-                  className={classes.buttonText}
-                >
-                  Sign Up
-                </Button>
-              </Link>
+    <Scrollbars>
+      <Page className={classes.root} title="Recipedia">
+        <Box
+          display="flex"
+          flexDirection="column"
+          height="50%"
+          justifyContent="center"
+        >
+          <Container maxWidth="md">
+            <Typography align="center" color="textSecondary" variant="h2">
+              Eat smarter with
+            </Typography>
+            <Typography
+              align="center"
+              color="textPrimary"
+              variant="h1"
+              className={classes.title}
+            >
+              Recipedia
+            </Typography>
+          </Container>
+        </Box>
+        <Box>
+          <Container maxWidth="sm">
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <Link to="/signup">
+                  <Button
+                    color="primary"
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    className={classes.buttonText}
+                  >
+                    Sign Up
+                  </Button>
+                </Link>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Link to="/login">
+                  <Button
+                    color="primary"
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    className={classes.buttonText}
+                  >
+                    Log in
+                  </Button>
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={6}>
-              <Link to="/login">
-                <Button
-                  color="primary"
-                  fullWidth
-                  variant="contained"
-                  size="large"
-                  className={classes.buttonText}
-                >
-                  Log in
-                </Button>
-              </Link>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
-    </Page>
+          </Container>
+        </Box>
+      </Page>
+    </Scrollbars>
   );
 };
 

@@ -6,6 +6,7 @@ import { getRecipesComplex } from "src/api/SpoonacularAPI";
 import RecipeInfoDialog from "src/views/search/SearchView/components/RecipeInfoDialog";
 import RecipeCardList from "src/views/search/SearchView/components/RecipeCardList";
 import Searchbar from "src/views/search/SearchView/components/Searchbar";
+import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +28,7 @@ const SearchView = () => {
   const [ingredients] = useState([]);
   const [diets] = useState([]);
   const [intolerances] = useState([]);
-  
+
   const handleQuerySearch = (query) => {
     setSearchQuery(query);
     loadRecipes([], ingredients, intolerances, 0, query);
@@ -44,20 +45,22 @@ const SearchView = () => {
   // }, []);
 
   return (
-    <Page className={classes.root} title="Recipedia | Search">
-      <Container maxWidth={false}>
-        <Searchbar onSubmit={handleQuerySearch} />
-        <Box mt={3}>
-          <RecipeCardList recipes={recipes} onRecipeClick={onRecipeClick} />
-        </Box>
-      </Container>
-      <RecipeInfoDialog
+    <Scrollbars>
+      <Page className={classes.root} title="Recipedia | Search">
+        <Container maxWidth={false}>
+          <Searchbar onSubmit={handleQuerySearch} />
+          <Box mt={3}>
+            <RecipeCardList recipes={recipes} onRecipeClick={onRecipeClick} />
+          </Box>
+        </Container>
+          <RecipeInfoDialog
             open={dlgOpen}
             handleClose={() => setDlgOpen(false)}
             recipeId={selectedRecipeId}
             recipeInfo={selectedRecipeInfo}
           />
-    </Page>
+      </Page>
+    </Scrollbars>
   );
 
   function loadRecipes(
@@ -92,7 +95,7 @@ const SearchView = () => {
     setSelectedRecipeInfo(clickedRecipe);
     setDlgOpen(true);
   }
-  
+
 };
 
 export default SearchView;
