@@ -3,10 +3,8 @@ import PropTypes from "prop-types";
 import {
   Card,
   CardContent,
-  CardMedia,
   Typography,
   CardActions,
-  Box,
   Grid,
   makeStyles,
 } from "@material-ui/core";
