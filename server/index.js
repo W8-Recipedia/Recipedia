@@ -12,7 +12,7 @@ const saltRounds = 10;
 const app = express();
 const { OAuth2Client } = require("google-auth-library");
 const gclient = new OAuth2Client(
-  ("265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com")
+  "265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
 );
 
 app.use(express.json());
@@ -63,8 +63,7 @@ app.post("/login", (req, res) => {
   con.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
     if (err) {
       res.send({ err: err });
-    }
-    if (result.length > 0) {
+    } else if (result.length > 0) {
       bcrypt.compare(password, result[0].password, (error, response) => {
         if (response) {
           const userid = result[0].userid;
@@ -112,6 +111,44 @@ app.get("/userinfo", verifyJWT, (req, res) => {
   }
 });
 
+app.post("/changepassword", (req, res) => {
+  const oldpassword = req.body.oldpassword;
+  const newpassword = req.body.newpassword;
+  if (req.session.user) {
+    const email = req.session.user[0].email;
+
+    con.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else if (result.length > 0) {
+        bcrypt.compare(oldpassword, result[0].password, (error, response) => {
+          if (response) {
+            bcrypt.hash(newpassword, saltRounds, (err, hash) => {
+              con.query(
+                "UPDATE users SET password = ? WHERE email = ?",
+                [hash, email],
+                (err, result) => {
+                  if (err) {
+                    res.send({ message: "DB error" });
+                  }
+                }
+              );
+            });
+            const userid = result[0].userid;
+            const token = jwt.sign({ userid }, process.env.JWT_SECRET);
+            req.session.user = result;
+            res.json({ passwordChanged: true, token: token });
+          } else {
+            res.send({ message: "wrongPassword" });
+          }
+        });
+      }
+    });
+  } else {
+    res.send({ loggedIn: false });
+  }
+});
+
 app.post("/glogin", (req, res) => {
   con.query(
     "SELECT * FROM users WHERE email = ?",
@@ -153,7 +190,8 @@ app.get("/guserinfo", (req, res) => {
   gclient
     .verifyIdToken({
       idToken: req.headers["x-access-token"],
-      audience: "265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com",
+      audience:
+        "265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com",
     })
     .catch(console.error);
   if (req.session.user) {
