@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { Box, Container, Grid, makeStyles } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { Box, Container, makeStyles } from "@material-ui/core";
 import Page from "src/components/Page";
-import FavouriteCard from "src/views/favourites/FavouritesView/components/FavouriteCard";
-import data from "src/views/favourites/FavouritesView/data/data";
+// import { getExampleRecipes } from "src/api/mockAPI";
 import { Scrollbars } from "react-custom-scrollbars";
+import FavRecipeDialog from "src/views/favourites/FavouritesView/components/FavRecipeDialog";
+import FavRecipeList from "src/views/favourites/FavouritesView/components/FavRecipeList";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,36 +13,53 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
-  favouriteCard: {
-    height: "100%",
-  },
 }));
 
 const Favourites = () => {
   const classes = useStyles();
-  const [favourites] = useState(data);
+  const [recipes, setRecipes] = useState([]);
+  const [selectedRecipeId, setSelectedRecipeId] = useState(0);
+  const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
+  const [dlgOpen, setDlgOpen] = useState(false);
+
+  const onRecipeClick = (id) => {
+    loadRecipeById(id);
+    setSelectedRecipeId(id);
+  };
+
+  // USED FOR TESTING
+  // useEffect(() => {
+  //   setRecipes(getExampleRecipes());
+  // }, []);
 
   return (
     <Scrollbars>
     <Page className={classes.root} title="Recipedia | Favourites">
-      <Container maxWidth={false}>
+    <Container maxWidth={false}>
         <Box mt={3}>
-          <Grid container spacing={3}>
-            {favourites.map((favourite) => (
-              <Grid item key={favourite.id} lg={4} md={6} xs={12}>
-                <FavouriteCard
-                  className={classes.favouriteCard}
-                  favourite={favourite}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <FavRecipeList 
+            recipes={recipes}
+            onRecipeClick={onRecipeClick} />
         </Box>
-        <Box mt={3} display="flex" justifyContent="center"></Box>
       </Container>
+      <FavRecipeDialog
+            open={dlgOpen}
+            handleClose={() => setDlgOpen(false)}
+            recipeId={selectedRecipeId}
+            recipeInfo={selectedRecipeInfo}
+          />
     </Page>
     </Scrollbars>
   );
+
+
+  function loadRecipeById(id) {
+    const clickedRecipe = recipes.find((recipe) => recipe.id === id);
+    console.log(clickedRecipe);
+    setSelectedRecipeInfo(clickedRecipe);
+    setDlgOpen(true);
+  }
+
 };
 
 export default Favourites;
