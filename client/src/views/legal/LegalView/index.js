@@ -27,17 +27,25 @@ const LegalView = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Legal">
+      <Container maxWidth="lg">
+          <Box mb={3}>
+            <Card variant="outlined">
+            <CardContent>
+              <Typography gutterBottom variant="h1">
+                Terms &amp; Conditions
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                The legality of our website matters a lot to us. Please take the 
+                time to read these terms of use carefully - they are important for 
+                your safety.
+              </Typography>
+            </CardContent>
+            </Card>
+          </Box>
+        </Container>
         <Container maxWidth="lg">
           <Card>
-            <CardHeader title="Terms and Conditions" />
-            <Divider />
             <CardContent>
-              <Box pb={2}>
-                <Typography>
-                  PLEASE READ THESE TERMS OF USE CAREFULLY BEFORE USING THIS
-                  WEBSITE
-                </Typography>
-              </Box>
               <Box pb={2}>
                 <Typography>
                   Welcome to the Recipedia website (“Site”). Recipedia maintains
