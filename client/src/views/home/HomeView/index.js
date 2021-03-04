@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Container, makeStyles } from "@material-ui/core";
+import { Box, Container, makeStyles, Card, CardContent, Typography } from "@material-ui/core";
 import Page from "src/components/Page";
 // import { getExampleRecipes } from "src/api/mockAPI";
 import { getRandomRecipes } from "src/api/SpoonacularAPI";
@@ -44,6 +44,20 @@ const Home = () => {
   return (
     <Scrollbars>
     <Page className={classes.root} title="Recipedia | Home">
+    <Container maxWidth="lg">
+      <Box mb={3}>
+        <Card variant="outlined">
+        <CardContent>
+          <Typography gutterBottom variant="h1">
+            Welcome home.
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            View our delightful assortment of recipes, picked just for you.
+          </Typography>
+        </CardContent>
+        </Card>
+      </Box>
+    </Container>
       <Container maxWidth={false}>
         <Box mt={3}>
             <RecipeCardList 
