@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { Box, Container, Grid, makeStyles } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { Box, Container, makeStyles } from "@material-ui/core";
 import Page from "src/components/Page";
-import HomeCard from "src/views/home/HomeView/components/HomeCard";
-import data from "src/views/home/HomeView/data/data";
+// import { getExampleRecipes } from "src/api/mockAPI";
+import { getRandomRecipes } from "src/api/SpoonacularAPI";
+import RecipeInfoDialog from "src/views/home/HomeView/components/RecipeInfoDialog";
+import RecipeCardList from "src/views/home/HomeView/components/RecipeCardList";
 import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
@@ -12,33 +14,64 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
-  homeCard: {
-    height: "100%",
-  },
 }));
 
 const Home = () => {
   const classes = useStyles();
-  const [recipes] = useState(data);
+  const [recipes, setRecipes] = useState([]);
+  const [selectedRecipeId, setSelectedRecipeId] = useState(0);
+  const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
+  const [dlgOpen, setDlgOpen] = useState(false);
+
+  const onRecipeClick = (id) => {
+    loadRecipeById(id);
+    setSelectedRecipeId(id);
+  };
+
+  // USED FOR TESTING
+  // useEffect(() => {
+  //   setRecipes(getExampleRecipes());
+  // }, []);
+
+  useEffect(() => {
+    loadRandomRecipes();
+  }, []);
 
   return (
     <Scrollbars>
     <Page className={classes.root} title="Recipedia | Home">
       <Container maxWidth={false}>
         <Box mt={3}>
-          <Grid container spacing={3}>
-            {recipes.map((recipe) => (
-              <Grid item key={recipe.id} lg={4} md={6} xs={12}>
-                <HomeCard className={classes.homeCard} recipe={recipe} />
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-        <Box mt={3} display="flex" justifyContent="center"></Box>
+            <RecipeCardList recipes={recipes} onRecipeClick={onRecipeClick} />
+          </Box>
       </Container>
+      <RecipeInfoDialog
+            open={dlgOpen}
+            handleClose={() => setDlgOpen(false)}
+            recipeId={selectedRecipeId}
+            recipeInfo={selectedRecipeInfo}
+          />
     </Page>
     </Scrollbars>
-  );
+  )
+
+    function loadRandomRecipes() {
+      getRandomRecipes()
+        .then((res) => {
+          console.log("recipes:", res.data);
+          setRecipes([...recipes, ...res.data.recipes])
+          // setRecipes(getExampleRecipes());
+          return false;
+        })
+        .catch((error) => console.log(error))
+    }
+
+  function loadRecipeById(id) {
+    const clickedRecipe = recipes.find((recipe) => recipe.id === id);
+    console.log(clickedRecipe);
+    setSelectedRecipeInfo(clickedRecipe);
+    setDlgOpen(true);
+  }
 };
 
 export default Home;
