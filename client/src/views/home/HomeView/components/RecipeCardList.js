@@ -1,9 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
 import RecipeCard from "src/views/home/HomeView/components/RecipeCard";
-import { Grid } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 
-const RecipeCardList = ({ recipes, onRecipeClick, }) => {
+
+const useStyles = makeStyles({
+  loadMoreGridBtn: {
+    display: "flex",
+    justifyContent: "center",
+  },
+});
+
+const RecipeCardList = ({ recipes, onRecipeClick, loadMore }) => {
+  const classes = useStyles();
   return (
       <Grid container spacing={2}>
         {recipes.map((recipeItem) => (
@@ -11,14 +22,26 @@ const RecipeCardList = ({ recipes, onRecipeClick, }) => {
             <RecipeCard recipe={recipeItem} onClick={onRecipeClick} />
           </Grid>
         ))}
-        <Grid item xs={12}></Grid>
+        <Grid item xs={12} className={classes.loadMoreGridBtn}>
+          <Button
+            color="primary"
+            onClick={loadMore}
+          >
+            <ArrowDownwardIcon/>
+            Load more recipes!
+            <ArrowDownwardIcon/>
+          </Button>
       </Grid>
+      </Grid>
+      
+      
   );
 };
 
 RecipeCardList.propTypes = {
   recipes: PropTypes.array.isRequired,
   onRecipeClick: PropTypes.func.isRequired,
+  loadMore: PropTypes.func,
 };
 
 export default RecipeCardList;

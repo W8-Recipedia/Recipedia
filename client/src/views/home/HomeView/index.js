@@ -37,12 +37,19 @@ const Home = () => {
     loadRandomRecipes();
   }, []);
 
+  const loadMoreRecipes = () => {
+    loadRandomRecipes();
+  };
+
   return (
     <Scrollbars>
     <Page className={classes.root} title="Recipedia | Home">
       <Container maxWidth={false}>
         <Box mt={3}>
-            <RecipeCardList recipes={recipes} onRecipeClick={onRecipeClick} />
+            <RecipeCardList 
+              recipes={recipes}
+              onRecipeClick={onRecipeClick}
+              loadMore={loadMoreRecipes} />
           </Box>
       </Container>
       <RecipeInfoDialog
