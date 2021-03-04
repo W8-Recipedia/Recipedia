@@ -60,7 +60,7 @@ const Home = () => {
           />
     </Page>
     </Scrollbars>
-  )
+  );
 
     function loadRandomRecipes() {
       getRandomRecipes()
