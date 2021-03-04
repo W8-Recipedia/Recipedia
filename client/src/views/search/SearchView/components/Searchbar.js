@@ -12,6 +12,7 @@ import {
   Checkbox,
   MenuItem,
   ListItemText,
+  Paper
 } from "@material-ui/core";
 import { Search as SearchIcon } from "react-feather";
 
@@ -105,13 +106,14 @@ const initialFormData = Object.freeze({
       <Box mt={1}>
         <Grid container spacing={3}>
           <Grid item md={6} xs={12}>
+          <Paper>
             <form noValidate autoComplete="off" onSubmit={onSubmit}>
               <TextField
                 variant="outlined"
                 name="query"
                 onChange={handleChange}
                 value={formState.query}
-                placeholder="Search recipes"
+                label="Search recipes"
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -124,6 +126,7 @@ const initialFormData = Object.freeze({
                 fullWidth
               />
             </form>
+            </Paper>
           </Grid>
           <Grid item md={3} xs={12}>
             <InputLabel id="type-label">Type</InputLabel>
@@ -176,3 +179,4 @@ Searchbar.propTypes = {
   className: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
 };
+
