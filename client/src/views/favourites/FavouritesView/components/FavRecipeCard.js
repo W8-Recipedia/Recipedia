@@ -9,7 +9,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import ScheduleIcon from "@material-ui/icons/Schedule";
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import IconButton from "@material-ui/core/IconButton";
 import LocalDiningIcon from "@material-ui/icons/LocalDining";
 
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecipeCard = ({ recipe, ...props }) => {
+const FavRecipeCard = ({ recipe, ...props }) => {
   const classes = useStyles();
 
   return (
@@ -116,7 +116,7 @@ const RecipeCard = ({ recipe, ...props }) => {
 
           <Grid className={classes.statsItem} item>
             <IconButton>
-              <FavoriteBorderIcon style={{ color: "red" }} />
+              <FavoriteIcon style={{ color: "red" }} />
             </IconButton>
           </Grid>
         </Grid>
@@ -125,9 +125,9 @@ const RecipeCard = ({ recipe, ...props }) => {
   );
 };
 
-RecipeCard.propTypes = {
+FavRecipeCard.propTypes = {
   recipe: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
-export default RecipeCard;
+export default FavRecipeCard;

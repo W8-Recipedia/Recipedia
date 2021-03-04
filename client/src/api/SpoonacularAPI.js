@@ -26,6 +26,16 @@ export const getRecipesComplex = async (
   });
 };
 
+export const getRandomRecipes = async () => {
+  let url = "/recipes/random";
+  return await Axios.get(url, {
+    params: {
+      apiKey: process.env.REACT_APP_RECIPE_API_KEY,
+      number: process.env.REACT_APP_MAX_RECIPE_NUMBER,
+    },
+  });
+};
+
 export const getRecipesByIngredients = async (ingredients) => {
   let url = "/recipes/findByIngredients";
   return await Axios.get(url, {
