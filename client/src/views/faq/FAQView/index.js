@@ -1,6 +1,8 @@
 import React from "react";
 import {
   Card,
+  CardContent,
+  Typography,
   Box,
   CardHeader,
   Container,
@@ -25,17 +27,22 @@ const FAQView = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | FAQ">
+      <Container maxWidth="lg">
+          <Box mb={3}>
+            <Card variant="outlined">
+            <CardContent>
+              <Typography gutterBottom variant="h1">
+                Frequently Asked Questions
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                If you have any questions, you may find that they're answered right here.
+              </Typography>
+            </CardContent>
+            </Card>
+          </Box>
+        </Container>
         <Container maxWidth="lg">
           <Box mb={3}>
-            <Card>
-              {/* <Box p={2}>
-            <Typography color="textPrimary"
-              variant="h3">
-              Frequently Asked Questions
-            </Typography>
-            </Box> */}
-              <CardHeader title="Frequently Asked Questions" />
-            </Card>
           </Box>
 
           <Box mb={3}>
