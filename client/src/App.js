@@ -1,10 +1,9 @@
 import "react-perfect-scrollbar/dist/css/styles.css";
 import React from "react";
-import { useRoutes } from "react-router-dom";
+import { useRoutes, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/core";
 import Styles from "src/components/theme/styles";
-import theme from "src/components/theme";
-import { Navigate } from "react-router-dom";
+import Theme from "src/components/theme";
 import SearchView from "src/views/search/SearchView";
 import LoginCheck, { AccessCheck } from "src/components/auth/AuthCheck";
 import NotFoundView from "src/views/error/ErrorView";
@@ -19,7 +18,7 @@ import FeedbackView from "src/views/feedback/FeedbackView";
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={Theme}>
       <Styles />
       {useRoutes([
         {

@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 const Home = () => {
   const classes = useStyles();
   const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [selectedRecipeId, setSelectedRecipeId] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
   const [dlgOpen, setDlgOpen] = useState(false);
@@ -59,7 +60,7 @@ const Home = () => {
                   Welcome home.
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  View our delightful assortment of recipes, picked just for
+                  View our delightful assortment of recipes, curated just for
                   you.
                 </Typography>
               </Box>
@@ -72,6 +73,7 @@ const Home = () => {
               recipes={recipes}
               onRecipeClick={onRecipeClick}
               loadMore={loadMoreRecipes}
+              loading={loading}
             />
           </Box>
         </Container>
@@ -86,6 +88,7 @@ const Home = () => {
   );
 
   function loadRandomRecipes() {
+    setLoading(true);
     getRandomRecipes()
       .then((res) => {
         console.log("recipes:", res.data);
@@ -93,7 +96,10 @@ const Home = () => {
         // setRecipes(getExampleRecipes());
         return false;
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   function loadRecipeById(id) {

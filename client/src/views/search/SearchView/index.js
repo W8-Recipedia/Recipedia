@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { 
+import {
   Box,
-  Grid, 
-  Container, 
+  Grid,
+  Container,
   Card,
   CardContent,
   Typography,
@@ -12,7 +12,8 @@ import {
   Input,
   Checkbox,
   MenuItem,
-  ListItemText, } from "@material-ui/core";
+  ListItemText,
+} from "@material-ui/core";
 import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
 import { getComplexRecipes } from "src/components/api/SpoonacularAPI";
@@ -94,6 +95,8 @@ const SearchView = () => {
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
   const [dlgOpen, setDlgOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const [ingredients] = useState([]);
   const [intolerances] = useState([]);
   const [diets] = useState([]);
@@ -110,7 +113,15 @@ const SearchView = () => {
 
   const handleQuerySearch = (query) => {
     setSearchQuery(query);
-    loadRecipes(ingredients, intolerances, diets, typeName, cuisineName, 0, query);
+    loadRecipes(
+      ingredients,
+      intolerances,
+      diets,
+      typeName,
+      cuisineName,
+      0,
+      query
+    );
   };
 
   const onRecipeClick = (id) => {
@@ -142,55 +153,63 @@ const SearchView = () => {
           </Card>
         </Container>
         <Container maxWidth={false}>
-        <Box mt={1}>
-          <Grid container spacing={3}>
-            <Searchbar onSubmit={handleQuerySearch} />
-            <Grid item md={3} xs={12}>
-              <InputLabel id="type-label">Type</InputLabel>
-              <Select
-                labelId="type-label"
-                id="type"
-                multiple
-                fullWidth
-                value={typeName}
-                onChange={handleChangeType}
-                input={<Input />}
-                renderValue={(selected) => selected.join(", ")}
-                MenuProps={MenuProps}
-              >
-                {typeNames.map((name) => (
-                  <MenuItem key={name} value={name}>
-                    <Checkbox checked={typeName.indexOf(name) > -1} />
-                    <ListItemText primary={name} />
-                  </MenuItem>
-                ))}
-              </Select>
+    <Box mt={1}>
+      <Card>
+        <Box p={2}>
+            <Grid container spacing={3}>
+              <Searchbar onSubmit={handleQuerySearch} />
+              <Grid item md={3} xs={12}>
+                <InputLabel id="type-label">Type</InputLabel>
+                <Select
+                  labelId="type-label"
+                  id="type"
+                  multiple
+                  fullWidth
+                  value={typeName}
+                  onChange={handleChangeType}
+                  input={<Input />}
+                  renderValue={(selected) => selected.join(", ")}
+                  MenuProps={MenuProps}
+                >
+                  {typeNames.map((name) => (
+                    <MenuItem key={name} value={name}>
+                      <Checkbox checked={typeName.indexOf(name) > -1} />
+                      <ListItemText primary={name} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Grid>
+              <Grid item md={3} xs={12}>
+                <InputLabel id="cuisine-label">Cuisine</InputLabel>
+                <Select
+                  labelId="cuisine-label"
+                  id="cuisine"
+                  multiple
+                  fullWidth
+                  value={cuisineName}
+                  onChange={handleChangeCuisine}
+                  input={<Input />}
+                  renderValue={(selected) => selected.join(", ")}
+                  MenuProps={MenuProps}
+                >
+                  {cuisineNames.map((name) => (
+                    <MenuItem key={name} value={name}>
+                      <Checkbox checked={cuisineName.indexOf(name) > -1} />
+                      <ListItemText primary={name} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Grid>
             </Grid>
-            <Grid item md={3} xs={12}>
-              <InputLabel id="cuisine-label">Cuisine</InputLabel>
-              <Select
-                labelId="cuisine-label"
-                id="cuisine"
-                multiple
-                fullWidth
-                value={cuisineName}
-                onChange={handleChangeCuisine}
-                input={<Input />}
-                renderValue={(selected) => selected.join(", ")}
-                MenuProps={MenuProps}
-              >
-                {cuisineNames.map((name) => (
-                  <MenuItem key={name} value={name}>
-                    <Checkbox checked={cuisineName.indexOf(name) > -1} />
-                    <ListItemText primary={name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-          </Grid>
-        </Box>        
+              </Box>
+            </Card>
+            </Box>
           <Box mt={3}>
-            <RecipeCardList recipes={recipes} onRecipeClick={onRecipeClick} />
+            <RecipeCardList
+              recipes={recipes}
+              loading={loading}
+              onRecipeClick={onRecipeClick}
+            />
           </Box>
         </Container>
         <RecipeInfoDialog
@@ -212,10 +231,12 @@ const SearchView = () => {
     offset,
     query
   ) {
+    setRecipes([]);
+    setLoading(true);
     let ingredientsString = ingredientsArray.map((o) => o.name).join(",");
     let intolerancesString = intolerancesArray.join(",");
     let dietsString = dietsArray.join(",");
-    let dishTypesString = typesArray.join(',').toLowerCase();
+    let dishTypesString = typesArray.join(",").toLowerCase();
     let cuisinesString = cuisineArray.join(",");
     getComplexRecipes(
       ingredientsString,
@@ -232,7 +253,10 @@ const SearchView = () => {
           ? setRecipes([...recipes, ...res.data.results])
           : setRecipes(res.data.results);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   function loadRecipeById(id) {

@@ -17,7 +17,6 @@ import {
   Avatar,
   colors,
 } from "@material-ui/core";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import EqualizerOutlinedIcon from "@material-ui/icons/EqualizerOutlined";
 
 const useStyles = makeStyles({
@@ -122,18 +121,9 @@ const Preferences = ({ className, ...rest }) => {
                           </Avatar>
                         </Grid>
                       </Grid>
-                      <Box mt={2} display="flex" alignItems="center">
-                        <ArrowUpwardIcon className={classes.differenceIcon} />
-                        <Typography
-                          className={classes.differenceValue}
-                          variant="body2"
-                        >
-                          16% {/*  MAKE DYNAMIC */}
-                        </Typography>
-                        <Typography color="textSecondary" variant="caption">
-                          Since last month
-                        </Typography>
-                      </Box>
+                      <Typography color="textSecondary" variant="caption">
+                        Normal weight
+                      </Typography>
                     </CardContent>
                   </Card>
                 </Grid>

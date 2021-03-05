@@ -5,7 +5,6 @@ import {
   TextField,
   Grid,
   InputAdornment,
-  Paper,
 } from "@material-ui/core";
 import { Search as SearchIcon } from "react-feather";
 
@@ -30,7 +29,6 @@ const initialFormData = Object.freeze({
 
   return (
           <Grid item md={6} xs={12}>
-          <Paper>
             <form noValidate autoComplete="off" onSubmit={onSubmit}>
               <TextField
                 variant="outlined"
@@ -50,7 +48,6 @@ const initialFormData = Object.freeze({
                 fullWidth
               />
             </form>
-            </Paper>
           </Grid>
   );
 }
