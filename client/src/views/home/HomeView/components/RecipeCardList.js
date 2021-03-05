@@ -16,25 +16,20 @@ const useStyles = makeStyles({
 const RecipeCardList = ({ recipes, onRecipeClick, loadMore }) => {
   const classes = useStyles();
   return (
-      <Grid container spacing={2}>
-        {recipes.map((recipeItem) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <RecipeCard recipe={recipeItem} onClick={onRecipeClick} />
-          </Grid>
-        ))}
-        <Grid item xs={12} className={classes.loadMoreGridBtn}>
-          <Button
-            color="primary"
-            onClick={loadMore}
-          >
-            <ArrowDownwardIcon/>
-            Load more recipes!
-            <ArrowDownwardIcon/>
-          </Button>
+    <Grid container spacing={2}>
+      {recipes.map((recipeItem) => (
+        <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <RecipeCard recipe={recipeItem} onClick={onRecipeClick} />
+        </Grid>
+      ))}
+      <Grid item xs={12} className={classes.loadMoreGridBtn}>
+        <Button color="primary" onClick={loadMore}>
+          <ArrowDownwardIcon fontSize="small" />
+          Load more recipes!
+          <ArrowDownwardIcon fontSize="small" />
+        </Button>
       </Grid>
-      </Grid>
-      
-      
+    </Grid>
   );
 };
 

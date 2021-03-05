@@ -8,9 +8,8 @@ import {
   Container,
   makeStyles,
 } from "@material-ui/core";
-import Page from "src/components/Page";
+import Page from "src/components/theme/page";
 import { Scrollbars } from "react-custom-scrollbars";
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,23 +26,23 @@ const FAQView = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | FAQ">
-      <Container maxWidth="lg">
-          <Box mb={3}>
-            <Card variant="outlined">
+        <Container maxWidth="lg">
+          <Card variant="outlined">
             <CardContent>
-              <Typography gutterBottom variant="h1">
-                Frequently Asked Questions
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                If you have any questions, you may find that they're answered right here.
-              </Typography>
+              <Box p={1}>
+                <Typography gutterBottom variant="h1">
+                  Frequently Asked Questions
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  If you have any questions, you'll find that they're answered
+                  right here.
+                </Typography>
+              </Box>
             </CardContent>
-            </Card>
-          </Box>
+          </Card>
         </Container>
         <Container maxWidth="lg">
-          <Box mb={3}>
-          </Box>
+          <Box mb={3}></Box>
 
           <Box mb={3}>
             <Card>

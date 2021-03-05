@@ -10,10 +10,11 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Typography,
   Divider,
   TextField,
 } from "@material-ui/core";
-import Page from "src/components/Page";
+import Page from "src/components/theme/page";
 import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
@@ -47,6 +48,21 @@ const FeedbackView = ({ className, ...rest }) => {
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Feedback">
         <Container maxWidth="lg">
+          <Card variant="outlined">
+            <CardContent>
+              <Box p={1}>
+                <Typography gutterBottom variant="h1">
+                  Feedback
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  We would love to hear your thoughts on Recipedia! Feel free to
+                  fill out this form and help us improve the app.
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Container>
+        <Container maxWidth="lg">
           <form
             autoComplete="off"
             noValidate
@@ -54,11 +70,6 @@ const FeedbackView = ({ className, ...rest }) => {
             {...rest}
           >
             <Card>
-              <CardHeader
-                title="Feedback"
-                subheader="We would love to hear your thoughts on Recipedia! Feel free to fill out this form and help us improve the app."
-              />
-              <Divider />
               <CardContent>
                 <Grid container spacing={3}>
                   <Grid item md={6} xs={12}>

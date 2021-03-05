@@ -19,7 +19,7 @@ import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { userLogin, googleLogin } from "src/components/auth/UserAuth";
-import Page from "src/components/Page";
+import Page from "src/components/theme/page";
 import GoogleLogin from "react-google-login";
 import { Scrollbars } from "react-custom-scrollbars";
 
