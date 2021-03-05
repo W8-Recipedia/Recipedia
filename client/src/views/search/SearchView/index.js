@@ -71,20 +71,20 @@ const cuisineNames = [
 ];
 
 const typeNames = [
-  "main course",
-  "side dish",
-  "dessert",
-  "appetizer",
-  "salad",
-  "bread",
-  "breakfast",
-  "soup",
-  "beverage",
-  "sauce",
-  "marinade",
-  "fingerfood",
-  "snack",
-  "drink",
+  "Main course",
+  "Side dish",
+  "Dessert",
+  "Appetizer",
+  "Salad",
+  "Bread",
+  "Breakfast",
+  "Soup",
+  "Beverage",
+  "Sauce",
+  "Marinade",
+  "Fingerfood",
+  "Snack",
+  "Drink",
 ];
 
 const SearchView = () => {
@@ -215,7 +215,7 @@ const SearchView = () => {
     let ingredientsString = ingredientsArray.map((o) => o.name).join(",");
     let intolerancesString = intolerancesArray.join(",");
     let dietsString = dietsArray.join(",");
-    let dishTypesString = typesArray.join(",");
+    let dishTypesString = typesArray.join(',').toLowerCase();
     let cuisinesString = cuisineArray.join(",");
     getRecipesComplex(
       ingredientsString,
