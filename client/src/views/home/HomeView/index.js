@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import Page from "src/components/Page";
 // import { getExampleRecipes } from "src/api/mockAPI";
-import { getRandomRecipes } from "src/api/SpoonacularAPI";
+import { getRandomRecipes } from "src/components/api/SpoonacularAPI";
 import RecipeInfoDialog from "src/views/home/HomeView/components/RecipeInfoDialog";
 import RecipeCardList from "src/views/home/HomeView/components/RecipeCardList";
 import { Scrollbars } from "react-custom-scrollbars";

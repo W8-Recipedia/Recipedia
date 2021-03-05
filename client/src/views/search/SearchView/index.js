@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import Page from "src/components/Page";
 // import { getExampleRecipes } from "src/api/mockAPI";
-import { getRecipesComplex } from "src/api/SpoonacularAPI";
+import { getRecipesComplex } from "src/components/api/SpoonacularAPI";
 import RecipeInfoDialog from "src/views/search/SearchView/components/RecipeInfoDialog";
 import RecipeCardList from "src/views/search/SearchView/components/RecipeCardList";
 import Searchbar from "src/views/search/SearchView/components/Searchbar";
