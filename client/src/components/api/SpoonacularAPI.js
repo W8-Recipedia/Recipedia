@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-export const getRecipesComplex = async (
+export const getComplexRecipes = async (
   ingredients,
   intolerances,
   diet,

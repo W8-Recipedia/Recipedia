@@ -15,7 +15,7 @@ import {
   ListItemText, } from "@material-ui/core";
 import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
-import { getRecipesComplex } from "src/components/api/SpoonacularAPI";
+import { getComplexRecipes } from "src/components/api/SpoonacularAPI";
 import RecipeInfoDialog from "src/views/search/SearchView/components/RecipeInfoDialog";
 import RecipeCardList from "src/views/search/SearchView/components/RecipeCardList";
 import Searchbar from "src/views/search/SearchView/components/Searchbar";
@@ -217,7 +217,7 @@ const SearchView = () => {
     let dietsString = dietsArray.join(",");
     let dishTypesString = typesArray.join(',').toLowerCase();
     let cuisinesString = cuisineArray.join(",");
-    getRecipesComplex(
+    getComplexRecipes(
       ingredientsString,
       intolerancesString,
       dietsString,
