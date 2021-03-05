@@ -6,7 +6,7 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import Page from "src/components/Page";
+import Page from "src/components/theme/page";
 import { Link } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
 

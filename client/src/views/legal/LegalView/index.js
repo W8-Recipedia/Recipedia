@@ -9,7 +9,7 @@ import {
   makeStyles,
   Box,
 } from "@material-ui/core";
-import Page from "src/components/Page";
+import Page from "src/components/theme/page";
 import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({

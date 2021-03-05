@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Container, makeStyles, Card, Typography, CardContent } from "@material-ui/core";
-import Page from "src/components/Page";
+import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
 import { Scrollbars } from "react-custom-scrollbars";
 import FavRecipeDialog from "src/views/favourites/FavouritesView/components/FavRecipeDialog";

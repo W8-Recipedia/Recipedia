@@ -7,7 +7,7 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import Page from "src/components/Page";
+import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
 import { getRecipesComplex } from "src/components/api/SpoonacularAPI";
 import RecipeInfoDialog from "src/views/search/SearchView/components/RecipeInfoDialog";
