@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, makeStyles } from "@material-ui/core";
+import {
+  Box,
+  Container,
+  Card,
+  CardContent,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
 import Page from "src/components/Page";
 // import { getExampleRecipes } from "src/api/mockAPI";
 import { getRecipesComplex } from "src/api/SpoonacularAPI";
@@ -47,18 +54,35 @@ const SearchView = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Search">
+        <Container maxWidth="lg">
+          <Card variant="outlined">
+            <CardContent>
+              <Box p={1}>
+                <Typography gutterBottom variant="h1">
+                  Search here.
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  If you want to find recipes filtered by cuisine or type you
+                  can do that here.
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Container>
         <Container maxWidth={false}>
-          <Searchbar onSubmit={handleQuerySearch} />
+          <Box mt={3}>
+            <Searchbar onSubmit={handleQuerySearch} />
+          </Box>
           <Box mt={3}>
             <RecipeCardList recipes={recipes} onRecipeClick={onRecipeClick} />
           </Box>
         </Container>
-          <RecipeInfoDialog
-            open={dlgOpen}
-            handleClose={() => setDlgOpen(false)}
-            recipeId={selectedRecipeId}
-            recipeInfo={selectedRecipeInfo}
-          />
+        <RecipeInfoDialog
+          open={dlgOpen}
+          handleClose={() => setDlgOpen(false)}
+          recipeId={selectedRecipeId}
+          recipeInfo={selectedRecipeInfo}
+        />
       </Page>
     </Scrollbars>
   );
@@ -86,7 +110,7 @@ const SearchView = () => {
           ? setRecipes([...recipes, ...res.data.results])
           : setRecipes(res.data.results);
       })
-      .catch((error) => console.log(error))
+      .catch((error) => console.log(error));
   }
 
   function loadRecipeById(id) {
@@ -95,7 +119,6 @@ const SearchView = () => {
     setSelectedRecipeInfo(clickedRecipe);
     setDlgOpen(true);
   }
-
 };
 
 export default SearchView;
