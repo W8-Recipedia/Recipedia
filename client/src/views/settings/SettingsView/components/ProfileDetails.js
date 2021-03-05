@@ -36,9 +36,9 @@ const ProfileDetails = ({ className, ...rest }) => {
           lastName: authResponse.data.user[0].lastname,
           email: authResponse.data.user[0].email,
         });
-      }
-      if (authResponse.data.user[0].googleId) {
-        setGoogleAccount(true);
+        if (authResponse.data.user[0].googleId) {
+          setGoogleAccount(true);
+        }
       }
     });
   }, []);

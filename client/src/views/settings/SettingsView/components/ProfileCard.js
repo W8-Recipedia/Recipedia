@@ -41,9 +41,9 @@ const ProfileCard = ({ className, ...rest }) => {
             " " +
             authResponse.data.user[0].lastname
         );
-      }
-      if (authResponse.data.user[0].imageUrl) {
-        setImageURL(authResponse.data.user[0].imageUrl);
+        if (authResponse.data.user[0].imageUrl) {
+          setImageURL(authResponse.data.user[0].imageUrl);
+        }
       }
     });
   });
