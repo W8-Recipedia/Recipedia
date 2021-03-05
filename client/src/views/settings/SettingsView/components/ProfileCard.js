@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
 
 const ProfileCard = ({ className, ...rest }) => {
   const classes = useStyles();
-  const [imageURL, setImageURL] = useState("/static/images/avatars/avatar.png");
+  const [imageURL, setImageURL] = useState("");
 
   const [userName, setUserName] = useState(() => {
     getUserCredentials().then((authResponse) => {

@@ -19,6 +19,21 @@ export const userLogin = async (email, password) => {
   }
 };
 
+export const changePassword = async (oldpassword, newpassword) => {
+  const response = await Axios.post(
+    process.env.REACT_APP_SERVER_URL + "/changepassword",
+    {
+      oldpassword: oldpassword,
+      newpassword: newpassword,
+    }
+  );
+  if (response.data.passwordChanged) {
+    return "Success";
+  } else {
+    return response.data.message;
+  }
+};
+
 export const userSignUp = async (firstname, lastname, email, password) => {
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/signup",
@@ -49,19 +64,19 @@ export const userSignUp = async (firstname, lastname, email, password) => {
 };
 
 export const googleLogin = async (token, userprofile) => {
-    const response = await Axios.post(
-      process.env.REACT_APP_SERVER_URL + "/glogin",
-      {
-        userprofile,
-      }
-    );
-    localStorage.setItem("gtoken", token);
-    localStorage.removeItem("token");
-    if (response.data.message == "noAccount") {
-      return response.data.message;
-    } else {
-      return "Success";
+  const response = await Axios.post(
+    process.env.REACT_APP_SERVER_URL + "/glogin",
+    {
+      userprofile,
     }
+  );
+  localStorage.setItem("gtoken", token);
+  localStorage.removeItem("token");
+  if (response.data.message == "noAccount") {
+    return response.data.message;
+  } else {
+    return "Success";
+  }
 };
 
 export const googleSignUp = async (token, userprofile, password) => {
@@ -93,7 +108,7 @@ export const getUserCredentials = async () => {
         headers: { "x-access-token": localStorage.getItem("gtoken") },
       }
     );
-    if (response.data.user) {
+    if (response.data.loggedIn) {
       response.data.user[0].firstname = response.data.user[0].givenName;
       response.data.user[0].lastname = response.data.user[0].familyName;
     }

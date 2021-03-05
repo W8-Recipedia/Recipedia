@@ -81,7 +81,7 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
-  const [imageURL, setImageURL] = useState("/static/images/avatars/avatar.png");
+  const [imageURL, setImageURL] = useState("");
   const [userName, setUserName] = useState(() => {
     getUserCredentials().then((authResponse) => {
       if (authResponse.data.loggedIn) {
