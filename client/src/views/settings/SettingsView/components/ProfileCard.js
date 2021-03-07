@@ -12,8 +12,12 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { getUserCredentials } from "src/components/auth/UserAuth";
+import {
+  getUserCredentials,
+  deleteAccount,
+} from "src/components/auth/UserAuth";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { red } from "@material-ui/core/colors";
@@ -30,23 +34,35 @@ const useStyles = makeStyles(() => ({
 
 const ProfileCard = ({ className, ...rest }) => {
   const classes = useStyles();
+  const navigate = useNavigate();
+
   const [imageURL, setImageURL] = useState("");
   const [open, setOpen] = React.useState(false);
+  const [deleteStatus, setDeleteStatus] = React.useState(false);
 
   const [userName, setUserName] = useState(() => {
     getUserCredentials().then((authResponse) => {
       if (authResponse.data.loggedIn) {
         setUserName(
-          authResponse.data.user[0].firstname +
+          authResponse.data.user.firstname +
             " " +
-            authResponse.data.user[0].lastname
+            authResponse.data.user.lastname
         );
-        if (authResponse.data.user[0].imageUrl) {
-          setImageURL(authResponse.data.user[0].imageUrl);
+        if (authResponse.data.user.imageUrl) {
+          setImageURL(authResponse.data.user.imageUrl);
         }
       }
     });
   });
+
+  const deleteAcc = () => {
+    deleteAccount().then((response) => {
+      if (response == "success") {
+        setOpen(false);
+        setDeleteStatus(true);
+      }
+    });
+  };
 
   return (
     <Card {...rest}>
@@ -98,10 +114,25 @@ const ProfileCard = ({ className, ...rest }) => {
                 color="secondary"
                 variant="text"
                 className={classes.button}
+                onClick={deleteAcc}
               >
                 Yes, I'm sure!
               </Button>
             </Box>
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={deleteStatus}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        onClose={() => {
+          navigate("/");
+        }}
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Your account has been deleted. We're sorry to see you go!
           </DialogContentText>
         </DialogContent>
       </Dialog>

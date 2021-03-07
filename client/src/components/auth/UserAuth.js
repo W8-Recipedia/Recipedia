@@ -11,8 +11,8 @@ export const userLogin = async (email, password) => {
     }
   );
   if (response.data.token) {
-    localStorage.setItem("token", response.data.token);
-    localStorage.removeItem("gtoken");
+    localStorage.removeItem("gusertoken");
+    localStorage.setItem("usertoken", response.data.token);
     return "Success";
   } else {
     return response.data.message;
@@ -28,6 +28,11 @@ export const changePassword = async (oldpassword, newpassword) => {
     }
   );
   if (response.data.passwordChanged) {
+    if (localStorage.getItem("usertoken")) {
+      localStorage.setItem("usertoken", response.data.token);
+    } else {
+      localStorage.setItem("gusertoken", response.data.token);
+    }
     return "Success";
   } else {
     return response.data.message;
@@ -53,7 +58,8 @@ export const userSignUp = async (firstname, lastname, email, password) => {
       }
     );
     if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
+      localStorage.removeItem("gusertoken");
+      localStorage.setItem("usertoken", response.data.token);
       return "Success";
     } else {
       return response.data.message;
@@ -70,8 +76,8 @@ export const googleLogin = async (token, userprofile) => {
       userprofile,
     }
   );
-  localStorage.setItem("gtoken", token);
-  localStorage.removeItem("token");
+  localStorage.removeItem("usertoken");
+  localStorage.setItem("gusertoken", response.data.token);
   if (response.data.message == "noAccount") {
     return response.data.message;
   } else {
@@ -81,9 +87,7 @@ export const googleLogin = async (token, userprofile) => {
 
 export const googleSignUp = async (token, userprofile, password) => {
   if (token) {
-    localStorage.setItem("gtoken", token);
-    localStorage.removeItem("token");
-
+    localStorage.removeItem("usertoken");
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/gsignup",
       {
@@ -92,41 +96,72 @@ export const googleSignUp = async (token, userprofile, password) => {
       }
     );
     if (response.data.message == "yesAccount") {
-      localStorage.removeItem("gtoken");
+      localStorage.removeItem("gusertoken");
       return response.data.message;
     } else {
+      localStorage.setItem("gusertoken", response.data.token);
       return "Success";
     }
   }
 };
 
 export const getUserCredentials = async () => {
-  if (localStorage.getItem("gtoken")) {
-    const response = await Axios.get(
-      process.env.REACT_APP_SERVER_URL + "/guserinfo",
-      {
-        headers: { "x-access-token": localStorage.getItem("gtoken") },
-      }
-    );
-    if (response.data.loggedIn) {
-      response.data.user[0].firstname = response.data.user[0].givenName;
-      response.data.user[0].lastname = response.data.user[0].familyName;
-    }
-    return response;
-  } else {
+  if (localStorage.getItem("gusertoken")) {
     const response = await Axios.get(
       process.env.REACT_APP_SERVER_URL + "/userinfo",
       {
-        headers: { "x-access-token": localStorage.getItem("token") },
+        headers: { "x-access-token": localStorage.getItem("gusertoken") },
+      }
+    );
+    if (response.data.loggedIn) {
+      response.data.user.firstname = response.data.user.givenName;
+      response.data.user.lastname = response.data.user.familyName;
+    }
+    return response;
+  } else if (localStorage.getItem("usertoken")) {
+    const response = await Axios.get(
+      process.env.REACT_APP_SERVER_URL + "/userinfo",
+      {
+        headers: { "x-access-token": localStorage.getItem("usertoken") },
       }
     );
     return response;
+  } else {
+    return { data: { loggedIn: false } };
+  }
+};
+
+export const deleteAccount = async () => {
+  if (localStorage.getItem("usertoken")) {
+    const response = await Axios.get(
+      process.env.REACT_APP_SERVER_URL + "/deleteaccount",
+      {
+        headers: { "x-access-token": localStorage.getItem("usertoken") },
+      }
+    );
+    if (response.data.message == "success") {
+      localStorage.removeItem("usertoken");
+      localStorage.removeItem("gusertoken");
+    }
+    return response.data.message;
+  } else if (localStorage.getItem("gusertoken")) {
+    const response = await Axios.get(
+      process.env.REACT_APP_SERVER_URL + "/deleteaccount",
+      {
+        headers: { "x-access-token": localStorage.getItem("gusertoken") },
+      }
+    );
+    if (response.data.message == "success") {
+      localStorage.removeItem("usertoken");
+      localStorage.removeItem("gusertoken");
+    }
+    return response.data.message;
   }
 };
 
 export const userLogOut = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("gtoken");
+  localStorage.removeItem("usertoken");
+  localStorage.removeItem("gusertoken");
 };
 
 export default userLogin;

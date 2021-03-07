@@ -86,13 +86,13 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     getUserCredentials().then((authResponse) => {
       if (authResponse.data.loggedIn) {
         setUserName(
-          authResponse.data.user[0].firstname +
+          authResponse.data.user.firstname +
             " " +
-            authResponse.data.user[0].lastname
+            authResponse.data.user.lastname
         );
       }
-      if (authResponse.data.user[0].imageUrl) {
-        setImageURL(authResponse.data.user[0].imageUrl);
+      if (authResponse.data.user.imageUrl) {
+        setImageURL(authResponse.data.user.imageUrl);
       }
     });
   });

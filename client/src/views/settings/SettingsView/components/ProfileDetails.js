@@ -32,11 +32,11 @@ const ProfileDetails = ({ className, ...rest }) => {
     getUserCredentials().then((authResponse) => {
       if (authResponse.data.loggedIn) {
         setValues({
-          firstName: authResponse.data.user[0].firstname,
-          lastName: authResponse.data.user[0].lastname,
-          email: authResponse.data.user[0].email,
+          firstName: authResponse.data.user.firstname,
+          lastName: authResponse.data.user.lastname,
+          email: authResponse.data.user.email,
         });
-        if (authResponse.data.user[0].googleId) {
+        if (authResponse.data.user.googleId) {
           setGoogleAccount(true);
         }
       }
