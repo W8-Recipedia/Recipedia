@@ -23,8 +23,7 @@ We are a team of 7 people, using an agile development process to create this pro
   - [ ] Upgrade user auth
   - [ ] Implement backend for changing name & email
   - [ ] Implement dark mode
+  - [ ] Change website colour scheme
   - [ ] Add recipe card loading animations
   - [ ] Revamp landing page
-  - [ ] Implement backend for deleting account
-  - [ ] Change website colour scheme
   - [ ] Implement backend for feedback page (auto insert user data into fields and send feedback to Recipedia email)
