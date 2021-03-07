@@ -21,6 +21,7 @@ We are a team of 7 people, using an agile development process to create this pro
 - [ ] **Other improvements**
   - [ ] Show already favourited recipes on search and home pages
   - [ ] Upgrade user auth
+  - [ ] Implement backend for changing name & email
   - [ ] Implement dark mode
   - [ ] Add recipe card loading animations
   - [ ] Revamp landing page
