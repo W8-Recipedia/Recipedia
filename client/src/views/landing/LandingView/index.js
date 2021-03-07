@@ -6,6 +6,10 @@ import {
   Typography,
   makeStyles,
   Grid,
+  AppBar,
+  Toolbar,
+  IconButton,
+  // MenuIcon,
 } from "@material-ui/core";
 import Page from "src/components/theme/page";
 import { Link } from "react-router-dom";
@@ -19,12 +23,12 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
   },
   title: {
-    fontSize: 84,
+    fontSize: 64,
     [theme.breakpoints.up("xs")]: {
       fontSize: 64,
     },
     [theme.breakpoints.up("md")]: {
-      fontSize: 84,
+      fontSize: 64,
     },
   },
   buttonText: {
@@ -37,6 +41,49 @@ const LandingView = () => {
 
   return (
     <Scrollbars>
+      <div>
+        <AppBar position="fixed">
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="primary"
+              aria-label="menu"
+            >
+              {/* <MenuIcon /> */}
+            </IconButton>
+            <Typography
+              variant="h6"
+              className={classes.title}
+              style={{ flexGrow: 1 }}
+            >
+              Recipedia
+            </Typography>
+            <Link to="/login">
+              <Button
+                color="primary"
+                fullWidth
+                variant="contained"
+                size="large"
+                className={classes.buttonText}
+              >
+                Log in
+              </Button>
+            </Link>
+            <Link to="/signup">
+              <Button
+                color="primary"
+                fullWidth
+                variant="contained"
+                size="large"
+                className={classes.buttonText}
+              >
+                Sign Up
+              </Button>
+            </Link>
+          </Toolbar>
+        </AppBar>
+      </div>
       <Page className={classes.root} title="Recipedia">
         <Box
           display="flex"
@@ -45,9 +92,6 @@ const LandingView = () => {
           justifyContent="center"
         >
           <Container maxWidth="md">
-            <Typography align="center" color="textSecondary" variant="h2">
-              Eat smarter with
-            </Typography>
             <Typography
               align="center"
               color="textPrimary"
@@ -55,6 +99,9 @@ const LandingView = () => {
               className={classes.title}
             >
               Recipedia
+            </Typography>
+            <Typography align="center" color="textSecondary" variant="h2">
+              Revolutionize the way that you find personalised recipes.
             </Typography>
           </Container>
         </Box>
