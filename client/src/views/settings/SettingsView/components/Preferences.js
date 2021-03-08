@@ -164,7 +164,7 @@ const Preferences = ({ className, ...rest }) => {
                           </Typography>
                           <Typography color="textPrimary" variant="h3">
                             {weight == 0 || height == 0
-                              ? "Enter details"
+                              ? "Undefined"
                               : Math.round(
                                   (weight * 10) / ((height / 100) ^ 2)
                                 ) /
@@ -183,8 +183,10 @@ const Preferences = ({ className, ...rest }) => {
                         </Grid>
                       </Grid>
                       <Typography color="textSecondary" variant="caption">
-                        {weight / ((height / 100) ^ 2) == 0
-                          ? ""
+                        {weight / ((height / 100) ^ 2) == 0 ||
+                        weight == 0 ||
+                        height == 0
+                          ? "Please enter your details"
                           : weight / ((height / 100) ^ 2) < 18.5
                           ? "Underweight"
                           : weight / ((height / 100) ^ 2) < 25
