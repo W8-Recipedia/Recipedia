@@ -51,7 +51,6 @@ const ProfileDetails = ({ className, ...rest }) => {
   }, []);
 
   const handleSubmit = (values, actions) => {
-    console.log(values);
     changeDetails(values.firstName, values.lastName, values.email).then(
       (authResponse) => {
         if (authResponse == "Success") {
@@ -98,6 +97,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.firstName}
+                    disabled={googleAccount}
                     variant="outlined"
                   />
                 </Grid>
@@ -110,6 +110,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                     name="lastName"
                     onBlur={handleBlur}
                     onChange={handleChange}
+                    disabled={googleAccount}
                     value={values.lastName}
                     variant="outlined"
                   />
@@ -137,6 +138,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 color="primary"
                 variant="contained"
                 type="submit"
+                disabled={googleAccount}
               >
                 Update
               </Button>

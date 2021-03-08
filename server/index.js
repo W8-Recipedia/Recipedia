@@ -156,7 +156,6 @@ app.get("/deleteaccount", (req, res) => {
 });
 
 app.post("/changedetails", (req, res) => {
-  console.log(req.headers["x-access-token"]);
   const token = jwt.verify(
     req.headers["x-access-token"],
     process.env.JWT_SECRET
@@ -167,7 +166,6 @@ app.post("/changedetails", (req, res) => {
     [req.body.firstname, req.body.lastname, req.body.email, token.user.userid],
     (err, result) => {
       if (err) {
-        console.log(err);
         res.send({ message: "emailExists" });
       } else {
         const user = {
@@ -179,7 +177,6 @@ app.post("/changedetails", (req, res) => {
         const token = jwt.sign({ user }, process.env.JWT_SECRET, {
           expiresIn: "7d",
         });
-        console.log(token);
         res.json({ token: token, result: result });
       }
     }

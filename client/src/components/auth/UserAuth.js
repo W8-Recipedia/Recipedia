@@ -132,7 +132,6 @@ export const getUserCredentials = async () => {
 };
 
 export const changeDetails = async (firstname, lastname, email) => {
-  console.log(localStorage.getItem("usertoken"));
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/changedetails",
     { firstname: firstname, lastname: lastname, email: email },
