@@ -22,6 +22,7 @@ We are a team of 7 people, using an agile development process to create this pro
   - [ ] Show already favourited recipes on search and home pages
   - [ ] Upgrade user auth
   - [ ] Move navbar to topbar
+  - [ ] Prevent Google users from logging in normally vice versa (don't require users to enter a password when signing up with Google)
   - [ ] Implement backend for changing name & email
   - [ ] Implement dark mode
   - [ ] Change website colour scheme
