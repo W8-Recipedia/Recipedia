@@ -23,6 +23,7 @@ We are a team of 7 people, using an agile development process to create this pro
   - [ ] Upgrade user auth
   - [ ] Move navbar to topbar
   - [ ] Prevent Google users from logging in normally vice versa (don't require users to enter a password when signing up with Google)
+  - [ ] Remove redundant code/comments and refactor 
   - [ ] Implement backend for changing name & email
   - [ ] Implement dark mode
   - [ ] Change website colour scheme
