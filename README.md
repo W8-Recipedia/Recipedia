@@ -26,6 +26,7 @@ We are a team of 7 people, using an agile development process to create this pro
   - [ ] Remove redundant code/comments and refactor 
   - [ ] Implement backend for changing name & email
   - [ ] Implement dark mode
+  - [ ] Ensure website follows GDPR regulations
   - [ ] Change website colour scheme
   - [ ] Add recipe card loading animations
   - [ ] Revamp landing page
