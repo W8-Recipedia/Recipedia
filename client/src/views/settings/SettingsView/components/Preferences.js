@@ -40,10 +40,10 @@ const useStyles = makeStyles({
 const Preferences = ({ className, ...rest }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-
   const [diets, setDiets] = useState([]);
   const [allergens, setAllergens] = useState([]);
-  const [health, setHealth] = useState([]);
+  const [height, setHeight] = useState();
+  const [weight, setWeight] = useState();
 
   useLayoutEffect(() => {}, []);
 
@@ -58,9 +58,12 @@ const Preferences = ({ className, ...rest }) => {
       ? setDiets(allergens.filter((allergen) => allergen !== allergenInput))
       : allergens.push(allergenInput);
   };
+
   const handleSubmit = () => {
     console.log(diets);
     console.log(allergens);
+    console.log(height);
+    console.log(weight);
   };
 
   return (
@@ -128,10 +131,13 @@ const Preferences = ({ className, ...rest }) => {
               <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <TextField
+                    margin="normal"
                     fullWidth
                     label="Height (cm)"
                     type="number"
                     variant="outlined"
+                    onChange={(e) => setHeight(e.target.value)}
+                    value={height}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -140,6 +146,8 @@ const Preferences = ({ className, ...rest }) => {
                     label="Weight (kg)"
                     type="number"
                     variant="outlined"
+                    onChange={(e) => setWeight(e.target.value)}
+                    value={weight}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -155,7 +163,17 @@ const Preferences = ({ className, ...rest }) => {
                             BMI
                           </Typography>
                           <Typography color="textPrimary" variant="h3">
-                            19.2 {/*  MAKE DYNAMIC */}
+                            {weight == 0 || height == 0
+                              ? "Enter details"
+                              : Math.round(
+                                  (weight * 10) / ((height / 100) ^ 2)
+                                ) /
+                                  10 >
+                                100
+                              ? "100+"
+                              : Math.round(
+                                  (weight * 10) / ((height / 100) ^ 2)
+                                ) / 10}
                           </Typography>
                         </Grid>
                         <Grid item>
@@ -165,7 +183,15 @@ const Preferences = ({ className, ...rest }) => {
                         </Grid>
                       </Grid>
                       <Typography color="textSecondary" variant="caption">
-                        Normal weight
+                        {weight / ((height / 100) ^ 2) == 0
+                          ? ""
+                          : weight / ((height / 100) ^ 2) < 18.5
+                          ? "Underweight"
+                          : weight / ((height / 100) ^ 2) < 25
+                          ? " Normal weight"
+                          : weight / ((height / 100) ^ 2) < 30
+                          ? " Overweight"
+                          : "Obese"}
                       </Typography>
                     </CardContent>
                   </Card>
