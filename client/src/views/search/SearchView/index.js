@@ -91,18 +91,17 @@ const typeNames = [
 
 const SearchView = () => {
   const classes = useStyles();
-  const [recipes, setRecipes] = useState([]);
-  const [selectedRecipeId, setSelectedRecipeId] = useState(0);
-  const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
-  const [dlgOpen, setDlgOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const [ingredients] = useState([]);
+  const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
+  const [selectedRecipeID, setSelectedRecipeID] = useState(0);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [cuisineName, setCuisineName] = useState([]);
+  const [typeName, setTypeName] = useState([]);
+  const [recipes, setRecipes] = useState([]);
   const [intolerances] = useState([]);
+  const [ingredients] = useState([]);
   const [diets] = useState([]);
-  const [cuisineName, setCuisineName] = React.useState([]);
-  const [typeName, setTypeName] = React.useState([]);
 
   const handleChangeCuisine = (event) => {
     setCuisineName(event.target.value);
@@ -113,7 +112,6 @@ const SearchView = () => {
   };
 
   const handleQuerySearch = (query) => {
-    setSearchQuery(query);
     loadRecipes(
       ingredients,
       intolerances,
@@ -127,7 +125,7 @@ const SearchView = () => {
 
   const onRecipeClick = (id) => {
     loadRecipeById(id);
-    setSelectedRecipeId(id);
+    setSelectedRecipeID(id);
   };
 
   // // USED FOR TESTING
@@ -214,9 +212,9 @@ const SearchView = () => {
           </Box>
         </Container>
         <RecipeInfoDialog
-          open={dlgOpen}
-          handleClose={() => setDlgOpen(false)}
-          recipeId={selectedRecipeId}
+          open={dialogOpen}
+          handleClose={() => setDialogOpen(false)}
+          recipeId={selectedRecipeID}
           recipeInfo={selectedRecipeInfo}
         />
       </Page>
@@ -264,7 +262,7 @@ const SearchView = () => {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);
     console.log(clickedRecipe);
     setSelectedRecipeInfo(clickedRecipe);
-    setDlgOpen(true);
+    setDialogOpen(true);
   }
 };
 
