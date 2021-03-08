@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect, useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import {
@@ -8,6 +8,7 @@ import {
   CardContent,
   CardHeader,
   Checkbox,
+  FormGroup,
   Divider,
   FormControlLabel,
   Grid,
@@ -18,6 +19,10 @@ import {
   colors,
 } from "@material-ui/core";
 import EqualizerOutlinedIcon from "@material-ui/icons/EqualizerOutlined";
+import {
+  getUserPreferences,
+  changePreferences,
+} from "src/components/auth/UserAuth";
 
 const useStyles = makeStyles({
   root: {},
@@ -34,6 +39,29 @@ const useStyles = makeStyles({
 
 const Preferences = ({ className, ...rest }) => {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
+
+  const [diets, setDiets] = useState([]);
+  const [allergens, setAllergens] = useState([]);
+  const [health, setHealth] = useState([]);
+
+  useLayoutEffect(() => {}, []);
+
+  const handleDietChange = (dietInput) => {
+    diets.includes(dietInput)
+      ? setDiets(diets.filter((diet) => diet !== dietInput))
+      : diets.push(dietInput);
+  };
+
+  const handleAllergenChange = (allergenInput) => {
+    allergens.includes(allergenInput)
+      ? setDiets(allergens.filter((allergen) => allergen !== allergenInput))
+      : allergens.push(allergenInput);
+  };
+  const handleSubmit = () => {
+    console.log(diets);
+    console.log(allergens);
+  };
 
   return (
     <form className={clsx(classes.root, className)} {...rest}>
@@ -49,34 +77,49 @@ const Preferences = ({ className, ...rest }) => {
               <Typography color="textPrimary" gutterBottom variant="h6">
                 Diet
               </Typography>
-              <FormControlLabel control={<Checkbox />} label="Vegan" />
-              <FormControlLabel control={<Checkbox />} label="Vegetarian" />
-              <FormControlLabel control={<Checkbox />} label="Paleo" />
-              <FormControlLabel control={<Checkbox />} label="Primal" />
-              <FormControlLabel control={<Checkbox />} label="Whole30" />
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Lacto-vegeterian"
-              />
-              <FormControlLabel control={<Checkbox />} label="Ovo-vegetarian" />
-              <FormControlLabel control={<Checkbox />} label="Pescetarian" />
-              <FormControlLabel control={<Checkbox />} label="Ketogenic" />
-              <FormControlLabel control={<Checkbox />} label="Gluten free" />
+              {[
+                "Vegan",
+                "Vegetarian",
+                "Paleo",
+                "Primal",
+                "Whole30",
+                "Lacto-vegetarian",
+                "Ovo-vegetarian",
+                "Pescetarian",
+                "Ketogenic",
+                "Gluten free",
+              ].map((diet) => (
+                <FormControlLabel
+                  control={<Checkbox name="diet" />}
+                  onChange={() => handleDietChange(diet)}
+                  key={diet}
+                  label={diet}
+                />
+              ))}
             </Grid>
             <Grid className={classes.item} item md={4} sm={6} xs={12}>
               <Typography color="textPrimary" gutterBottom variant="h6">
                 Allergens
               </Typography>
-              <FormControlLabel control={<Checkbox />} label="Dairy" />
-              <FormControlLabel control={<Checkbox />} label="Egg" />
-              <FormControlLabel control={<Checkbox />} label="Gluten" />
-              <FormControlLabel control={<Checkbox />} label="Grain" />
-              <FormControlLabel control={<Checkbox />} label="Peanut" />
-              <FormControlLabel control={<Checkbox />} label="Seafood" />
-              <FormControlLabel control={<Checkbox />} label="Shellfish" />
-              <FormControlLabel control={<Checkbox />} label="Soy" />
-              <FormControlLabel control={<Checkbox />} label="Tree nut" />
-              <FormControlLabel control={<Checkbox />} label="Wheat" />
+              {[
+                "Dairy",
+                "Egg",
+                "Gluten",
+                "Grain",
+                "Peanut",
+                "Seafood",
+                "Shellfish",
+                "Soy",
+                "Tree nut",
+                "Wheat",
+              ].map((allergen) => (
+                <FormControlLabel
+                  control={<Checkbox name="allergen" />}
+                  onChange={() => handleAllergenChange(allergen)}
+                  key={allergen}
+                  label={allergen}
+                />
+              ))}
             </Grid>
             <Grid className={classes.item} item md={4} sm={6} xs={12}>
               <Typography color="textPrimary" gutterBottom variant="h6">
@@ -133,8 +176,8 @@ const Preferences = ({ className, ...rest }) => {
         </CardContent>
         <Divider />
         <Box display="flex" justifyContent="flex-end" p={2}>
-          <Button color="primary" variant="contained">
-            Save
+          <Button color="primary" variant="contained" onClick={handleSubmit}>
+            Update
           </Button>
         </Box>
       </Card>
