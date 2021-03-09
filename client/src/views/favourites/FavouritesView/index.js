@@ -46,7 +46,6 @@ const Favourites = () => {
 
   useLayoutEffect(() => {
     getUserFavourites().then((res) => {
-      console.log(res.data.favourites)
       loadMultipleRecipes(
         res.data.favourites,
       );
