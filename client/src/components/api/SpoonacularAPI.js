@@ -1,7 +1,6 @@
 import Axios from "axios";
 
 export const getComplexRecipes = async (
-  ingredients,
   intolerances,
   diet,
   dishtypes,
@@ -18,7 +17,6 @@ export const getComplexRecipes = async (
       addRecipeInformation: true,
       fillIngredients: true,
       number: process.env.REACT_APP_MAX_RECIPE_NUMBER,
-      includeIngredients: ingredients,
       diet: diet || undefined,
       intolerances: intolerances || undefined,
       type: dishtypes || undefined,
