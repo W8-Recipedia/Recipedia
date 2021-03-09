@@ -12,6 +12,8 @@ import {
   DialogContent,
   DialogContentText,
   Divider,
+  Radio,
+  RadioGroup,
   FormControlLabel,
   Grid,
   Typography,
@@ -43,36 +45,66 @@ const Preferences = ({ className, ...rest }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
-  const [diets, setDiets] = useState([]);
-  const [allergens, setAllergens] = useState([]);
+  const [diet, setDiet] = useState("");
+  const [allergens, setAllergens] = useState({
+    Dairy: false,
+    Egg: false,
+    Gluten: false,
+    Grain: false,
+    Peanut: false,
+    Seafood: false,
+    Shellfish: false,
+    Soy: false,
+    TreeNut: false,
+    Wheat: false,
+  });
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
 
   useLayoutEffect(() => {
     getUserPreferences().then((authResponse) => {
       if (authResponse.data.loggedIn) {
-        setAllergens(authResponse.data.allergens);
-        setDiets(authResponse.data.diets);
+        setDiet(authResponse.data.diet);
+        console.log(authResponse.data.allergens);
+        for (var allergen in allergens) {
+          if (allergens.hasOwnProperty(allergen)) {
+            if (authResponse.data.allergens.includes(allergen)) {
+              if (allergen == "TreeNut") {
+                allergens[TreeNut] = true;
+              } else {
+                allergens[allergen] = true;
+              }
+            }
+          }
+        }
         setHeight(authResponse.data.health.height);
         setWeight(authResponse.data.health.weight);
       }
     });
   }, []);
 
-  const handleDietChange = (dietInput) => {
-    diets.includes(dietInput)
-      ? setDiets(diets.filter((diet) => diet !== dietInput))
-      : diets.push(dietInput);
+  const handleDietChange = (event) => {
+    setDiet(event.target.value);
   };
 
-  const handleAllergenChange = (allergenInput) => {
-    allergens.includes(allergenInput)
-      ? setAllergens(allergens.filter((allergen) => allergen !== allergenInput))
-      : allergens.push(allergenInput);
+  const handleAllergenChange = (event) => {
+    setAllergens({ ...allergens, [event.target.name]: event.target.checked });
   };
 
   const handleSubmit = () => {
-    changePreferences(diets, allergens, height, weight).then((response) => {
+    var allergenList = [];
+    for (var allergen in allergens) {
+      if (allergens.hasOwnProperty(allergen)) {
+        if (allergens[allergen] == true) {
+          if (allergen == "TreeNut") {
+            allergenList.push("Tree Nut");
+          } else {
+            allergenList.push(allergen);
+          }
+        }
+      }
+    }
+    changePreferences(diet, allergenList, height, weight).then((response) => {
       if (response.data.err) {
         setError(true);
         setOpen(true);
@@ -82,6 +114,19 @@ const Preferences = ({ className, ...rest }) => {
       }
     });
   };
+
+  const {
+    Dairy,
+    Egg,
+    Gluten,
+    Grain,
+    Peanut,
+    Seafood,
+    Shellfish,
+    Soy,
+    TreeNut,
+    Wheat,
+  } = allergens;
 
   return (
     <form className={clsx(classes.root, className)} {...rest}>
@@ -97,55 +142,168 @@ const Preferences = ({ className, ...rest }) => {
               <Typography color="textPrimary" gutterBottom variant="h6">
                 Diet
               </Typography>
-              {[
-                "Vegan",
-                "Vegetarian",
-                "Paleo",
-                "Primal",
-                "Whole30",
-                "Lacto-vegetarian",
-                "Ovo-vegetarian",
-                "Pescetarian",
-                "Ketogenic",
-                "Gluten free",
-              ].map((diet) => (
+              <RadioGroup
+                aria-label="diet"
+                name="diet"
+                value={diet}
+                onChange={handleDietChange}
+              >
                 <FormControlLabel
-                  control={
-                    <Checkbox name="diet" />
-                  }
-                  onChange={() => handleDietChange(diet)}
-                  key={diet}
-                  label={diet}
+                  value="Vegan"
+                  control={<Radio />}
+                  label="Vegan"
                 />
-              ))}
+                <FormControlLabel
+                  value="Vegetarian"
+                  control={<Radio />}
+                  label="Vegetarian"
+                />
+                <FormControlLabel
+                  value="Paleo"
+                  control={<Radio />}
+                  label="Paleo"
+                />
+                <FormControlLabel
+                  value="Primal"
+                  control={<Radio />}
+                  label="Primal"
+                />
+                <FormControlLabel
+                  value="Whole30"
+                  control={<Radio />}
+                  label="Whole30"
+                />
+                <FormControlLabel
+                  value="Lacto-vegetarian"
+                  control={<Radio />}
+                  label="Lacto-vegetarian"
+                />
+                <FormControlLabel
+                  value="Ovo-vegetarian"
+                  control={<Radio />}
+                  label="Ovo-vegetarian"
+                />
+                <FormControlLabel
+                  value="Pescetarian"
+                  control={<Radio />}
+                  label="Pescetarian"
+                />
+                <FormControlLabel
+                  value="Ketogenic"
+                  control={<Radio />}
+                  label="Ketogenic"
+                />
+                <FormControlLabel
+                  value="Gluten free"
+                  control={<Radio />}
+                  label="Gluten free"
+                />
+              </RadioGroup>
             </Grid>
             <Grid className={classes.item} item md={4} sm={6} xs={12}>
               <Typography color="textPrimary" gutterBottom variant="h6">
                 Allergens
               </Typography>
-              {[
-                "Dairy",
-                "Egg",
-                "Gluten",
-                "Grain",
-                "Peanut",
-                "Seafood",
-                "Shellfish",
-                "Soy",
-                "Tree nut",
-                "Wheat",
-              ].map((allergen) => (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name="allergen"
-                    />
-                  }
-                  onChange={() => handleAllergenChange(allergen)}
-                  key={allergen}
-                  label={allergen}
-                />
-              ))}
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={Dairy}
+                    name="Dairy"
+                    onChange={handleAllergenChange}
+                  />
+                }
+                label="Dairy"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={Egg}
+                    name="Egg"
+                    onChange={handleAllergenChange}
+                  />
+                }
+                label="Egg"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={Gluten}
+                    name="Gluten"
+                    onChange={handleAllergenChange}
+                  />
+                }
+                label="Gluten"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={Grain}
+                    name="Grain"
+                    onChange={handleAllergenChange}
+                  />
+                }
+                label="Grain"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={Peanut}
+                    name="Peanut"
+                    onChange={handleAllergenChange}
+                  />
+                }
+                label="Peanut"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={Seafood}
+                    name="Seafood"
+                    onChange={handleAllergenChange}
+                  />
+                }
+                label="Seafood"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={Shellfish}
+                    name="Shellfish"
+                    onChange={handleAllergenChange}
+                  />
+                }
+                label="Shellfish"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={Soy}
+                    name="Soy"
+                    onChange={handleAllergenChange}
+                  />
+                }
+                label="Soy"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={TreeNut}
+                    name="TreeNut"
+                    onChange={handleAllergenChange}
+                  />
+                }
+                label="Tree Nut"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={Wheat}
+                    name="Wheat"
+                    onChange={handleAllergenChange}
+                  />
+                }
+                label="Wheat"
+              />
             </Grid>
             <Grid className={classes.item} item md={4} sm={6} xs={12}>
               <Typography color="textPrimary" gutterBottom variant="h6">
