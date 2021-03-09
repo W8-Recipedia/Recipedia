@@ -53,6 +53,7 @@ const Preferences = ({ className, ...rest }) => {
     Grain: false,
     Peanut: false,
     Seafood: false,
+    Sesame: false,
     Shellfish: false,
     Soy: false,
     TreeNut: false,
@@ -121,6 +122,7 @@ const Preferences = ({ className, ...rest }) => {
     Grain,
     Peanut,
     Seafood,
+    Sesame,
     Shellfish,
     Soy,
     TreeNut,
@@ -147,6 +149,11 @@ const Preferences = ({ className, ...rest }) => {
                 value={diet}
                 onChange={handleDietChange}
               >
+                <FormControlLabel
+                  value="None"
+                  control={<Radio />}
+                  label="None"
+                />
                 <FormControlLabel
                   value="Vegan"
                   control={<Radio />}
@@ -262,6 +269,16 @@ const Preferences = ({ className, ...rest }) => {
                   />
                 }
                 label="Seafood"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={Sesame}
+                    name="Sesame"
+                    onChange={handleAllergenChange}
+                  />
+                }
+                label="Sesame"
               />
               <FormControlLabel
                 control={
