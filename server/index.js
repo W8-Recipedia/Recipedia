@@ -163,12 +163,11 @@ app.get("/getuserpreferences", (req, res) => {
           res.json({ err: err });
         } else if (result.length > 0) {
           res.json({
-            diets: result[0].diets,
-            allergens: result[0].allergens,
-            health: result[0].health,
+            diets: JSON.parse(result[0].diets),
+            allergens: JSON.parse(result[0].allergens),
+            health: JSON.parse(result[0].health),
+            loggedIn: true,
           });
-        } else {
-          res.json({ message: "noEmail" });
         }
       }
     );
@@ -231,8 +230,6 @@ app.post("/changepreferences", (req, res) => {
         uid,
       ],
       (err, result) => {
-        console.log(err);
-
         if (err) {
           res.json({ err: err });
         } else {

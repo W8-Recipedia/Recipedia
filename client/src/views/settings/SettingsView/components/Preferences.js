@@ -45,12 +45,17 @@ const Preferences = ({ className, ...rest }) => {
   const [error, setError] = useState(false);
   const [diets, setDiets] = useState([]);
   const [allergens, setAllergens] = useState([]);
-  const [height, setHeight] = useState();
-  const [weight, setWeight] = useState();
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
 
   useLayoutEffect(() => {
-    getUserPreferences().then((response) => {
-      console.log(response);
+    getUserPreferences().then((authResponse) => {
+      if (authResponse.data.loggedIn) {
+        setAllergens(authResponse.data.allergens);
+        setDiets(authResponse.data.diets);
+        setHeight(authResponse.data.health.height);
+        setWeight(authResponse.data.health.weight);
+      }
     });
   }, []);
 
@@ -68,7 +73,6 @@ const Preferences = ({ className, ...rest }) => {
 
   const handleSubmit = () => {
     changePreferences(diets, allergens, height, weight).then((response) => {
-      console.log(response);
       if (response.data.err) {
         setError(true);
         setOpen(true);
@@ -106,7 +110,9 @@ const Preferences = ({ className, ...rest }) => {
                 "Gluten free",
               ].map((diet) => (
                 <FormControlLabel
-                  control={<Checkbox name="diet" />}
+                  control={
+                    <Checkbox name="diet" />
+                  }
                   onChange={() => handleDietChange(diet)}
                   key={diet}
                   label={diet}
@@ -130,7 +136,11 @@ const Preferences = ({ className, ...rest }) => {
                 "Wheat",
               ].map((allergen) => (
                 <FormControlLabel
-                  control={<Checkbox name="allergen" />}
+                  control={
+                    <Checkbox
+                      name="allergen"
+                    />
+                  }
                   onChange={() => handleAllergenChange(allergen)}
                   key={allergen}
                   label={allergen}
