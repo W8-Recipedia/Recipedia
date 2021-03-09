@@ -136,7 +136,7 @@ const SearchView = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Search">
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Card variant="outlined">
             <CardContent>
               <Box p={1}>

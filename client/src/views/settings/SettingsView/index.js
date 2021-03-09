@@ -30,7 +30,7 @@ const SettingsView = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Settings">
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Card variant="outlined">
             <CardContent>
               <Box p={1}>
@@ -45,7 +45,7 @@ const SettingsView = () => {
             </CardContent>
           </Card>
         </Container>
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Box mb={3} mt={3}>
             <Grid container spacing={3}>
               <Grid item lg={4} md={6} xs={12}>

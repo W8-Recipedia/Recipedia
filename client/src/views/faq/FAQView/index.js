@@ -26,7 +26,7 @@ const FAQView = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | FAQ">
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Card variant="outlined">
             <CardContent>
               <Box p={1}>
@@ -41,7 +41,7 @@ const FAQView = () => {
             </CardContent>
           </Card>
         </Container>
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Box mb={3}></Box>
 
           <Box mb={3}>
