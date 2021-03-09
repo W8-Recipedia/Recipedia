@@ -30,6 +30,26 @@ export const getComplexRecipes = async (
   });
 };
 
+export const getRecommendedRecipes = async (
+  intolerances,
+  diet,
+  offset = 0,
+) => {
+  let url = "/recipes/complexSearch";
+  return await Axios.get(url, {
+    params: {
+      apiKey: process.env.REACT_APP_RECIPE_API_KEY,
+      instructionsRequired: true,
+      addRecipeInformation: true,
+      fillIngredients: true,
+      number: process.env.REACT_APP_MAX_RECIPE_NUMBER,
+      diet: diet || undefined,
+      intolerances: intolerances || undefined,
+      offset,
+    },
+  });
+};
+
 export const getRandomRecipes = async () => {
   let url = "/recipes/random";
   return await Axios.get(url, {
