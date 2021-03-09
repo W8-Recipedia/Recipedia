@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
+import {
+  getUserPreferences,
+} from "src/components/auth/UserAuth";
 import {
   Box,
   Grid,
@@ -102,6 +105,13 @@ const SearchView = () => {
   const [ingredients] = useState([]);
   const [intolerances, setIntolerances] = useState([]);
   const [diet, setDiet] = useState("");
+
+  useLayoutEffect(() => {
+    getUserPreferences().then((res) => {
+      setIntolerances(res.data.allergens);
+      setDiet(res.data.diets);
+    });
+  }, []);
 
   const handleChangeCuisine = (event) => {
     setCuisineName(event.target.value);
