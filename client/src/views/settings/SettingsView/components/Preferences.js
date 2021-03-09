@@ -8,7 +8,9 @@ import {
   CardContent,
   CardHeader,
   Checkbox,
-  FormGroup,
+  Dialog,
+  DialogContent,
+  DialogContentText,
   Divider,
   FormControlLabel,
   Grid,
@@ -40,12 +42,17 @@ const useStyles = makeStyles({
 const Preferences = ({ className, ...rest }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
   const [diets, setDiets] = useState([]);
   const [allergens, setAllergens] = useState([]);
   const [height, setHeight] = useState();
   const [weight, setWeight] = useState();
 
-  useLayoutEffect(() => {}, []);
+  useLayoutEffect(() => {
+    getUserPreferences().then((response) => {
+      console.log(response);
+    });
+  }, []);
 
   const handleDietChange = (dietInput) => {
     diets.includes(dietInput)
@@ -55,15 +62,21 @@ const Preferences = ({ className, ...rest }) => {
 
   const handleAllergenChange = (allergenInput) => {
     allergens.includes(allergenInput)
-      ? setDiets(allergens.filter((allergen) => allergen !== allergenInput))
+      ? setAllergens(allergens.filter((allergen) => allergen !== allergenInput))
       : allergens.push(allergenInput);
   };
 
   const handleSubmit = () => {
-    console.log(diets);
-    console.log(allergens);
-    console.log(height);
-    console.log(weight);
+    changePreferences(diets, allergens, height, weight).then((response) => {
+      console.log(response);
+      if (response.data.err) {
+        setError(true);
+        setOpen(true);
+      } else if (response) {
+        setError(false);
+        setOpen(true);
+      }
+    });
   };
 
   return (
@@ -163,13 +176,9 @@ const Preferences = ({ className, ...rest }) => {
                             BMI
                           </Typography>
                           <Typography color="textPrimary" variant="h3">
-                            {weight == 0 || height == 0
+                            {weight == 0 || height == 0 || !weight || !height
                               ? "Undefined"
-                              : Math.round(
-                                  (weight * 10) / ((height / 100) ^ 2)
-                                ) /
-                                  10 >
-                                100
+                              : weight / ((height / 100) ^ 2) > 100
                               ? "100+"
                               : Math.round(
                                   (weight * 10) / ((height / 100) ^ 2)
@@ -185,7 +194,9 @@ const Preferences = ({ className, ...rest }) => {
                       <Typography color="textSecondary" variant="caption">
                         {weight / ((height / 100) ^ 2) == 0 ||
                         weight == 0 ||
-                        height == 0
+                        height == 0 ||
+                        !weight ||
+                        !height
                           ? "Please enter your details"
                           : weight / ((height / 100) ^ 2) < 18.5
                           ? "Underweight"
@@ -208,6 +219,22 @@ const Preferences = ({ className, ...rest }) => {
             Update
           </Button>
         </Box>
+        <Dialog
+          open={open}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          onClose={() => {
+            setOpen(false);
+          }}
+        >
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {error
+                ? "Your preferences could not be updated. Please try again later."
+                : "Your preferences have been updated."}
+            </DialogContentText>
+          </DialogContent>
+        </Dialog>
       </Card>
     </form>
   );
