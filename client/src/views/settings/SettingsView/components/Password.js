@@ -17,8 +17,9 @@ import {
 } from "@material-ui/core";
 
 const Password = () => {
-  const [open, setOpen] = React.useState(false);
-  const [wrongPassword, setWrongPassword] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [wrongPassword, setWrongPassword] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
   const handleSubmit = (values, actions) => {
     changePassword(values.currentPassword, values.password).then(
       (authResponse) => {
@@ -89,6 +90,7 @@ const Password = () => {
                 onChange={(e) => {
                   handleChange(e);
                   setWrongPassword(false);
+                  setButtonDisabled(false);
                 }}
                 type="password"
                 value={values.currentPassword}
@@ -101,8 +103,10 @@ const Password = () => {
                 helperText={touched.password && errors.password}
                 margin="normal"
                 name="password"
-                onBlur={handleBlur}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  setButtonDisabled(false);
+                }}
                 type="password"
                 value={values.password}
                 variant="outlined"
@@ -117,7 +121,10 @@ const Password = () => {
                 margin="normal"
                 name="confirmPassword"
                 onBlur={handleBlur}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  setButtonDisabled(false);
+                }}
                 type="password"
                 value={values.confirmPassword}
                 variant="outlined"
@@ -125,7 +132,7 @@ const Password = () => {
             </CardContent>
             <Divider />
             <Box display="flex" justifyContent="flex-end" p={2}>
-              <Button color="primary" variant="contained" type="submit">
+              <Button color="primary" variant="contained" type="submit" disabled={buttonDisabled}>
                 Update
               </Button>
             </Box>

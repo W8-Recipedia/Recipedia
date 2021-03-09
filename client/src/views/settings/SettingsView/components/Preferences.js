@@ -61,6 +61,7 @@ const Preferences = ({ className, ...rest }) => {
   });
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
+  const [buttonDisabled, setButtonDisabled] = useState(true);
 
   useLayoutEffect(() => {
     getUserPreferences().then((authResponse) => {
@@ -69,29 +70,32 @@ const Preferences = ({ className, ...rest }) => {
         for (var allergen in allergens) {
           if (allergens.hasOwnProperty(allergen)) {
             if (authResponse.data.allergens) {
-            if (authResponse.data.allergens.includes(allergen)) {
-              if (allergen == "TreeNut") {
-                allergens[TreeNut] = true;
-              } else {
-                allergens[allergen] = true;
+              if (authResponse.data.allergens.includes(allergen)) {
+                if (allergen == "TreeNut") {
+                  allergens[TreeNut] = true;
+                } else {
+                  allergens[allergen] = true;
+                }
               }
             }
           }
         }
-        }
         if (authResponse.data.health) {
-        setHeight(authResponse.data.health.height);
-        setWeight(authResponse.data.health.weight);
+          setHeight(authResponse.data.health.height);
+          setWeight(authResponse.data.health.weight);
+        }
       }
-      }
+      setButtonDisabled(true);
     });
   }, []);
 
   const handleDietChange = (event) => {
+    setButtonDisabled(false);
     setDiet(event.target.value);
   };
 
   const handleAllergenChange = (event) => {
+    setButtonDisabled(false);
     setAllergens({ ...allergens, [event.target.name]: event.target.checked });
   };
 
@@ -337,7 +341,10 @@ const Preferences = ({ className, ...rest }) => {
                     label="Height (cm)"
                     type="number"
                     variant="outlined"
-                    onChange={(e) => setHeight(e.target.value)}
+                    onChange={(e) => {
+                      setHeight(e.target.value);
+                      setButtonDisabled(false);
+                    }}
                     value={height}
                   />
                 </Grid>
@@ -347,7 +354,10 @@ const Preferences = ({ className, ...rest }) => {
                     label="Weight (kg)"
                     type="number"
                     variant="outlined"
-                    onChange={(e) => setWeight(e.target.value)}
+                    onChange={(e) => {
+                      setWeight(e.target.value);
+                      setButtonDisabled(false);
+                    }}
                     value={weight}
                   />
                 </Grid>
@@ -403,7 +413,12 @@ const Preferences = ({ className, ...rest }) => {
         </CardContent>
         <Divider />
         <Box display="flex" justifyContent="flex-end" p={2}>
-          <Button color="primary" variant="contained" onClick={handleSubmit}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={buttonDisabled}
+          >
             Update
           </Button>
         </Box>
