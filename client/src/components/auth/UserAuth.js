@@ -54,14 +54,13 @@ export const googleLogin = async (token, userprofile) => {
   }
 };
 
-export const googleSignUp = async (gtoken, userprofile, password) => {
+export const googleSignUp = async (gtoken, userprofile) => {
   if (gtoken) {
     localStorage.removeItem("usertoken");
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/gsignup",
       {
         user: userprofile,
-        password: password,
       }
     );
     if (response.data.token) {
@@ -220,6 +219,10 @@ export const changePreferences = async (diet, allergens, height, weight) => {
 };
 
 export const changePassword = async (oldpassword, newpassword) => {
+    var localtoken;
+    localStorage.getItem("usertoken")
+      ? (localtoken = localStorage.getItem("usertoken"))
+      : (localtoken = localStorage.getItem("gusertoken"));
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/changepassword",
     {
@@ -227,7 +230,7 @@ export const changePassword = async (oldpassword, newpassword) => {
       newpassword: newpassword,
     },
     {
-      headers: { "x-access-token": localStorage.getItem("gusertoken") },
+      headers: { "x-access-token": localtoken },
     }
   );
   if (response.data.passwordChanged) {
@@ -246,7 +249,7 @@ export const deleteAccount = async () => {
     ? (localtoken = localStorage.getItem("usertoken"))
     : (localtoken = localStorage.getItem("gusertoken"));
 
-  const response = await Axios.post(
+  const response = await Axios.get(
     process.env.REACT_APP_SERVER_URL + "/deleteaccount",
     {
       headers: {

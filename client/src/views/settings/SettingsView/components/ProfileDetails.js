@@ -27,6 +27,7 @@ const ProfileDetails = ({ className, ...rest }) => {
   const [googleAccount, setGoogleAccount] = useState(false);
   const [changeUserInfoSuccess, setChangeDetailsSuccess] = useState(false);
   const [open, setOpen] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
@@ -45,6 +46,7 @@ const ProfileDetails = ({ className, ...rest }) => {
         }
       }
     });
+    setButtonDisabled(true);
   }, []);
 
   const handleSubmit = (values, actions) => {
@@ -92,7 +94,10 @@ const ProfileDetails = ({ className, ...rest }) => {
                     label="First name"
                     name="firstName"
                     onBlur={handleBlur}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setButtonDisabled(false);
+                    }}
                     value={values.firstName}
                     disabled={googleAccount}
                     variant="outlined"
@@ -106,7 +111,10 @@ const ProfileDetails = ({ className, ...rest }) => {
                     label="Last name"
                     name="lastName"
                     onBlur={handleBlur}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setButtonDisabled(false);
+                    }}
                     disabled={googleAccount}
                     value={values.lastName}
                     variant="outlined"
@@ -121,7 +129,10 @@ const ProfileDetails = ({ className, ...rest }) => {
                     name="email"
                     disabled={googleAccount}
                     onBlur={handleBlur}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setButtonDisabled(false);
+                    }}
                     type="email"
                     value={values.email}
                     variant="outlined"
@@ -135,7 +146,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 color="primary"
                 variant="contained"
                 type="submit"
-                disabled={googleAccount}
+                disabled={googleAccount || buttonDisabled}
               >
                 Update
               </Button>
@@ -153,7 +164,7 @@ const ProfileDetails = ({ className, ...rest }) => {
               <DialogContentText id="alert-dialog-description">
                 {changeUserInfoSuccess
                   ? "Your details have been changed successfully!"
-                  : "The email address specified already exists!"}
+                  : "The email address specified is already linked to a Recipedia account! Please use another email address."}
               </DialogContentText>
             </DialogContent>
           </Dialog>

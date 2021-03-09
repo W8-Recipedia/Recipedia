@@ -2,21 +2,14 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
 const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+
 const app = express();
-const { OAuth2Client } = require("google-auth-library");
-const gclient = new OAuth2Client(
-  "265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
-);
 
 app.use(express.json());
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: [process.env.CLIENT_URL],
@@ -50,7 +43,11 @@ app.post("/login", (req, res) => {
             token: token,
           });
         } else {
-          res.json({ message: "wrongPassword" });
+          if (result[0].googlelogin) {
+            res.json({ message: "googleAccount" });
+          } else {
+            res.json({ message: "wrongPassword" });
+          }
         }
       });
     } else {
@@ -100,41 +97,38 @@ app.post("/glogin", (req, res) => {
       if (result.length == 0) {
         res.json({ message: "noAccount" });
       } else {
-        const user = req.body.userprofile;
-        const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-          expiresIn: "7d",
-        });
-        res.json({
-          token: token,
-        });
+        if (result[0].googlelogin) {
+          const user = req.body.userprofile;
+          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+            expiresIn: "7d",
+          });
+          res.json({
+            token: token,
+          });
+        } else {
+          res.json({ message: "noGoogle" });
+        }
       }
     }
   );
 });
 
 app.post("/gsignup", (req, res) => {
-  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-    con.query(
-      "INSERT INTO users (firstname, lastname, email, password) VALUES (?,?,?,?)",
-      [
-        req.body.user.givenName,
-        req.body.user.familyName,
-        req.body.user.email,
-        hash,
-      ],
-      (err, result) => {
-        if (err) {
-          res.json({ message: "yesAccount" });
-        } else {
-          const user = req.body.user;
-          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-            expiresIn: "7d",
-          });
-          res.json({ token: token, result: result });
-        }
+  con.query(
+    "INSERT INTO users (firstname, lastname, googlelogin, email) VALUES (?,?,?,?)",
+    [req.body.user.givenName, req.body.user.familyName, 1, req.body.user.email],
+    (err, result) => {
+      if (err) {
+        res.json({ message: "yesAccount" });
+      } else {
+        const user = req.body.user;
+        const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+          expiresIn: "7d",
+        });
+        res.json({ token: token, result: result });
       }
-    );
-  });
+    }
+  );
 });
 
 app.get("/getuserinfo", (req, res) => {
@@ -305,6 +299,7 @@ app.post("/changeuserinfo", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
+    const uid = token.user.userid;
     con.query(
       "UPDATE users SET firstname = ?, lastname = ?, email = ? WHERE email = ?",
       [req.body.firstname, req.body.lastname, req.body.email, token.user.email],
@@ -359,13 +354,13 @@ app.post("/changepreferences", (req, res) => {
 });
 
 app.post("/changepassword", (req, res) => {
-  const oldpassword = req.body.oldpassword;
-  const newpassword = req.body.newpassword;
   if (req.headers["x-access-token"]) {
     const token = jwt.verify(
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
+    const oldpassword = req.body.oldpassword;
+    const newpassword = req.body.newpassword;
     con.query(
       "SELECT * FROM users WHERE email = ?",
       token.user.email,
@@ -378,7 +373,7 @@ app.post("/changepassword", (req, res) => {
               bcrypt.hash(newpassword, saltRounds, (err, hash) => {
                 con.query(
                   "UPDATE users SET password = ? WHERE email = ?",
-                  [hash, email],
+                  [hash, token.user.email],
                   (err, result) => {
                     if (err) {
                       res.json({ message: "DBError" });
@@ -409,7 +404,6 @@ app.get("/deleteaccount", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-
     con.query(
       "DELETE FROM users WHERE email = ?",
       token.user.email,

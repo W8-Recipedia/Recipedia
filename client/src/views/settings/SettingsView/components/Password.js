@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import { changePassword } from "src/components/auth/UserAuth";
@@ -15,10 +15,22 @@ import {
   DialogContent,
   DialogContentText,
 } from "@material-ui/core";
+import { getUserInfo } from "src/components/auth/UserAuth";
 
 const Password = () => {
-  const [open, setOpen] = React.useState(false);
-  const [wrongPassword, setWrongPassword] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [wrongPassword, setWrongPassword] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [googleAccount, setGoogleAccount] = useState(false);
+  useLayoutEffect(() => {
+    getUserInfo().then((authResponse) => {
+      if (authResponse.data.user.googleId) {
+        setGoogleAccount(true);
+      }
+    });
+    setButtonDisabled(true);
+  }, []);
+
   const handleSubmit = (values, actions) => {
     changePassword(values.currentPassword, values.password).then(
       (authResponse) => {
@@ -89,10 +101,12 @@ const Password = () => {
                 onChange={(e) => {
                   handleChange(e);
                   setWrongPassword(false);
+                  setButtonDisabled(false);
                 }}
                 type="password"
                 value={values.currentPassword}
                 variant="outlined"
+                disabled={googleAccount}
               />
               <TextField
                 error={Boolean(touched.password && errors.password)}
@@ -101,11 +115,14 @@ const Password = () => {
                 helperText={touched.password && errors.password}
                 margin="normal"
                 name="password"
-                onBlur={handleBlur}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  setButtonDisabled(false);
+                }}
                 type="password"
                 value={values.password}
                 variant="outlined"
+                disabled={googleAccount}
               />
               <TextField
                 error={Boolean(
@@ -117,15 +134,24 @@ const Password = () => {
                 margin="normal"
                 name="confirmPassword"
                 onBlur={handleBlur}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  setButtonDisabled(false);
+                }}
                 type="password"
                 value={values.confirmPassword}
                 variant="outlined"
+                disabled={googleAccount}
               />
             </CardContent>
             <Divider />
             <Box display="flex" justifyContent="flex-end" p={2}>
-              <Button color="primary" variant="contained" type="submit">
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+                disabled={buttonDisabled || googleAccount}
+              >
                 Update
               </Button>
             </Box>
