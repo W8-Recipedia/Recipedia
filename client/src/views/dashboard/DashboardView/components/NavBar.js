@@ -19,7 +19,7 @@ import {
 } from "react-feather";
 import React, { useEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { getUserCredentials } from "src/components/auth/UserAuth";
+import { getUserInfo } from "src/components/auth/UserAuth";
 
 import NavItem from "src/views/dashboard/DashboardView/components/NavItem";
 import PropTypes from "prop-types";
@@ -83,7 +83,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
   const [imageURL, setImageURL] = useState("");
   const [userName, setUserName] = useState(() => {
-    getUserCredentials().then((authResponse) => {
+    getUserInfo().then((authResponse) => {
       if (authResponse.data.loggedIn) {
         setUserName(
           authResponse.data.user.firstname +

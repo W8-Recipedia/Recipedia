@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import { userSignUp, googleSignUp } from "src/components/auth/UserAuth";
+import { signUp, googleSignUp } from "src/components/auth/UserAuth";
 
 import {
   Box,
@@ -51,7 +51,7 @@ const SignUpView = () => {
   const [signupError, setSignUpError] = useState("");
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
-    userSignUp(
+    signUp(
       values.firstName,
       values.lastName,
       values.email,

@@ -42,13 +42,17 @@ const useStyles = makeStyles({
 const Preferences = ({ className, ...rest }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState(true);
+  const [error, setError] = useState(false);
   const [diets, setDiets] = useState([]);
   const [allergens, setAllergens] = useState([]);
   const [height, setHeight] = useState();
   const [weight, setWeight] = useState();
 
-  useLayoutEffect(() => {}, []);
+  useLayoutEffect(() => {
+    getUserPreferences().then((response) => {
+      console.log(response);
+    });
+  }, []);
 
   const handleDietChange = (dietInput) => {
     diets.includes(dietInput)
@@ -69,6 +73,7 @@ const Preferences = ({ className, ...rest }) => {
         setError(true);
         setOpen(true);
       } else if (response) {
+        setError(false);
         setOpen(true);
       }
     });

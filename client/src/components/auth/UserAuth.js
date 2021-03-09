@@ -2,7 +2,7 @@ import Axios from "axios";
 
 Axios.defaults.withCredentials = true;
 
-export const userLogin = async (email, password) => {
+export const login = async (email, password) => {
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/login",
     {
@@ -19,7 +19,7 @@ export const userLogin = async (email, password) => {
   }
 };
 
-export const userSignUp = async (firstname, lastname, email, password) => {
+export const signUp = async (firstname, lastname, email, password) => {
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/signup",
     {
@@ -73,44 +73,20 @@ export const googleSignUp = async (gtoken, userprofile, password) => {
   }
 };
 
-export const changePassword = async (oldpassword, newpassword) => {
-  const response = await Axios.post(
-    process.env.REACT_APP_SERVER_URL + "/changepassword",
-    {
-      oldpassword: oldpassword,
-      newpassword: newpassword,
-    },
-    {
-      headers: { "x-access-token": localStorage.getItem("gusertoken") },
-    }
-  );
-  if (response.data.passwordChanged) {
-    localStorage.getItem("usertoken")
-      ? localStorage.setItem("usertoken", response.data.token)
-      : localStorage.setItem("gusertoken", response.data.token);
-    return "Success";
-  } else {
-    return response.data.message;
-  }
-};
-
-export const getUserCredentials = async () => {
+export const getUserInfo = async () => {
   var localtoken;
   localStorage.getItem("usertoken")
     ? (localtoken = localStorage.getItem("usertoken"))
     : (localtoken = localStorage.getItem("gusertoken"));
   if (localtoken) {
-    const response = localStorage.getItem("usertoken")
-      ? await Axios.get(process.env.REACT_APP_SERVER_URL + "/userinfo", {
-          headers: {
-            "x-access-token": localStorage.getItem("usertoken"),
-          },
-        })
-      : await Axios.get(process.env.REACT_APP_SERVER_URL + "/userinfo", {
-          headers: {
-            "x-access-token": localStorage.getItem("gusertoken"),
-          },
-        });
+    const response = await Axios.get(
+      process.env.REACT_APP_SERVER_URL + "/getuserinfo",
+      {
+        headers: {
+          "x-access-token": localtoken,
+        },
+      }
+    );
     if (localStorage.getItem("gusertoken")) {
       response.data.user.firstname = response.data.user.givenName;
       response.data.user.lastname = response.data.user.familyName;
@@ -120,6 +96,44 @@ export const getUserCredentials = async () => {
     return { data: { loggedIn: false } };
   }
 };
+
+export const getUserPreferences = async () => {
+  var localtoken;
+  localStorage.getItem("usertoken")
+    ? (localtoken = localStorage.getItem("usertoken"))
+    : (localtoken = localStorage.getItem("gusertoken"));
+  if (localtoken) {
+    const response = await Axios.get(
+      process.env.REACT_APP_SERVER_URL + "/getuserpreferences",
+      {
+        headers: {
+          "x-access-token": localtoken,
+        },
+      }
+    );
+    return response;
+  } else {
+    return { data: { loggedIn: false } };
+  }
+};
+
+export const changeUserInfo = async (firstname, lastname, email) => {
+  const response = await Axios.post(
+    process.env.REACT_APP_SERVER_URL + "/changeuserinfo",
+    { firstname: firstname, lastname: lastname, email: email },
+    {
+      headers: { "x-access-token": localStorage.getItem("usertoken") },
+    }
+  );
+  if (response.data.message == "emailExists") {
+    return response.data.message;
+  } else {
+    localStorage.setItem("usertoken", response.data.token);
+
+    return "Success";
+  }
+};
+
 export const changePreferences = async (diets, allergens, height, weight) => {
   var localtoken;
   localStorage.getItem("usertoken")
@@ -143,6 +157,27 @@ export const changePreferences = async (diets, allergens, height, weight) => {
   return response;
 };
 
+export const changePassword = async (oldpassword, newpassword) => {
+  const response = await Axios.post(
+    process.env.REACT_APP_SERVER_URL + "/changepassword",
+    {
+      oldpassword: oldpassword,
+      newpassword: newpassword,
+    },
+    {
+      headers: { "x-access-token": localStorage.getItem("gusertoken") },
+    }
+  );
+  if (response.data.passwordChanged) {
+    localStorage.getItem("usertoken")
+      ? localStorage.setItem("usertoken", response.data.token)
+      : localStorage.setItem("gusertoken", response.data.token);
+    return "Success";
+  } else {
+    return response.data.message;
+  }
+};
+
 export const deleteAccount = async () => {
   var localtoken;
   localStorage.getItem("usertoken")
@@ -164,26 +199,9 @@ export const deleteAccount = async () => {
   return response.data.message;
 };
 
-export const changeDetails = async (firstname, lastname, email) => {
-  const response = await Axios.post(
-    process.env.REACT_APP_SERVER_URL + "/changedetails",
-    { firstname: firstname, lastname: lastname, email: email },
-    {
-      headers: { "x-access-token": localStorage.getItem("usertoken") },
-    }
-  );
-  if (response.data.message == "emailExists") {
-    return response.data.message;
-  } else {
-    localStorage.setItem("usertoken", response.data.token);
-
-    return "Success";
-  }
-};
-
-export const userLogOut = () => {
+export const logOut = () => {
   localStorage.removeItem("usertoken");
   localStorage.removeItem("gusertoken");
 };
 
-export default userLogin;
+export default login;

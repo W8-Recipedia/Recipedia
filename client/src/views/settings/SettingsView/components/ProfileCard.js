@@ -14,10 +14,7 @@ import {
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import {
-  getUserCredentials,
-  deleteAccount,
-} from "src/components/auth/UserAuth";
+import { getUserInfo, deleteAccount } from "src/components/auth/UserAuth";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { red } from "@material-ui/core/colors";
@@ -41,7 +38,7 @@ const ProfileCard = ({ className, ...rest }) => {
   const [deleteStatus, setDeleteStatus] = React.useState(false);
 
   const [userName, setUserName] = useState(() => {
-    getUserCredentials().then((authResponse) => {
+    getUserInfo().then((authResponse) => {
       if (authResponse.data.loggedIn) {
         setUserName(
           authResponse.data.user.firstname +

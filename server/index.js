@@ -59,26 +59,6 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.post("/glogin", (req, res) => {
-  con.query(
-    "SELECT * FROM users WHERE email = ?",
-    req.body.userprofile.email,
-    (err, result) => {
-      if (result.length == 0) {
-        res.json({ message: "noAccount" });
-      } else {
-        const user = req.body.userprofile;
-        const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-          expiresIn: "7d",
-        });
-        res.json({
-          token: token,
-        });
-      }
-    }
-  );
-});
-
 app.post("/signup", (req, res) => {
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
@@ -112,6 +92,26 @@ app.post("/signup", (req, res) => {
   });
 });
 
+app.post("/glogin", (req, res) => {
+  con.query(
+    "SELECT * FROM users WHERE email = ?",
+    req.body.userprofile.email,
+    (err, result) => {
+      if (result.length == 0) {
+        res.json({ message: "noAccount" });
+      } else {
+        const user = req.body.userprofile;
+        const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+          expiresIn: "7d",
+        });
+        res.json({
+          token: token,
+        });
+      }
+    }
+  );
+});
+
 app.post("/gsignup", (req, res) => {
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
     con.query(
@@ -137,7 +137,7 @@ app.post("/gsignup", (req, res) => {
   });
 });
 
-app.get("/userinfo", (req, res) => {
+app.get("/getuserinfo", (req, res) => {
   if (req.headers["x-access-token"]) {
     const token = jwt.verify(
       req.headers["x-access-token"],
@@ -149,21 +149,26 @@ app.get("/userinfo", (req, res) => {
   }
 });
 
-app.get("/deleteaccount", (req, res) => {
+app.get("/getuserpreferences", (req, res) => {
   if (req.headers["x-access-token"]) {
     const token = jwt.verify(
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-
     con.query(
-      "DELETE FROM users WHERE email = ?",
+      "SELECT * FROM users WHERE email = ?",
       token.user.email,
       (err, result) => {
         if (err) {
-          res.json({ message: "error" });
+          res.json({ err: err });
+        } else if (result.length > 0) {
+          res.json({
+            diets: result[0].diets,
+            allergens: result[0].allergens,
+            health: result[0].health,
+          });
         } else {
-          res.json({ message: "success" });
+          res.json({ message: "noEmail" });
         }
       }
     );
@@ -172,7 +177,7 @@ app.get("/deleteaccount", (req, res) => {
   }
 });
 
-app.post("/changedetails", (req, res) => {
+app.post("/changeuserinfo", (req, res) => {
   if (req.headers["x-access-token"]) {
     const token = jwt.verify(
       req.headers["x-access-token"],
@@ -226,6 +231,8 @@ app.post("/changepreferences", (req, res) => {
         uid,
       ],
       (err, result) => {
+        console.log(err);
+
         if (err) {
           res.json({ err: err });
         } else {
@@ -275,6 +282,29 @@ app.post("/changepassword", (req, res) => {
               res.json({ message: "wrongPassword" });
             }
           });
+        }
+      }
+    );
+  } else {
+    res.json({ loggedIn: false });
+  }
+});
+
+app.get("/deleteaccount", (req, res) => {
+  if (req.headers["x-access-token"]) {
+    const token = jwt.verify(
+      req.headers["x-access-token"],
+      process.env.JWT_SECRET
+    );
+
+    con.query(
+      "DELETE FROM users WHERE email = ?",
+      token.user.email,
+      (err, result) => {
+        if (err) {
+          res.json({ message: "error" });
+        } else {
+          res.json({ message: "success" });
         }
       }
     );

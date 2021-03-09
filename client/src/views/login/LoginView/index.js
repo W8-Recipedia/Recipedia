@@ -18,7 +18,7 @@ import {
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { userLogin, googleLogin } from "src/components/auth/UserAuth";
+import { login, googleLogin } from "src/components/auth/UserAuth";
 import Page from "src/components/theme/page";
 import GoogleLogin from "react-google-login";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -57,7 +57,7 @@ const LoginView = () => {
 
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
-    userLogin(values.email, values.password).then((authResponse) => {
+    login(values.email, values.password).then((authResponse) => {
       if (authResponse == "Success") {
         navigate("/app/home");
       } else {

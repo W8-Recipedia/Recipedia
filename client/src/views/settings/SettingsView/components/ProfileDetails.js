@@ -16,10 +16,7 @@ import React, { useLayoutEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
-import {
-  getUserCredentials,
-  changeDetails,
-} from "src/components/auth/UserAuth";
+import { getUserInfo, changeUserInfo } from "src/components/auth/UserAuth";
 import PropTypes from "prop-types";
 
 const useStyles = makeStyles(() => ({
@@ -28,7 +25,7 @@ const useStyles = makeStyles(() => ({
 
 const ProfileDetails = ({ className, ...rest }) => {
   const [googleAccount, setGoogleAccount] = useState(false);
-  const [changeDetailsSuccess, setChangeDetailsSuccess] = useState(false);
+  const [changeUserInfoSuccess, setChangeDetailsSuccess] = useState(false);
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState({
     firstName: "",
@@ -36,7 +33,7 @@ const ProfileDetails = ({ className, ...rest }) => {
     email: "",
   });
   useLayoutEffect(() => {
-    getUserCredentials().then((authResponse) => {
+    getUserInfo().then((authResponse) => {
       if (authResponse.data.loggedIn) {
         setValues({
           firstName: authResponse.data.user.firstname,
@@ -51,7 +48,7 @@ const ProfileDetails = ({ className, ...rest }) => {
   }, []);
 
   const handleSubmit = (values, actions) => {
-    changeDetails(values.firstName, values.lastName, values.email).then(
+    changeUserInfo(values.firstName, values.lastName, values.email).then(
       (authResponse) => {
         if (authResponse == "Success") {
           setChangeDetailsSuccess(true);
@@ -154,7 +151,7 @@ const ProfileDetails = ({ className, ...rest }) => {
           >
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                {changeDetailsSuccess
+                {changeUserInfoSuccess
                   ? "Your details have been changed successfully!"
                   : "The email address specified already exists!"}
               </DialogContentText>

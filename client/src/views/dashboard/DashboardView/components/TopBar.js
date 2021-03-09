@@ -13,7 +13,7 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 
 import { LogOut as LogoutIcon } from "react-feather";
-import { userLogOut } from "src/components/auth/UserAuth";
+import { logOut } from "src/components/auth/UserAuth";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -30,10 +30,10 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
     <AppBar className={clsx(classes.root, className)} elevation={0} {...rest}>
       <Toolbar>
         <RouterLink to="/app/home">
-          <img alt="Logo" src="/static/images/logo.svg"/>
+          <img alt="Logo" src="/static/images/logo.svg" />
         </RouterLink>
         <Box flexGrow={1} />
-        <IconButton color="inherit" onClick={userLogOut} href="/">
+        <IconButton color="inherit" onClick={logOut} href="/">
           <LogoutIcon />
         </IconButton>
         <Hidden lgUp>
