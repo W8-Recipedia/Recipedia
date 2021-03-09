@@ -42,7 +42,7 @@ const Favourites = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Favourites">
-        <Container maxWidth="xl">
+        <Container maxWidth="false">
           <Card variant="outlined">
             <CardContent>
               <Box p={1}>
@@ -73,7 +73,7 @@ const Favourites = () => {
 
   function loadRecipeById(id) {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);
-    console.log(clickedRecipe);
+    // console.log(clickedRecipe);
     setSelectedRecipeInfo(clickedRecipe);
     setDlgOpen(true);
   }

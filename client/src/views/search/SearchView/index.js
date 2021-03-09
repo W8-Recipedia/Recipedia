@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
+import {
+  getUserPreferences,
+} from "src/components/auth/UserAuth";
 import {
   Box,
   Grid,
@@ -99,9 +102,15 @@ const SearchView = () => {
   const [cuisineName, setCuisineName] = useState([]);
   const [typeName, setTypeName] = useState([]);
   const [recipes, setRecipes] = useState([]);
-  const [intolerances] = useState([]);
-  const [ingredients] = useState([]);
-  const [diets] = useState([]);
+  const [intolerances, setIntolerances] = useState([]);
+  const [diet, setDiet] = useState("");
+
+  useLayoutEffect(() => {
+    getUserPreferences().then((res) => {
+      setIntolerances(res.data.allergens);
+      setDiet(res.data.diet);
+    });
+  }, []);
 
   const handleChangeCuisine = (event) => {
     setCuisineName(event.target.value);
@@ -113,9 +122,8 @@ const SearchView = () => {
 
   const handleQuerySearch = (query) => {
     loadRecipes(
-      ingredients,
       intolerances,
-      diets,
+      diet,
       typeName,
       cuisineName,
       0,
@@ -136,7 +144,7 @@ const SearchView = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Search">
-        <Container maxWidth="xl">
+        <Container maxWidth="false">
           <Card variant="outlined">
             <CardContent>
               <Box p={1}>
@@ -222,9 +230,8 @@ const SearchView = () => {
   );
 
   function loadRecipes(
-    ingredientsArray,
     intolerancesArray,
-    dietsArray,
+    diet,
     typesArray,
     cuisineArray,
     offset,
@@ -232,22 +239,19 @@ const SearchView = () => {
   ) {
     setRecipes([]);
     setLoading(true);
-    let ingredientsString = ingredientsArray.map((o) => o.name).join(",");
     let intolerancesString = intolerancesArray.join(",");
-    let dietsString = dietsArray.join(",");
     let dishTypesString = typesArray.join(",").toLowerCase();
     let cuisinesString = cuisineArray.join(",");
     getComplexRecipes(
-      ingredientsString,
       intolerancesString,
-      dietsString,
+      diet,
       dishTypesString,
       cuisinesString,
       offset,
       query
     )
       .then((res) => {
-        console.log("recipes:", res.data);
+        // console.log("recipes:", res.data);
         offset
           ? setRecipes([...recipes, ...res.data.results])
           : setRecipes(res.data.results);
@@ -260,7 +264,7 @@ const SearchView = () => {
 
   function loadRecipeById(id) {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);
-    console.log(clickedRecipe);
+    // console.log(clickedRecipe);
     setSelectedRecipeInfo(clickedRecipe);
     setDialogOpen(true);
   }

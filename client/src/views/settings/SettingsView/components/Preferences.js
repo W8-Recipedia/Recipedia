@@ -68,6 +68,7 @@ const Preferences = ({ className, ...rest }) => {
         setDiet(authResponse.data.diet);
         for (var allergen in allergens) {
           if (allergens.hasOwnProperty(allergen)) {
+            if (authResponse.data.allergens) {
             if (authResponse.data.allergens.includes(allergen)) {
               if (allergen == "TreeNut") {
                 allergens[TreeNut] = true;
@@ -77,8 +78,11 @@ const Preferences = ({ className, ...rest }) => {
             }
           }
         }
+        }
+        if (authResponse.data.health) {
         setHeight(authResponse.data.health.height);
         setWeight(authResponse.data.health.weight);
+      }
       }
     });
   }, []);

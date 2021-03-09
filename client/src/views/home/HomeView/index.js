@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
+import {
+  getUserPreferences,
+} from "src/components/auth/UserAuth";
 import {
   Box,
   Container,
@@ -9,7 +12,7 @@ import {
 } from "@material-ui/core";
 import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
-import { getRandomRecipes } from "src/components/api/SpoonacularAPI";
+import { getRecommendedRecipes } from "src/components/api/SpoonacularAPI";
 import RecipeInfoDialog from "src/views/home/HomeView/components/RecipeInfoDialog";
 import RecipeCardList from "src/views/home/HomeView/components/RecipeCardList";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -30,6 +33,9 @@ const Home = () => {
   const [selectedRecipeId, setSelectedRecipeId] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
   const [dlgOpen, setDlgOpen] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [intolerances, setIntolerances] = useState([]);
+  const [diet, setDiet] = useState("");
 
   const onRecipeClick = (id) => {
     loadRecipeById(id);
@@ -41,18 +47,32 @@ const Home = () => {
   //   setRecipes(getExampleRecipes());
   // }, []);
 
-  useEffect(() => {
-    loadRandomRecipes();
+  useLayoutEffect(() => {
+    getUserPreferences().then((res) => {
+      setIntolerances(res.data.allergens);
+      setDiet(res.data.diet);
+      loadRecommendedRecipes(
+        res.data.allergens,
+        res.data.diet,
+        0,
+      );
+    });
   }, []);
 
   const loadMoreRecipes = () => {
-    loadRandomRecipes();
+    let newOffset = offset + parseInt(process.env.REACT_APP_MAX_RECIPE_NUMBER);
+    setOffset(newOffset);
+    loadRecommendedRecipes(
+      intolerances,
+      diet,
+      newOffset,
+    );
   };
 
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Home">
-        <Container maxWidth="xl">
+        <Container maxWidth="false">
           <Card variant="outlined">
             <CardContent>
               <Box p={1}>
@@ -87,14 +107,23 @@ const Home = () => {
     </Scrollbars>
   );
 
-  function loadRandomRecipes() {
+  function loadRecommendedRecipes(
+    intolerancesArray,
+    diet,
+    offset,
+  ) {
     setLoading(true);
-    getRandomRecipes()
+    let intolerancesString = intolerancesArray ? intolerancesArray.join(",") : null
+    getRecommendedRecipes(
+      intolerancesString,
+      diet,
+      offset,
+    )
       .then((res) => {
-        console.log("recipes:", res.data);
-        setRecipes([...recipes, ...res.data.recipes]);
-        // setRecipes(getExampleRecipes());
-        return false;
+        // console.log("recipes:", res.data);
+        offset
+          ? setRecipes([...recipes, ...res.data.results])
+          : setRecipes(res.data.results);
       })
       .catch((error) => console.log(error))
       .finally(() => {
@@ -104,7 +133,7 @@ const Home = () => {
 
   function loadRecipeById(id) {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);
-    console.log(clickedRecipe);
+    // console.log(clickedRecipe);
     setSelectedRecipeInfo(clickedRecipe);
     setDlgOpen(true);
   }
