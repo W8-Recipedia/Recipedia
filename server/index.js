@@ -43,7 +43,11 @@ app.post("/login", (req, res) => {
             token: token,
           });
         } else {
-          res.json({ message: "wrongPassword" });
+          if (result[0].googlelogin) {
+            res.json({ message: "googleAccount" });
+          } else {
+            res.json({ message: "wrongPassword" });
+          }
         }
       });
     } else {
@@ -106,28 +110,21 @@ app.post("/glogin", (req, res) => {
 });
 
 app.post("/gsignup", (req, res) => {
-  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-    con.query(
-      "INSERT INTO users (firstname, lastname, email, password) VALUES (?,?,?,?)",
-      [
-        req.body.user.givenName,
-        req.body.user.familyName,
-        req.body.user.email,
-        hash,
-      ],
-      (err, result) => {
-        if (err) {
-          res.json({ message: "yesAccount" });
-        } else {
-          const user = req.body.user;
-          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-            expiresIn: "7d",
-          });
-          res.json({ token: token, result: result });
-        }
+  con.query(
+    "INSERT INTO users (firstname, lastname, googlelogin, email) VALUES (?,?,?,?)",
+    [req.body.user.givenName, req.body.user.familyName, 1, req.body.user.email],
+    (err, result) => {
+      if (err) {
+        res.json({ message: "yesAccount" });
+      } else {
+        const user = req.body.user;
+        const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+          expiresIn: "7d",
+        });
+        res.json({ token: token, result: result });
       }
-    );
-  });
+    }
+  );
 });
 
 app.get("/getuserinfo", (req, res) => {

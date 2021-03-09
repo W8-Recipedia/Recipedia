@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
@@ -37,18 +37,16 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     margin: "auto",
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3),
   },
 }));
 
 const SignUpView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
-  const [googleRegOpen, setGoogleRegOpen] = React.useState(false);
-  const googleref = useRef(null);
-
+  const [open, setOpen] = useState(false);
+  const [googleSignUpOpen, setGoogleSignUpOpen] = useState(false);
   const [signupError, setSignUpError] = useState("");
+
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
     signUp(
@@ -66,19 +64,15 @@ const SignUpView = () => {
   };
 
   const responseGoogle = (response) => {
-    setGoogleRegOpen(true);
+    setGoogleSignUpOpen(true);
   };
 
   const handleGoogleSubmit = (response) => {
-    googleSignUp(
-      response.tokenId,
-      response.profileObj,
-      googleref.current.values.gpassword
-    ).then((authResponse) => {
+    googleSignUp(response.tokenId, response.profileObj).then((authResponse) => {
       if (authResponse == "Success") {
         navigate("/app/home");
       } else {
-        setGoogleRegOpen(false);
+        setGoogleSignUpOpen(false);
         setOpen(true);
       }
     });
@@ -292,6 +286,9 @@ const SignUpView = () => {
               open={open}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
+              onClose={() => {
+                setOpen(false);
+              }}
             >
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
@@ -312,31 +309,19 @@ const SignUpView = () => {
               </DialogActions>
             </Dialog>
             <Dialog
-              open={googleRegOpen}
+              open={googleSignUpOpen}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
               fullWidth
+              onClose={() => {
+                setGoogleSignUpOpen(false);
+              }}
             >
               <Formik
-                innerRef={googleref}
                 initialValues={{
-                  gpassword: "",
-                  gconfirmPassword: "",
                   gpolicy: false,
                 }}
                 validationSchema={Yup.object().shape({
-                  gpassword: Yup.string()
-                    .max(255)
-                    .required("Password is required")
-                    .matches(
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
-                      "Password must contain an uppercase letter, a number, and a symbol"
-                    )
-                    .min(8, "Password must be at least 8 characters"),
-                  gconfirmPassword: Yup.string().oneOf(
-                    [Yup.ref("gpassword"), null],
-                    "Passwords must match"
-                  ),
                   gpolicy: Yup.boolean().oneOf(
                     [true],
                     "Please accept the Terms and Conditions"
@@ -355,39 +340,6 @@ const SignUpView = () => {
                   <Form>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
-                        <Typography color="textSecondary" variant="body1">
-                          Please enter a password:
-                        </Typography>
-                        <TextField
-                          error={Boolean(touched.gpassword && errors.gpassword)}
-                          fullWidth
-                          helperText={touched.gpassword && errors.gpassword}
-                          label="Password"
-                          margin="normal"
-                          name="gpassword"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          type="password"
-                          value={values.gpassword}
-                          variant="outlined"
-                        />
-                        <TextField
-                          error={Boolean(
-                            touched.gconfirmPassword && errors.gconfirmPassword
-                          )}
-                          fullWidth
-                          helperText={
-                            touched.gconfirmPassword && errors.gconfirmPassword
-                          }
-                          label="Confirm password"
-                          margin="normal"
-                          name="gconfirmPassword"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          type="password"
-                          value={values.gconfirmPassword}
-                          variant="outlined"
-                        />
                         <Box alignItems="center" display="flex" ml={-1}>
                           <Checkbox
                             checked={values.gpolicy}

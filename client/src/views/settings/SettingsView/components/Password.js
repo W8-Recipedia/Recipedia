@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import { changePassword } from "src/components/auth/UserAuth";
@@ -15,11 +15,22 @@ import {
   DialogContent,
   DialogContentText,
 } from "@material-ui/core";
+import { getUserInfo } from "src/components/auth/UserAuth";
 
 const Password = () => {
   const [open, setOpen] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [googleAccount, setGoogleAccount] = useState(false);
+  useLayoutEffect(() => {
+    getUserInfo().then((authResponse) => {
+      if (authResponse.data.user.googleId) {
+        setGoogleAccount(true);
+      }
+    });
+    setButtonDisabled(true);
+  }, []);
+
   const handleSubmit = (values, actions) => {
     changePassword(values.currentPassword, values.password).then(
       (authResponse) => {
@@ -95,6 +106,7 @@ const Password = () => {
                 type="password"
                 value={values.currentPassword}
                 variant="outlined"
+                disabled={googleAccount}
               />
               <TextField
                 error={Boolean(touched.password && errors.password)}
@@ -110,6 +122,7 @@ const Password = () => {
                 type="password"
                 value={values.password}
                 variant="outlined"
+                disabled={googleAccount}
               />
               <TextField
                 error={Boolean(
@@ -128,11 +141,17 @@ const Password = () => {
                 type="password"
                 value={values.confirmPassword}
                 variant="outlined"
+                disabled={googleAccount}
               />
             </CardContent>
             <Divider />
             <Box display="flex" justifyContent="flex-end" p={2}>
-              <Button color="primary" variant="contained" type="submit" disabled={buttonDisabled}>
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+                disabled={buttonDisabled || googleAccount}
+              >
                 Update
               </Button>
             </Box>

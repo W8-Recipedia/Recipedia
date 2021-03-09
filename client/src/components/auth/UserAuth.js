@@ -54,14 +54,13 @@ export const googleLogin = async (token, userprofile) => {
   }
 };
 
-export const googleSignUp = async (gtoken, userprofile, password) => {
+export const googleSignUp = async (gtoken, userprofile) => {
   if (gtoken) {
     localStorage.removeItem("usertoken");
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/gsignup",
       {
         user: userprofile,
-        password: password,
       }
     );
     if (response.data.token) {
