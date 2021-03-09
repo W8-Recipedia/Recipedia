@@ -57,7 +57,6 @@ const Home = () => {
         0,
       );
     });
-
   }, []);
 
   const loadMoreRecipes = () => {

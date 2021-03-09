@@ -99,9 +99,9 @@ const SearchView = () => {
   const [cuisineName, setCuisineName] = useState([]);
   const [typeName, setTypeName] = useState([]);
   const [recipes, setRecipes] = useState([]);
-  const [intolerances] = useState([]);
   const [ingredients] = useState([]);
-  const [diets] = useState([]);
+  const [intolerances, setIntolerances] = useState([]);
+  const [diet, setDiet] = useState("");
 
   const handleChangeCuisine = (event) => {
     setCuisineName(event.target.value);
@@ -115,7 +115,7 @@ const SearchView = () => {
     loadRecipes(
       ingredients,
       intolerances,
-      diets,
+      diet,
       typeName,
       cuisineName,
       0,
@@ -224,7 +224,7 @@ const SearchView = () => {
   function loadRecipes(
     ingredientsArray,
     intolerancesArray,
-    dietsArray,
+    diet,
     typesArray,
     cuisineArray,
     offset,
@@ -234,13 +234,12 @@ const SearchView = () => {
     setLoading(true);
     let ingredientsString = ingredientsArray.map((o) => o.name).join(",");
     let intolerancesString = intolerancesArray.join(",");
-    let dietsString = dietsArray.join(",");
     let dishTypesString = typesArray.join(",").toLowerCase();
     let cuisinesString = cuisineArray.join(",");
     getComplexRecipes(
       ingredientsString,
       intolerancesString,
-      dietsString,
+      diet,
       dishTypesString,
       cuisinesString,
       offset,
