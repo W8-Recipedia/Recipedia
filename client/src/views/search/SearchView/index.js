@@ -160,7 +160,7 @@ const SearchView = () => {
           </Card>
         </Container>
         <Container maxWidth={false}>
-          <Box mt={1}>
+          <Box mt={3}>
             <Card>
               <Box p={2}>
                 <Grid container spacing={3}>
