@@ -39,3 +39,13 @@ export const getRandomRecipes = async () => {
     },
   });
 };
+
+export const getMultipleRecipes = async (favRecipes) => {
+  let url = "/recipes/informationBulk";
+  return await Axios.get(url, {
+    params: {
+      apiKey: process.env.REACT_APP_RECIPE_API_KEY,
+      ids: favRecipes,
+    },
+  });
+};
