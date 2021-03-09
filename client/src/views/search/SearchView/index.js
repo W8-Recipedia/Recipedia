@@ -108,7 +108,7 @@ const SearchView = () => {
   useLayoutEffect(() => {
     getUserPreferences().then((res) => {
       setIntolerances(res.data.allergens);
-      setDiet(res.data.diets);
+      setDiet(res.data.diet);
     });
   }, []);
 

@@ -50,10 +50,10 @@ const Home = () => {
   useLayoutEffect(() => {
     getUserPreferences().then((res) => {
       setIntolerances(res.data.allergens);
-      setDiet(res.data.diets);
+      setDiet(res.data.diet);
       loadRecommendedRecipes(
         res.data.allergens,
-        res.data.diets,
+        res.data.diet,
         0,
       );
     });
