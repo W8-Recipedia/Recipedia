@@ -2,21 +2,14 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
 const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+
 const app = express();
-const { OAuth2Client } = require("google-auth-library");
-const gclient = new OAuth2Client(
-  "265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
-);
 
 app.use(express.json());
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: [process.env.CLIENT_URL],
