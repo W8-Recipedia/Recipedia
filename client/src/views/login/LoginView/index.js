@@ -49,6 +49,8 @@ const LoginView = () => {
     googleLogin(response.tokenId, response.profileObj).then((authResponse) => {
       if (authResponse == "Success") {
         navigate("/app/home");
+      } else if (authResponse == "noGoogle") {
+        setLoginError(authResponse);
       } else {
         setOpen(true);
       }
@@ -251,10 +253,38 @@ const LoginView = () => {
               open={open}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
+              onClose={() => {
+                setOpen(false);
+              }}
             >
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                   You must sign up with Google before logging in!
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions className={classes.signupbutton}>
+                <Button
+                  onClick={() => {
+                    navigate("/signup");
+                  }}
+                  color="primary"
+                  variant="contained"
+                >
+                  Sign up
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog
+              open={Boolean(loginError == "noGoogle")}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              onClose={() => {
+                setLoginError("");
+              }}
+            >
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Please login with your email and password!{" "}
                 </DialogContentText>
               </DialogContent>
             </Dialog>

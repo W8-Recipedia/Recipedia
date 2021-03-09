@@ -97,13 +97,17 @@ app.post("/glogin", (req, res) => {
       if (result.length == 0) {
         res.json({ message: "noAccount" });
       } else {
-        const user = req.body.userprofile;
-        const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-          expiresIn: "7d",
-        });
-        res.json({
-          token: token,
-        });
+        if (result[0].googlelogin) {
+          const user = req.body.userprofile;
+          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+            expiresIn: "7d",
+          });
+          res.json({
+            token: token,
+          });
+        } else {
+          res.json({ message: "noGoogle" });
+        }
       }
     }
   );
