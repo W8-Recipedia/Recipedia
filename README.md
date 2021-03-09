@@ -4,18 +4,21 @@ Recipedia is a web application that seeks to revolutionize the way that people f
 
 ## Getting Started
 
-These instructions will get you Recipedia up and running on your local machine. 
+These instructions will get Recipedia up and running on your local machine. 
 
 ### Prerequisites
-You need `node` and `npm` installed globally on your machine. You will also need to make a [Spoonacular](https://spoonacular.com/food-api/console#Dashboard) account to access the [Spoonacular API](https://spoonacular.com/food-api), and a MySQL database.
+You need `node` and `npm` installed globally on your machine. You will also need to make a [Spoonacular](https://spoonacular.com/food-api/console#Dashboard) account to access the [Spoonacular API](https://spoonacular.com/food-api), and a MySQL database to store user details.
 
 ### Installing
 
-Clone this repository:
+Cloning the repository:
 `git clone https://github.com/W8-Recipedia/Recipedia.git`
 
 ---
-Add a `.env` file to your client and server directories, and replace `[...]` with the relevant values:
+
+Environment variables:
+
+Add a `.env` file to your client and server directories, and replace `[...]` with the relevant values.
 
 client/.env
 ```
@@ -34,13 +37,44 @@ PASSWORD=[DATABASE PASSWORD]
 DATABASE=[DATABASE NAME]
 PORT=3001
 ```
+---
+Database setup (replace `+XX:XX` with your time zone):
+```
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+
+START TRANSACTION;
+
+SET time_zone = "+XX:XX";
+
+CREATE TABLE `users` (
+  `userid` int(11) NOT NULL,
+  `firstname` text COLLATE utf8_unicode_ci NOT NULL,
+  `lastname` text COLLATE utf8_unicode_ci NOT NULL,
+  `googlelogin` tinyint(1) NOT NULL DEFAULT '0',
+  `email` varchar(254) COLLATE utf8_unicode_ci NOT NULL,
+  `password` text COLLATE utf8_unicode_ci,
+  `diet` text COLLATE utf8_unicode_ci,
+  `allergens` json DEFAULT NULL,
+  `health` json DEFAULT NULL,
+  `favourites` json DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`userid`),
+  ADD UNIQUE KEY `email` (`email`);
+
+ALTER TABLE `users`
+  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT;
+  
+COMMIT;
+```
 
 ---
 Installation:
 
 `npm run install-all`
 
-Starting the app:
+Starting Recipedia:
 
 `npm run dev`  
 
