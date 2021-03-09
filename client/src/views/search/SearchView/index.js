@@ -239,7 +239,7 @@ const SearchView = () => {
   ) {
     setRecipes([]);
     setLoading(true);
-    let intolerancesString = intolerancesArray.join(",");
+    let intolerancesString = intolerancesArray ? intolerancesArray.join(",") : null
     let dishTypesString = typesArray.join(",").toLowerCase();
     let cuisinesString = cuisineArray.join(",");
     getComplexRecipes(
