@@ -120,7 +120,7 @@ const Home = () => {
       offset,
     )
       .then((res) => {
-        console.log("recipes:", res.data);
+        // console.log("recipes:", res.data);
         offset
           ? setRecipes([...recipes, ...res.data.results])
           : setRecipes(res.data.results);
@@ -133,7 +133,7 @@ const Home = () => {
 
   function loadRecipeById(id) {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);
-    console.log(clickedRecipe);
+    // console.log(clickedRecipe);
     setSelectedRecipeInfo(clickedRecipe);
     setDlgOpen(true);
   }
