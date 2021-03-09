@@ -187,7 +187,7 @@ export const deleteAccount = async () => {
     ? (localtoken = localStorage.getItem("usertoken"))
     : (localtoken = localStorage.getItem("gusertoken"));
 
-  const response = await Axios.post(
+  const response = await Axios.get(
     process.env.REACT_APP_SERVER_URL + "/deleteaccount",
     {
       headers: {
