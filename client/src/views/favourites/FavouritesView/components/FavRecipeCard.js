@@ -9,7 +9,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import ScheduleIcon from "@material-ui/icons/Schedule";
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteIcon from "@material-ui/icons/Favorite";
 import IconButton from "@material-ui/core/IconButton";
 import LocalDiningIcon from "@material-ui/icons/LocalDining";
 
