@@ -8,6 +8,7 @@ import {
   Grid,
   makeStyles,
 } from "@material-ui/core";
+// import { addToFavourites } from "src/components/auth/userAuth";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import IconButton from "@material-ui/core/IconButton";
@@ -73,19 +74,18 @@ const FavRecipeCard = ({ recipe, ...props }) => {
     <Card
       className={classes.root}
       elevation={4}
-      onClick={() => props.onClick(recipe.id)}
     >
-      <div className={classes.media}>
+      <div onClick={() => props.onClick(recipe.id)} className={classes.media}>
         <img
           className={classes.image}
           src={`https://spoonacular.com/recipeImages/${recipe.id}-636x393.${recipe.imageType}`}
           alt={recipe.title}
         />
         <div className={classes.recipeButton}>
-          <Typography variant="button">Click for the recipe!</Typography>
+          <Typography variant="button">Click here for the recipe!</Typography>
         </div>
       </div>
-      <CardContent>
+      <CardContent onClick={() => props.onClick(recipe.id)}>
         <Typography
           variant="h3"
           component="h3"
@@ -98,7 +98,7 @@ const FavRecipeCard = ({ recipe, ...props }) => {
       <CardActions>
         <Grid container justify="center">
           <Grid className={classes.statsItem} item md={6}>
-            <IconButton>
+            <IconButton disabled>
               <LocalDiningIcon color="primary" />
             </IconButton>
             <Typography color="textSecondary" display="inline" variant="body2">
@@ -106,7 +106,7 @@ const FavRecipeCard = ({ recipe, ...props }) => {
             </Typography>
           </Grid>
           <Grid className={classes.statsItem} item md={6}>
-            <IconButton>
+            <IconButton disabled>
               <ScheduleIcon color="primary" />
             </IconButton>
             <Typography color="textSecondary" display="inline" variant="body2">
