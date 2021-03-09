@@ -111,7 +111,7 @@ const Preferences = ({ className, ...rest }) => {
               ].map((diet) => (
                 <FormControlLabel
                   control={
-                    <Checkbox name="diet" checked={diets.includes(diet)} />
+                    <Checkbox name="diet" />
                   }
                   onChange={() => handleDietChange(diet)}
                   key={diet}
@@ -139,7 +139,6 @@ const Preferences = ({ className, ...rest }) => {
                   control={
                     <Checkbox
                       name="allergen"
-                      checked={allergens.includes(allergen)}
                     />
                   }
                   onChange={() => handleAllergenChange(allergen)}
