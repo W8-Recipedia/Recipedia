@@ -376,11 +376,15 @@ const Preferences = ({ className, ...rest }) => {
                           <Typography color="textPrimary" variant="h3">
                             {weight == 0 || height == 0 || !weight || !height
                               ? "Undefined"
-                              : weight / ((height / 100) ^ 2) > 100
+                              : (parseFloat(weight) * 10.0) /
+                                  Math.pow(parseFloat(height) / 100.0, 2) /
+                                  10.0 >
+                                100
                               ? "100+"
                               : Math.round(
-                                  (weight * 10) / ((height / 100) ^ 2)
-                                ) / 10}
+                                  (parseFloat(weight) * 10.0) /
+                                    Math.pow(parseFloat(height) / 100.0, 2)
+                                ) / 10.0}
                           </Typography>
                         </Grid>
                         <Grid item>
@@ -390,17 +394,25 @@ const Preferences = ({ className, ...rest }) => {
                         </Grid>
                       </Grid>
                       <Typography color="textSecondary" variant="caption">
-                        {weight / ((height / 100) ^ 2) == 0 ||
+                        {parseFloat(weight) /
+                          Math.pow(parseFloat(height) / 100.0, 2) ==
+                          0 ||
                         weight == 0 ||
                         height == 0 ||
                         !weight ||
                         !height
                           ? "Please enter your details"
-                          : weight / ((height / 100) ^ 2) < 18.5
+                          : parseFloat(weight) /
+                              Math.pow(parseFloat(height) / 100.0, 2) <
+                            18.5
                           ? "Underweight"
-                          : weight / ((height / 100) ^ 2) < 25
+                          : parseFloat(weight) /
+                              Math.pow(parseFloat(height) / 100.0, 2) <
+                            25
                           ? " Normal weight"
-                          : weight / ((height / 100) ^ 2) < 30
+                          : parseFloat(weight) /
+                              Math.pow(parseFloat(height) / 100.0, 2) <
+                            30
                           ? " Overweight"
                           : "Obese"}
                       </Typography>
