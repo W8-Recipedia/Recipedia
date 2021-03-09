@@ -131,6 +131,23 @@ export const getUserCredentials = async () => {
   }
 };
 
+export const changeDetails = async (firstname, lastname, email) => {
+  const response = await Axios.post(
+    process.env.REACT_APP_SERVER_URL + "/changedetails",
+    { firstname: firstname, lastname: lastname, email: email },
+    {
+      headers: { "x-access-token": localStorage.getItem("usertoken") },
+    }
+  );
+  if (response.data.message == "emailExists") {
+    return response.data.message;
+  } else {
+    localStorage.setItem("usertoken", response.data.token);
+
+    return "Success";
+  }
+};
+
 export const deleteAccount = async () => {
   if (localStorage.getItem("usertoken")) {
     const response = await Axios.get(

@@ -8,21 +8,28 @@ import {
   Grid,
   TextField,
   makeStyles,
+  Dialog,
+  DialogContent,
+  DialogContentText,
 } from "@material-ui/core";
 import React, { useLayoutEffect, useState } from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 
-import { getUserCredentials } from "src/components/auth/UserAuth";
+import {
+  getUserCredentials,
+  changeDetails,
+} from "src/components/auth/UserAuth";
 import PropTypes from "prop-types";
-import clsx from "clsx";
 
 const useStyles = makeStyles(() => ({
   root: {},
 }));
 
 const ProfileDetails = ({ className, ...rest }) => {
-  const classes = useStyles();
-
   const [googleAccount, setGoogleAccount] = useState(false);
+  const [changeDetailsSuccess, setChangeDetailsSuccess] = useState(false);
+  const [open, setOpen] = useState(false);
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
@@ -43,75 +50,119 @@ const ProfileDetails = ({ className, ...rest }) => {
     });
   }, []);
 
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value,
-    });
+  const handleSubmit = (values, actions) => {
+    changeDetails(values.firstName, values.lastName, values.email).then(
+      (authResponse) => {
+        if (authResponse == "Success") {
+          setChangeDetailsSuccess(true);
+        } else {
+          setChangeDetailsSuccess(false);
+        }
+        setOpen(true);
+      }
+    );
   };
 
   return (
-    <form
-      autoComplete="off"
-      noValidate
-      className={clsx(classes.root, className)}
-      {...rest}
+    <Formik
+      enableReinitialize
+      initialValues={values}
+      validationSchema={Yup.object().shape({
+        email: Yup.string()
+          .email("Must be a valid email")
+          .max(255)
+          .required("Email is required"),
+        firstName: Yup.string().max(255).required("First name is required"),
+        lastName: Yup.string().max(255).required("Last name is required"),
+      })}
+      onSubmit={handleSubmit}
     >
-      <Card>
-        <CardHeader
-          subheader="Manage your account settings here"
-          title="Profile"
-        />
-        <Divider />
-        <CardContent>
-          <Grid container spacing={3}>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="First name"
-                name="firstName"
-                onChange={handleChange}
-                required
-                value={values.firstName}
-                variant="outlined"
+      {({ errors, handleBlur, handleChange, touched, values }) => (
+        <Form>
+          <Card>
+            <CardHeader
+              subheader="Manage your account settings here"
+              title="Profile"
+            />
+            <Divider />
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.firstName && errors.firstName)}
+                    fullWidth
+                    helperText={touched.firstName && errors.firstName}
+                    label="First name"
+                    name="firstName"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.firstName}
+                    disabled={googleAccount}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.lastName && errors.lastName)}
+                    fullWidth
+                    helperText={touched.lastName && errors.lastName}
+                    label="Last name"
+                    name="lastName"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    disabled={googleAccount}
+                    value={values.lastName}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <TextField
+                    error={Boolean(touched.email && errors.email)}
+                    fullWidth
+                    helperText={touched.email && errors.email}
+                    label="Email address"
+                    name="email"
+                    disabled={googleAccount}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    type="email"
+                    value={values.email}
+                    variant="outlined"
+                  />
+                </Grid>
+              </Grid>
+            </CardContent>
+            <Divider />
+            <Box display="flex" justifyContent="flex-end" p={2}>
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
                 disabled={googleAccount}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Last name"
-                name="lastName"
-                onChange={handleChange}
-                required
-                value={values.lastName}
-                variant="outlined"
-                disabled={googleAccount}
-              />
-            </Grid>
-            <Grid item md={12} xs={12}>
-              <TextField
-                fullWidth
-                label="Email Address"
-                name="email"
-                onChange={handleChange}
-                required
-                value={values.email}
-                variant="outlined"
-                disabled={googleAccount}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}></Grid>
-          </Grid>
-        </CardContent>
-        <Divider />
-        <Box display="flex" justifyContent="flex-end" p={2}>
-          <Button color="primary" variant="contained" disabled={googleAccount}>
-            Save details
-          </Button>
-        </Box>
-      </Card>
-    </form>
+              >
+                Update
+              </Button>
+            </Box>
+          </Card>
+          <Dialog
+            open={open}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            onClose={() => {
+              window.location.reload(false);
+            }}
+          >
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {changeDetailsSuccess
+                  ? "Your details have been changed successfully!"
+                  : "The email address specified already exists!"}
+              </DialogContentText>
+            </DialogContent>
+          </Dialog>
+        </Form>
+      )}
+    </Formik>
   );
 };
 
