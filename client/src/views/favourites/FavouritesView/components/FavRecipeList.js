@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import FavRecipeCard from "src/views/favourites/FavouritesView/components/FavRecipeCard";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { Grid } from "@material-ui/core";
 
-const FavRecipeList = ({ recipes, onRecipeClick, loadMore }) => {
+const FavRecipeList = ({ recipes, onRecipeClick, loadMore, loading }) => {
   return (
     <Grid container spacing={2}>
       {recipes.map((recipeItem) => (
@@ -11,6 +12,14 @@ const FavRecipeList = ({ recipes, onRecipeClick, loadMore }) => {
           <FavRecipeCard recipe={recipeItem} onClick={onRecipeClick} />
         </Grid>
       ))}
+      <Grid item xs={12} style={{ display: "flex", justifyContent: "center" }}>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <>
+          </>
+        )}
+      </Grid>
     </Grid>
   );
 };
@@ -19,6 +28,7 @@ FavRecipeList.propTypes = {
   recipes: PropTypes.array.isRequired,
   onRecipeClick: PropTypes.func.isRequired,
   loadMore: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 export default FavRecipeList;
