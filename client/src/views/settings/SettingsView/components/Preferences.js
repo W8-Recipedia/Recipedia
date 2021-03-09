@@ -65,7 +65,6 @@ const Preferences = ({ className, ...rest }) => {
     getUserPreferences().then((authResponse) => {
       if (authResponse.data.loggedIn) {
         setDiet(authResponse.data.diet);
-        console.log(authResponse.data.allergens);
         for (var allergen in allergens) {
           if (allergens.hasOwnProperty(allergen)) {
             if (authResponse.data.allergens.includes(allergen)) {

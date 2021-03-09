@@ -182,15 +182,9 @@ app.post("/changeuserinfo", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-    const uid = token.user.userid;
     con.query(
-      "UPDATE users SET firstname = ?, lastname = ?, email = ? WHERE userid = ?",
-      [
-        req.body.firstname,
-        req.body.lastname,
-        req.body.email,
-        token.user.userid,
-      ],
+      "UPDATE users SET firstname = ?, lastname = ?, email = ? WHERE email = ?",
+      [req.body.firstname, req.body.lastname, req.body.email, token.user.email],
       (err, result) => {
         if (err) {
           res.json({ message: "emailExists" });
@@ -219,15 +213,14 @@ app.post("/changepreferences", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-    const uid = token.user.userid;
     const healthData = { height: req.body.height, weight: req.body.weight };
     con.query(
-      "UPDATE users SET diet = ?, allergens = ?, health = ? WHERE userid = ?",
+      "UPDATE users SET diet = ?, allergens = ?, health = ? WHERE email = ?",
       [
         req.body.diet,
         JSON.stringify(req.body.allergens),
         JSON.stringify(healthData),
-        uid,
+        token.user.email,
       ],
       (err, result) => {
         if (err) {
