@@ -10,7 +10,6 @@ import Page from "src/components/theme/page";
 import { Link } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,

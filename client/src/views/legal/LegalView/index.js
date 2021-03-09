@@ -27,7 +27,7 @@ const LegalView = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Legal">
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Card variant="outlined">
             <CardContent>
               <Box p={1}>
@@ -43,7 +43,7 @@ const LegalView = () => {
             </CardContent>
           </Card>
         </Container>
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Box mt={3}>
             <Card>
               <CardContent>

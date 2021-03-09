@@ -5,15 +5,13 @@ import { Grid } from "@material-ui/core";
 
 const FavRecipeList = ({ recipes, onRecipeClick, loadMore }) => {
   return (
-      <Grid container spacing={2}>
-        {recipes.map((recipeItem) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            <FavRecipeCard recipe={recipeItem} onClick={onRecipeClick} />
-          </Grid>
-        ))}
-      </Grid>
-      
-      
+    <Grid container spacing={2}>
+      {recipes.map((recipeItem) => (
+        <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <FavRecipeCard recipe={recipeItem} onClick={onRecipeClick} />
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 

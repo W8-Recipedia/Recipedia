@@ -31,6 +31,7 @@ const MenuProps = {
       width: 250,
     },
   },
+  getContentAnchorEl: () => null,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -90,18 +91,17 @@ const typeNames = [
 
 const SearchView = () => {
   const classes = useStyles();
-  const [recipes, setRecipes] = useState([]);
-  const [selectedRecipeId, setSelectedRecipeId] = useState(0);
-  const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
-  const [dlgOpen, setDlgOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const [ingredients] = useState([]);
+  const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
+  const [selectedRecipeID, setSelectedRecipeID] = useState(0);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [cuisineName, setCuisineName] = useState([]);
+  const [typeName, setTypeName] = useState([]);
+  const [recipes, setRecipes] = useState([]);
   const [intolerances] = useState([]);
+  const [ingredients] = useState([]);
   const [diets] = useState([]);
-  const [cuisineName, setCuisineName] = React.useState([]);
-  const [typeName, setTypeName] = React.useState([]);
 
   const handleChangeCuisine = (event) => {
     setCuisineName(event.target.value);
@@ -112,7 +112,6 @@ const SearchView = () => {
   };
 
   const handleQuerySearch = (query) => {
-    setSearchQuery(query);
     loadRecipes(
       ingredients,
       intolerances,
@@ -126,7 +125,7 @@ const SearchView = () => {
 
   const onRecipeClick = (id) => {
     loadRecipeById(id);
-    setSelectedRecipeId(id);
+    setSelectedRecipeID(id);
   };
 
   // // USED FOR TESTING
@@ -137,7 +136,7 @@ const SearchView = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Search">
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Card variant="outlined">
             <CardContent>
               <Box p={1}>
@@ -153,57 +152,57 @@ const SearchView = () => {
           </Card>
         </Container>
         <Container maxWidth={false}>
-    <Box mt={1}>
-      <Card>
-        <Box p={2}>
-            <Grid container spacing={3}>
-              <Searchbar onSubmit={handleQuerySearch} />
-              <Grid item md={3} xs={12}>
-                <InputLabel id="type-label">Type</InputLabel>
-                <Select
-                  labelId="type-label"
-                  id="type"
-                  multiple
-                  fullWidth
-                  value={typeName}
-                  onChange={handleChangeType}
-                  input={<Input />}
-                  renderValue={(selected) => selected.join(", ")}
-                  MenuProps={MenuProps}
-                >
-                  {typeNames.map((name) => (
-                    <MenuItem key={name} value={name}>
-                      <Checkbox checked={typeName.indexOf(name) > -1} />
-                      <ListItemText primary={name} />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </Grid>
-              <Grid item md={3} xs={12}>
-                <InputLabel id="cuisine-label">Cuisine</InputLabel>
-                <Select
-                  labelId="cuisine-label"
-                  id="cuisine"
-                  multiple
-                  fullWidth
-                  value={cuisineName}
-                  onChange={handleChangeCuisine}
-                  input={<Input />}
-                  renderValue={(selected) => selected.join(", ")}
-                  MenuProps={MenuProps}
-                >
-                  {cuisineNames.map((name) => (
-                    <MenuItem key={name} value={name}>
-                      <Checkbox checked={cuisineName.indexOf(name) > -1} />
-                      <ListItemText primary={name} />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </Grid>
-            </Grid>
+          <Box mt={1}>
+            <Card>
+              <Box p={2}>
+                <Grid container spacing={3}>
+                  <Searchbar onSubmit={handleQuerySearch} />
+                  <Grid item md={3} xs={12}>
+                    <InputLabel id="type-label">Type</InputLabel>
+                    <Select
+                      labelId="type-label"
+                      id="type"
+                      multiple
+                      fullWidth
+                      value={typeName}
+                      onChange={handleChangeType}
+                      input={<Input />}
+                      renderValue={(selected) => selected.join(", ")}
+                      MenuProps={MenuProps}
+                    >
+                      {typeNames.map((name) => (
+                        <MenuItem key={name} value={name}>
+                          <Checkbox checked={typeName.indexOf(name) > -1} />
+                          <ListItemText primary={name} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Grid>
+                  <Grid item md={3} xs={12}>
+                    <InputLabel id="cuisine-label">Cuisine</InputLabel>
+                    <Select
+                      labelId="cuisine-label"
+                      id="cuisine"
+                      multiple
+                      fullWidth
+                      value={cuisineName}
+                      onChange={handleChangeCuisine}
+                      input={<Input />}
+                      renderValue={(selected) => selected.join(", ")}
+                      MenuProps={MenuProps}
+                    >
+                      {cuisineNames.map((name) => (
+                        <MenuItem key={name} value={name}>
+                          <Checkbox checked={cuisineName.indexOf(name) > -1} />
+                          <ListItemText primary={name} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Grid>
+                </Grid>
               </Box>
             </Card>
-            </Box>
+          </Box>
           <Box mt={3}>
             <RecipeCardList
               recipes={recipes}
@@ -213,9 +212,9 @@ const SearchView = () => {
           </Box>
         </Container>
         <RecipeInfoDialog
-          open={dlgOpen}
-          handleClose={() => setDlgOpen(false)}
-          recipeId={selectedRecipeId}
+          open={dialogOpen}
+          handleClose={() => setDialogOpen(false)}
+          recipeId={selectedRecipeID}
           recipeInfo={selectedRecipeInfo}
         />
       </Page>
@@ -263,7 +262,7 @@ const SearchView = () => {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);
     console.log(clickedRecipe);
     setSelectedRecipeInfo(clickedRecipe);
-    setDlgOpen(true);
+    setDialogOpen(true);
   }
 };
 

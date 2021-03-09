@@ -82,7 +82,7 @@ const RecipeCard = ({ recipe, ...props }) => {
           alt={recipe.title}
         />
         <div className={classes.recipeButton}>
-          <Typography variant="button">Click for the recipe!</Typography>
+          <Typography variant="button">Click here for the recipe!</Typography>
         </div>
       </div>
       <CardContent>
