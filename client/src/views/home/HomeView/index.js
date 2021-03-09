@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
-import { getRecommendedRecipes } from "src/components/api/SpoonacularAPI";
+import { getRandomRecommendedRecipes } from "src/components/api/SpoonacularAPI";
 import RecipeInfoDialog from "src/views/home/HomeView/components/RecipeInfoDialog";
 import RecipeCardList from "src/views/home/HomeView/components/RecipeCardList";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -36,6 +36,7 @@ const Home = () => {
   const [offset, setOffset] = useState(0);
   const [intolerances, setIntolerances] = useState([]);
   const [diet, setDiet] = useState("");
+  const [tags, setTags] = useState("");
 
   const onRecipeClick = (id) => {
     loadRecipeById(id);
@@ -51,21 +52,21 @@ const Home = () => {
     getUserPreferences().then((res) => {
       setIntolerances(res.data.allergens);
       setDiet(res.data.diet);
-      loadRecommendedRecipes(
-        res.data.allergens,
-        res.data.diet,
+      const userDietLowerCase = res.data.diet ? res.data.diet.toLowerCase() : null;
+      const userIntolerancesArray = res.data.allergens ? res.data.allergens.join(',').toLowerCase() : null;
+      const tags = userIntolerancesArray ? [userDietLowerCase, userIntolerancesArray] : [userDietLowerCase];
+      console.log(tags)
+      setTags(tags);
+      loadRandomRecommendedRecipes(
+        tags,
         0,
       );
     });
   }, []);
 
   const loadMoreRecipes = () => {
-    let newOffset = offset + parseInt(process.env.REACT_APP_MAX_RECIPE_NUMBER);
-    setOffset(newOffset);
-    loadRecommendedRecipes(
-      intolerances,
-      diet,
-      newOffset,
+    loadRandomRecommendedRecipes(
+      tags
     );
   };
 
@@ -107,23 +108,17 @@ const Home = () => {
     </Scrollbars>
   );
 
-  function loadRecommendedRecipes(
-    intolerancesArray,
-    diet,
-    offset,
+  function loadRandomRecommendedRecipes(
+    tagsArray,
   ) {
     setLoading(true);
-    let intolerancesString = intolerancesArray ? intolerancesArray.join(",") : null
-    getRecommendedRecipes(
-      intolerancesString,
-      diet,
-      offset,
+    let tagsString = tagsArray ? tagsArray.join(",") : null
+    getRandomRecommendedRecipes(
+      tagsString,
     )
       .then((res) => {
         // console.log("recipes:", res.data);
-        offset
-          ? setRecipes([...recipes, ...res.data.results])
-          : setRecipes(res.data.results);
+        setRecipes([...recipes, ...res.data.recipes])
       })
       .catch((error) => console.log(error))
       .finally(() => {
