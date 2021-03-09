@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Box, Container, makeStyles, Card, Typography, CardContent } from "@material-ui/core";
+import {
+  Box,
+  Container,
+  makeStyles,
+  Card,
+  Typography,
+  CardContent,
+} from "@material-ui/core";
 import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -64,14 +71,12 @@ const Favourites = () => {
     </Scrollbars>
   );
 
-
   function loadRecipeById(id) {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);
     console.log(clickedRecipe);
     setSelectedRecipeInfo(clickedRecipe);
     setDlgOpen(true);
   }
-
 };
 
 export default Favourites;

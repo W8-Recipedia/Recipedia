@@ -134,7 +134,7 @@ export const changeUserInfo = async (firstname, lastname, email) => {
   }
 };
 
-export const changePreferences = async (diets, allergens, height, weight) => {
+export const changePreferences = async (diet, allergens, height, weight) => {
   var localtoken;
   localStorage.getItem("usertoken")
     ? (localtoken = localStorage.getItem("usertoken"))
@@ -143,7 +143,7 @@ export const changePreferences = async (diets, allergens, height, weight) => {
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/changepreferences",
     {
-      diets: diets,
+      diet: diet,
       allergens: allergens,
       height: height,
       weight: weight,

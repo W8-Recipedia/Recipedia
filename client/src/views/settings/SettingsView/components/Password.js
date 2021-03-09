@@ -86,7 +86,10 @@ const Password = () => {
                 margin="normal"
                 name="currentPassword"
                 onBlur={handleBlur}
-                onChange={(e) => { handleChange(e); setWrongPassword(false) }}
+                onChange={(e) => {
+                  handleChange(e);
+                  setWrongPassword(false);
+                }}
                 type="password"
                 value={values.currentPassword}
                 variant="outlined"
@@ -122,11 +125,7 @@ const Password = () => {
             </CardContent>
             <Divider />
             <Box display="flex" justifyContent="flex-end" p={2}>
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-              >
+              <Button color="primary" variant="contained" type="submit">
                 Update
               </Button>
             </Box>

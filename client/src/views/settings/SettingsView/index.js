@@ -1,5 +1,13 @@
 import React from "react";
-import { Box, Container, Grid, Card, CardContent, Typography, makeStyles } from "@material-ui/core";
+import {
+  Box,
+  Container,
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
 import Page from "src/components/theme/page";
 import Preferences from "src/views/settings/SettingsView/components/Preferences";
 import Password from "src/views/settings/SettingsView/components/Password";
@@ -22,7 +30,7 @@ const SettingsView = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Settings">
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Card variant="outlined">
             <CardContent>
               <Box p={1}>
@@ -30,13 +38,14 @@ const SettingsView = () => {
                   Your settings.
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  Adjust your personal details, dietary preferences, allergens and health data on this page.
+                  Adjust your personal details, dietary preferences, allergens
+                  and health data on this page.
                 </Typography>
               </Box>
             </CardContent>
           </Card>
         </Container>
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Box mb={3} mt={3}>
             <Grid container spacing={3}>
               <Grid item lg={4} md={6} xs={12}>

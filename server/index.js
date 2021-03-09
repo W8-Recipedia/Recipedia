@@ -163,7 +163,7 @@ app.get("/getuserpreferences", (req, res) => {
           res.json({ err: err });
         } else if (result.length > 0) {
           res.json({
-            diets: JSON.parse(result[0].diets),
+            diet: result[0].diet,
             allergens: JSON.parse(result[0].allergens),
             health: JSON.parse(result[0].health),
             loggedIn: true,
@@ -182,15 +182,9 @@ app.post("/changeuserinfo", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-    const uid = token.user.userid;
     con.query(
-      "UPDATE users SET firstname = ?, lastname = ?, email = ? WHERE userid = ?",
-      [
-        req.body.firstname,
-        req.body.lastname,
-        req.body.email,
-        token.user.userid,
-      ],
+      "UPDATE users SET firstname = ?, lastname = ?, email = ? WHERE email = ?",
+      [req.body.firstname, req.body.lastname, req.body.email, token.user.email],
       (err, result) => {
         if (err) {
           res.json({ message: "emailExists" });
@@ -219,15 +213,14 @@ app.post("/changepreferences", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-    const uid = token.user.userid;
     const healthData = { height: req.body.height, weight: req.body.weight };
     con.query(
-      "UPDATE users SET diets = ?, allergens = ?, health = ? WHERE userid = ?",
+      "UPDATE users SET diet = ?, allergens = ?, health = ? WHERE email = ?",
       [
-        JSON.stringify(req.body.diets),
+        req.body.diet,
         JSON.stringify(req.body.allergens),
         JSON.stringify(healthData),
-        uid,
+        token.user.email,
       ],
       (err, result) => {
         if (err) {

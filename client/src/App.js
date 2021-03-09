@@ -15,7 +15,6 @@ import LegalView from "src/views/legal/LegalView";
 import FAQView from "src/views/faq/FAQView";
 import FeedbackView from "src/views/feedback/FeedbackView";
 
-
 const App = () => {
   return (
     <ThemeProvider theme={Theme}>
