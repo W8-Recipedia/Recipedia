@@ -61,6 +61,13 @@ const Home = () => {
   }, []);
 
   const loadMoreRecipes = () => {
+    let newOffset = offset + parseInt(process.env.REACT_APP_MAX_RECIPE_NUMBER);
+    setOffset(newOffset);
+    loadRecommendedRecipes(
+      intolerances,
+      diet,
+      newOffset,
+    );
   };
 
   return (
