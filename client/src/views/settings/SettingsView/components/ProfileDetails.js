@@ -164,7 +164,7 @@ const ProfileDetails = ({ className, ...rest }) => {
               <DialogContentText id="alert-dialog-description">
                 {changeUserInfoSuccess
                   ? "Your details have been changed successfully!"
-                  : "The email address specified already exists!"}
+                  : "The email address specified is already linked to a Recipedia account! Please use another email address."}
               </DialogContentText>
             </DialogContent>
           </Dialog>
