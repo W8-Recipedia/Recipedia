@@ -4,7 +4,7 @@ Recipedia is a web application that seeks to revolutionize the way that people f
 
 ## Getting Started
 
-These instructions will get you a copy of Recipedia up and running on your local machine. 
+These instructions will get you Recipedia up and running on your local machine. 
 
 ### Prerequisites
 You need `node` and `npm` installed globally on your machine. You will also need to make a [Spoonacular](https://spoonacular.com/food-api/console#Dashboard) account to access the [Spoonacular API](https://spoonacular.com/food-api), and a MySQL database.
