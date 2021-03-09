@@ -35,7 +35,7 @@ const Favourites = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Favourites">
-        <Container maxWidth="lg">
+        <Container maxWidth="false">
           <Card variant="outlined">
             <CardContent>
               <Box p={1}>
