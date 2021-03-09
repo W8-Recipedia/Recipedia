@@ -113,7 +113,7 @@ const Home = () => {
     offset,
   ) {
     setLoading(true);
-    let intolerancesString = intolerancesArray.join(",");
+    let intolerancesString = intolerancesArray ? intolerancesArray.join(",") : null
     getRecommendedRecipes(
       intolerancesString,
       diet,
