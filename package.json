@@ -5,7 +5,11 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "client": "npm start --prefix client",
     "server": "nodemon server",
-    "start": "concurrently \"npm start --prefix client\" \"node server\""
+    "start": "concurrently \"npm start --prefix client\" \"node server\"",
+    "install:root": "npm install",
+    "install:client": "cd client && npm install",
+    "install:server": "cd server && npm install",
+    "install-all": "npm run install:root && npm run install:client && npm run install:server"
   },
   "devDependencies": {
     "nodemon": "^2.0.7",
