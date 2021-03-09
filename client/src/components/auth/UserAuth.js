@@ -117,6 +117,68 @@ export const getUserPreferences = async () => {
   }
 };
 
+export const getUserFavourites = async () => {
+  var localtoken;
+  localStorage.getItem("usertoken")
+    ? (localtoken = localStorage.getItem("usertoken"))
+    : (localtoken = localStorage.getItem("gusertoken"));
+  if (localtoken) {
+    const response = await Axios.get(
+      process.env.REACT_APP_SERVER_URL + "/getuserfavourites",
+      {
+        headers: {
+          "x-access-token": localtoken,
+        },
+      }
+    );
+    return response;
+  } else {
+    return { data: { loggedIn: false } };
+  }
+};
+
+export const addToFavourites = async (favourite) => {
+  var localtoken;
+  localStorage.getItem("usertoken")
+    ? (localtoken = localStorage.getItem("usertoken"))
+    : (localtoken = localStorage.getItem("gusertoken"));
+  if (localtoken) {
+    const response = await Axios.post(
+      process.env.REACT_APP_SERVER_URL + "/addtofavourites",
+      { favourite: favourite },
+      {
+        headers: {
+          "x-access-token": localtoken,
+        },
+      }
+    );
+    return response;
+  } else {
+    return { data: { loggedIn: false } };
+  }
+};
+
+export const removeFromFavourites = async (favourite) => {
+  var localtoken;
+  localStorage.getItem("usertoken")
+    ? (localtoken = localStorage.getItem("usertoken"))
+    : (localtoken = localStorage.getItem("gusertoken"));
+  if (localtoken) {
+    const response = await Axios.post(
+      process.env.REACT_APP_SERVER_URL + "/removefromfavourites",
+      { favourite: favourite },
+      {
+        headers: {
+          "x-access-token": localtoken,
+        },
+      }
+    );
+    return response;
+  } else {
+    return { data: { loggedIn: false } };
+  }
+};
+
 export const changeUserInfo = async (firstname, lastname, email) => {
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/changeuserinfo",

@@ -176,6 +176,129 @@ app.get("/getuserpreferences", (req, res) => {
   }
 });
 
+app.get("/getuserfavourites", (req, res) => {
+  if (req.headers["x-access-token"]) {
+    const token = jwt.verify(
+      req.headers["x-access-token"],
+      process.env.JWT_SECRET
+    );
+    con.query(
+      "SELECT * FROM users WHERE email = ?",
+      token.user.email,
+      (err, result) => {
+        if (err) {
+          res.json({ err: err });
+        } else if (result.length > 0) {
+          res.json({
+            favourites: JSON.parse(result[0].favourites),
+            loggedIn: true,
+          });
+        }
+      }
+    );
+  } else {
+    res.json({ loggedIn: false });
+  }
+});
+
+// GET USER FAVOURITES
+
+app.post("/addtofavourites", (req, res) => {
+  if (req.headers["x-access-token"]) {
+    const token = jwt.verify(
+      req.headers["x-access-token"],
+      process.env.JWT_SECRET
+    );
+    con.query(
+      "SELECT * FROM users WHERE email = ?",
+      token.user.email,
+      (err, result) => {
+        if (err) {
+          res.json({ err: err });
+        } else {
+          if (result[0].favourites) {
+            favouriteList = JSON.parse(result[0].favourites);
+            if (!favouriteList.includes(req.body.favourite.toString())) {
+              favouriteList.push(req.body.favourite.toString());
+              con.query(
+                "UPDATE users SET favourites = ? WHERE email = ?",
+                [JSON.stringify(favouriteList), token.user.email],
+                (err, result) => {
+                  console.log(err);
+                  if (err) {
+                    res.json({ message: "DBError" });
+                  }
+                }
+              );
+            } else {
+              res.json({ message: "favouriteExists" });
+            }
+          } else {
+            initialFavourite = JSON.stringify([req.body.favourite]);
+            con.query(
+              "UPDATE users SET favourites = ? WHERE email = ?",
+              [initialFavourite, token.user.email],
+              (err, result) => {
+                console.log(err);
+                if (err) {
+                  res.json({ message: "DBError" });
+                }
+              }
+            );
+          }
+        }
+      }
+    );
+  } else {
+    res.json({ loggedIn: false });
+  }
+});
+
+app.post("/removefromfavourites", (req, res) => {
+  if (req.headers["x-access-token"]) {
+    const token = jwt.verify(
+      req.headers["x-access-token"],
+      process.env.JWT_SECRET
+    );
+    con.query(
+      "SELECT * FROM users WHERE email = ?",
+      token.user.email,
+      (err, result) => {
+        if (err) {
+          res.json({ err: err });
+        } else {
+          if (result[0].favourites) {
+            favouriteList = JSON.parse(result[0].favourites);
+            if (favouriteList.includes(req.body.favourite.toString())) {
+              const favouriteIndex = favouriteList.indexOf(
+                req.body.favourite.toString()
+              );
+              console.log(favouriteList);
+              console.log(favouriteIndex);
+              favouriteList.splice(favouriteIndex, 1);
+              console.log(favouriteList);
+
+              con.query(
+                "UPDATE users SET favourites = ? WHERE email = ?",
+                [JSON.stringify(favouriteList), token.user.email],
+                (err, result) => {
+                  if (err) {
+                    res.json({ message: "DBError" });
+                  }
+                }
+              );
+            } else {
+              res.json({ message: "favouriteDoesNotExist" });
+            }
+          }
+        }
+      }
+    );
+  } else {
+    res.json({ loggedIn: false });
+  }
+});
+
 app.post("/changeuserinfo", (req, res) => {
   if (req.headers["x-access-token"]) {
     const token = jwt.verify(
