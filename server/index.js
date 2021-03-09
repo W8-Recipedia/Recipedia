@@ -38,7 +38,7 @@ app.post("/login", (req, res) => {
 
   con.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
     if (err) {
-      res.send({ err: err });
+      res.json({ err: err });
     } else if (result.length > 0) {
       bcrypt.compare(password, result[0].password, (error, response) => {
         if (response) {
@@ -50,11 +50,11 @@ app.post("/login", (req, res) => {
             token: token,
           });
         } else {
-          res.send({ message: "wrongPassword" });
+          res.json({ message: "wrongPassword" });
         }
       });
     } else {
-      res.send({ message: "noEmail" });
+      res.json({ message: "noEmail" });
     }
   });
 });
@@ -65,7 +65,7 @@ app.post("/glogin", (req, res) => {
     req.body.userprofile.email,
     (err, result) => {
       if (result.length == 0) {
-        res.send({ message: "noAccount" });
+        res.json({ message: "noAccount" });
       } else {
         const user = req.body.userprofile;
         const token = jwt.sign({ user }, process.env.JWT_SECRET, {
@@ -91,9 +91,21 @@ app.post("/signup", (req, res) => {
       [firstname, lastname, email, hash],
       (err, result) => {
         if (err) {
-          res.send({ err: err });
+          res.json({ err: err });
         } else {
-          res.send({ result: result });
+          const user = {
+            email: email,
+            firstname: firstname,
+            lastname: lastname,
+            password: password,
+          };
+          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+            expiresIn: "7d",
+          });
+          res.json({
+            token: token,
+            result: result,
+          });
         }
       }
     );
@@ -112,7 +124,7 @@ app.post("/gsignup", (req, res) => {
       ],
       (err, result) => {
         if (err) {
-          res.send({ message: "yesAccount" });
+          res.json({ message: "yesAccount" });
         } else {
           const user = req.body.user;
           const token = jwt.sign({ user }, process.env.JWT_SECRET, {
@@ -131,42 +143,51 @@ app.get("/userinfo", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-    res.send({ loggedIn: true, user: token.user });
+    res.json({ loggedIn: true, user: token.user });
   } else {
-    res.send({ loggedIn: false });
+    res.json({ loggedIn: false });
   }
 });
 
 app.get("/deleteaccount", (req, res) => {
-  const token = jwt.verify(
-    req.headers["x-access-token"],
-    process.env.JWT_SECRET
-  );
-  con.query(
-    "DELETE FROM users WHERE email = ?",
-    token.user.email,
-    (err, result) => {
-      if (err) {
-        res.send({ message: "error" });
-      } else {
-        res.send({ message: "success" });
+  if (req.headers["x-access-token"]) {
+    const token = jwt.verify(
+      req.headers["x-access-token"],
+      process.env.JWT_SECRET
+    );
+
+    con.query(
+      "DELETE FROM users WHERE email = ?",
+      token.user.email,
+      (err, result) => {
+        if (err) {
+          res.json({ message: "error" });
+        } else {
+          res.json({ message: "success" });
+        }
       }
-    }
-  );
+    );
+  } else {
+    res.json({ loggedIn: false });
+  }
 });
 
 app.post("/changedetails", (req, res) => {
-  const token = jwt.verify(
-    req.headers["x-access-token"],
-    process.env.JWT_SECRET
-  );
+  if (req.headers["x-access-token"]) {
+    const token = jwt.verify(
+      req.headers["x-access-token"],
+      process.env.JWT_SECRET
+    );
+  } else {
+    res.json({ message: "noToken" });
+  }
   const uid = token.user.userid;
   con.query(
     "UPDATE users SET firstname = ?, lastname = ?, email = ? WHERE userid = ?",
     [req.body.firstname, req.body.lastname, req.body.email, token.user.userid],
     (err, result) => {
       if (err) {
-        res.send({ message: "emailExists" });
+        res.json({ message: "emailExists" });
       } else {
         const user = {
           userid: uid,
@@ -183,6 +204,35 @@ app.post("/changedetails", (req, res) => {
   );
 });
 
+app.post("/changepreferences", (req, res) => {
+  if (req.headers["x-access-token"]) {
+    const token = jwt.verify(
+      req.headers["x-access-token"],
+      process.env.JWT_SECRET
+    );
+    const uid = token.user.userid;
+    const healthData = { height: req.body.height, weight: req.body.weight };
+    con.query(
+      "UPDATE users SET diets = ?, allergens = ?, health = ? WHERE userid = ?",
+      [
+        JSON.stringify(req.body.diets),
+        JSON.stringify(req.body.allergens),
+        JSON.stringify(healthData),
+        uid,
+      ],
+      (err, result) => {
+        if (err) {
+          res.json({ err: err });
+        } else {
+          res.json({ result: result });
+        }
+      }
+    );
+  } else {
+    res.json({ message: "noToken" });
+  }
+});
+
 app.post("/changepassword", (req, res) => {
   const oldpassword = req.body.oldpassword;
   const newpassword = req.body.newpassword;
@@ -196,7 +246,7 @@ app.post("/changepassword", (req, res) => {
       token.user.email,
       (err, result) => {
         if (err) {
-          res.send({ err: err });
+          res.json({ err: err });
         } else if (result.length > 0) {
           bcrypt.compare(oldpassword, result[0].password, (error, response) => {
             if (response) {
@@ -206,7 +256,7 @@ app.post("/changepassword", (req, res) => {
                   [hash, email],
                   (err, result) => {
                     if (err) {
-                      res.send({ message: "DBError" });
+                      res.json({ message: "DBError" });
                     }
                   }
                 );
@@ -217,14 +267,14 @@ app.post("/changepassword", (req, res) => {
               });
               res.json({ passwordChanged: true, token: token });
             } else {
-              res.send({ message: "wrongPassword" });
+              res.json({ message: "wrongPassword" });
             }
           });
         }
       }
     );
   } else {
-    res.send({ loggedIn: false });
+    res.json({ loggedIn: false });
   }
 });
 

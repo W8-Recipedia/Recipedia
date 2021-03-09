@@ -110,6 +110,23 @@ const ProfileCard = ({ className, ...rest }) => {
               display="flex"
               flexDirection="column"
             >
+              <Box
+                pb={2}
+                pt={2}
+                alignItems="center"
+                display="flex"
+                flexDirection="column"
+              >
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  No, take me back.
+                </Button>
+              </Box>
               <Button
                 color="secondary"
                 variant="text"
