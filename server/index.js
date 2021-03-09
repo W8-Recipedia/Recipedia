@@ -236,13 +236,13 @@ app.post("/changepreferences", (req, res) => {
 });
 
 app.post("/changepassword", (req, res) => {
-  const oldpassword = req.body.oldpassword;
-  const newpassword = req.body.newpassword;
   if (req.headers["x-access-token"]) {
     const token = jwt.verify(
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
+    const oldpassword = req.body.oldpassword;
+    const newpassword = req.body.newpassword;
     con.query(
       "SELECT * FROM users WHERE email = ?",
       token.user.email,
@@ -286,7 +286,6 @@ app.get("/deleteaccount", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-
     con.query(
       "DELETE FROM users WHERE email = ?",
       token.user.email,
