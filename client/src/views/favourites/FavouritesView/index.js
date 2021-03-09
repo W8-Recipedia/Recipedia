@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
+import {
+  getUserFavourites,
+} from "src/components/auth/UserAuth";
 import {
   Box,
   Container,
@@ -9,6 +12,7 @@ import {
 } from "@material-ui/core";
 import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
+import { getMultipleRecipes } from "src/components/api/SpoonacularAPI";
 import { Scrollbars } from "react-custom-scrollbars";
 import FavRecipeDialog from "src/views/favourites/FavouritesView/components/FavRecipeDialog";
 import FavRecipeList from "src/views/favourites/FavouritesView/components/FavRecipeList";
@@ -25,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const Favourites = () => {
   const classes = useStyles();
   const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [selectedRecipeId, setSelectedRecipeId] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
   const [dlgOpen, setDlgOpen] = useState(false);
@@ -38,6 +43,15 @@ const Favourites = () => {
   // useEffect(() => {
   //   setRecipes(getExampleRecipes());
   // }, []);
+
+  useLayoutEffect(() => {
+    getUserFavourites().then((res) => {
+      console.log(res.data.favourites)
+      loadMultipleRecipes(
+        res.data.favourites,
+      );
+    });
+  }, []);
 
   return (
     <Scrollbars>
@@ -58,7 +72,9 @@ const Favourites = () => {
         </Container>
         <Container maxWidth={false}>
           <Box mt={3}>
-            <FavRecipeList recipes={recipes} onRecipeClick={onRecipeClick} />
+            <FavRecipeList recipes={recipes} 
+                            onRecipeClick={onRecipeClick}
+                            loading={loading} />
           </Box>
         </Container>
         <FavRecipeDialog
@@ -70,6 +86,24 @@ const Favourites = () => {
       </Page>
     </Scrollbars>
   );
+
+  function loadMultipleRecipes(
+    idsArray
+  ) {
+    setLoading(true);
+    let idsString = idsArray ? idsArray.join(",") : null
+    getMultipleRecipes(
+      idsString
+    )
+      .then((res) => {
+        console.log(res.data);
+        setRecipes([...recipes, ...res.data])
+      })
+      .catch((error) => console.log(error))
+      .finally(() => {
+        setLoading(false);
+      });
+  }
 
   function loadRecipeById(id) {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);
