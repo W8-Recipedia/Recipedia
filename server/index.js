@@ -182,6 +182,7 @@ app.post("/changeuserinfo", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
+    const uid = token.user.userid;
     con.query(
       "UPDATE users SET firstname = ?, lastname = ?, email = ? WHERE email = ?",
       [req.body.firstname, req.body.lastname, req.body.email, token.user.email],
@@ -255,7 +256,7 @@ app.post("/changepassword", (req, res) => {
               bcrypt.hash(newpassword, saltRounds, (err, hash) => {
                 con.query(
                   "UPDATE users SET password = ? WHERE email = ?",
-                  [hash, email],
+                  [hash, token.user.email],
                   (err, result) => {
                     if (err) {
                       res.json({ message: "DBError" });
