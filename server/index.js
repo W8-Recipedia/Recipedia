@@ -178,30 +178,35 @@ app.post("/changedetails", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
+    const uid = token.user.userid;
+    con.query(
+      "UPDATE users SET firstname = ?, lastname = ?, email = ? WHERE userid = ?",
+      [
+        req.body.firstname,
+        req.body.lastname,
+        req.body.email,
+        token.user.userid,
+      ],
+      (err, result) => {
+        if (err) {
+          res.json({ message: "emailExists" });
+        } else {
+          const user = {
+            userid: uid,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            email: req.body.email,
+          };
+          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+            expiresIn: "7d",
+          });
+          res.json({ token: token, result: result });
+        }
+      }
+    );
   } else {
     res.json({ message: "noToken" });
   }
-  const uid = token.user.userid;
-  con.query(
-    "UPDATE users SET firstname = ?, lastname = ?, email = ? WHERE userid = ?",
-    [req.body.firstname, req.body.lastname, req.body.email, token.user.userid],
-    (err, result) => {
-      if (err) {
-        res.json({ message: "emailExists" });
-      } else {
-        const user = {
-          userid: uid,
-          firstname: req.body.firstname,
-          lastname: req.body.lastname,
-          email: req.body.email,
-        };
-        const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-          expiresIn: "7d",
-        });
-        res.json({ token: token, result: result });
-      }
-    }
-  );
 });
 
 app.post("/changepreferences", (req, res) => {
