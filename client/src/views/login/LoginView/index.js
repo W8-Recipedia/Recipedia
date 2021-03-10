@@ -47,9 +47,9 @@ const LoginView = () => {
 
   const responseGoogle = (response) => {
     googleLogin(response.tokenId, response.profileObj).then((authResponse) => {
-      if (authResponse == "Success") {
+      if (authResponse === "Success") {
         navigate("/app/home");
-      } else if (authResponse == "noGoogle") {
+      } else if (authResponse === "noGoogle") {
         setLoginError(authResponse);
       } else {
         setOpen(true);
@@ -60,10 +60,10 @@ const LoginView = () => {
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
     login(values.email, values.password).then((authResponse) => {
-      if (authResponse == "Success") {
+      if (authResponse === "Success") {
         navigate("/app/home");
       } else {
-        if (authResponse == "googleAccount") {
+        if (authResponse === "googleAccount") {
           setGoogleAccount(true);
         } else {
           setLoginError(authResponse);
@@ -149,12 +149,16 @@ const LoginView = () => {
                   </Box>
                   <TextField
                     error={
-                      loginError == "noEmail" || loginError == "wrongPassword"
+                      loginError === "noEmail" || loginError === "wrongPassword"
                         ? Boolean(true)
                         : Boolean(touched.password && errors.password)
                     }
                     fullWidth
-                    helperText={touched.email && errors.email}
+                    helperText={
+                      loginError === "noEmail"
+                        ? "Please sign up before logging in!"
+                        : touched.email && errors.email
+                    }
                     label="Email Address"
                     margin="normal"
                     name="email"
@@ -163,20 +167,19 @@ const LoginView = () => {
                     type="email"
                     value={values.email}
                     variant="outlined"
-                    helperText={
-                      loginError == "noEmail"
-                        ? "Please sign up before logging in!"
-                        : ""
-                    }
                   />
                   <TextField
                     error={
-                      loginError == "wrongPassword"
+                      loginError === "wrongPassword"
                         ? Boolean(true)
                         : Boolean(touched.password && errors.password)
                     }
                     fullWidth
-                    helperText={touched.password && errors.password}
+                    helperText={
+                      loginError === "wrongPassword"
+                        ? "Incorrect email and/or password"
+                        : touched.password && errors.password
+                    }
                     label="Password"
                     margin="normal"
                     name="password"
@@ -185,11 +188,6 @@ const LoginView = () => {
                     type="password"
                     value={values.password}
                     variant="outlined"
-                    helperText={
-                      loginError == "wrongPassword"
-                        ? "Incorrect email and/or password"
-                        : ""
-                    }
                   />
                   <Box my={2}>
                     <Button
@@ -275,7 +273,7 @@ const LoginView = () => {
               </DialogActions>
             </Dialog>
             <Dialog
-              open={Boolean(loginError == "noGoogle")}
+              open={Boolean(loginError === "noGoogle")}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
               onClose={() => {

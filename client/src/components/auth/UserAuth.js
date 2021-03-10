@@ -186,7 +186,7 @@ export const changeUserInfo = async (firstname, lastname, email) => {
       headers: { "x-access-token": localStorage.getItem("usertoken") },
     }
   );
-  if (response.data.message == "emailExists") {
+  if (response.data.message === "emailExists") {
     return response.data.message;
   } else {
     localStorage.setItem("usertoken", response.data.token);
@@ -200,7 +200,6 @@ export const changePreferences = async (diet, allergens, height, weight) => {
   localStorage.getItem("usertoken")
     ? (localtoken = localStorage.getItem("usertoken"))
     : (localtoken = localStorage.getItem("gusertoken"));
-
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/changepreferences",
     {
@@ -219,10 +218,10 @@ export const changePreferences = async (diet, allergens, height, weight) => {
 };
 
 export const changePassword = async (oldpassword, newpassword) => {
-    var localtoken;
-    localStorage.getItem("usertoken")
-      ? (localtoken = localStorage.getItem("usertoken"))
-      : (localtoken = localStorage.getItem("gusertoken"));
+  var localtoken;
+  localStorage.getItem("usertoken")
+    ? (localtoken = localStorage.getItem("usertoken"))
+    : (localtoken = localStorage.getItem("gusertoken"));
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/changepassword",
     {
@@ -257,7 +256,7 @@ export const deleteAccount = async () => {
       },
     }
   );
-  if (response.data.message == "success") {
+  if (response.data.message === "success") {
     localStorage.removeItem("usertoken");
     localStorage.removeItem("gusertoken");
   }

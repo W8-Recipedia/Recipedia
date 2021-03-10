@@ -102,13 +102,11 @@ const Preferences = ({ className, ...rest }) => {
   const handleSubmit = () => {
     var allergenList = [];
     for (var allergen in allergens) {
-      if (allergens.hasOwnProperty(allergen)) {
-        if (allergens[allergen] == true) {
-          if (allergen == "TreeNut") {
-            allergenList.push("Tree Nut");
-          } else {
-            allergenList.push(allergen);
-          }
+      if (allergens[allergen] === true) {
+        if (allergen === "TreeNut") {
+          allergenList.push("Tree Nut");
+        } else {
+          allergenList.push(allergen);
         }
       }
     }
@@ -374,7 +372,7 @@ const Preferences = ({ className, ...rest }) => {
                             BMI
                           </Typography>
                           <Typography color="textPrimary" variant="h3">
-                            {weight == 0 || height == 0 || !weight || !height
+                            {weight === 0 || height === 0 || !weight || !height
                               ? "Undefined"
                               : (parseFloat(weight) * 10.0) /
                                   Math.pow(parseFloat(height) / 100.0, 2) /
@@ -395,10 +393,10 @@ const Preferences = ({ className, ...rest }) => {
                       </Grid>
                       <Typography color="textSecondary" variant="caption">
                         {parseFloat(weight) /
-                          Math.pow(parseFloat(height) / 100.0, 2) ==
+                          Math.pow(parseFloat(height) / 100.0, 2) ===
                           0 ||
-                        weight == 0 ||
-                        height == 0 ||
+                        weight === 0 ||
+                        height === 0 ||
                         !weight ||
                         !height
                           ? "Please enter your details"

@@ -52,7 +52,7 @@ const ProfileDetails = ({ className, ...rest }) => {
   const handleSubmit = (values, actions) => {
     changeUserInfo(values.firstName, values.lastName, values.email).then(
       (authResponse) => {
-        if (authResponse == "Success") {
+        if (authResponse === "Success") {
           setChangeDetailsSuccess(true);
         } else {
           setChangeDetailsSuccess(false);

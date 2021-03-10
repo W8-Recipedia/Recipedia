@@ -16,8 +16,8 @@ export const LoginCheck = () => {
       }
     });
   });
-  return isloggedIn == false ? (
-    pathname == "/login" ? (
+  return isloggedIn === false ? (
+    pathname === "/login" ? (
       <LoginView />
     ) : (
       <LandingView />

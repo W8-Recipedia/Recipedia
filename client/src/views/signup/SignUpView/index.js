@@ -55,7 +55,7 @@ const SignUpView = () => {
       values.email,
       values.password
     ).then((authResponse) => {
-      if (authResponse == "Success") {
+      if (authResponse === "Success") {
         navigate("/app/home");
       } else {
         setOpen(true);
@@ -69,7 +69,7 @@ const SignUpView = () => {
 
   const handleGoogleSubmit = (response) => {
     googleSignUp(response.tokenId, response.profileObj).then((authResponse) => {
-      if (authResponse == "Success") {
+      if (authResponse === "Success") {
         navigate("/app/home");
       } else {
         setGoogleSignUpOpen(false);

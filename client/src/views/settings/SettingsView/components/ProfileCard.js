@@ -54,7 +54,7 @@ const ProfileCard = ({ className, ...rest }) => {
 
   const deleteAcc = () => {
     deleteAccount().then((response) => {
-      if (response == "success") {
+      if (response === "success") {
         setOpen(false);
         setDeleteStatus(true);
       }
