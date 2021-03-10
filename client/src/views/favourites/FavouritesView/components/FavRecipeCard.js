@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import PropTypes from "prop-types";
 import {
   Card,
@@ -8,11 +8,18 @@ import {
   Grid,
   makeStyles,
 } from "@material-ui/core";
-// import { addToFavourites } from "src/components/auth/userAuth";
+import { removeFromFavourites } from "src/components/auth/UserAuth";
 import ScheduleIcon from "@material-ui/icons/Schedule";
-import FavoriteIcon from "@material-ui/icons/Favorite";
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import IconButton from "@material-ui/core/IconButton";
 import LocalDiningIcon from "@material-ui/icons/LocalDining";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 function convertTime(num) {
   if (num <= 60) {
@@ -69,6 +76,22 @@ const useStyles = makeStyles((theme) => ({
 
 const FavRecipeCard = ({ recipe, ...props }) => {
   const classes = useStyles();
+  const[favourited, setFavourited] = useState(false);
+  const[open, setOpen] = useState(false);
+
+  const handleClick = () => {
+    setOpen(false);
+    removeFromFavourites(recipe.id);
+    setFavourited(true);
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
 
   return (
     <Card
@@ -115,8 +138,21 @@ const FavRecipeCard = ({ recipe, ...props }) => {
           </Grid>
 
           <Grid className={classes.statsItem} item>
-            <IconButton>
-              <FavoriteIcon style={{ color: "red" }} />
+            <IconButton disabled = {favourited ? true : false} onClick={handleClick}>
+            {favourited ? (
+              <>
+              <FavoriteBorderIcon style={{ color: "gray" }} />
+              <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+                <Alert severity="info">
+                  {recipe.title} has been removed from your favourites.
+                </Alert>
+              </Snackbar>
+              </>
+        ) : (
+          <>
+            <FavoriteIcon style={{ color: "red" }} />
+          </>
+        )}
             </IconButton>
           </Grid>
         </Grid>
