@@ -1,11 +1,9 @@
 import React from "react";
 import {
   Card,
-  CardHeader,
   Container,
   CardContent,
   Typography,
-  Divider,
   makeStyles,
   Box,
 } from "@material-ui/core";

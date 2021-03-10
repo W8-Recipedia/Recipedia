@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Container,
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Favourites = () => {
   const classes = useStyles();
-  const [recipes, setRecipes] = useState([]);
+  const [recipes] = useState([]);
   const [selectedRecipeId, setSelectedRecipeId] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
   const [dlgOpen, setDlgOpen] = useState(false);

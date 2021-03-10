@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import {
-  getUserPreferences,
-} from "src/components/auth/UserAuth";
+import React, { useState, useLayoutEffect } from "react";
+import { getUserPreferences } from "src/components/auth/UserAuth";
 import {
   Box,
   Container,
@@ -51,22 +49,14 @@ const Home = () => {
     getUserPreferences().then((res) => {
       setIntolerances(res.data.allergens);
       setDiet(res.data.diet);
-      loadRecommendedRecipes(
-        res.data.allergens,
-        res.data.diet,
-        0,
-      );
+      loadRecommendedRecipes(res.data.allergens, res.data.diet, 0);
     });
   }, []);
 
   const loadMoreRecipes = () => {
     let newOffset = offset + parseInt(process.env.REACT_APP_MAX_RECIPE_NUMBER);
     setOffset(newOffset);
-    loadRecommendedRecipes(
-      intolerances,
-      diet,
-      newOffset,
-    );
+    loadRecommendedRecipes(intolerances, diet, newOffset);
   };
 
   return (
@@ -107,18 +97,12 @@ const Home = () => {
     </Scrollbars>
   );
 
-  function loadRecommendedRecipes(
-    intolerancesArray,
-    diet,
-    offset,
-  ) {
+  function loadRecommendedRecipes(intolerancesArray, diet, offset) {
     setLoading(true);
-    let intolerancesString = intolerancesArray ? intolerancesArray.join(",") : null
-    getRecommendedRecipes(
-      intolerancesString,
-      diet,
-      offset,
-    )
+    let intolerancesString = intolerancesArray
+      ? intolerancesArray.join(",")
+      : null;
+    getRecommendedRecipes(intolerancesString, diet, offset)
       .then((res) => {
         // console.log("recipes:", res.data);
         offset

@@ -1,7 +1,5 @@
 import React, { useLayoutEffect, useState } from "react";
-import {
-  getUserPreferences,
-} from "src/components/auth/UserAuth";
+import { getUserPreferences } from "src/components/auth/UserAuth";
 import {
   Box,
   Grid,
@@ -121,14 +119,7 @@ const SearchView = () => {
   };
 
   const handleQuerySearch = (query) => {
-    loadRecipes(
-      intolerances,
-      diet,
-      typeName,
-      cuisineName,
-      0,
-      query
-    );
+    loadRecipes(intolerances, diet, typeName, cuisineName, 0, query);
   };
 
   const onRecipeClick = (id) => {

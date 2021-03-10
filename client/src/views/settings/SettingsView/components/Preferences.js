@@ -66,20 +66,19 @@ const Preferences = ({ className, ...rest }) => {
   useLayoutEffect(() => {
     getUserPreferences().then((authResponse) => {
       if (authResponse.data.loggedIn) {
-        setDiet(authResponse.data.diet);
-        for (var allergen in allergens) {
-          if (allergens.hasOwnProperty(allergen)) {
-            if (authResponse.data.allergens) {
-              if (authResponse.data.allergens.includes(allergen)) {
-                if (allergen == "TreeNut") {
-                  allergens[TreeNut] = true;
-                } else {
-                  allergens[allergen] = true;
-                }
-              }
-            }
-          }
+        if (authResponse.data.diet) {
+          setDiet(authResponse.data.diet);
         }
+        if (authResponse.data.allergens) {
+          var allergenJSON = {};
+          authResponse.data.allergens.forEach((item) => {
+            const allergen = item === "Tree Nut" ? "TreeNut" : item;
+            allergenJSON[allergen] = true;
+          });
+          console.log(allergenJSON);
+          setAllergens(allergenJSON);
+        }
+
         if (authResponse.data.health) {
           setHeight(authResponse.data.health.height);
           setWeight(authResponse.data.health.weight);

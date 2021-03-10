@@ -7,7 +7,6 @@ import {
   Divider,
   Grid,
   TextField,
-  makeStyles,
   Dialog,
   DialogContent,
   DialogContentText,
@@ -18,10 +17,6 @@ import * as Yup from "yup";
 
 import { getUserInfo, changeUserInfo } from "src/components/auth/UserAuth";
 import PropTypes from "prop-types";
-
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
 
 const ProfileDetails = ({ className, ...rest }) => {
   const [googleAccount, setGoogleAccount] = useState(false);
