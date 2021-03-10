@@ -30,38 +30,44 @@ const SettingsView = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Settings">
-        <Container maxWidth="xl">
-          <Card variant="outlined">
-            <CardContent>
-              <Box p={1}>
-                <Typography gutterBottom variant="h1">
-                  Your settings.
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  Adjust your personal details, dietary preferences, allergens
-                  and health data on this page.
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Container>
-        <Container maxWidth="xl">
-          <Box mb={3} mt={3}>
-            <Grid container spacing={3}>
-              <Grid item lg={4} md={6} xs={12}>
-                <ProfileCard />
-              </Grid>
+        <Box m={2}>
+          <Container maxWidth="xl">
+            <Card variant="outlined">
+              <CardContent>
+                <Box p={1}>
+                  <Typography gutterBottom variant="h1">
+                    Your settings.
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    Adjust your personal details, dietary preferences, allergens
+                    and health data on this page.
+                  </Typography>
+                </Box>
+              </CardContent>
+            </Card>
+          </Container>
+          <Container maxWidth="xl">
+            <Box mb={3} mt={3}>
+              <Grid container spacing={3}>
+                <Grid item lg={4} md={6} xs={12}>
+                  <ProfileCard />
+                </Grid>
 
-              <Grid item lg={8} md={6} xs={12}>
-                <ProfileDetails />
+                <Grid item lg={8} md={6} xs={12}>
+                  <ProfileDetails />
+                </Grid>
               </Grid>
-            </Grid>
-          </Box>
-          <Preferences />
-          <Box mt={3}>
-            <Password />
-          </Box>
-        </Container>
+            </Box>
+            <Preferences />
+            <Box mt={3}>
+              <Password />
+            </Box>
+          </Container>
+        </Box>
       </Page>
     </Scrollbars>
   );

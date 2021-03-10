@@ -127,7 +127,6 @@ const SearchView = () => {
     setSelectedRecipeID(id);
   };
 
-  // // USED FOR TESTING
   // useEffect(() => {
   //   setRecipes(getExampleRecipes());
   // }, []);
@@ -135,87 +134,95 @@ const SearchView = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Search">
-        <Container maxWidth="false">
-          <Card variant="outlined">
-            <CardContent>
-              <Box p={1}>
-                <Typography gutterBottom variant="h1">
-                  Search here.
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  If you want to find recipes filtered by cuisine or type you
-                  can do that here.
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Container>
-        <Container maxWidth={false}>
-          <Box mt={3}>
-            <Card>
-              <Box p={2}>
-                <Grid container spacing={3}>
-                  <Searchbar onSubmit={handleQuerySearch} />
-                  <Grid item md={3} xs={12}>
-                    <InputLabel id="type-label">Type</InputLabel>
-                    <Select
-                      labelId="type-label"
-                      id="type"
-                      multiple
-                      fullWidth
-                      value={typeName}
-                      onChange={handleChangeType}
-                      input={<Input />}
-                      renderValue={(selected) => selected.join(", ")}
-                      MenuProps={MenuProps}
-                    >
-                      {typeNames.map((name) => (
-                        <MenuItem key={name} value={name}>
-                          <Checkbox checked={typeName.indexOf(name) > -1} />
-                          <ListItemText primary={name} />
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </Grid>
-                  <Grid item md={3} xs={12}>
-                    <InputLabel id="cuisine-label">Cuisine</InputLabel>
-                    <Select
-                      labelId="cuisine-label"
-                      id="cuisine"
-                      multiple
-                      fullWidth
-                      value={cuisineName}
-                      onChange={handleChangeCuisine}
-                      input={<Input />}
-                      renderValue={(selected) => selected.join(", ")}
-                      MenuProps={MenuProps}
-                    >
-                      {cuisineNames.map((name) => (
-                        <MenuItem key={name} value={name}>
-                          <Checkbox checked={cuisineName.indexOf(name) > -1} />
-                          <ListItemText primary={name} />
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </Grid>
-                </Grid>
-              </Box>
+        <Box m={2}>
+          <Container maxWidth="false">
+            <Card variant="outlined">
+              <CardContent>
+                <Box p={1}>
+                  <Typography gutterBottom variant="h1">
+                    Search here.
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    If you want to find recipes filtered by cuisine or type you
+                    can do that here.
+                  </Typography>
+                </Box>
+              </CardContent>
             </Card>
-          </Box>
-          <Box mt={3}>
-            <RecipeCardList
-              recipes={recipes}
-              loading={loading}
-              onRecipeClick={onRecipeClick}
-            />
-          </Box>
-        </Container>
-        <RecipeInfoDialog
-          open={dialogOpen}
-          handleClose={() => setDialogOpen(false)}
-          recipeId={selectedRecipeID}
-          recipeInfo={selectedRecipeInfo}
-        />
+          </Container>
+          <Container maxWidth={false}>
+            <Box mt={3}>
+              <Card>
+                <Box p={2}>
+                  <Grid container spacing={3}>
+                    <Searchbar onSubmit={handleQuerySearch} />
+                    <Grid item md={3} xs={12}>
+                      <InputLabel id="type-label">Type</InputLabel>
+                      <Select
+                        labelId="type-label"
+                        id="type"
+                        multiple
+                        fullWidth
+                        value={typeName}
+                        onChange={handleChangeType}
+                        input={<Input />}
+                        renderValue={(selected) => selected.join(", ")}
+                        MenuProps={MenuProps}
+                      >
+                        {typeNames.map((name) => (
+                          <MenuItem key={name} value={name}>
+                            <Checkbox checked={typeName.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </Grid>
+                    <Grid item md={3} xs={12}>
+                      <InputLabel id="cuisine-label">Cuisine</InputLabel>
+                      <Select
+                        labelId="cuisine-label"
+                        id="cuisine"
+                        multiple
+                        fullWidth
+                        value={cuisineName}
+                        onChange={handleChangeCuisine}
+                        input={<Input />}
+                        renderValue={(selected) => selected.join(", ")}
+                        MenuProps={MenuProps}
+                      >
+                        {cuisineNames.map((name) => (
+                          <MenuItem key={name} value={name}>
+                            <Checkbox
+                              checked={cuisineName.indexOf(name) > -1}
+                            />
+                            <ListItemText primary={name} />
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Card>
+            </Box>
+            <Box mt={3}>
+              <RecipeCardList
+                recipes={recipes}
+                loading={loading}
+                onRecipeClick={onRecipeClick}
+              />
+            </Box>
+          </Container>
+          <RecipeInfoDialog
+            open={dialogOpen}
+            handleClose={() => setDialogOpen(false)}
+            recipeId={selectedRecipeID}
+            recipeInfo={selectedRecipeInfo}
+          />
+        </Box>
       </Page>
     </Scrollbars>
   );
@@ -242,12 +249,10 @@ const SearchView = () => {
       query
     )
       .then((res) => {
-        // console.log("recipes:", res.data);
         offset
           ? setRecipes([...recipes, ...res.data.results])
           : setRecipes(res.data.results);
       })
-      .catch((error) => console.log(error))
       .finally(() => {
         setLoading(false);
       });
@@ -255,7 +260,6 @@ const SearchView = () => {
 
   function loadRecipeById(id) {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);
-    // console.log(clickedRecipe);
     setSelectedRecipeInfo(clickedRecipe);
     setDialogOpen(true);
   }

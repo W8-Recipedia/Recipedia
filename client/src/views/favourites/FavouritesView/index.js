@@ -34,7 +34,6 @@ const Favourites = () => {
     setSelectedRecipeId(id);
   };
 
-  // USED FOR TESTING
   // useEffect(() => {
   //   setRecipes(getExampleRecipes());
   // }, []);
@@ -42,38 +41,43 @@ const Favourites = () => {
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Favourites">
-        <Container maxWidth="false">
-          <Card variant="outlined">
-            <CardContent>
-              <Box p={1}>
-                <Typography gutterBottom variant="h1">
-                  Your favourites.
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  You can view and manage your favourite recipes right here.
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Container>
-        <Container maxWidth={false}>
-          <Box mt={3}>
-            <FavRecipeList recipes={recipes} onRecipeClick={onRecipeClick} />
-          </Box>
-        </Container>
-        <FavRecipeDialog
-          open={dlgOpen}
-          handleClose={() => setDlgOpen(false)}
-          recipeId={selectedRecipeId}
-          recipeInfo={selectedRecipeInfo}
-        />
+        <Box m={2}>
+          <Container maxWidth="false">
+            <Card variant="outlined">
+              <CardContent>
+                <Box p={1}>
+                  <Typography gutterBottom variant="h1">
+                    Your favourites.
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    You can view and manage your favourite recipes right here.
+                  </Typography>
+                </Box>
+              </CardContent>
+            </Card>
+          </Container>
+          <Container maxWidth={false}>
+            <Box mt={3}>
+              <FavRecipeList recipes={recipes} onRecipeClick={onRecipeClick} />
+            </Box>
+          </Container>
+          <FavRecipeDialog
+            open={dlgOpen}
+            handleClose={() => setDlgOpen(false)}
+            recipeId={selectedRecipeId}
+            recipeInfo={selectedRecipeInfo}
+          />
+        </Box>
       </Page>
     </Scrollbars>
   );
 
   function loadRecipeById(id) {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);
-    // console.log(clickedRecipe);
     setSelectedRecipeInfo(clickedRecipe);
     setDlgOpen(true);
   }

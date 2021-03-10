@@ -28,11 +28,7 @@ export const getComplexRecipes = async (
   });
 };
 
-export const getRecommendedRecipes = async (
-  intolerances,
-  diet,
-  offset = 0,
-) => {
+export const getRecommendedRecipes = async (intolerances, diet, offset = 0) => {
   let url = "/recipes/complexSearch";
   return await Axios.get(url, {
     params: {
