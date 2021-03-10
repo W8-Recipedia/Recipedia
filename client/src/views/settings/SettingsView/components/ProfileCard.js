@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Divider,
   Button,
   Dialog,
   DialogContent,
@@ -16,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 
 import { getUserInfo, deleteAccount } from "src/components/auth/UserAuth";
 import PropTypes from "prop-types";
-import clsx from "clsx";
 import { red } from "@material-ui/core/colors";
 
 const useStyles = makeStyles(() => ({
@@ -54,7 +52,7 @@ const ProfileCard = ({ className, ...rest }) => {
 
   const deleteAcc = () => {
     deleteAccount().then((response) => {
-      if (response == "success") {
+      if (response === "success") {
         setOpen(false);
         setDeleteStatus(true);
       }

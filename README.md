@@ -4,9 +4,10 @@ Recipedia is a web application that seeks to revolutionize the way that people f
 
 ## Getting Started
 
-These instructions will get Recipedia up and running on your local machine. 
+These instructions will get Recipedia up and running on your local machine.
 
 ### Prerequisites
+
 You need `node` and `npm` installed globally on your machine. You will also need to make a [Spoonacular](https://spoonacular.com/food-api/console#Dashboard) account to access the [Spoonacular API](https://spoonacular.com/food-api), and a MySQL database to store user details.
 
 ### Installing
@@ -21,6 +22,7 @@ Environment variables:
 Add a `.env` file to your client and server directories, and replace `[...]` with the relevant values.
 
 client/.env
+
 ```
 REACT_APP_SERVER_URL=http://localhost:3001
 REACT_APP_RECIPE_API_KEY=[SPOONACULAR API KEY]
@@ -28,6 +30,7 @@ REACT_APP_MAX_RECIPE_NUMBER=21
 ```
 
 server/.env
+
 ```
 JWT_SECRET=[RANDOM ALPHABETICAL STRING]
 CLIENT_URL=http://localhost:3000
@@ -37,8 +40,11 @@ PASSWORD=[DATABASE PASSWORD]
 DATABASE=[DATABASE NAME]
 PORT=3001
 ```
+
 ---
+
 Database setup (replace `+XX:XX` with your time zone):
+
 ```
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 
@@ -65,42 +71,43 @@ ALTER TABLE `users`
 
 ALTER TABLE `users`
   MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT;
-  
+
 COMMIT;
 ```
 
 ---
+
 Installation:
 
 `npm run install-all`
 
 Starting Recipedia:
 
-`npm run dev`  
+`npm run dev`
 
 ## Built With
 
-* [React](https://reactjs.org/)
-* [Material-UI](https://material-ui.com/)
-* [Spoonacular API](https://spoonacular.com/food-api)
-* [Formik + Yup](https://formik.org/)
-* [Axios](https://www.npmjs.com/package/axios)
-* [Bcrypt](https://www.npmjs.com/package/bcrypt)
-* [JWT](https://jwt.io/)
-* [Node.js](https://nodejs.org/)
-* [Express](https://expressjs.com/)
-* [MySQL](https://www.mysql.com/)
-* [NPM](https://www.npmjs.com/)
-* [Google Sign-in](https://developers.google.com/identity/sign-in/web)
+- [React](https://reactjs.org/)
+- [Material-UI](https://material-ui.com/)
+- [Spoonacular API](https://spoonacular.com/food-api)
+- [Formik + Yup](https://formik.org/)
+- [Axios](https://www.npmjs.com/package/axios)
+- [Bcrypt](https://www.npmjs.com/package/bcrypt)
+- [JWT](https://jwt.io/)
+- [Node.js](https://nodejs.org/)
+- [Express](https://expressjs.com/)
+- [MySQL](https://www.mysql.com/)
+- [NPM](https://www.npmjs.com/)
+- [Google Sign-in](https://developers.google.com/identity/sign-in/web)
 
 ## Authors
 
-* **[Aryan Agrawal](https://github.com/ary4n99)**
-* **[Shadi Abumattar](https://github.com/AbumattarSA)**
-* [Ahmed Soliman](https://github.com/LEGENDSOLI)
-* [AJ Singh](https://github.com/asjsingh)
-* [Stefan Tutugan](https://github.com/tutugan)
-* [Max Lawley](https://github.com/lawleymax)
+- **[Aryan Agrawal](https://github.com/ary4n99)**
+- **[Shadi Abumattar](https://github.com/AbumattarSA)**
+- [Ahmed Soliman](https://github.com/LEGENDSOLI)
+- [AJ Singh](https://github.com/asjsingh)
+- [Stefan Tutugan](https://github.com/tutugan)
+- [Max Lawley](https://github.com/lawleymax)
 
 ## License
 
@@ -108,5 +115,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* [Devias Material-UI Kit](https://github.com/devias-io/material-kit-react/) - Initial website design
-* [Prettier](https://prettier.io/) - Code formatting
+- [Devias Material-UI Kit](https://github.com/devias-io/material-kit-react/) - Initial website design
+- [Prettier](https://prettier.io/) - Code formatting

@@ -45,7 +45,6 @@ const SignUpView = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [googleSignUpOpen, setGoogleSignUpOpen] = useState(false);
-  const [signupError, setSignUpError] = useState("");
 
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
@@ -55,7 +54,7 @@ const SignUpView = () => {
       values.email,
       values.password
     ).then((authResponse) => {
-      if (authResponse == "Success") {
+      if (authResponse === "Success") {
         navigate("/app/home");
       } else {
         setOpen(true);
@@ -69,7 +68,7 @@ const SignUpView = () => {
 
   const handleGoogleSubmit = (response) => {
     googleSignUp(response.tokenId, response.profileObj).then((authResponse) => {
-      if (authResponse == "Success") {
+      if (authResponse === "Success") {
         navigate("/app/home");
       } else {
         setGoogleSignUpOpen(false);
@@ -111,7 +110,7 @@ const SignUpView = () => {
                   .max(255)
                   .required("Password is required")
                   .matches(
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
                     "Password must contain an uppercase letter, a number, and a symbol"
                   )
                   .min(8, "Password must be at least 8 characters"),

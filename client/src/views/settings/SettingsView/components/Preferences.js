@@ -66,20 +66,18 @@ const Preferences = ({ className, ...rest }) => {
   useLayoutEffect(() => {
     getUserPreferences().then((authResponse) => {
       if (authResponse.data.loggedIn) {
-        setDiet(authResponse.data.diet);
-        for (var allergen in allergens) {
-          if (allergens.hasOwnProperty(allergen)) {
-            if (authResponse.data.allergens) {
-              if (authResponse.data.allergens.includes(allergen)) {
-                if (allergen == "TreeNut") {
-                  allergens[TreeNut] = true;
-                } else {
-                  allergens[allergen] = true;
-                }
-              }
-            }
-          }
+        if (authResponse.data.diet) {
+          setDiet(authResponse.data.diet);
         }
+        if (authResponse.data.allergens) {
+          var allergenJSON = {};
+          authResponse.data.allergens.forEach((item) => {
+            const allergen = item === "Tree Nut" ? "TreeNut" : item;
+            allergenJSON[allergen] = true;
+          });
+          setAllergens(allergenJSON);
+        }
+
         if (authResponse.data.health) {
           setHeight(authResponse.data.health.height);
           setWeight(authResponse.data.health.weight);
@@ -102,13 +100,11 @@ const Preferences = ({ className, ...rest }) => {
   const handleSubmit = () => {
     var allergenList = [];
     for (var allergen in allergens) {
-      if (allergens.hasOwnProperty(allergen)) {
-        if (allergens[allergen] == true) {
-          if (allergen == "TreeNut") {
-            allergenList.push("Tree Nut");
-          } else {
-            allergenList.push(allergen);
-          }
+      if (allergens[allergen] === true) {
+        if (allergen === "TreeNut") {
+          allergenList.push("Tree Nut");
+        } else {
+          allergenList.push(allergen);
         }
       }
     }
@@ -374,7 +370,7 @@ const Preferences = ({ className, ...rest }) => {
                             BMI
                           </Typography>
                           <Typography color="textPrimary" variant="h3">
-                            {weight == 0 || height == 0 || !weight || !height
+                            {weight === 0 || height === 0 || !weight || !height
                               ? "Undefined"
                               : (parseFloat(weight) * 10.0) /
                                   Math.pow(parseFloat(height) / 100.0, 2) /
@@ -395,10 +391,10 @@ const Preferences = ({ className, ...rest }) => {
                       </Grid>
                       <Typography color="textSecondary" variant="caption">
                         {parseFloat(weight) /
-                          Math.pow(parseFloat(height) / 100.0, 2) ==
+                          Math.pow(parseFloat(height) / 100.0, 2) ===
                           0 ||
-                        weight == 0 ||
-                        height == 0 ||
+                        weight === 0 ||
+                        height === 0 ||
                         !weight ||
                         !height
                           ? "Please enter your details"

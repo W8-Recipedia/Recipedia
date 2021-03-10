@@ -12,10 +12,8 @@
     "install-all": "npm run install:root && npm run install:client && npm run install:server"
   },
   "devDependencies": {
+    "concurrently": "^6.0.0",
     "nodemon": "^2.0.7",
     "prettier": "^2.2.1"
-  },
-  "dependencies": {
-    "concurrently": "^6.0.0"
   }
 }

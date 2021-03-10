@@ -8,9 +8,10 @@ import {
   Grid,
   makeStyles,
 } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import IconButton from "@material-ui/core/IconButton";
 import LocalDiningIcon from "@material-ui/icons/LocalDining";
 
 function convertTime(num) {

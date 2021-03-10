@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import {
-  getUserPreferences,
-} from "src/components/auth/UserAuth";
+import React, { useState, useLayoutEffect } from "react";
+import { getUserPreferences } from "src/components/auth/UserAuth";
 import {
   Box,
   Container,
@@ -42,7 +40,6 @@ const Home = () => {
     setSelectedRecipeId(id);
   };
 
-  // USED FOR TESTING
   // useEffect(() => {
   //   setRecipes(getExampleRecipes());
   // }, []);
@@ -51,81 +48,71 @@ const Home = () => {
     getUserPreferences().then((res) => {
       setIntolerances(res.data.allergens);
       setDiet(res.data.diet);
-      loadRecommendedRecipes(
-        res.data.allergens,
-        res.data.diet,
-        0,
-      );
+      loadRecommendedRecipes(res.data.allergens, res.data.diet, 0);
     });
   }, []);
 
   const loadMoreRecipes = () => {
     let newOffset = offset + parseInt(process.env.REACT_APP_MAX_RECIPE_NUMBER);
     setOffset(newOffset);
-    loadRecommendedRecipes(
-      intolerances,
-      diet,
-      newOffset,
-    );
+    loadRecommendedRecipes(intolerances, diet, newOffset);
   };
 
   return (
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Home">
-        <Container maxWidth="false">
-          <Card variant="outlined">
-            <CardContent>
-              <Box p={1}>
-                <Typography gutterBottom variant="h1">
-                  Welcome home.
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  View our delightful assortment of recipes, curated just for
-                  you.
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Container>
-        <Container maxWidth={false}>
-          <Box mt={3}>
-            <RecipeCardList
-              recipes={recipes}
-              onRecipeClick={onRecipeClick}
-              loadMore={loadMoreRecipes}
-              loading={loading}
-            />
-          </Box>
-        </Container>
-        <RecipeInfoDialog
-          open={dlgOpen}
-          handleClose={() => setDlgOpen(false)}
-          recipeId={selectedRecipeId}
-          recipeInfo={selectedRecipeInfo}
-        />
+        <Box m={2}>
+          <Container maxWidth="false">
+            <Card variant="outlined">
+              <CardContent>
+                <Box p={1}>
+                  <Typography gutterBottom variant="h1">
+                    Welcome home.
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    View our delightful assortment of recipes, curated just for
+                    you.
+                  </Typography>
+                </Box>
+              </CardContent>
+            </Card>
+          </Container>
+          <Container maxWidth={false}>
+            <Box mt={3}>
+              <RecipeCardList
+                recipes={recipes}
+                onRecipeClick={onRecipeClick}
+                loadMore={loadMoreRecipes}
+                loading={loading}
+              />
+            </Box>
+          </Container>
+          <RecipeInfoDialog
+            open={dlgOpen}
+            handleClose={() => setDlgOpen(false)}
+            recipeId={selectedRecipeId}
+            recipeInfo={selectedRecipeInfo}
+          />
+        </Box>
       </Page>
     </Scrollbars>
   );
 
-  function loadRecommendedRecipes(
-    intolerancesArray,
-    diet,
-    offset,
-  ) {
+  function loadRecommendedRecipes(intolerancesArray, diet, offset) {
     setLoading(true);
-    let intolerancesString = intolerancesArray ? intolerancesArray.join(",") : null
-    getRecommendedRecipes(
-      intolerancesString,
-      diet,
-      offset,
-    )
+    let intolerancesString = intolerancesArray
+      ? intolerancesArray.join(",")
+      : null;
+    getRecommendedRecipes(intolerancesString, diet, offset)
       .then((res) => {
-        // console.log("recipes:", res.data);
         offset
           ? setRecipes([...recipes, ...res.data.results])
           : setRecipes(res.data.results);
       })
-      .catch((error) => console.log(error))
       .finally(() => {
         setLoading(false);
       });
@@ -133,7 +120,6 @@ const Home = () => {
 
   function loadRecipeById(id) {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);
-    // console.log(clickedRecipe);
     setSelectedRecipeInfo(clickedRecipe);
     setDlgOpen(true);
   }

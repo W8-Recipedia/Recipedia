@@ -34,7 +34,7 @@ const Password = () => {
   const handleSubmit = (values, actions) => {
     changePassword(values.currentPassword, values.password).then(
       (authResponse) => {
-        if (authResponse == "Success") {
+        if (authResponse === "Success") {
           setOpen(true);
           actions.resetForm({});
         } else {
@@ -63,7 +63,7 @@ const Password = () => {
             .max(255)
             .required("Password is required")
             .matches(
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
               "Password must contain an uppercase letter, a number, and a symbol"
             )
             .min(8, "Password must be at least 8 characters"),
