@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import {
   Card,
@@ -8,7 +8,7 @@ import {
   Grid,
   makeStyles,
 } from "@material-ui/core";
-import { addToFavourites, removeFromFavourites } from "src/components/auth/UserAuth";
+import { addToFavourites, removeFromFavourites, getUserFavourites } from "src/components/auth/UserAuth";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -78,6 +78,16 @@ const RecipeCard = ({ recipe, ...props }) => {
   const classes = useStyles();
   const[favourited, setFavourited] = useState(false);
   const[open, setOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    getUserFavourites().then((res) => {
+      console.log(res.data.favourites)
+      console.log(recipe.id)
+      if (res.data.favourites.includes(recipe.id.toString())) {
+        setFavourited(true);
+      }
+    });
+  }, []);
 
   const handleClick = () => {
     if (!favourited) {
