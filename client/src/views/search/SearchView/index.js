@@ -152,8 +152,8 @@ const SearchView = () => {
                   Search here.
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  If you want to find recipes filtered by cuisine or type you
-                  can do that here.
+                  If you'd like to find recipes that match your specific taste,
+                  then you're in the right place.
                 </Typography>
               </Box>
             </CardContent>
