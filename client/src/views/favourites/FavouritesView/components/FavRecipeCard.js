@@ -8,7 +8,7 @@ import {
   Grid,
   makeStyles,
 } from "@material-ui/core";
-import { removeFromFavourites } from "src/components/auth/UserAuth";
+import { addToFavourites, removeFromFavourites } from "src/components/auth/UserAuth";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -80,9 +80,13 @@ const FavRecipeCard = ({ recipe, ...props }) => {
   const[open, setOpen] = useState(false);
 
   const handleClick = () => {
+    if (!favourited) {
+      removeFromFavourites(recipe.id);
+    } else {
+      addToFavourites(recipe.id);
+    }
     setOpen(false);
-    removeFromFavourites(recipe.id);
-    setFavourited(true);
+    setFavourited(prevFavourited => !prevFavourited);
     setOpen(true);
   };
 
@@ -138,19 +142,24 @@ const FavRecipeCard = ({ recipe, ...props }) => {
           </Grid>
 
           <Grid className={classes.statsItem} item>
-            <IconButton disabled = {favourited ? true : false} onClick={handleClick}>
-            {favourited ? (
+            <IconButton onClick={handleClick}>
+            {!favourited ? (
               <>
-              <FavoriteBorderIcon style={{ color: "gray" }} />
+              <FavoriteIcon style={{ color: "red" }} />
               <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-                <Alert severity="info">
-                  {recipe.title} has been removed from your favourites.
+                <Alert severity="success">
+                  {recipe.title} has been added to your favourites.
                 </Alert>
               </Snackbar>
               </>
         ) : (
           <>
-            <FavoriteIcon style={{ color: "red" }} />
+            <FavoriteBorderIcon style={{ color: "red" }} />
+            <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+                <Alert severity="info">
+                  {recipe.title} has been removed from your favourites.
+                </Alert>
+              </Snackbar>
           </>
         )}
             </IconButton>
