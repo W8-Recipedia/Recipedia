@@ -1,4 +1,3 @@
-import "react-perfect-scrollbar/dist/css/styles.css";
 import React from "react";
 import { useRoutes, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/core";
