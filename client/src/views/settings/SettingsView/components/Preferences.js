@@ -75,7 +75,6 @@ const Preferences = ({ className, ...rest }) => {
             const allergen = item === "Tree Nut" ? "TreeNut" : item;
             allergenJSON[allergen] = true;
           });
-          console.log(allergenJSON);
           setAllergens(allergenJSON);
         }
 
