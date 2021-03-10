@@ -195,8 +195,6 @@ app.get("/getuserfavourites", (req, res) => {
   }
 });
 
-// GET USER FAVOURITES
-
 app.post("/addtofavourites", (req, res) => {
   if (req.headers["x-access-token"]) {
     const token = jwt.verify(
@@ -218,7 +216,6 @@ app.post("/addtofavourites", (req, res) => {
                 "UPDATE users SET favourites = ? WHERE email = ?",
                 [JSON.stringify(favouriteList), token.user.email],
                 (err, result) => {
-                  console.log(err);
                   if (err) {
                     res.json({ message: "DBError" });
                   }
@@ -233,7 +230,6 @@ app.post("/addtofavourites", (req, res) => {
               "UPDATE users SET favourites = ? WHERE email = ?",
               [initialFavourite, token.user.email],
               (err, result) => {
-                console.log(err);
                 if (err) {
                   res.json({ message: "DBError" });
                 }
@@ -267,11 +263,7 @@ app.post("/removefromfavourites", (req, res) => {
               const favouriteIndex = favouriteList.indexOf(
                 req.body.favourite.toString()
               );
-              console.log(favouriteList);
-              console.log(favouriteIndex);
               favouriteList.splice(favouriteIndex, 1);
-              console.log(favouriteList);
-
               con.query(
                 "UPDATE users SET favourites = ? WHERE email = ?",
                 [JSON.stringify(favouriteList), token.user.email],
@@ -390,6 +382,28 @@ app.post("/changepassword", (req, res) => {
               res.json({ message: "wrongPassword" });
             }
           });
+        }
+      }
+    );
+  } else {
+    res.json({ loggedIn: false });
+  }
+});
+
+app.post("/submitfeedback", (req, res) => {
+  if (req.headers["x-access-token"]) {
+    const token = jwt.verify(
+      req.headers["x-access-token"],
+      process.env.JWT_SECRET
+    );
+    con.query(
+      "INSERT INTO feedback (email, message) VALUES (?,?)",
+      [token.user.email, req.body.feedback],
+      (err, result) => {
+        if (err) {
+          res.json({ message: err });
+        } else {
+          res.json({ message: "Success" });
         }
       }
     );

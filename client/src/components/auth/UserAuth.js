@@ -242,6 +242,23 @@ export const changePassword = async (oldpassword, newpassword) => {
   }
 };
 
+export const submitFeeback = async (feedback) => {
+  var localtoken;
+  localStorage.getItem("usertoken")
+    ? (localtoken = localStorage.getItem("usertoken"))
+    : (localtoken = localStorage.getItem("gusertoken"));
+  const response = await Axios.post(
+    process.env.REACT_APP_SERVER_URL + "/submitfeedback",
+    {
+      feedback: feedback,
+    },
+    {
+      headers: { "x-access-token": localtoken },
+    }
+  );
+  return response;
+};
+
 export const deleteAccount = async () => {
   var localtoken;
   localStorage.getItem("usertoken")
