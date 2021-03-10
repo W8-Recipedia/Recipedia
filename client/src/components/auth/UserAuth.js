@@ -219,10 +219,10 @@ export const changePreferences = async (diet, allergens, height, weight) => {
 };
 
 export const changePassword = async (oldpassword, newpassword) => {
-    var localtoken;
-    localStorage.getItem("usertoken")
-      ? (localtoken = localStorage.getItem("usertoken"))
-      : (localtoken = localStorage.getItem("gusertoken"));
+  var localtoken;
+  localStorage.getItem("usertoken")
+    ? (localtoken = localStorage.getItem("usertoken"))
+    : (localtoken = localStorage.getItem("gusertoken"));
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/changepassword",
     {
