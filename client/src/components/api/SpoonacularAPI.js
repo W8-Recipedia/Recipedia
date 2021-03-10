@@ -63,7 +63,7 @@ export const getRandomRecommendedRecipes = async (tags) => {
   return await Axios.get(url, {
     params: {
       apiKey: process.env.REACT_APP_RECIPE_API_KEY,
-      tags: tags,
+      tags: tags || undefined,
       number: process.env.REACT_APP_MAX_RECIPE_NUMBER,
     },
   });

@@ -113,6 +113,9 @@ const Home = () => {
   ) {
     setLoading(true);
     let tagsString = tagsArray ? tagsArray.join(",") : null
+    if (tagsString == "none") {
+      tagsString = "";
+    }
     getRandomRecommendedRecipes(
       tagsString,
     )
@@ -125,7 +128,7 @@ const Home = () => {
         setLoading(false);
       });
   }
-
+  
   function loadRecipeById(id) {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);
     // console.log(clickedRecipe);
