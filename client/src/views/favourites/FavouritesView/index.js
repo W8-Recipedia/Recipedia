@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
+import { getUserFavourites } from "src/components/auth/UserAuth";
 import {
   Box,
   Container,
@@ -6,12 +7,15 @@ import {
   Card,
   Typography,
   CardContent,
+  Grid,
 } from "@material-ui/core";
 import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
+import { getMultipleRecipes } from "src/components/api/SpoonacularAPI";
 import { Scrollbars } from "react-custom-scrollbars";
-import FavRecipeDialog from "src/views/favourites/FavouritesView/components/FavRecipeDialog";
-import FavRecipeList from "src/views/favourites/FavouritesView/components/FavRecipeList";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import RecipeDialog from "src/components/recipe/RecipeDialog";
+import RecipeList from "src/components/recipe/RecipeList";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Favourites = () => {
   const classes = useStyles();
-  const [recipes] = useState([]);
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [selectedRecipeId, setSelectedRecipeId] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
   const [dlgOpen, setDlgOpen] = useState(false);
@@ -37,6 +42,12 @@ const Favourites = () => {
   // useEffect(() => {
   //   setRecipes(getExampleRecipes());
   // }, []);
+
+  useLayoutEffect(() => {
+    getUserFavourites().then((res) => {
+      loadMultipleRecipes(res.data.favourites);
+    });
+  }, []);
 
   return (
     <Scrollbars>
@@ -62,10 +73,21 @@ const Favourites = () => {
           </Container>
           <Container maxWidth={false}>
             <Box mt={3}>
-              <FavRecipeList recipes={recipes} onRecipeClick={onRecipeClick} />
+              <RecipeList
+                recipes={recipes}
+                onRecipeClick={onRecipeClick}
+                loading={loading}
+              />
+              <Grid
+                item
+                xs={12}
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                {loading ? <CircularProgress /> : null}
+              </Grid>
             </Box>
           </Container>
-          <FavRecipeDialog
+          <RecipeDialog
             open={dlgOpen}
             handleClose={() => setDlgOpen(false)}
             recipeId={selectedRecipeId}
@@ -75,6 +97,20 @@ const Favourites = () => {
       </Page>
     </Scrollbars>
   );
+
+  function loadMultipleRecipes(idsArray) {
+    setLoading(true);
+    let idsString = idsArray ? idsArray.join(",") : null;
+    getMultipleRecipes(idsString)
+      .then((res) => {
+        console.log(res.data);
+        setRecipes([...recipes, ...res.data]);
+      })
+      .catch((error) => console.log(error))
+      .finally(() => {
+        setLoading(false);
+      });
+  }
 
   function loadRecipeById(id) {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);

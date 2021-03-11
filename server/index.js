@@ -252,7 +252,7 @@ app.post("/addtofavourites", (req, res) => {
               res.json({ message: "favouriteExists" });
             }
           } else {
-            initialFavourite = JSON.stringify([req.body.favourite]);
+            initialFavourite = JSON.stringify([req.body.favourite.toString()]);
             con.query(
               "UPDATE users SET favourites = ? WHERE email = ?",
               [initialFavourite, token.user.email],

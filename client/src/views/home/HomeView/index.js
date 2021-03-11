@@ -7,12 +7,17 @@ import {
   Card,
   CardContent,
   Typography,
+  Button,
+  Grid,
 } from "@material-ui/core";
+import PropTypes from "prop-types";
 import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
-import { getRecommendedRecipes } from "src/components/api/SpoonacularAPI";
-import RecipeInfoDialog from "src/views/home/HomeView/components/RecipeInfoDialog";
-import RecipeCardList from "src/views/home/HomeView/components/RecipeCardList";
+import { getRandomRecommendedRecipes } from "src/components/api/SpoonacularAPI";
+import RecipeDialog from "src/components/recipe/RecipeDialog";
+import RecipeList from "src/components/recipe/RecipeList";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,6 +26,14 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "100%",
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
+  },
+  loadMoreGridBtn: {
+    display: "flex",
+    justifyContent: "center",
+    paddingTop: "15px",
+  },
+  downArrow: {
+    fontSize: "15px",
   },
 }));
 
@@ -34,6 +47,7 @@ const Home = () => {
   const [offset, setOffset] = useState(0);
   const [intolerances, setIntolerances] = useState([]);
   const [diet, setDiet] = useState("");
+  const [tags, setTags] = useState("");
 
   const onRecipeClick = (id) => {
     loadRecipeById(id);
@@ -48,14 +62,23 @@ const Home = () => {
     getUserPreferences().then((res) => {
       setIntolerances(res.data.allergens);
       setDiet(res.data.diet);
-      loadRecommendedRecipes(res.data.allergens, res.data.diet, 0);
+      const userDietLowerCase = res.data.diet
+        ? res.data.diet.toLowerCase()
+        : null;
+      const userIntolerancesArray = res.data.allergens
+        ? res.data.allergens.join(",").toLowerCase()
+        : null;
+      const tags = userIntolerancesArray
+        ? [userDietLowerCase, userIntolerancesArray]
+        : [userDietLowerCase];
+      console.log(tags);
+      setTags(tags);
+      loadRandomRecommendedRecipes(tags, 0);
     });
   }, []);
 
   const loadMoreRecipes = () => {
-    let newOffset = offset + parseInt(process.env.REACT_APP_MAX_RECIPE_NUMBER);
-    setOffset(newOffset);
-    loadRecommendedRecipes(intolerances, diet, newOffset);
+    loadRandomRecommendedRecipes(tags);
   };
 
   return (
@@ -83,15 +106,27 @@ const Home = () => {
           </Container>
           <Container maxWidth={false}>
             <Box mt={3}>
-              <RecipeCardList
+              <RecipeList
                 recipes={recipes}
                 onRecipeClick={onRecipeClick}
-                loadMore={loadMoreRecipes}
                 loading={loading}
               />
             </Box>
+            <Grid item xs={12} className={classes.loadMoreGridBtn}>
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                <>
+                  <Button color="primary" onClick={loadMoreRecipes}>
+                    <ArrowDownwardIcon className={classes.downArrow} /> Load
+                    more recipes!{" "}
+                    <ArrowDownwardIcon className={classes.downArrow} />
+                  </Button>
+                </>
+              )}
+            </Grid>
           </Container>
-          <RecipeInfoDialog
+          <RecipeDialog
             open={dlgOpen}
             handleClose={() => setDlgOpen(false)}
             recipeId={selectedRecipeId}
@@ -102,16 +137,16 @@ const Home = () => {
     </Scrollbars>
   );
 
-  function loadRecommendedRecipes(intolerancesArray, diet, offset) {
+  function loadRandomRecommendedRecipes(tagsArray) {
     setLoading(true);
-    let intolerancesString = intolerancesArray
-      ? intolerancesArray.join(",")
-      : null;
-    getRecommendedRecipes(intolerancesString, diet, offset)
+    let tagsString = tagsArray ? tagsArray.join(",") : null;
+    if (tagsString == "none") {
+      tagsString = "";
+    }
+    getRandomRecommendedRecipes(tagsString)
       .then((res) => {
-        offset
-          ? setRecipes([...recipes, ...res.data.results])
-          : setRecipes(res.data.results);
+        // console.log("recipes:", res.data);
+        setRecipes([...recipes, ...res.data.recipes]);
       })
       .finally(() => {
         setLoading(false);
@@ -123,6 +158,10 @@ const Home = () => {
     setSelectedRecipeInfo(clickedRecipe);
     setDlgOpen(true);
   }
+};
+
+RecipeList.propTypes = {
+  loading: PropTypes.bool,
 };
 
 export default Home;

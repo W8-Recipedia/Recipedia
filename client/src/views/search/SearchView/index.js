@@ -18,10 +18,11 @@ import {
 import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
 import { getComplexRecipes } from "src/components/api/SpoonacularAPI";
-import RecipeInfoDialog from "src/views/search/SearchView/components/RecipeInfoDialog";
-import RecipeCardList from "src/views/search/SearchView/components/RecipeCardList";
+import RecipeDialog from "src/components/recipe/RecipeDialog";
+import RecipeList from "src/components/recipe/RecipeList";
 import Searchbar from "src/views/search/SearchView/components/Searchbar";
 import { Scrollbars } from "react-custom-scrollbars";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -147,8 +148,8 @@ const SearchView = () => {
                     color="textSecondary"
                     component="p"
                   >
-                    If you want to find recipes filtered by cuisine or type you
-                    can do that here.
+                    If you'd like to find recipes that match your specific
+                    taste, then you're in the right place.
                   </Typography>
                 </Box>
               </CardContent>
@@ -209,14 +210,17 @@ const SearchView = () => {
               </Card>
             </Box>
             <Box mt={3}>
-              <RecipeCardList
+              <RecipeList
                 recipes={recipes}
                 loading={loading}
                 onRecipeClick={onRecipeClick}
               />
+              <Grid item xs={12}>
+                {loading ? <LinearProgress /> : null}
+              </Grid>
             </Box>
           </Container>
-          <RecipeInfoDialog
+          <RecipeDialog
             open={dialogOpen}
             handleClose={() => setDialogOpen(false)}
             recipeId={selectedRecipeID}
@@ -237,7 +241,9 @@ const SearchView = () => {
   ) {
     setRecipes([]);
     setLoading(true);
-    let intolerancesString = intolerancesArray.join(",");
+    let intolerancesString = intolerancesArray
+      ? intolerancesArray.join(",")
+      : null;
     let dishTypesString = typesArray.join(",").toLowerCase();
     let cuisinesString = cuisineArray.join(",");
     getComplexRecipes(

@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import {
   Card,
@@ -8,11 +8,18 @@ import {
   Grid,
   makeStyles,
 } from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton";
-
+import { addToFavourites, removeFromFavourites, getUserFavourites } from "src/components/auth/UserAuth";
 import ScheduleIcon from "@material-ui/icons/Schedule";
-import FavoriteIcon from "@material-ui/icons/Favorite";
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import IconButton from "@material-ui/core/IconButton";
 import LocalDiningIcon from "@material-ui/icons/LocalDining";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 function convertTime(num) {
   if (num <= 60) {
@@ -67,26 +74,55 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FavRecipeCard = ({ recipe, ...props }) => {
+const RecipeCard = ({ recipe, ...props }) => {
   const classes = useStyles();
+  const[favourited, setFavourited] = useState(false);
+  const[open, setOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    getUserFavourites().then((res) => {
+      console.log(res.data.favourites)
+      console.log(recipe.id)
+      if (res.data.favourites.includes(recipe.id.toString())) {
+        setFavourited(true);
+      }
+    });
+  }, []);
+
+  const handleClick = () => {
+    if (!favourited) {
+      addToFavourites(recipe.id);
+    } else {
+      removeFromFavourites(recipe.id);
+    }
+    setOpen(false);
+    setFavourited(prevFavourited => !prevFavourited);
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
 
   return (
     <Card
       className={classes.root}
       elevation={4}
-      onClick={() => props.onClick(recipe.id)}
     >
-      <div className={classes.media}>
+      <div onClick={() => props.onClick(recipe.id)} className={classes.media}>
         <img
           className={classes.image}
           src={`https://spoonacular.com/recipeImages/${recipe.id}-636x393.${recipe.imageType}`}
           alt={recipe.title}
         />
         <div className={classes.recipeButton}>
-          <Typography variant="button">Click for the recipe!</Typography>
+          <Typography variant="button">Click here for the recipe!</Typography>
         </div>
       </div>
-      <CardContent>
+      <CardContent onClick={() => props.onClick(recipe.id)}>
         <Typography
           variant="h3"
           component="h3"
@@ -99,7 +135,7 @@ const FavRecipeCard = ({ recipe, ...props }) => {
       <CardActions>
         <Grid container justify="center">
           <Grid className={classes.statsItem} item md={6}>
-            <IconButton>
+            <IconButton disabled>
               <LocalDiningIcon color="primary" />
             </IconButton>
             <Typography color="textSecondary" display="inline" variant="body2">
@@ -107,7 +143,7 @@ const FavRecipeCard = ({ recipe, ...props }) => {
             </Typography>
           </Grid>
           <Grid className={classes.statsItem} item md={6}>
-            <IconButton>
+            <IconButton disabled>
               <ScheduleIcon color="primary" />
             </IconButton>
             <Typography color="textSecondary" display="inline" variant="body2">
@@ -116,8 +152,26 @@ const FavRecipeCard = ({ recipe, ...props }) => {
           </Grid>
 
           <Grid className={classes.statsItem} item>
-            <IconButton>
+            <IconButton onClick={handleClick}>
+            {favourited ? (
+              <>
               <FavoriteIcon style={{ color: "red" }} />
+              <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+                <Alert severity="success">
+                  {recipe.title} has been added to your favourites.
+                </Alert>
+              </Snackbar>
+              </>
+        ) : (
+          <>
+            <FavoriteBorderIcon style={{ color: "red" }} />
+            <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+                <Alert severity="info">
+                  {recipe.title} has been removed from your favourites.
+                </Alert>
+              </Snackbar>
+          </>
+        )}
             </IconButton>
           </Grid>
         </Grid>
@@ -126,9 +180,9 @@ const FavRecipeCard = ({ recipe, ...props }) => {
   );
 };
 
-FavRecipeCard.propTypes = {
+RecipeCard.propTypes = {
   recipe: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
-export default FavRecipeCard;
+export default RecipeCard;

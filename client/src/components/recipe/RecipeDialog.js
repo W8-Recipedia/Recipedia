@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FavRecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
+const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const classes = useStyles();
@@ -194,11 +194,11 @@ const FavRecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
   );
 };
 
-FavRecipeDialog.propTypes = {
+RecipeDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   recipeId: PropTypes.number,
   recipeInfo: PropTypes.object.isRequired,
 };
 
-export default FavRecipeDialog;
+export default RecipeDialog;
