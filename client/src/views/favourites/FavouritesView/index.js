@@ -14,7 +14,7 @@ import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
 import { getMultipleRecipes } from "src/components/api/SpoonacularAPI";
 import { Scrollbars } from "react-custom-scrollbars";
-import FavRecipeDialog from "src/views/favourites/FavouritesView/components/FavRecipeDialog";
+import RecipeDialog from "src/components/recipe/RecipeDialog";
 import FavRecipeList from "src/views/favourites/FavouritesView/components/FavRecipeList";
 
 const useStyles = makeStyles((theme) => ({
@@ -76,7 +76,7 @@ const Favourites = () => {
                             loading={loading} />
           </Box>
         </Container>
-        <FavRecipeDialog
+        <RecipeDialog
           open={dlgOpen}
           handleClose={() => setDlgOpen(false)}
           recipeId={selectedRecipeId}

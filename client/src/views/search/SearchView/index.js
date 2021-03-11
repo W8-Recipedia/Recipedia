@@ -20,7 +20,7 @@ import {
 import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
 import { getComplexRecipes } from "src/components/api/SpoonacularAPI";
-import RecipeInfoDialog from "src/views/search/SearchView/components/RecipeInfoDialog";
+import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeCardList from "src/views/search/SearchView/components/RecipeCardList";
 import Searchbar from "src/views/search/SearchView/components/Searchbar";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -219,7 +219,7 @@ const SearchView = () => {
             />
           </Box>
         </Container>
-        <RecipeInfoDialog
+        <RecipeDialog
           open={dialogOpen}
           handleClose={() => setDialogOpen(false)}
           recipeId={selectedRecipeID}

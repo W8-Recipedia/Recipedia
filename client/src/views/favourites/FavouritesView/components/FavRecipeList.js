@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import FavRecipeCard from "src/views/favourites/FavouritesView/components/FavRecipeCard";
+import RecipeCard from "src/components/recipe/RecipeCard";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Grid } from "@material-ui/core";
 
@@ -9,7 +9,7 @@ const FavRecipeList = ({ recipes, onRecipeClick, loadMore, loading }) => {
     <Grid container spacing={2}>
       {recipes.map((recipeItem) => (
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-          <FavRecipeCard recipe={recipeItem} onClick={onRecipeClick} />
+          <RecipeCard recipe={recipeItem} onClick={onRecipeClick} />
         </Grid>
       ))}
       <Grid item xs={12} style={{ display: "flex", justifyContent: "center" }}>

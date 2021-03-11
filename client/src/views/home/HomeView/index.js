@@ -13,7 +13,7 @@ import {
 import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
 import { getRandomRecommendedRecipes } from "src/components/api/SpoonacularAPI";
-import RecipeInfoDialog from "src/views/home/HomeView/components/RecipeInfoDialog";
+import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeCardList from "src/views/home/HomeView/components/RecipeCardList";
 import { Scrollbars } from "react-custom-scrollbars";
 
@@ -98,7 +98,7 @@ const Home = () => {
             />
           </Box>
         </Container>
-        <RecipeInfoDialog
+        <RecipeDialog
           open={dlgOpen}
           handleClose={() => setDlgOpen(false)}
           recipeId={selectedRecipeId}

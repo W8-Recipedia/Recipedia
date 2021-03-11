@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import RecipeCard from "src/views/home/HomeView/components/RecipeCard";
+import RecipeCard from "src/components/recipe/RecipeCard";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Grid, Button } from "@material-ui/core";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
