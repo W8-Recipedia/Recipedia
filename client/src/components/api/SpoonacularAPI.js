@@ -6,19 +6,20 @@ export const getComplexRecipes = async (
   dishtypes,
   cuisines,
   offset = 0,
-  query) => {
+  query
+) => {
   return await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/recipes/complexsearch",
     {
-        instructions: true,
-        recipeinformation: true,
-        fillingredients: true,
-        diet: diet || undefined,
-        intolerances: intolerances || undefined,
-        type: dishtypes || undefined,
-        cuisine: cuisines || undefined,
-        offset,
-        query,
+      instructions: true,
+      recipeinformation: true,
+      fillingredients: true,
+      diet: diet,
+      intolerances: intolerances,
+      type: dishtypes,
+      cuisine: cuisines,
+      offset,
+      query,
     }
   );
 };

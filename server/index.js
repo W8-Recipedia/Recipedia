@@ -24,10 +24,7 @@ app.use(
 app.use((req, res, next) => {
   const allowedOrigins = process.env.LOCALHOST_CLIENT_URL
     ? [process.env.LOCALHOST_CLIENT_URL]
-    : [
-        process.env.HEROKU_CLIENT_URL,
-        process.env.NETLIFY_CLIENT_URL,
-      ];
+    : [process.env.HEROKU_CLIENT_URL, process.env.NETLIFY_CLIENT_URL];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
@@ -80,7 +77,7 @@ app.post("/recipes/complexsearch", (req, res) => {
   const query = req.body.query ? `&query=${req.body.query}` : ``;
 
   request(
-    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.RECIPE_API_KEY}&instructionsRequired=${req.body.instructions}&addRecipeInformation=${req.body.recipeinformation}&addRecipeInformation=${req.body.recipeinformation}&fillIngredients=${req.body.fillingredients}&number=${process.env.RECIPE_NUMBER}${diet}${intolerances}${type}${cuisine}&offset=${req.body.offset}${query}`,
+    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.RECIPE_API_KEY}&instructionsRequired=${req.body.instructions}&addRecipeInformation=${req.body.recipeinformation}&fillIngredients=${req.body.fillingredients}&number=${process.env.RECIPE_NUMBER}${diet}${intolerances}${type}${cuisine}&offset=${req.body.offset}${query}`,
     (error, response, body) => {
       res.json(JSON.parse(body));
     }
