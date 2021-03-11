@@ -448,4 +448,8 @@ app.get("/deleteaccount", (req, res) => {
   }
 });
 
+app.get("/test", (req, res) => {
+  res.send("Hello world!");
+});
+
 app.listen(process.env.PORT, () => {});
