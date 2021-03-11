@@ -48,10 +48,9 @@ const LoginView = () => {
   const [open, setOpen] = React.useState(false);
   const [loginError, setLoginError] = useState("");
   const [googleAccount, setGoogleAccount] = useState(false);
-  const [initialRender, setInitialRender] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-  
+
   const responseGoogle = (response) => {
     googleLogin(response.tokenId, response.profileObj).then((authResponse) => {
       if (authResponse === "Success") {
@@ -202,7 +201,7 @@ const LoginView = () => {
                             aria-label="toggle password visibility"
                             onClick={handleClickShowPassword}
                           >
-                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
                           </IconButton>
                         </InputAdornment>
                       ),
@@ -221,7 +220,7 @@ const LoginView = () => {
                     </Button>
                   </Box>
                   <Typography color="textSecondary" variant="body1">
-                    Don&apos;t have an account?
+                    Don&apos;t have an account?{" "}
                     <Link component={RouterLink} to="/signup" variant="h6">
                       Sign up
                     </Link>

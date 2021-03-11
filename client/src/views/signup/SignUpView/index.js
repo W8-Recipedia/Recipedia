@@ -241,7 +241,7 @@ const SignUpView = () => {
                             aria-label="toggle password visibility"
                             onClick={handleClickShowPassword}
                           >
-                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
                           </IconButton>
                         </InputAdornment>
                       ),
@@ -302,7 +302,7 @@ const SignUpView = () => {
                     </Button>
                   </Box>
                   <Typography color="textSecondary" variant="body1">
-                    Have an account?
+                    Have an account?{" "}
                     <Link component={RouterLink} to="/login" variant="h6">
                       Log in
                     </Link>
