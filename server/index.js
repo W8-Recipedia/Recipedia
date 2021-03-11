@@ -1,7 +1,6 @@
 require("dotenv").config();
 
 const express = require("express");
-const cors = require("cors");
 const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -10,16 +9,17 @@ const saltRounds = 10;
 const app = express();
 
 app.use(express.json());
-app.use(
-  cors({
-    origin: [process.env.CLIENT_URL],
-    methods: ["GET", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"],
-    credentials: true,
-  })
-);
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", process.env.CLIENT_URL);
+  const allowedOrigins = [
+    process.env.HEROKU_CLIENT_URL,
+    process.env.NETLIFY_CLIENT_URL,
+  ];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  // res.setHeader("Access-Control-Allow-Origin", process.env.LOCALHOST_CLIENT_URL);
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
