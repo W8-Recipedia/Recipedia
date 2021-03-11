@@ -12,11 +12,33 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [process.env.CLIENT_URL],
-    methods: ["GET", "POST"],
+    origin: process.env.LOCALHOST_CLIENT_URL
+      ? [process.env.LOCALHOST_CLIENT_URL]
+      : [process.env.HEROKU_CLIENT_URL, process.env.NETLIFY_CLIENT_URL],
+    methods: ["GET", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"],
     credentials: true,
   })
 );
+
+app.use((req, res, next) => {
+  const allowedOrigins = process.env.LOCALHOST_CLIENT_URL
+    ? [process.env.LOCALHOST_CLIENT_URL]
+    : [process.env.HEROKU_CLIENT_URL, process.env.NETLIFY_CLIENT_URL];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  next();
+});
 
 const con = mysql.createConnection({
   host: process.env.HOST,
@@ -28,12 +50,17 @@ const con = mysql.createConnection({
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  console.log(req.body);
 
   con.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
     if (err) {
+      console.log(err);
+
       res.json({ err: err });
     } else if (result.length > 0) {
       bcrypt.compare(password, result[0].password, (error, response) => {
+        console.log(error);
+
         if (response) {
           const user = result[0];
           const token = jwt.sign({ user }, process.env.JWT_SECRET, {
