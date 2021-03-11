@@ -42,12 +42,17 @@ const con = mysql.createConnection({
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  console.log(req.body);
 
   con.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
     if (err) {
+      console.log(err);
+
       res.json({ err: err });
     } else if (result.length > 0) {
       bcrypt.compare(password, result[0].password, (error, response) => {
+        console.log(error);
+
         if (response) {
           const user = result[0];
           const token = jwt.sign({ user }, process.env.JWT_SECRET, {
