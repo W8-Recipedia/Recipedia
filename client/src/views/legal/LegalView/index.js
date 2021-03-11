@@ -31,7 +31,7 @@ const LegalView = () => {
               <CardContent>
                 <Box p={1}>
                   <Typography gutterBottom variant="h1">
-                    Terms &amp; Conditions{" "}
+                    Terms &amp; Conditions
                   </Typography>
                   <Typography
                     variant="body2"
@@ -119,7 +119,7 @@ const LegalView = () => {
                       rendering consulting, design, or other professional advice
                       of any kind. Your use of this Site does not give rise to a
                       client, advisory, fiduciary, or professional services
-                      relationship between you and Recipedia.{" "}
+                      relationship between you and Recipedia.
                     </Typography>
                   </Box>
 
@@ -134,7 +134,7 @@ const LegalView = () => {
                       reliable, current or error-free. Recipedia assumes no
                       liability or responsibility for any errors or omissions in
                       the content of this Site or such other materials or
-                      communications.{" "}
+                      communications.
                     </Typography>
                   </Box>
                   <Box pb={2}>
@@ -210,7 +210,7 @@ const LegalView = () => {
                       Minors. This Site is not intended for use by or
                       availability to minors. IF YOU ARE NOT LEGALLY AN ADULT
                       UNDER THE LAW WHERE YOU LIVE OR IF YOU ARE UNDER 13 YEARS
-                      OF AGE, YOU MAY NOT ACCESS OR USE THIS SITE.{" "}
+                      OF AGE, YOU MAY NOT ACCESS OR USE THIS SITE.
                     </Typography>
                   </Box>
                 </CardContent>

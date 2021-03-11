@@ -153,7 +153,7 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
                       tabIndex={-1}
                       disableRipple
                       inputProps={{ "aria-labelledby": labelId }}
-                    />{" "}
+                    />
                   </ListItemIcon>
                   <ListItemText primary={item.original} />
                 </ListItem>
@@ -179,7 +179,7 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
         </List>
         <Box pb={1}>
           <Typography variant="caption">
-            This recipe is courtesy of{" "}
+            This recipe is courtesy of
             <Link
               href={recipeInfo.sourceUrl || "#"}
               target="_blank"
