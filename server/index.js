@@ -12,26 +12,22 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [process.env.HEROKU_CLIENT_URL, process.env.NETLIFY_CLIENT_URL],
-    // origin: [process.env.LOCALHOST_CLIENT_URL],
+    origin: process.env.LOCALHOST_CLIENT_URL
+      ? [process.env.LOCALHOST_CLIENT_URL]
+      : [process.env.HEROKU_CLIENT_URL, process.env.NETLIFY_CLIENT_URL],
     methods: ["GET", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"],
     credentials: true,
   })
 );
 
 app.use((req, res, next) => {
-  const allowedOrigins = [
-    process.env.HEROKU_CLIENT_URL,
-    process.env.NETLIFY_CLIENT_URL,
-  ];
+  const allowedOrigins = process.env.LOCALHOST_CLIENT_URL
+    ? [process.env.LOCALHOST_CLIENT_URL]
+    : [process.env.HEROKU_CLIENT_URL, process.env.NETLIFY_CLIENT_URL];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
-  // res.setHeader(
-  //   "Access-Control-Allow-Origin",
-  //   process.env.LOCALHOST_CLIENT_URL
-  // );
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
