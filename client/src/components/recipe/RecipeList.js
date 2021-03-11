@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import RecipeCard from "src/components/recipe/RecipeCard";
 import { Grid } from "@material-ui/core";
-import LinearProgress from "@material-ui/core/LinearProgress";
 
 const RecipeCardList = ({ recipes, onRecipeClick, loading }) => {
   return (
@@ -12,9 +11,6 @@ const RecipeCardList = ({ recipes, onRecipeClick, loading }) => {
           <RecipeCard recipe={recipeItem} onClick={onRecipeClick} />
         </Grid>
       ))}
-      <Grid item xs={12}>
-        {loading ? <LinearProgress /> : null}
-      </Grid>
     </Grid>
   );
 };

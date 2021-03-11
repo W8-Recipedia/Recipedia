@@ -21,9 +21,10 @@ import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
 import { getComplexRecipes } from "src/components/api/SpoonacularAPI";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
-import RecipeCardList from "src/views/search/SearchView/components/RecipeCardList";
+import RecipeList from "src/components/recipe/RecipeList";
 import Searchbar from "src/views/search/SearchView/components/Searchbar";
 import { Scrollbars } from "react-custom-scrollbars";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -212,11 +213,14 @@ const SearchView = () => {
             </Card>
           </Box>
           <Box mt={3}>
-            <RecipeCardList
+            <RecipeList
               recipes={recipes}
               loading={loading}
               onRecipeClick={onRecipeClick}
             />
+            <Grid item xs={12}>
+              {loading ? <LinearProgress /> : null}
+            </Grid>
           </Box>
         </Container>
         <RecipeDialog
