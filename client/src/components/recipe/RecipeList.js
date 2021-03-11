@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import RecipeCard from "src/components/recipe/RecipeCard";
 import { Grid } from "@material-ui/core";
 
-const RecipeCardList = ({ recipes, onRecipeClick, loading }) => {
+const RecipeCardList = ({ recipes, onRecipeClick }) => {
   return (
     <Grid container spacing={2}>
       {recipes.map((recipeItem) => (
@@ -18,7 +18,6 @@ const RecipeCardList = ({ recipes, onRecipeClick, loading }) => {
 RecipeCardList.propTypes = {
   recipes: PropTypes.array.isRequired,
   onRecipeClick: PropTypes.func.isRequired,
-  loading: PropTypes.bool,
 };
 
 export default RecipeCardList;

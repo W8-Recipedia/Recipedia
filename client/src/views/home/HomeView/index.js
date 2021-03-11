@@ -9,12 +9,17 @@ import {
   Card,
   CardContent,
   Typography,
+  Button,
+  Grid,
 } from "@material-ui/core";
+import PropTypes from "prop-types";
 import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
 import { getRandomRecommendedRecipes } from "src/components/api/SpoonacularAPI";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
-import RecipeCardList from "src/views/home/HomeView/components/RecipeCardList";
+import RecipeList from "src/components/recipe/RecipeList";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
@@ -23,6 +28,14 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "100%",
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
+  },
+  loadMoreGridBtn: {
+    display: "flex",
+    justifyContent: "center",
+    paddingTop: '15px',
+  },
+  downArrow: {
+    fontSize: "15px",
   },
 }));
 
@@ -90,13 +103,22 @@ const Home = () => {
         </Container>
         <Container maxWidth={false}>
           <Box mt={3}>
-            <RecipeCardList
+            <RecipeList
               recipes={recipes}
               onRecipeClick={onRecipeClick}
-              loadMore={loadMoreRecipes}
               loading={loading}
             />
           </Box>
+          <Grid item xs={12} className={classes.loadMoreGridBtn}>
+            {loading ? ( <CircularProgress /> ) : (
+            <>
+              <Button color="primary" onClick={loadMoreRecipes}>
+                <ArrowDownwardIcon className={classes.downArrow} /> Load more
+                recipes! <ArrowDownwardIcon className={classes.downArrow} />
+              </Button>
+            </>
+            )}
+          </Grid>
         </Container>
         <RecipeDialog
           open={dlgOpen}
@@ -135,6 +157,10 @@ const Home = () => {
     setSelectedRecipeInfo(clickedRecipe);
     setDlgOpen(true);
   }
+};
+
+RecipeList.propTypes = {
+  loading: PropTypes.bool,
 };
 
 export default Home;
