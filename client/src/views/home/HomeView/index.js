@@ -145,7 +145,7 @@ const Home = () => {
     }
     getRandomRecommendedRecipes(tagsString)
       .then((res) => {
-        // console.log("recipes:", res.data);
+        console.log(res);
         setRecipes([...recipes, ...res.data.recipes]);
       })
       .finally(() => {
