@@ -5,6 +5,7 @@ const cors = require("cors");
 const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const request = require("request");
 const saltRounds = 10;
 
 const app = express();
@@ -23,7 +24,10 @@ app.use(
 app.use((req, res, next) => {
   const allowedOrigins = process.env.LOCALHOST_CLIENT_URL
     ? [process.env.LOCALHOST_CLIENT_URL]
-    : [process.env.HEROKU_CLIENT_URL, process.env.NETLIFY_CLIENT_URL];
+    : [
+        process.env.HEROKU_CLIENT_URL,
+        process.env.NETLIFY_CLIENT_URL,
+      ];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
@@ -45,6 +49,42 @@ const con = mysql.createConnection({
   user: process.env.USER,
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
+});
+
+app.post("/recipes/random", (req, res) => {
+  const tags = req.body.tags ? `&tags=${req.body.tags}` : ``;
+  request(
+    `https://api.spoonacular.com/recipes/random?apiKey=${process.env.RECIPE_API_KEY}${tags}&number=${process.env.RECIPE_NUMBER}`,
+    (error, response, body) => {
+      res.json({ recipes: JSON.parse(body).recipes });
+    }
+  );
+});
+
+app.post("/recipes/informationbulk", (req, res) => {
+  request(
+    `https://api.spoonacular.com/recipes/informationBulk?apiKey=${process.env.RECIPE_API_KEY}&ids=${req.body.favourites}`,
+    (error, response, body) => {
+      res.json(JSON.parse(body));
+    }
+  );
+});
+
+app.post("/recipes/complexsearch", (req, res) => {
+  const diet = req.body.diet ? `&diet=${req.body.diet}` : ``;
+  const intolerances = req.body.intolerances
+    ? `&intolerances=${req.body.intolerances}`
+    : ``;
+  const type = req.body.type ? `&type=${req.body.type}` : ``;
+  const cuisine = req.body.cuisine ? `&cuisine=${req.body.cuisine}` : ``;
+  const query = req.body.query ? `&query=${req.body.query}` : ``;
+
+  request(
+    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.RECIPE_API_KEY}&instructionsRequired=${req.body.instructions}&addRecipeInformation=${req.body.recipeinformation}&addRecipeInformation=${req.body.recipeinformation}&fillIngredients=${req.body.fillingredients}&number=${process.env.RECIPE_NUMBER}${diet}${intolerances}${type}${cuisine}&offset=${req.body.offset}${query}`,
+    (error, response, body) => {
+      res.json(JSON.parse(body));
+    }
+  );
 });
 
 app.post("/login", (req, res) => {
