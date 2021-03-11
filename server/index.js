@@ -15,7 +15,7 @@ app.use(
   cors({
     origin: process.env.LOCALHOST_CLIENT_URL
       ? [process.env.LOCALHOST_CLIENT_URL]
-      : [process.env.HEROKU_CLIENT_URL, process.env.NETLIFY_CLIENT_URL],
+      : [process.env.NETLIFY_CLIENT_URL],
     methods: ["GET", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"],
     credentials: true,
   })
@@ -24,7 +24,7 @@ app.use(
 app.use((req, res, next) => {
   const allowedOrigins = process.env.LOCALHOST_CLIENT_URL
     ? [process.env.LOCALHOST_CLIENT_URL]
-    : [process.env.HEROKU_CLIENT_URL, process.env.NETLIFY_CLIENT_URL];
+    : [process.env.NETLIFY_CLIENT_URL];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
