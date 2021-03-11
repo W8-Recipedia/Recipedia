@@ -8,14 +8,18 @@ import {
   Grid,
   makeStyles,
 } from "@material-ui/core";
-import { addToFavourites, removeFromFavourites, getUserFavourites } from "src/components/auth/UserAuth";
+import {
+  addToFavourites,
+  removeFromFavourites,
+  getUserFavourites,
+} from "src/components/auth/UserAuth";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteIcon from "@material-ui/icons/Favorite";
 import IconButton from "@material-ui/core/IconButton";
 import LocalDiningIcon from "@material-ui/icons/LocalDining";
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -76,13 +80,13 @@ const useStyles = makeStyles((theme) => ({
 
 const RecipeCard = ({ recipe, ...props }) => {
   const classes = useStyles();
-  const[favourited, setFavourited] = useState(false);
-  const[open, setOpen] = useState(false);
+  const [favourited, setFavourited] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useLayoutEffect(() => {
     getUserFavourites().then((res) => {
-      console.log(res.data.favourites)
-      console.log(recipe.id)
+      console.log(res.data.favourites);
+      console.log(recipe.id);
       if (res.data.favourites.includes(recipe.id.toString())) {
         setFavourited(true);
       }
@@ -96,22 +100,19 @@ const RecipeCard = ({ recipe, ...props }) => {
       removeFromFavourites(recipe.id);
     }
     setOpen(false);
-    setFavourited(prevFavourited => !prevFavourited);
+    setFavourited((prevFavourited) => !prevFavourited);
     setOpen(true);
   };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setOpen(false);
   };
 
   return (
-    <Card
-      className={classes.root}
-      elevation={4}
-    >
+    <Card className={classes.root} elevation={4}>
       <div onClick={() => props.onClick(recipe.id)} className={classes.media}>
         <img
           className={classes.image}
@@ -153,25 +154,33 @@ const RecipeCard = ({ recipe, ...props }) => {
 
           <Grid className={classes.statsItem} item>
             <IconButton onClick={handleClick}>
-            {favourited ? (
-              <>
-              <FavoriteIcon style={{ color: "red" }} />
-              <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-                <Alert severity="success">
-                  {recipe.title} has been added to your favourites.
-                </Alert>
-              </Snackbar>
-              </>
-        ) : (
-          <>
-            <FavoriteBorderIcon style={{ color: "red" }} />
-            <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-                <Alert severity="info">
-                  {recipe.title} has been removed from your favourites.
-                </Alert>
-              </Snackbar>
-          </>
-        )}
+              {favourited ? (
+                <>
+                  <FavoriteIcon style={{ color: "red" }} />
+                  <Snackbar
+                    open={open}
+                    autoHideDuration={2000}
+                    onClose={handleClose}
+                  >
+                    <Alert severity="success">
+                      {recipe.title} has been added to your favourites.
+                    </Alert>
+                  </Snackbar>
+                </>
+              ) : (
+                <>
+                  <FavoriteBorderIcon style={{ color: "red" }} />
+                  <Snackbar
+                    open={open}
+                    autoHideDuration={2000}
+                    onClose={handleClose}
+                  >
+                    <Alert severity="info">
+                      {recipe.title} has been removed from your favourites.
+                    </Alert>
+                  </Snackbar>
+                </>
+              )}
             </IconButton>
           </Grid>
         </Grid>

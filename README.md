@@ -74,6 +74,7 @@ ALTER TABLE `users`
 ALTER TABLE `users`
   MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT;
 ```
+
 If you get errors for the `json` columns, you can change them to `text` columns.
 
 ---
