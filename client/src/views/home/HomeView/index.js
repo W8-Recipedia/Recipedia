@@ -17,7 +17,7 @@ import { getRandomRecommendedRecipes } from "src/components/api/SpoonacularAPI";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,9 +31,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     paddingTop: "15px",
-  },
-  downArrow: {
-    fontSize: "15px",
   },
 }));
 
@@ -118,9 +115,8 @@ const Home = () => {
               ) : (
                 <>
                   <Button color="primary" onClick={loadMoreRecipes}>
-                    <ArrowDownwardIcon className={classes.downArrow} /> Load
-                    more recipes!
-                    <ArrowDownwardIcon className={classes.downArrow} />
+                    <ExpandMoreIcon /> Load more
+                    recipes! <ExpandMoreIcon  />
                   </Button>
                 </>
               )}
