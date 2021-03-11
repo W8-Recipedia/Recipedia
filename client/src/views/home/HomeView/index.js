@@ -119,7 +119,7 @@ const Home = () => {
                 <>
                   <Button color="primary" onClick={loadMoreRecipes}>
                     <ArrowDownwardIcon className={classes.downArrow} /> Load
-                    more recipes!{" "}
+                    more recipes!
                     <ArrowDownwardIcon className={classes.downArrow} />
                   </Button>
                 </>

@@ -29,18 +29,15 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
   return (
     <AppBar className={clsx(classes.root, className)} elevation={0} {...rest}>
       <Toolbar>
-        <RouterLink to="/app/home">
-          <img alt="Logo" src="/static/images/logo.svg" />
-        </RouterLink>
-        <Box flexGrow={1} />
-        <IconButton color="inherit" onClick={logOut} href="/">
-          <LogoutIcon />
-        </IconButton>
         <Hidden lgUp>
           <IconButton color="inherit" onClick={onMobileNavOpen}>
             <MenuIcon />
           </IconButton>
         </Hidden>
+        <Box flexGrow={1} />
+        <IconButton color="inherit" onClick={logOut} href="/">
+          <LogoutIcon />
+        </IconButton>
       </Toolbar>
     </AppBar>
   );

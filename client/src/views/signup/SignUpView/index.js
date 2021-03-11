@@ -17,6 +17,8 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  IconButton,
+  InputAdornment,
   Typography,
   makeStyles,
   SvgIcon,
@@ -24,6 +26,8 @@ import {
 import Page from "src/components/theme/page";
 import GoogleLogin from "react-google-login";
 import { Scrollbars } from "react-custom-scrollbars";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,6 +49,9 @@ const SignUpView = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [googleSignUpOpen, setGoogleSignUpOpen] = useState(false);
+  const [initialRender, setInitialRender] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
@@ -211,15 +218,34 @@ const SignUpView = () => {
                   <TextField
                     error={Boolean(touched.password && errors.password)}
                     fullWidth
-                    helperText={touched.password && errors.password}
+                    helperText={
+                      initialRender
+                        ? "Use 8 or more characters with a mix of letters, numbers & symbols"
+                        : touched.password && errors.password
+                    }
                     label="Password"
                     margin="normal"
                     name="password"
                     onBlur={handleBlur}
-                    onChange={handleChange}
-                    type="password"
+                    onChange={(e) => {
+                      handleChange(e);
+                      setInitialRender(false);
+                    }}
                     value={values.password}
                     variant="outlined"
+                    type={showPassword ? "text" : "password"} // <-- This is where the magic happens
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                          >
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                   <TextField
                     error={Boolean(
@@ -233,7 +259,10 @@ const SignUpView = () => {
                     margin="normal"
                     name="confirmPassword"
                     onBlur={handleBlur}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setInitialRender(false);
+                    }}
                     type="password"
                     value={values.confirmPassword}
                     variant="outlined"
@@ -273,7 +302,7 @@ const SignUpView = () => {
                     </Button>
                   </Box>
                   <Typography color="textSecondary" variant="body1">
-                    Have an account?{" "}
+                    Have an account?
                     <Link component={RouterLink} to="/login" variant="h6">
                       Log in
                     </Link>
@@ -346,7 +375,7 @@ const SignUpView = () => {
                             onChange={handleChange}
                           />
                           <Typography color="textSecondary" variant="body1">
-                            I have read the{" "}
+                            I have read the
                             <Link
                               color="primary"
                               component={RouterLink}

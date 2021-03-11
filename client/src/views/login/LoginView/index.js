@@ -12,6 +12,8 @@ import {
   DialogContentText,
   SvgIcon,
   TextField,
+  IconButton,
+  InputAdornment,
   Typography,
   makeStyles,
 } from "@material-ui/core";
@@ -22,6 +24,8 @@ import { login, googleLogin } from "src/components/auth/UserAuth";
 import Page from "src/components/theme/page";
 import GoogleLogin from "react-google-login";
 import { Scrollbars } from "react-custom-scrollbars";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,7 +48,10 @@ const LoginView = () => {
   const [open, setOpen] = React.useState(false);
   const [loginError, setLoginError] = useState("");
   const [googleAccount, setGoogleAccount] = useState(false);
-
+  const [initialRender, setInitialRender] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  
   const responseGoogle = (response) => {
     googleLogin(response.tokenId, response.profileObj).then((authResponse) => {
       if (authResponse === "Success") {
@@ -185,9 +192,21 @@ const LoginView = () => {
                     name="password"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    type="password"
                     value={values.password}
                     variant="outlined"
+                    type={showPassword ? "text" : "password"} // <-- This is where the magic happens
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                          >
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                   <Box my={2}>
                     <Button
@@ -202,7 +221,7 @@ const LoginView = () => {
                     </Button>
                   </Box>
                   <Typography color="textSecondary" variant="body1">
-                    Don&apos;t have an account?{" "}
+                    Don&apos;t have an account?
                     <Link component={RouterLink} to="/signup" variant="h6">
                       Sign up
                     </Link>
@@ -282,7 +301,7 @@ const LoginView = () => {
             >
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  Please login with your email and password!{" "}
+                  Please login with your email and password!
                 </DialogContentText>
               </DialogContent>
             </Dialog>
