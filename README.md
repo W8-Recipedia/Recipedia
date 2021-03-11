@@ -25,20 +25,21 @@ client/.env
 
 ```
 REACT_APP_SERVER_URL=http://localhost:3001
-REACT_APP_RECIPE_API_KEY=[SPOONACULAR API KEY]
-REACT_APP_MAX_RECIPE_NUMBER=21
 ```
 
 server/.env
 
 ```
 JWT_SECRET=[RANDOM ALPHABETICAL STRING]
-CLIENT_URL=http://localhost:3000
+LOCALHOST_CLIENT_URL=http://localhost:3000
 HOST=[DATABASE URL]
 USER=[DATABASE USER]
 PASSWORD=[DATABASE PASSWORD]
 DATABASE=[DATABASE NAME]
 PORT=3001
+RECIPE_API_KEY=[SPOONACULAR API KEY]
+RECIPE_NUMBER=24
+
 ```
 
 ---
@@ -60,9 +61,9 @@ CREATE TABLE `users` (
   `email` varchar(254) COLLATE utf8_unicode_ci NOT NULL,
   `password` text COLLATE utf8_unicode_ci,
   `diet` text COLLATE utf8_unicode_ci,
-  `allergens` json DEFAULT NULL,
-  `health` json DEFAULT NULL,
-  `favourites` json DEFAULT NULL
+  `allergens` text DEFAULT NULL,
+  `health` text DEFAULT NULL,
+  `favourites` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `users`
