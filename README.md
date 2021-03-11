@@ -47,10 +47,12 @@ Database setup (replace `+XX:XX` with your time zone):
 
 ```
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-
-START TRANSACTION;
-
 SET time_zone = "+XX:XX";
+
+CREATE TABLE `feedback` (
+  `email` varchar(254) COLLATE utf8_unicode_ci NOT NULL,
+  `message` text COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `users` (
   `userid` int(11) NOT NULL,
@@ -60,9 +62,9 @@ CREATE TABLE `users` (
   `email` varchar(254) COLLATE utf8_unicode_ci NOT NULL,
   `password` text COLLATE utf8_unicode_ci,
   `diet` text COLLATE utf8_unicode_ci,
-  `allergens` text DEFAULT NULL,
-  `health` text DEFAULT NULL,
-  `favourites` text DEFAULT NULL
+  `allergens` json DEFAULT NULL,
+  `health` json DEFAULT NULL,
+  `favourites` json DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `users`
@@ -71,9 +73,8 @@ ALTER TABLE `users`
 
 ALTER TABLE `users`
   MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT;
-
-COMMIT;
 ```
+If you get errors for the `json` columns, you can change them to `text` columns.
 
 ---
 
