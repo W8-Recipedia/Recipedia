@@ -1,4 +1,11 @@
 # Recipedia
+<p>
+<img src="https://img.shields.io/github/license/W8-Recipedia/Recipedia" />
+<img src="https://img.shields.io/snyk/vulnerabilities/github/W8-Recipedia/Recipedia" />
+<img src="https://img.shields.io/github/repo-size/W8-Recipedia/Recipedia" />
+<img src="https://img.shields.io/github/commit-activity/m/W8-Recipedia/Recipedia" />
+<img src="https://img.shields.io/netlify/f95d5909-051d-4a94-ad17-4f8c86c80fc1" />
+</p>
 
 Recipedia is a web application that seeks to revolutionize the way that people find personalised recipes. It recommends the most suitable recipes to users based on their dietary preferences, allergies, and health data. It also has a search function, which allows users to filter recipes by cuisine and/or diet.
 
