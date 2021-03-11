@@ -3,7 +3,6 @@
 <img src="https://img.shields.io/github/license/W8-Recipedia/Recipedia" />
 <img src="https://img.shields.io/snyk/vulnerabilities/github/W8-Recipedia/Recipedia" />
 <img src="https://img.shields.io/github/repo-size/W8-Recipedia/Recipedia" />
-<img src="https://img.shields.io/github/commit-activity/w/W8-Recipedia/Recipedia" />
 <img src="https://img.shields.io/netlify/f95d5909-051d-4a94-ad17-4f8c86c80fc1" />
 </p>
 
