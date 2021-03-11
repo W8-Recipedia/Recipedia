@@ -25,20 +25,20 @@ client/.env
 
 ```
 REACT_APP_SERVER_URL=http://localhost:3001
-REACT_APP_RECIPE_API_KEY=[SPOONACULAR API KEY]
-REACT_APP_MAX_RECIPE_NUMBER=21
 ```
 
 server/.env
 
 ```
 JWT_SECRET=[RANDOM ALPHABETICAL STRING]
-CLIENT_URL=http://localhost:3000
+LOCALHOST_CLIENT_URL=http://localhost:3000
 HOST=[DATABASE URL]
 USER=[DATABASE USER]
 PASSWORD=[DATABASE PASSWORD]
 DATABASE=[DATABASE NAME]
 PORT=3001
+RECIPE_API_KEY=[SPOONACULAR API KEY]
+RECIPE_NUMBER=24
 ```
 
 ---
@@ -47,10 +47,12 @@ Database setup (replace `+XX:XX` with your time zone):
 
 ```
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-
-START TRANSACTION;
-
 SET time_zone = "+XX:XX";
+
+CREATE TABLE `feedback` (
+  `email` varchar(254) COLLATE utf8_unicode_ci NOT NULL,
+  `message` text COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `users` (
   `userid` int(11) NOT NULL,
@@ -71,9 +73,8 @@ ALTER TABLE `users`
 
 ALTER TABLE `users`
   MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT;
-
-COMMIT;
 ```
+If you get errors for the `json` columns, you can change them to `text` columns.
 
 ---
 
