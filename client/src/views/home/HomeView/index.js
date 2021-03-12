@@ -40,7 +40,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [selectedRecipeId, setSelectedRecipeId] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
-  const [dlgOpen, setDlgOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [offset, setOffset] = useState(0);
   const [intolerances, setIntolerances] = useState([]);
   const [diet, setDiet] = useState("");
@@ -110,21 +110,22 @@ const Home = () => {
               />
             </Box>
             <Grid item xs={12} className={classes.loadMoreGridBtn}>
-              {loading ? (
-                <CircularProgress />
-              ) : (
-                <>
-                  <Button color="primary" onClick={loadMoreRecipes}>
-                    <ExpandMoreIcon /> Load more
-                    recipes! <ExpandMoreIcon  />
-                  </Button>
-                </>
-              )}
+              <Box mt={3}>
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  <>
+                    <Button color="primary" onClick={loadMoreRecipes}>
+                      <ExpandMoreIcon /> Load more recipes! <ExpandMoreIcon />
+                    </Button>
+                  </>
+                )}
+              </Box>
             </Grid>
           </Container>
           <RecipeDialog
-            open={dlgOpen}
-            handleClose={() => setDlgOpen(false)}
+            open={dialogOpen}
+            handleClose={() => setDialogOpen(false)}
             recipeId={selectedRecipeId}
             recipeInfo={selectedRecipeInfo}
           />
@@ -152,7 +153,7 @@ const Home = () => {
   function loadRecipeById(id) {
     const clickedRecipe = recipes.find((recipe) => recipe.id === id);
     setSelectedRecipeInfo(clickedRecipe);
-    setDlgOpen(true);
+    setDialogOpen(true);
   }
 };
 

@@ -83,7 +83,11 @@ const Favourites = () => {
                 xs={12}
                 style={{ display: "flex", justifyContent: "center" }}
               >
-                {loading ? <CircularProgress /> : null}
+                {loading ? (
+                  <Box mt={6}>
+                    <CircularProgress />
+                  </Box>
+                ) : null}
               </Grid>
             </Box>
           </Container>
