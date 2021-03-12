@@ -195,7 +195,7 @@ export const changeUserInfo = async (firstname, lastname, email) => {
   }
 };
 
-export const changePreferences = async (diet, allergens, height, weight) => {
+export const changePreferences = async (diet, allergens, height, weight, activity) => {
   var localtoken;
   localStorage.getItem("usertoken")
     ? (localtoken = localStorage.getItem("usertoken"))
@@ -207,6 +207,7 @@ export const changePreferences = async (diet, allergens, height, weight) => {
       allergens: allergens,
       height: height,
       weight: weight,
+      activity: activity,
     },
     {
       headers: {

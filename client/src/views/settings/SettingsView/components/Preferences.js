@@ -21,6 +21,7 @@ import {
   makeStyles,
   Avatar,
   colors,
+  Slider,
 } from "@material-ui/core";
 import EqualizerOutlinedIcon from "@material-ui/icons/EqualizerOutlined";
 import {
@@ -62,6 +63,7 @@ const Preferences = ({ className, ...rest }) => {
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [activity, setActivity] = useState(0);
 
   useLayoutEffect(() => {
     getUserPreferences().then((authResponse) => {
@@ -81,6 +83,7 @@ const Preferences = ({ className, ...rest }) => {
         if (authResponse.data.health) {
           setHeight(authResponse.data.health.height);
           setWeight(authResponse.data.health.weight);
+          setActivity(authResponse.data.health.activity);
         }
       }
       setButtonDisabled(true);
@@ -108,15 +111,17 @@ const Preferences = ({ className, ...rest }) => {
         }
       }
     }
-    changePreferences(diet, allergenList, height, weight).then((response) => {
-      if (response.data.err) {
-        setError(true);
-        setOpen(true);
-      } else if (response) {
-        setError(false);
-        setOpen(true);
+    changePreferences(diet, allergenList, height, weight, activity).then(
+      (response) => {
+        if (response.data.err) {
+          setError(true);
+          setOpen(true);
+        } else if (response) {
+          setError(false);
+          setOpen(true);
+        }
       }
-    });
+    );
   };
 
   const {
@@ -327,7 +332,7 @@ const Preferences = ({ className, ...rest }) => {
             </Grid>
             <Grid className={classes.item} item md={4} sm={6} xs={12}>
               <Typography color="textPrimary" gutterBottom variant="h6">
-                Health Metrics
+                Health metrics
               </Typography>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
@@ -355,7 +360,7 @@ const Preferences = ({ className, ...rest }) => {
                       setButtonDisabled(false);
                     }}
                     value={weight}
-                  />
+                  />{" "}
                 </Grid>
                 <Grid item xs={12}>
                   <Card className={clsx(classes.root, className)} {...rest}>
@@ -414,6 +419,32 @@ const Preferences = ({ className, ...rest }) => {
                       </Typography>
                     </CardContent>
                   </Card>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h6" gutterBottom>
+                    Activity level
+                  </Typography>
+                  <Typography
+                    gutterBottom
+                    color="textSecondary"
+                    variant="body2"
+                  >
+                    How many hours of exercise do you get every week?
+                  </Typography>
+                  <Box pt={2} pr={3}>
+                    <Slider
+                      value={activity}
+                      onChange={(e, value) => {
+                        setActivity(value);
+                        setButtonDisabled(false);
+                      }}
+                      aria-labelledby="activity"
+                      valueLabelDisplay="auto"
+                      step={0.5}
+                      min={0}
+                      max={20}
+                    />
+                  </Box>
                 </Grid>
               </Grid>
             </Grid>
