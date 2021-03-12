@@ -17,9 +17,9 @@ import {
   Search as SearchIcon,
   Settings as SettingsIcon,
 } from "react-feather";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { getUserInfo } from "src/components/auth/UserAuth";
+import { getUserFavourites, getUserInfo } from "src/components/auth/UserAuth";
 
 import NavItem from "src/views/dashboard/DashboardView/components/NavItem";
 import PropTypes from "prop-types";
@@ -82,7 +82,10 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
   const [imageURL, setImageURL] = useState("");
-  const [userName, setUserName] = useState(() => {
+  const [userRank, setUserRank] = useState("");
+  const [userName, setUserName] = useState("");
+
+  useLayoutEffect(() => {
     getUserInfo().then((authResponse) => {
       if (authResponse.data.loggedIn) {
         setUserName(
@@ -94,8 +97,20 @@ const NavBar = ({ onMobileClose, openMobile }) => {
       if (authResponse.data.user.imageUrl) {
         setImageURL(authResponse.data.user.imageUrl);
       }
+      getUserFavourites().then((res) => {
+        if (res.data.favourites) {
+          const userFavouritesLength = res.data.favourites.length;
+          setUserRank(userFavouritesLength < 5
+            ? "Recipedia Beginner"
+            : userFavouritesLength < 10
+            ? "Food Connoisseur"
+            : userFavouritesLength < 15
+            ? "Sustenance Master"
+            : "Nourishment God")
+        }
+      });
     });
-  });
+  }, []);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -114,12 +129,16 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             to="/app/settings"
           />
         </Box>
-        <Typography className={classes.name} color="textPrimary" variant="h5">
-          {userName}
-        </Typography>
-        <Typography color="textSecondary" variant="body2">
-          {""}
-        </Typography>
+        <Box pb={1}>
+          <Typography className={classes.name} color="textPrimary" variant="h5">
+            {userName}
+          </Typography>
+        </Box>
+        <Box pb={1}>
+          <Typography color="textSecondary" variant="body2">
+            {userRank}
+          </Typography>
+        </Box>
       </Box>
       <Divider />
       <Box p={2}>

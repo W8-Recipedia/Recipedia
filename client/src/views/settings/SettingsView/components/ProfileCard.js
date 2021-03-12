@@ -13,7 +13,11 @@ import {
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getUserInfo, deleteAccount } from "src/components/auth/UserAuth";
+import {
+  getUserInfo,
+  getUserFavourites,
+  deleteAccount,
+} from "src/components/auth/UserAuth";
 import PropTypes from "prop-types";
 import { red } from "@material-ui/core/colors";
 
@@ -34,6 +38,7 @@ const ProfileCard = ({ className, ...rest }) => {
   const [imageURL, setImageURL] = useState("");
   const [open, setOpen] = React.useState(false);
   const [deleteStatus, setDeleteStatus] = React.useState(false);
+  const [userRank, setUserRank] = useState("");
 
   const [userName, setUserName] = useState(() => {
     getUserInfo().then((authResponse) => {
@@ -46,6 +51,20 @@ const ProfileCard = ({ className, ...rest }) => {
         if (authResponse.data.user.imageUrl) {
           setImageURL(authResponse.data.user.imageUrl);
         }
+      }
+    });
+    getUserFavourites().then((res) => {
+      if (res.data.favourites) {
+        const userFavouritesLength = res.data.favourites.length;
+        setUserRank(
+          userFavouritesLength < 5
+            ? "Recipedia Beginner"
+            : userFavouritesLength < 10
+            ? "Food Connoisseur"
+            : userFavouritesLength < 15
+            ? "Sustenance Master"
+            : "Nourishment God"
+        );
       }
     });
   });
@@ -63,16 +82,21 @@ const ProfileCard = ({ className, ...rest }) => {
     <Card {...rest}>
       <CardContent>
         <Box alignItems="center" display="flex" flexDirection="column">
-          <Box pb={2}>
+          <Box pb={3}>
             <Avatar className={classes.avatar} src={imageURL} />
           </Box>
-          <Typography color="textPrimary" gutterBottom variant="h3">
-            {userName}
-          </Typography>
-          <Typography color="textSecondary" variant="body1">
-            {""}
-          </Typography>
-          <Box pt={2}>
+          <Box pb={1}>
+            <Typography color="textPrimary" gutterBottom variant="h3">
+              {userName}
+            </Typography>
+          </Box>
+          <Box pb={2}>
+            <Typography color="textSecondary" gutterBottom variant="body1">
+              {userRank}
+            </Typography>
+          </Box>
+
+          <Box>
             <Button
               color="secondary"
               variant="text"

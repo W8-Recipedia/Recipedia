@@ -45,7 +45,11 @@ const Favourites = () => {
 
   useLayoutEffect(() => {
     getUserFavourites().then((res) => {
-      loadMultipleRecipes(res.data.favourites);
+      if (res.data.favourites) {
+        if (res.data.favourites.length > 0) {
+          loadMultipleRecipes(res.data.favourites);
+        }
+      }
     });
   }, []);
 
