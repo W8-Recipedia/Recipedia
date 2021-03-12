@@ -45,7 +45,11 @@ const Favourites = () => {
 
   useLayoutEffect(() => {
     getUserFavourites().then((res) => {
-      loadMultipleRecipes(res.data.favourites);
+      if (res.data.favourites) {
+        if (res.data.favourites.length > 0) {
+          loadMultipleRecipes(res.data.favourites);
+        }
+      }
     });
   }, []);
 
@@ -83,7 +87,11 @@ const Favourites = () => {
                 xs={12}
                 style={{ display: "flex", justifyContent: "center" }}
               >
-                {loading ? <CircularProgress /> : null}
+                {loading ? (
+                  <Box mt={6}>
+                    <CircularProgress />
+                  </Box>
+                ) : null}
               </Grid>
             </Box>
           </Container>
