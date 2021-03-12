@@ -18,6 +18,7 @@ import {
   DialogContent,
   DialogContentText,
   IconButton,
+  LinearProgress,
   InputAdornment,
   Typography,
   makeStyles,
@@ -41,6 +42,18 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     margin: "auto",
     paddingBottom: theme.spacing(3),
+  },
+  red: {
+    backgroundColor: "#ff4040",
+  },
+  fadedRed: {
+    backgroundColor: "#ffabab",
+  },
+  green: {
+    backgroundColor: "#52e36e",
+  },
+  fadedGreen: {
+    backgroundColor: "#99ffad",
   },
 }));
 
@@ -247,6 +260,45 @@ const SignUpView = () => {
                       ),
                     }}
                   />
+                  {values.password ? (
+                    <Box pb={1}>
+                      <LinearProgress
+                        variant="determinate"
+                        classes={
+                          Boolean(errors.password)
+                            ? {
+                                colorPrimary: classes.fadedRed,
+                                barColorPrimary: classes.red,
+                              }
+                            : {
+                                colorPrimary: classes.fadedGreen,
+                                barColorPrimary: classes.green,
+                              }
+                        }
+                        value={
+                          values.password.match(
+                            /^((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]))/
+                          ) && values.password.length > 12
+                            ? 100
+                            : values.password.match(
+                                /^((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])|(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])|(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])|(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]))/
+                              ) || values.password.length > 8
+                            ? 75
+                            : values.password.match(
+                                /^((?=.*[a-z])(?=.*[A-Z])|(?=.*[a-z])(?=.*[0-9])|(?=.*[A-Z])(?=.*[0-9]))/
+                              ) || values.password.length > 8
+                            ? 50
+                            : (values.password.match(
+                                /^((?=.*[a-z])(?=.*[A-Z]))/
+                              ) &&
+                                values.password.length > 4) ||
+                              values.password.length > 6
+                            ? 25
+                            : 0
+                        }
+                      />
+                    </Box>
+                  ) : null}
                   <TextField
                     error={Boolean(
                       touched.confirmPassword && errors.confirmPassword
@@ -340,7 +392,7 @@ const SignUpView = () => {
               open={googleSignUpOpen}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
-              fullWidth
+
               onClose={() => {
                 setGoogleSignUpOpen(false);
               }}
@@ -368,7 +420,12 @@ const SignUpView = () => {
                   <Form>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
-                        <Box alignItems="center" display="flex" ml={-1}>
+                        <Box
+                          alignItems="center"
+                          justifyContent="center"
+                          display="flex"
+                          pr={2}
+                        >
                           <Checkbox
                             checked={values.gpolicy}
                             name="gpolicy"
@@ -393,28 +450,28 @@ const SignUpView = () => {
                           </FormHelperText>
                         )}
                       </DialogContentText>
+                      <Box justifyContent="center" display="flex" pb={2}>
+                        <GoogleLogin
+                          clientId="265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
+                          buttonText="Log in with Google"
+                          onSuccess={handleGoogleSubmit}
+                          onFailure={handleGoogleSubmit}
+                          render={(renderProps) => (
+                            <Button
+                              color="primary"
+                              variant="contained"
+                              disabled={renderProps.disabled}
+                              onClick={
+                                isValid && dirty ? renderProps.onClick : null
+                              }
+                              type="submit"
+                            >
+                              Submit
+                            </Button>
+                          )}
+                        />
+                      </Box>
                     </DialogContent>
-                    <DialogActions className={classes.loginbutton}>
-                      <GoogleLogin
-                        clientId="265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
-                        buttonText="Log in with Google"
-                        onSuccess={handleGoogleSubmit}
-                        onFailure={handleGoogleSubmit}
-                        render={(renderProps) => (
-                          <Button
-                            color="primary"
-                            variant="contained"
-                            disabled={renderProps.disabled}
-                            onClick={
-                              isValid && dirty ? renderProps.onClick : null
-                            }
-                            type="submit"
-                          >
-                            Submit
-                          </Button>
-                        )}
-                      />
-                    </DialogActions>
                   </Form>
                 )}
               </Formik>
