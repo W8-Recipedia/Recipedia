@@ -85,8 +85,6 @@ const RecipeCard = ({ recipe, ...props }) => {
 
   useLayoutEffect(() => {
     getUserFavourites().then((res) => {
-      console.log(res.data.favourites);
-      console.log(recipe.id);
       if (res.data.favourites.includes(recipe.id.toString())) {
         setFavourited(true);
       }
