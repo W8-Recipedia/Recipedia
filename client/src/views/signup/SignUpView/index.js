@@ -375,7 +375,7 @@ const SignUpView = () => {
                             onChange={handleChange}
                           />
                           <Typography color="textSecondary" variant="body1">
-                            I have read the
+                            I have read the{" "}
                             <Link
                               color="primary"
                               component={RouterLink}
