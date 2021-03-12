@@ -387,7 +387,11 @@ app.post("/changepreferences", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-    const healthData = { height: req.body.height, weight: req.body.weight };
+    const healthData = {
+      height: req.body.height,
+      weight: req.body.weight,
+      activity: req.body.activity,
+    };
     con.query(
       "UPDATE users SET diet = ?, allergens = ?, health = ? WHERE email = ?",
       [

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import {
   Dialog,
@@ -63,7 +63,7 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const classes = useStyles();
-  const [checked, setChecked] = React.useState([0]);
+  const [checked, setChecked] = useState([0]);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
