@@ -429,7 +429,7 @@ const Preferences = ({ className, ...rest }) => {
                     color="textSecondary"
                     variant="body2"
                   >
-                    How many hours of exercise do you get every week?
+                    How many hours do you exercise every week?
                   </Typography>
                   <Box pt={2} pr={3}>
                     <Slider
