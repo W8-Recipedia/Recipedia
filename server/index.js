@@ -295,33 +295,6 @@ app.post("/gsignup", (req, res) => {
   );
 });
 
-app.post("/resendverification", (req, res) => {
-  con.query(
-    "SELECT * FROM users WHERE email = ?",
-    req.body.email,
-    (err, result) => {
-      if (err) {
-        res.json({ message: err });
-      } else if (result.length != 1) {
-        res.json({ message: "noAccount" });
-      } else if (result[0].verifiedemail == 1) {
-        res.json({ message: "accountAlreadyVerified" });
-      } else {
-        const user = {
-          email: req.body.email,
-        };
-        sendVerificationEmail(user).then((response) => {
-          if (response === "error") {
-            res.json({ message: "emailError" });
-          } else {
-            res.json({ message: "emailSuccess" });
-          }
-        });
-      }
-    }
-  );
-});
-
 app.get("/verifyemail", (req, res) => {
   if (!req.headers["x-access-token"]) {
     res.json({ message: "notLoggedIn" });
@@ -348,6 +321,33 @@ app.get("/verifyemail", (req, res) => {
       }
     );
   }
+});
+
+app.post("/resendverification", (req, res) => {
+  con.query(
+    "SELECT * FROM users WHERE email = ?",
+    req.body.email,
+    (err, result) => {
+      if (err) {
+        res.json({ message: err });
+      } else if (result.length != 1) {
+        res.json({ message: "noAccount" });
+      } else if (result[0].verifiedemail == 1) {
+        res.json({ message: "accountAlreadyVerified" });
+      } else {
+        const user = {
+          email: req.body.email,
+        };
+        sendVerificationEmail(user).then((response) => {
+          if (response === "error") {
+            res.json({ message: "emailError" });
+          } else {
+            res.json({ message: "emailSuccess" });
+          }
+        });
+      }
+    }
+  );
 });
 
 app.get("/getuserdata", (req, res) => {
