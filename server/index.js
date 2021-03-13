@@ -336,9 +336,9 @@ app.get("/verifyemail", (req, res) => {
           con.query(
             "UPDATE users SET verifiedemail = ? WHERE email = ?",
             [1, decoded.user.email],
-            (err, result) => {
+            (err) => {
               if (err) {
-                res.json({ message: "databaseError" });
+                res.json({ message: err });
               } else {
                 res.json({ message: "userVerified" });
               }
@@ -548,7 +548,7 @@ app.post("/changeuserinfo", (req, res) => {
                 const token = jwt.sign({ user }, process.env.JWT_SECRET, {
                   expiresIn: "30m",
                 });
-                res.json({ token: token, message: "updateSuccess" });
+                res.json({ message: "updateSuccess", token: token });
               }
             }
           );
@@ -590,7 +590,7 @@ app.post("/changeuserpreferences", (req, res) => {
                 const token = jwt.sign({ user }, process.env.JWT_SECRET, {
                   expiresIn: "30m",
                 });
-                res.json({ token: token, message: "updateSuccess" });
+                res.json({ message: "updateSuccess", token: token });
               }
             }
           );
@@ -665,8 +665,8 @@ app.post("/changeuserpassword", (req, res) => {
                                     }
                                   );
                                   res.json({
-                                    token: token,
                                     message: "passwordChanged",
+                                    token: token,
                                   });
                                 }
                               }
@@ -709,7 +709,7 @@ app.post("/submitfeedback", (req, res) => {
           };
           transporter.sendMail(mailOptions, (err) => {
             if (err) {
-              res.json({ message: err, token: newtoken });
+              res.json({ message: err, token: token });
             } else {
               res.json({ message: "feedbackSent", token: token });
             }
