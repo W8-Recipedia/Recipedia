@@ -91,6 +91,7 @@ const SignUpView = () => {
   const handleGoogleSubmit = (response) => {
     googleSignUp(response.tokenId, response.profileObj).then((authResponse) => {
       if (authResponse === "success") {
+        setGoogleSignUpOpen(false);
         setVerifyEmailOpen(true);
       } else {
         setGoogleSignUpOpen(false);
