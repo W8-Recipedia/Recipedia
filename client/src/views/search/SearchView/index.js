@@ -43,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
+  placeholderText: {
+    paddingTop: theme.spacing(4)
+  }
 }));
 
 const cuisineNames = [
@@ -216,15 +219,14 @@ const SearchView = () => {
             <Box mt={3}>
               {initialSearch ? (
                 <>
-                  <Box mt={10}>
                     <Typography
+                      className={classes.placeholderText}
                       color="textSecondary"
                       align="center"
                       variant="h1"
                     >
                       Start searching to find your new favourite recipes!
                     </Typography>
-                  </Box>
                 </>
               ) : (
                 <>
@@ -237,25 +239,16 @@ const SearchView = () => {
               )}
               {emptySearch ? (
                 <>
-                  <Box mt={10}>
                     <Typography
+                      className={classes.placeholderText}
                       color="textSecondary"
                       align="center"
                       variant="h1"
                     >
                       No results found for your dietary preferences.
                     </Typography>
-                  </Box>
                 </>
-              ) : (
-                <>
-                  <RecipeList
-                    recipes={recipes}
-                    onRecipeClick={onRecipeClick}
-                    loading={loading}
-                  />
-                </>
-              )}
+              ) : null }
               <Grid item xs={12}>
                 {loading ? <LinearProgress /> : null}
               </Grid>
