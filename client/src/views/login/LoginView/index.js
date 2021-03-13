@@ -55,11 +55,11 @@ const LoginView = () => {
 
   const responseGoogle = (response) => {
     googleLogin(response.tokenId, response.profileObj).then((authResponse) => {
-      if (authResponse === "Success") {
+      if (authResponse === "success") {
         navigate("/app/home");
-      } else if (authResponse === "noGoogle") {
+      } else if (authResponse === "wrongAccountType") {
         setLoginError(authResponse);
-      } else if (authResponse === "notVerified") {
+      } else if (authResponse === "accountNotVerified") {
         setVerifyError(true);
       } else {
         setOpen(true);
@@ -70,12 +70,12 @@ const LoginView = () => {
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
     login(values.email, values.password).then((authResponse) => {
-      if (authResponse === "Success") {
+      if (authResponse === "success") {
         navigate("/app/home");
       } else {
-        if (authResponse === "googleAccount") {
+        if (authResponse === "wrongAccountType") {
           setGoogleAccount(true);
-        } else if (authResponse === "notVerified") {
+        } else if (authResponse === "accountNotVerified") {
           setVerifyError(true);
         } else {
           setLoginError(authResponse);
@@ -311,7 +311,7 @@ const LoginView = () => {
               </DialogContent>
             </Dialog>
             <Dialog
-              open={Boolean(loginError === "noGoogle")}
+              open={Boolean(loginError === "wrongAccountType")}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
               onClose={() => {

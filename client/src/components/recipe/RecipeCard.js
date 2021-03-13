@@ -9,7 +9,7 @@ import {
 import { React, useLayoutEffect, useState } from "react";
 import {
   addToFavourites,
-  getUserFavourites,
+  getUserData,
   removeFromFavourites,
 } from "src/components/auth/UserAuth";
 
@@ -85,7 +85,7 @@ const RecipeCard = ({ recipe, ...props }) => {
   const [open, setOpen] = useState(false);
 
   useLayoutEffect(() => {
-    getUserFavourites().then((res) => {
+    getUserData().then((res) => {
       if (res.data.favourites) {
         if (res.data.favourites.includes(recipe.id.toString())) {
           setFavourited(true);
@@ -166,7 +166,7 @@ const RecipeCard = ({ recipe, ...props }) => {
               autoHideDuration={1200}
               onClose={handleSnackbarClose}
             >
-              <Alert severity={favourited ? "Success" : "info"}>
+              <Alert severity={favourited ? "success" : "info"}>
                 {favourited
                   ? recipe.title + " has been added to your favourites."
                   : recipe.title + " has been removed from your favourites."}

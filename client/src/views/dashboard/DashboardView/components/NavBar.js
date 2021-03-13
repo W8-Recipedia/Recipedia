@@ -19,7 +19,7 @@ import {
 } from "react-feather";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { getUserFavourites, getUserInfo } from "src/components/auth/UserAuth";
+import { getUserData, getUserInfo } from "src/components/auth/UserAuth";
 
 import NavItem from "src/views/dashboard/DashboardView/components/NavItem";
 import PropTypes from "prop-types";
@@ -97,18 +97,20 @@ const NavBar = ({ onMobileClose, openMobile }) => {
       if (authResponse.data.user.imageUrl) {
         setImageURL(authResponse.data.user.imageUrl);
       }
-      getUserFavourites().then((res) => {
+      getUserData().then((res) => {
         if (res.data.favourites) {
           const userFavouritesLength = res.data.favourites.length;
-          setUserRank(userFavouritesLength < 5
-            ? "Recipedia Beginner"
-            : userFavouritesLength < 10
-            ? "Food Connoisseur"
-            : userFavouritesLength < 15
-            ? "Sustenance Master"
-            : "Nourishment God")
+          setUserRank(
+            userFavouritesLength < 5
+              ? "Recipedia Beginner"
+              : userFavouritesLength < 10
+              ? "Food Connoisseur"
+              : userFavouritesLength < 15
+              ? "Sustenance Master"
+              : "Nourishment God"
+          );
         } else {
-          setUserRank("Recipedia Beginner")
+          setUserRank("Recipedia Beginner");
         }
       });
     });

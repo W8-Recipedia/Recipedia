@@ -1,28 +1,29 @@
-import React, { useLayoutEffect, useState } from "react";
-import { getUserPreferences } from "src/components/auth/UserAuth";
 import {
   Box,
-  Grid,
-  Container,
   Card,
   CardContent,
+  Checkbox,
+  Container,
+  Grid,
+  Input,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  Select,
   Typography,
   makeStyles,
-  Select,
-  InputLabel,
-  Input,
-  Checkbox,
-  MenuItem,
-  ListItemText,
 } from "@material-ui/core";
+import React, { useLayoutEffect, useState } from "react";
+
+import LinearProgress from "@material-ui/core/LinearProgress";
 import Page from "src/components/theme/page";
-// import { getExampleRecipes } from "src/api/mockAPI";
-import { getComplexRecipes } from "src/components/api/SpoonacularAPI";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
-import Searchbar from "src/views/search/SearchView/components/Searchbar";
 import { Scrollbars } from "react-custom-scrollbars";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import Searchbar from "src/views/search/SearchView/components/Searchbar";
+// import { getExampleRecipes } from "src/api/mockAPI";
+import { getComplexRecipes } from "src/components/api/SpoonacularAPI";
+import { getUserData } from "src/components/auth/UserAuth";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -105,7 +106,7 @@ const SearchView = () => {
   const [diet, setDiet] = useState("");
 
   useLayoutEffect(() => {
-    getUserPreferences().then((res) => {
+    getUserData().then((res) => {
       setIntolerances(res.data.allergens);
       setDiet(res.data.diet);
     });

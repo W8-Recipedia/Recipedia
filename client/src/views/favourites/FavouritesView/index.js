@@ -1,21 +1,22 @@
-import React, { useState, useLayoutEffect, useEffect } from "react";
-import { getUserFavourites } from "src/components/auth/UserAuth";
 import {
   Box,
-  Container,
-  makeStyles,
   Card,
-  Typography,
   CardContent,
+  Container,
   Grid,
+  Typography,
+  makeStyles,
 } from "@material-ui/core";
-import Page from "src/components/theme/page";
-// import { getExampleRecipes } from "src/api/mockAPI";
-import { getMultipleRecipes } from "src/components/api/SpoonacularAPI";
-import { Scrollbars } from "react-custom-scrollbars";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Page from "src/components/theme/page";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
+import { Scrollbars } from "react-custom-scrollbars";
+// import { getExampleRecipes } from "src/api/mockAPI";
+import { getMultipleRecipes } from "src/components/api/SpoonacularAPI";
+import { getUserData } from "src/components/auth/UserAuth";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,7 +45,7 @@ const Favourites = () => {
   // }, []);
 
   useLayoutEffect(() => {
-    getUserFavourites().then((res) => {
+    getUserData().then((res) => {
       if (res.data.favourites) {
         if (res.data.favourites.length > 0) {
           loadMultipleRecipes(res.data.favourites);

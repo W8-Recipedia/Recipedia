@@ -1,7 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
 import * as Yup from "yup";
-import { Formik, Form } from "formik";
-import { changePassword } from "src/components/auth/UserAuth";
 
 import {
   Box,
@@ -9,12 +6,16 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Divider,
-  TextField,
   Dialog,
   DialogContent,
   DialogContentText,
+  Divider,
+  TextField,
 } from "@material-ui/core";
+import { Form, Formik } from "formik";
+import React, { useLayoutEffect, useState } from "react";
+
+import { changePassword } from "src/components/auth/UserAuth";
 import { getUserInfo } from "src/components/auth/UserAuth";
 
 const Password = () => {
@@ -34,7 +35,7 @@ const Password = () => {
   const handleSubmit = (values, actions) => {
     changePassword(values.currentPassword, values.password).then(
       (authResponse) => {
-        if (authResponse === "Success") {
+        if (authResponse === "success") {
           setOpen(true);
           actions.resetForm({});
         } else {

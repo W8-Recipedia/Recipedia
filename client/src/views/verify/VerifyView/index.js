@@ -45,7 +45,7 @@ const VerifyView = () => {
   const resendVerification = (values) => {
     resendEmail(values.email).then((authResponse) => {
       console.log(authResponse);
-      if (authResponse === "Success") {
+      if (authResponse === "success") {
         setEmailSent(true);
         setEmailError(false);
       } else {
@@ -58,7 +58,7 @@ const VerifyView = () => {
   useLayoutEffect(() => {
     verifyEmail(window.location.pathname.replace("/verify/", "")).then(
       (authResponse) => {
-        if (authResponse === "notVerified") {
+        if (authResponse === "accountNotVerified") {
           setVerified(false);
         } else {
           setVerified(true);

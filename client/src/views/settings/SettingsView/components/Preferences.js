@@ -21,10 +21,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useLayoutEffect, useState } from "react";
-import {
-  changePreferences,
-  getUserPreferences,
-} from "src/components/auth/UserAuth";
+import { changePreferences, getUserData } from "src/components/auth/UserAuth";
 
 import EqualizerOutlinedIcon from "@material-ui/icons/EqualizerOutlined";
 import PropTypes from "prop-types";
@@ -67,7 +64,7 @@ const Preferences = ({ className, ...rest }) => {
   const [activity, setActivity] = useState(0);
 
   useLayoutEffect(() => {
-    getUserPreferences().then((authResponse) => {
+    getUserData().then((authResponse) => {
       if (authResponse.data.loggedIn) {
         if (authResponse.data.diet) {
           setDiet(authResponse.data.diet);

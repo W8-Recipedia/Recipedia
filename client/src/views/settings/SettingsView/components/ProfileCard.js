@@ -13,7 +13,7 @@ import {
 import React, { useState } from "react";
 import {
   deleteAccount,
-  getUserFavourites,
+  getUserData,
   getUserInfo,
 } from "src/components/auth/UserAuth";
 
@@ -53,7 +53,7 @@ const ProfileCard = ({ className, ...rest }) => {
         }
       }
     });
-    getUserFavourites().then((res) => {
+    getUserData().then((res) => {
       if (res.data.favourites) {
         const userFavouritesLength = res.data.favourites.length;
         setUserRank(
@@ -73,7 +73,7 @@ const ProfileCard = ({ className, ...rest }) => {
 
   const deleteAcc = () => {
     deleteAccount().then((response) => {
-      if (response === "Success") {
+      if (response === "success") {
         setOpen(false);
         setDeleteStatus(true);
       }

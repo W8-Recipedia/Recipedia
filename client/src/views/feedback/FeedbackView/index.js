@@ -1,24 +1,25 @@
-import React, { useState, useLayoutEffect } from "react";
-import clsx from "clsx";
-import PropTypes from "prop-types";
 import {
-  Container,
-  Grid,
-  makeStyles,
   Box,
   Button,
   Card,
   CardContent,
+  Container,
   Dialog,
   DialogContent,
   DialogContentText,
-  Typography,
   Divider,
+  Grid,
   TextField,
+  Typography,
+  makeStyles,
 } from "@material-ui/core";
-import Page from "src/components/theme/page";
-import { Scrollbars } from "react-custom-scrollbars";
+import React, { useLayoutEffect, useState } from "react";
 import { getUserInfo, submitFeeback } from "src/components/auth/UserAuth";
+
+import Page from "src/components/theme/page";
+import PropTypes from "prop-types";
+import { Scrollbars } from "react-custom-scrollbars";
+import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -188,7 +189,7 @@ const FeedbackView = ({ className, ...rest }) => {
           >
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                {feedbackStatus === "Success"
+                {feedbackStatus === "success"
                   ? "Thank you for your feedback!"
                   : "There was an error submitting your feedback. Please try again later."}
               </DialogContentText>

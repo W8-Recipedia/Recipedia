@@ -19,7 +19,7 @@ import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
 // import { getExampleRecipes } from "src/api/mockAPI";
 import { getRandomRecommendedRecipes } from "src/components/api/SpoonacularAPI";
-import { getUserPreferences } from "src/components/auth/UserAuth";
+import { getUserData } from "src/components/auth/UserAuth";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +57,7 @@ const Home = () => {
   // }, []);
 
   useLayoutEffect(() => {
-    getUserPreferences().then((res) => {
+    getUserData().then((res) => {
       setIntolerances(res.data.allergens);
       setDiet(res.data.diet);
       const userDietLowerCase = res.data.diet
@@ -142,8 +142,8 @@ const Home = () => {
     }
     getRandomRecommendedRecipes(tagsString)
       .then((res) => {
-        if (res.data.recipes) {
-          setRecipes([...recipes, ...res.data.recipes]);
+        if (res.data) {
+          setRecipes([...recipes, ...res.data]);
         }
       })
       .finally(() => {
