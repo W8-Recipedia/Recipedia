@@ -111,10 +111,8 @@ const Favourites = () => {
     let idsString = idsArray ? idsArray.join(",") : null;
     getMultipleRecipes(idsString)
       .then((res) => {
-        console.log(res.data);
         setRecipes([...recipes, ...res.data]);
       })
-      .catch((error) => console.log(error))
       .finally(() => {
         setLoading(false);
       });

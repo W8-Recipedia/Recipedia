@@ -1,24 +1,25 @@
-import React, { useState, useLayoutEffect } from "react";
-import { getUserPreferences } from "src/components/auth/UserAuth";
 import {
   Box,
-  Container,
-  makeStyles,
+  Button,
   Card,
   CardContent,
-  Typography,
-  Button,
+  Container,
   Grid,
+  Typography,
+  makeStyles,
 } from "@material-ui/core";
-import PropTypes from "prop-types";
-import Page from "src/components/theme/page";
-// import { getExampleRecipes } from "src/api/mockAPI";
-import { getRandomRecommendedRecipes } from "src/components/api/SpoonacularAPI";
-import RecipeDialog from "src/components/recipe/RecipeDialog";
-import RecipeList from "src/components/recipe/RecipeList";
+import React, { useLayoutEffect, useState } from "react";
+
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Page from "src/components/theme/page";
+import PropTypes from "prop-types";
+import RecipeDialog from "src/components/recipe/RecipeDialog";
+import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
+// import { getExampleRecipes } from "src/api/mockAPI";
+import { getRandomRecommendedRecipes } from "src/components/api/SpoonacularAPI";
+import { getUserPreferences } from "src/components/auth/UserAuth";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,7 +69,6 @@ const Home = () => {
       const tags = userIntolerancesArray
         ? [userDietLowerCase, userIntolerancesArray]
         : [userDietLowerCase];
-      console.log(tags);
       setTags(tags);
       loadRandomRecommendedRecipes(tags, 0);
     });
@@ -137,7 +137,7 @@ const Home = () => {
   function loadRandomRecommendedRecipes(tagsArray) {
     setLoading(true);
     let tagsString = tagsArray ? tagsArray.join(",") : null;
-    if (tagsString == "none") {
+    if (tagsString === "none") {
       tagsString = "";
     }
     getRandomRecommendedRecipes(tagsString)
