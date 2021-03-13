@@ -93,7 +93,7 @@ const RecipeCard = ({ recipe, ...props }) => {
     });
   }, []);
 
-  const handleClick = () => {
+  const handleFavouriteClick = () => {
     if (!favourited) {
       addToFavourites(recipe.id);
     } else {
@@ -104,7 +104,7 @@ const RecipeCard = ({ recipe, ...props }) => {
     setOpen(true);
   };
 
-  const handleClose = (event, reason) => {
+  const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
@@ -153,35 +153,24 @@ const RecipeCard = ({ recipe, ...props }) => {
           </Grid>
 
           <Grid className={classes.statsItem} item>
-            <IconButton onClick={handleClick}>
+            <IconButton onClick={handleFavouriteClick}>
               {favourited ? (
-                <>
-                  <FavoriteIcon style={{ color: "red" }} />
-                  <Snackbar
-                    open={open}
-                    autoHideDuration={2000}
-                    onClose={handleClose}
-                  >
-                    <Alert severity="success">
-                      {recipe.title} has been added to your favourites.
-                    </Alert>
-                  </Snackbar>
-                </>
+                <FavoriteIcon style={{ color: "red" }} />
               ) : (
-                <>
-                  <FavoriteBorderIcon style={{ color: "red" }} />
-                  <Snackbar
-                    open={open}
-                    autoHideDuration={2000}
-                    onClose={handleClose}
-                  >
-                    <Alert severity="info">
-                      {recipe.title} has been removed from your favourites.
-                    </Alert>
-                  </Snackbar>
-                </>
+                <FavoriteBorderIcon style={{ color: "red" }} />
               )}
             </IconButton>
+            <Snackbar
+              open={open}
+              autoHideDuration={1200}
+              onClose={handleSnackbarClose}
+            >
+              <Alert severity={favourited ? "success" : "info"}>
+                {favourited
+                  ? recipe.title + " has been added to your favourites."
+                  : recipe.title + " has been removed from your favourites."}
+              </Alert>
+            </Snackbar>
           </Grid>
         </Grid>
       </CardActions>
