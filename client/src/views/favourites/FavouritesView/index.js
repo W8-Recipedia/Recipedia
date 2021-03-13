@@ -92,7 +92,7 @@ const Favourites = () => {
                 </>
               ) : (
                 <>
-                  <Box>
+                  <Box mt={10}>
                     <Typography
                       color="textSecondary"
                       align="center"
