@@ -55,7 +55,6 @@ const LoginView = () => {
 
   const responseGoogle = (response) => {
     googleLogin(response.tokenId, response.profileObj).then((authResponse) => {
-      console.log(authResponse);
       if (authResponse === "Success") {
         navigate("/app/home");
       } else if (authResponse === "noGoogle") {

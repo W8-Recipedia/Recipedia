@@ -140,15 +140,13 @@ app.post("/login", (req, res) => {
         (error, response) => {
           if (result[0].verifiedemail == 1) {
             if (response) {
-              console.log(result[0].userid);
               const user = {
                 userid: result[0].userid,
                 firstname: decrypt(JSON.parse(result[0].firstname)),
                 lastname: decrypt(JSON.parse(result[0].lastname)),
               };
-              console.log(user);
               const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-                expiresIn: "7d",
+                expiresIn: "30m",
               });
               res.json({
                 token: token,
@@ -183,7 +181,7 @@ app.post("/glogin", (req, res) => {
           if (result[0].verifiedemail == 1) {
             const user = req.body.userprofile;
             const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-              expiresIn: "7d",
+              expiresIn: "30m",
             });
             res.json({
               token: token,
@@ -229,14 +227,8 @@ app.post("/signup", (req, res) => {
                 : [process.env.NETLIFY_CLIENT_URL]
             }/verify/${token}`,
           };
-          transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-              console.log(error);
-            } else {
-              console.log("Email sent: " + info.response);
-            }
-          });
-          res.json({ message: "success" });
+          transporter.sendMail(mailOptions);
+          res.json({ message: "Success" });
         }
       }
     );
@@ -254,7 +246,6 @@ app.post("/gsignup", (req, res) => {
     ],
     (err, result) => {
       if (err) {
-        console.log(err);
         res.json({ message: err });
       } else {
         const user = {
@@ -273,14 +264,8 @@ app.post("/gsignup", (req, res) => {
               : [process.env.NETLIFY_CLIENT_URL]
           }/verify/${token}`,
         };
-        transporter.sendMail(mailOptions, function (error, info) {
-          if (error) {
-            console.log(error);
-          } else {
-            console.log("Email sent: " + info.response);
-          }
-        });
-        res.json({ message: "success" });
+        transporter.sendMail(mailOptions);
+        res.json({ message: "Success" });
       }
     }
   );
@@ -292,7 +277,13 @@ app.get("/getuserinfo", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-    res.json({ loggedIn: true, user: token.user });
+    if (token) {
+      user = token.user;
+      const newtoken = jwt.sign({ user }, process.env.JWT_SECRET, {
+        expiresIn: "30m",
+      });
+      res.json({ loggedIn: true, user: token.user, token: newtoken });
+    }
   } else {
     res.json({ loggedIn: false });
   }
@@ -331,26 +322,33 @@ app.get("/getuserpreferences", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-    con.query(
-      "SELECT * FROM users WHERE email = ?",
-      token.user.email,
-      (err, result) => {
-        if (err) {
-          res.json({ message: err });
-        } else if (result.length > 0) {
-          res.json({
-            diet: result[0].diet ? decrypt(JSON.parse(result[0].diet)) : null,
-            allergens: result[0].allergens
-              ? JSON.parse(decrypt(JSON.parse(result[0].allergens)))
-              : null,
-            health: result[0].health
-              ? JSON.parse(decrypt(JSON.parse(result[0].health)))
-              : null,
-            loggedIn: true,
-          });
+    if (token) {
+      con.query(
+        "SELECT * FROM users WHERE email = ?",
+        token.user.email,
+        (err, result) => {
+          if (err) {
+            res.json({ message: err });
+          } else if (result.length > 0) {
+            user = token.user;
+            const newtoken = jwt.sign({ user }, process.env.JWT_SECRET, {
+              expiresIn: "30m",
+            });
+            res.json({
+              diet: result[0].diet ? decrypt(JSON.parse(result[0].diet)) : null,
+              allergens: result[0].allergens
+                ? JSON.parse(decrypt(JSON.parse(result[0].allergens)))
+                : null,
+              health: result[0].health
+                ? JSON.parse(decrypt(JSON.parse(result[0].health)))
+                : null,
+              loggedIn: true,
+              token: newtoken,
+            });
+          }
         }
-      }
-    );
+      );
+    }
   } else {
     res.json({ loggedIn: false });
   }
@@ -362,22 +360,29 @@ app.get("/getuserfavourites", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-    con.query(
-      "SELECT * FROM users WHERE email = ?",
-      token.user.email,
-      (err, result) => {
-        if (err) {
-          res.json({ message: err });
-        } else if (result.length > 0) {
-          res.json({
-            favourites: result[0].favourites
-              ? JSON.parse(decrypt(JSON.parse(result[0].favourites)))
-              : null,
-            loggedIn: true,
-          });
+    if (token) {
+      con.query(
+        "SELECT * FROM users WHERE email = ?",
+        token.user.email,
+        (err, result) => {
+          if (err) {
+            res.json({ message: err });
+          } else if (result.length > 0) {
+            user = token.user;
+            const newtoken = jwt.sign({ user }, process.env.JWT_SECRET, {
+              expiresIn: "30m",
+            });
+            res.json({
+              favourites: result[0].favourites
+                ? JSON.parse(decrypt(JSON.parse(result[0].favourites)))
+                : null,
+              loggedIn: true,
+              token: newtoken,
+            });
+          }
         }
-      }
-    );
+      );
+    }
   } else {
     res.json({ loggedIn: false });
   }
@@ -513,7 +518,7 @@ app.post("/changeuserinfo", (req, res) => {
             email: req.body.email,
           };
           const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-            expiresIn: "7d",
+            expiresIn: "30m",
           });
           res.json({ token: token, result: result });
         }
@@ -530,27 +535,33 @@ app.post("/changepreferences", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-    const healthData = {
-      height: req.body.height,
-      weight: req.body.weight,
-      activity: req.body.activity,
-    };
-    con.query(
-      "UPDATE users SET diet = ?, allergens = ?, health = ? WHERE email = ?",
-      [
-        JSON.stringify(encrypt(req.body.diet)),
-        JSON.stringify(encrypt(JSON.stringify(req.body.allergens))),
-        JSON.stringify(encrypt(JSON.stringify(healthData))),
-        token.user.email,
-      ],
-      (err, result) => {
-        if (err) {
-          res.json({ message: err });
-        } else {
-          res.json({ result: result });
+    if (token) {
+      const healthData = {
+        height: req.body.height,
+        weight: req.body.weight,
+        activity: req.body.activity,
+      };
+      con.query(
+        "UPDATE users SET diet = ?, allergens = ?, health = ? WHERE email = ?",
+        [
+          JSON.stringify(encrypt(req.body.diet)),
+          JSON.stringify(encrypt(JSON.stringify(req.body.allergens))),
+          JSON.stringify(encrypt(JSON.stringify(healthData))),
+          token.user.email,
+        ],
+        (err, result) => {
+          if (err) {
+            res.json({ message: err });
+          } else {
+            user = token.user;
+            const newtoken = jwt.sign({ user }, process.env.JWT_SECRET, {
+              expiresIn: "30m",
+            });
+            res.json({ result: result, token: newtoken });
+          }
         }
-      }
-    );
+      );
+    }
   } else {
     res.json({ message: "noToken" });
   }
@@ -586,7 +597,7 @@ app.post("/changepassword", (req, res) => {
               });
               const user = result[0];
               const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-                expiresIn: "7d",
+                expiresIn: "30m",
               });
               res.json({ passwordChanged: true, token: token });
             } else {
@@ -607,17 +618,23 @@ app.post("/submitfeedback", (req, res) => {
       req.headers["x-access-token"],
       process.env.JWT_SECRET
     );
-    con.query(
-      "INSERT INTO feedback (email, message) VALUES (?,?)",
-      [token.user.email, req.body.feedback],
-      (err, result) => {
-        if (err) {
-          res.json({ message: err });
-        } else {
-          res.json({ message: "Success" });
+    if (token) {
+      con.query(
+        "INSERT INTO feedback (email, message) VALUES (?,?)",
+        [token.user.email, req.body.feedback],
+        (err, result) => {
+          if (err) {
+            res.json({ message: err });
+          } else {
+            user = token.user;
+            const newtoken = jwt.sign({ user }, process.env.JWT_SECRET, {
+              expiresIn: "30m",
+            });
+            res.json({ message: "Success", token: newtoken });
+          }
         }
-      }
-    );
+      );
+    }
   } else {
     res.json({ loggedIn: false });
   }
@@ -636,7 +653,7 @@ app.get("/deleteaccount", (req, res) => {
         if (err) {
           res.json({ message: "error" });
         } else {
-          res.json({ message: "success" });
+          res.json({ message: "Success" });
         }
       }
     );

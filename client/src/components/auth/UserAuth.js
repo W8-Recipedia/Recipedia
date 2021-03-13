@@ -85,6 +85,14 @@ export const getUserInfo = async () => {
         },
       }
     );
+    if (response.data.token) {
+      localStorage.getItem("usertoken")
+        ? (localtoken = localStorage.setItem("usertoken", response.data.token))
+        : (localtoken = localStorage.setItem(
+            "gusertoken",
+            response.data.token
+          ));
+    }
     if (localStorage.getItem("gusertoken")) {
       response.data.user.firstname = response.data.user.givenName;
       response.data.user.lastname = response.data.user.familyName;
@@ -109,6 +117,14 @@ export const getUserPreferences = async () => {
         },
       }
     );
+    if (response.data.token) {
+      localStorage.getItem("usertoken")
+        ? (localtoken = localStorage.setItem("usertoken", response.data.token))
+        : (localtoken = localStorage.setItem(
+            "gusertoken",
+            response.data.token
+          ));
+    }
     return response;
   } else {
     return { data: { loggedIn: false } };
@@ -129,6 +145,14 @@ export const getUserFavourites = async () => {
         },
       }
     );
+    if (response.data.token) {
+      localStorage.getItem("usertoken")
+        ? (localtoken = localStorage.setItem("usertoken", response.data.token))
+        : (localtoken = localStorage.setItem(
+            "gusertoken",
+            response.data.token
+          ));
+    }
     return response;
   } else {
     return { data: { loggedIn: false } };
@@ -220,6 +244,11 @@ export const changePreferences = async (
       },
     }
   );
+  if (response.data.token) {
+    localStorage.getItem("usertoken")
+      ? (localtoken = localStorage.setItem("usertoken", response.data.token))
+      : (localtoken = localStorage.setItem("gusertoken", response.data.token));
+  }
   return response;
 };
 
@@ -262,6 +291,11 @@ export const submitFeeback = async (feedback) => {
       headers: { "x-access-token": localtoken },
     }
   );
+  if (response.data.token) {
+    localStorage.getItem("usertoken")
+      ? (localtoken = localStorage.setItem("usertoken", response.data.token))
+      : (localtoken = localStorage.setItem("gusertoken", response.data.token));
+  }
   return response;
 };
 
@@ -279,7 +313,7 @@ export const deleteAccount = async () => {
       },
     }
   );
-  if (response.data.message === "success") {
+  if (response.data.message === "Success") {
     localStorage.removeItem("usertoken");
     localStorage.removeItem("gusertoken");
   }

@@ -76,7 +76,7 @@ const SignUpView = () => {
       values.email,
       values.password
     ).then((authResponse) => {
-      if (authResponse === "success") {
+      if (authResponse === "Success") {
         setVerifyEmailOpen(true);
       } else {
         setOpen(true);
@@ -90,7 +90,7 @@ const SignUpView = () => {
 
   const handleGoogleSubmit = (response) => {
     googleSignUp(response.tokenId, response.profileObj).then((authResponse) => {
-      if (authResponse === "success") {
+      if (authResponse === "Success") {
         setGoogleSignUpOpen(false);
         setVerifyEmailOpen(true);
       } else {

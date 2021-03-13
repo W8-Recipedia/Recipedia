@@ -73,7 +73,7 @@ const ProfileCard = ({ className, ...rest }) => {
 
   const deleteAcc = () => {
     deleteAccount().then((response) => {
-      if (response === "success") {
+      if (response === "Success") {
         setOpen(false);
         setDeleteStatus(true);
       }
@@ -98,7 +98,7 @@ const ProfileCard = ({ className, ...rest }) => {
             </Typography>
           </Box>
 
-          <Box >
+          <Box>
             <Button
               color="secondary"
               variant="text"
