@@ -31,6 +31,17 @@ export const signUp = async (firstname, lastname, email, password) => {
   );
   return response.data.message;
 };
+
+export const resendEmail = async  (email) => {
+  const response = await Axios.post(
+    process.env.REACT_APP_SERVER_URL + "/reverify",
+    {
+      email: email,
+    }
+  );
+  return response.data.message;
+};
+
 export const googleSignUp = async (gtoken, userprofile) => {
   if (gtoken) {
     localStorage.removeItem("usertoken");

@@ -235,6 +235,42 @@ app.post("/signup", (req, res) => {
   });
 });
 
+app.post("/reverify", (req, res) => {
+  console.log(req.body.email);
+  con.query(
+    "SELECT * FROM users WHERE email = ?",
+    req.body.email,
+    (err, result) => {
+      if (result.length === 0) {
+        res.json({ message: "noAccount" });
+      } else {
+        if (result[0].verifiedemail == 0) {
+          const user = {
+            email: req.body.email,
+          };
+          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+          });
+          var mailOptions = {
+            from: "w8.recipedia@gmail.com",
+            to: req.body.email,
+            subject: "Verify your Recipedia account",
+            text: `Click here to verify your Recipedia account (this link is valid for 1 hour): ${
+              process.env.LOCALHOST_CLIENT_URL
+                ? [process.env.LOCALHOST_CLIENT_URL]
+                : [process.env.NETLIFY_CLIENT_URL]
+            }/verify/${token}`,
+          };
+          transporter.sendMail(mailOptions);
+          res.json({ message: "Success" });
+        } else {
+          res.json({ message: "alreadyVerified" });
+        }
+      }
+    }
+  );
+});
+
 app.post("/gsignup", (req, res) => {
   con.query(
     "INSERT INTO users (firstname, lastname, googlelogin, email) VALUES (?,?,?,?)",
