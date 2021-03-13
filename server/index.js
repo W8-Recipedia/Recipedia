@@ -11,16 +11,16 @@ const nodemailer = require("nodemailer");
 
 const saltRounds = 10;
 const algorithm = "aes-256-ctr";
-const secretKey = process.env.ENCRYPTIONKEY;
+const secretKey = process.env.ENCRYPTION_KEY;
 const iv = crypto.randomBytes(16);
 
 const app = express();
 
 const con = mysql.createConnection({
-  host: process.env.HOST,
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
+  host: process.env.DATABASE_HOST,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
 });
 
 const transporter = nodemailer.createTransport({
