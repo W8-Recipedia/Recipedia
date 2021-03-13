@@ -29,11 +29,17 @@ export const signUp = async (firstname, lastname, email, password) => {
       password: password,
     }
   );
-  if (response.data.token) {
-    localStorage.removeItem("gusertoken");
-    localStorage.setItem("usertoken", response.data.token);
-    return "Success";
-  } else {
+  return response.data.message;
+};
+export const googleSignUp = async (gtoken, userprofile) => {
+  if (gtoken) {
+    localStorage.removeItem("usertoken");
+    const response = await Axios.post(
+      process.env.REACT_APP_SERVER_URL + "/gsignup",
+      {
+        user: userprofile,
+      }
+    );
     return response.data.message;
   }
 };
@@ -53,23 +59,16 @@ export const googleLogin = async (token, userprofile) => {
     return response.data.message;
   }
 };
-
-export const googleSignUp = async (gtoken, userprofile) => {
-  if (gtoken) {
-    localStorage.removeItem("usertoken");
-    const response = await Axios.post(
-      process.env.REACT_APP_SERVER_URL + "/gsignup",
-      {
-        user: userprofile,
-      }
-    );
-    if (response.data.token) {
-      localStorage.setItem("gusertoken", response.data.token);
-      return "Success";
-    } else {
-      return response.data.message;
+export const verifyEmail = async (token) => {
+  const response = await Axios.get(
+    process.env.REACT_APP_SERVER_URL + "/verifyemail",
+    {
+      headers: {
+        "x-access-token": token,
+      },
     }
-  }
+  );
+  return response.data.message;
 };
 
 export const getUserInfo = async () => {
@@ -195,7 +194,13 @@ export const changeUserInfo = async (firstname, lastname, email) => {
   }
 };
 
-export const changePreferences = async (diet, allergens, height, weight, activity) => {
+export const changePreferences = async (
+  diet,
+  allergens,
+  height,
+  weight,
+  activity
+) => {
   var localtoken;
   localStorage.getItem("usertoken")
     ? (localtoken = localStorage.getItem("usertoken"))

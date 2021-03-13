@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const request = require("request");
 const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 
 const saltRounds = 10;
 const algorithm = "aes-256-ctr";
@@ -20,6 +21,16 @@ const con = mysql.createConnection({
   user: process.env.USER,
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
+});
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.RECIPEDIA_EMAIL,
+    pass: process.env.RECIPEDIA_PASSWORD,
+  },
 });
 
 const encrypt = (text) => {
@@ -127,20 +138,30 @@ app.post("/login", (req, res) => {
         password,
         decrypt(JSON.parse(result[0].password)),
         (error, response) => {
-          if (response) {
-            const user = result[0];
-            const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-              expiresIn: "7d",
-            });
-            res.json({
-              token: token,
-            });
-          } else {
-            if (result[0].googlelogin) {
-              res.json({ message: "googleAccount" });
+          if (result[0].verifiedemail == 1) {
+            if (response) {
+              console.log(result[0].userid);
+              const user = {
+                userid: result[0].userid,
+                firstname: decrypt(JSON.parse(result[0].firstname)),
+                lastname: decrypt(JSON.parse(result[0].lastname)),
+              };
+              console.log(user);
+              const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+                expiresIn: "7d",
+              });
+              res.json({
+                token: token,
+              });
             } else {
-              res.json({ message: "wrongPassword" });
+              if (result[0].googlelogin) {
+                res.json({ message: "googleAccount" });
+              } else {
+                res.json({ message: "wrongPassword" });
+              }
             }
+          } else {
+            res.json({ message: "notVerified" });
           }
         }
       );
@@ -148,6 +169,34 @@ app.post("/login", (req, res) => {
       res.json({ message: "noEmail" });
     }
   });
+});
+
+app.post("/glogin", (req, res) => {
+  con.query(
+    "SELECT * FROM users WHERE email = ?",
+    req.body.userprofile.email,
+    (err, result) => {
+      if (result.length === 0) {
+        res.json({ message: "noAccount" });
+      } else {
+        if (result[0].googlelogin) {
+          if (result[0].verifiedemail == 1) {
+            const user = req.body.userprofile;
+            const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+              expiresIn: "7d",
+            });
+            res.json({
+              token: token,
+            });
+          } else {
+            res.json({ message: "notVerified" });
+          }
+        } else {
+          res.json({ message: "noGoogle" });
+        }
+      }
+    }
+  );
 });
 
 app.post("/signup", (req, res) => {
@@ -166,44 +215,32 @@ app.post("/signup", (req, res) => {
         } else {
           const user = {
             email: req.body.email,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
           };
           const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-            expiresIn: "7d",
+            expiresIn: "1h",
           });
-          res.json({
-            token: token,
-            result: result,
+          var mailOptions = {
+            from: "w8.recipedia@gmail.com",
+            to: req.body.email,
+            subject: "Verify your Recipedia account",
+            text: `Click here to verify your Recipedia account (this link is valid for 1 hour): ${
+              process.env.LOCALHOST_CLIENT_URL
+                ? [process.env.LOCALHOST_CLIENT_URL]
+                : [process.env.NETLIFY_CLIENT_URL]
+            }/verify/${token}`,
+          };
+          transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("Email sent: " + info.response);
+            }
           });
+          res.json({ message: "success" });
         }
       }
     );
   });
-});
-
-app.post("/glogin", (req, res) => {
-  con.query(
-    "SELECT * FROM users WHERE email = ?",
-    req.body.userprofile.email,
-    (err, result) => {
-      if (result.length === 0) {
-        res.json({ message: "noAccount" });
-      } else {
-        if (result[0].googlelogin) {
-          const user = req.body.userprofile;
-          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-            expiresIn: "7d",
-          });
-          res.json({
-            token: token,
-          });
-        } else {
-          res.json({ message: "noGoogle" });
-        }
-      }
-    }
-  );
 });
 
 app.post("/gsignup", (req, res) => {
@@ -220,11 +257,30 @@ app.post("/gsignup", (req, res) => {
         console.log(err);
         res.json({ message: err });
       } else {
-        const user = req.body.user;
+        const user = {
+          email: req.body.user.email,
+        };
         const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-          expiresIn: "7d",
+          expiresIn: "1h",
         });
-        res.json({ token: token, result: result });
+        var mailOptions = {
+          from: "w8.recipedia@gmail.com",
+          to: req.body.user.email,
+          subject: "Verify your Recipedia account",
+          text: `Click here to verify your Recipedia account (this link is valid for 1 hour): ${
+            process.env.LOCALHOST_CLIENT_URL
+              ? [process.env.LOCALHOST_CLIENT_URL]
+              : [process.env.NETLIFY_CLIENT_URL]
+          }/verify/${token}`,
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("Email sent: " + info.response);
+          }
+        });
+        res.json({ message: "success" });
       }
     }
   );
@@ -239,6 +295,33 @@ app.get("/getuserinfo", (req, res) => {
     res.json({ loggedIn: true, user: token.user });
   } else {
     res.json({ loggedIn: false });
+  }
+});
+
+app.get("/verifyemail", (req, res) => {
+  if (req.headers["x-access-token"]) {
+    const token = jwt.verify(
+      req.headers["x-access-token"],
+      process.env.JWT_SECRET,
+      (err, decoded) => {
+        if (err) {
+          res.json({ message: "notVerified" });
+        } else {
+          con.query(
+            "UPDATE users SET verifiedemail = ? WHERE email = ?",
+            [1, decoded.user.email],
+            (err, result) => {
+              if (err) {
+                res.json({ message: "DBError" });
+              }
+            }
+          );
+          res.json({ message: "verified" });
+        }
+      }
+    );
+  } else {
+    res.json({ message: "notVerified" });
   }
 });
 

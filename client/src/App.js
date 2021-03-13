@@ -1,18 +1,20 @@
-import React from "react";
-import { useRoutes, Navigate } from "react-router-dom";
-import { ThemeProvider } from "@material-ui/core";
-import Styles from "src/components/theme/styles";
-import Theme from "src/components/theme";
-import SearchView from "src/views/search/SearchView";
 import LoginCheck, { AccessCheck } from "src/components/auth/AuthCheck";
-import NotFoundView from "src/views/error/ErrorView";
+import { Navigate, useRoutes } from "react-router-dom";
+
+import FAQView from "src/views/faq/FAQView";
 import FavouritesView from "src/views/favourites/FavouritesView";
-import SignUpView from "src/views/signup/SignUpView";
-import SettingsView from "src/views/settings/SettingsView";
+import FeedbackView from "src/views/feedback/FeedbackView";
 import HomeView from "src/views/home/HomeView";
 import LegalView from "src/views/legal/LegalView";
-import FAQView from "src/views/faq/FAQView";
-import FeedbackView from "src/views/feedback/FeedbackView";
+import NotFoundView from "src/views/error/ErrorView";
+import React from "react";
+import SearchView from "src/views/search/SearchView";
+import SettingsView from "src/views/settings/SettingsView";
+import SignUpView from "src/views/signup/SignUpView";
+import Styles from "src/components/theme/styles";
+import Theme from "src/components/theme";
+import { ThemeProvider } from "@material-ui/core";
+import VerifyView from "src/views/verify/VerifyView";
 
 const App = () => {
   return (
@@ -40,6 +42,7 @@ const App = () => {
             { path: "login", element: <LoginCheck /> },
             { path: "signup", element: <SignUpView /> },
             { path: "legal", element: <LegalView /> },
+            { path: "verify/*", element: <VerifyView /> },
             { path: "", element: <LoginCheck /> },
             { path: "*", element: <NotFoundView /> },
           ],

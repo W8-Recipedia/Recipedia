@@ -4,25 +4,26 @@ import {
   Box,
   Button,
   Container,
-  Grid,
-  Link,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  SvgIcon,
-  TextField,
+  Grid,
   IconButton,
   InputAdornment,
+  Link,
+  SvgIcon,
+  TextField,
   Typography,
   makeStyles,
 } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { login, googleLogin } from "src/components/auth/UserAuth";
-import Page from "src/components/theme/page";
+import { googleLogin, login } from "src/components/auth/UserAuth";
+
 import GoogleLogin from "react-google-login";
+import Page from "src/components/theme/page";
 import { Scrollbars } from "react-custom-scrollbars";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
@@ -47,16 +48,20 @@ const LoginView = () => {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [loginError, setLoginError] = useState("");
+  const [verifyError, setVerifyError] = useState(false);
   const [googleAccount, setGoogleAccount] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const responseGoogle = (response) => {
     googleLogin(response.tokenId, response.profileObj).then((authResponse) => {
+      console.log(authResponse);
       if (authResponse === "Success") {
         navigate("/app/home");
       } else if (authResponse === "noGoogle") {
         setLoginError(authResponse);
+      } else if (authResponse === "notVerified") {
+        setVerifyError(true);
       } else {
         setOpen(true);
       }
@@ -71,6 +76,8 @@ const LoginView = () => {
       } else {
         if (authResponse === "googleAccount") {
           setGoogleAccount(true);
+        } else if (authResponse === "notVerified") {
+          setVerifyError(true);
         } else {
           setLoginError(authResponse);
         }
@@ -289,6 +296,20 @@ const LoginView = () => {
                   Sign up
                 </Button>
               </DialogActions>
+            </Dialog>
+            <Dialog
+              open={verifyError}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              onClose={() => {
+                setVerifyError(false);
+              }}
+            >
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Please verify your email before logging in!
+                </DialogContentText>
+              </DialogContent>
             </Dialog>
             <Dialog
               open={Boolean(loginError === "noGoogle")}
