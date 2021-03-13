@@ -17,7 +17,7 @@ import {
   Search as SearchIcon,
   Settings as SettingsIcon,
 } from "react-feather";
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { getUserFavourites, getUserInfo } from "src/components/auth/UserAuth";
 
@@ -107,6 +107,8 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             : userFavouritesLength < 15
             ? "Sustenance Master"
             : "Nourishment God")
+        } else {
+          setUserRank("Recipedia Beginner")
         }
       });
     });

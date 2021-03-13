@@ -1,25 +1,25 @@
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
-  Typography,
-  Button,
   Dialog,
   DialogContent,
   DialogContentText,
+  Typography,
   makeStyles,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import {
-  getUserInfo,
-  getUserFavourites,
   deleteAccount,
+  getUserFavourites,
+  getUserInfo,
 } from "src/components/auth/UserAuth";
+
 import PropTypes from "prop-types";
 import { red } from "@material-ui/core/colors";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
   avatar: {
@@ -65,6 +65,8 @@ const ProfileCard = ({ className, ...rest }) => {
             ? "Sustenance Master"
             : "Nourishment God"
         );
+      } else {
+        setUserRank("Recipedia Beginner");
       }
     });
   });
@@ -96,7 +98,7 @@ const ProfileCard = ({ className, ...rest }) => {
             </Typography>
           </Box>
 
-          <Box>
+          <Box >
             <Button
               color="secondary"
               variant="text"
