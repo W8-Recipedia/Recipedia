@@ -13,7 +13,10 @@ import {
 } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useLayoutEffect, useState } from "react";
-import { resendEmail, verifyEmail } from "src/components/auth/UserAuth";
+import {
+  resendVerificationEmail,
+  verifyEmail,
+} from "src/components/auth/UserAuth";
 
 import { Link } from "react-router-dom";
 import Page from "src/components/theme/page";
@@ -43,7 +46,7 @@ const VerifyView = () => {
   const [emailSent, setEmailSent] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const resendVerification = (values) => {
-    resendEmail(values.email).then((authResponse) => {
+    resendVerificationEmail(values.email).then((authResponse) => {
       console.log(authResponse);
       if (authResponse === "success") {
         setEmailSent(true);
