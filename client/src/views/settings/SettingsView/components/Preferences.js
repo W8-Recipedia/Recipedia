@@ -432,7 +432,7 @@ const Preferences = ({ className, ...rest }) => {
                   >
                     How many hours do you exercise every week?
                   </Typography>
-                  <Box pt={2} pr={3}>
+                  <Box pt={2} pr={1}>
                     <Slider
                       value={activity}
                       onChange={(e, value) => {
