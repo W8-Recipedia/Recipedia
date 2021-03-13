@@ -1,76 +1,57 @@
-# Contributor Covenant Code of Conduct
+# Code of Conduct
 
-## Our Pledge
+## Attitude and culture
 
-In the interest of fostering an open and welcoming environment, we as
-contributors and maintainers pledge to making participation in our project and
-our community a harassment-free experience for everyone, regardless of age, body
-size, disability, ethnicity, sex characteristics, gender identity and expression,
-level of experience, education, socio-economic status, nationality, personal
-appearance, race, religion, or sexual identity and orientation.
+- Treat each other with respect.
+- Intend to develop personal relationships, to enhance trust and open communication.
+- Value constructive feedback. Avoid being defensive and give feedback in a constructive manner.
+- Strive to recognize and celebrate individual and team accomplishments.
+- Pitch in to help where necessary to help solve problems and catch-up on work behind schedule.
 
-## Our Standards
+## Team meetings
 
-Examples of behavior that contributes to creating a positive environment
-include:
+- The team leader must publish and distribute an agenda. Team members are responsible for contacting the team leader with any agenda items they want to include. Agenda items can be added at the meeting with the consensus of the team.
+- Additional meetings can be scheduled to discuss critical issues or tabled items, upon discussion and agreement with the team leader.
+- Meetings always start at the scheduled time, and all members are expected to be on-time. If, due to extenuating circumstances, a member is late, said member must catch-up on their own.
+- No responsibilities are to be assigned unless the person being assigned the responsibility accepts it. If a person to be given a responsibility is not at the meeting, the team leader must review that assignment with said person before the responsibility is designated.
 
-* Using welcoming and inclusive language
-* Being respectful of differing viewpoints and experiences
-* Gracefully accepting constructive criticism
-* Focusing on what is best for the community
-* Showing empathy towards other community members
+## Communication and decision-making
 
-Examples of unacceptable behavior by participants include:
+- One person talks at a time; there are no side discussions.
+- Each person is given a chance to speak their mind while at the same time respecting the group’s time and the meeting's agenda.
+- Value open and honest communication – no hidden agendas.
+- De-personalize discussion of issues – no attacks directed at people.
+- Listen, be non-judgmental and keep an open mind on all issues.
+- Emphasize the balanced participation of all team members, and use a consensus for important decisions and issues. For less important issues, rely on the subject matter expert with input from others.
 
-* The use of sexualized language or imagery and unwelcome sexual attention or
- advances
-* Trolling, insulting/derogatory comments, and personal or political attacks
-* Public or private harassment
-* Publishing others' private information, such as a physical or electronic
- address, without explicit permission
-* Other conduct which could reasonably be considered inappropriate in a
- professional setting
+## Planning and management
 
-## Our Responsibilities
+- Accept the responsibility and accountability along with the authority given.
+- Maintain the team's work plan and schedule.
+- If a team member believes they are being asked to do a task outside the scope of the team’s charter, said member must bring this to the attention of the team leader for resolution.
+- When posing an issue or a problem, one must also try to present a solution.
+- Team commitments shouldn’t be made lightly, but those that are made must be kept.
 
-Project maintainers are responsible for clarifying the standards of acceptable
-behavior and are expected to take appropriate and fair corrective action in
-response to any instances of unacceptable behavior.
+## Ethics
 
-Project maintainers have the right and responsibility to remove, edit, or
-reject comments, commits, code, wiki edits, issues, and other contributions
-that are not aligned to this Code of Conduct, or to ban temporarily or
-permanently any contributor for other behaviors that they deem inappropriate,
-threatening, offensive, or harmful.
+### Team duties
 
-## Scope
+- Ensure that all team members feel included and have their opinions considered.
+- Make sure that all team members have a task that they are satisfied with and able to complete.
+- Encourage and support the other team members with their tasks, whether they seem like they need it or not.
+- Do not disclose any team secrets to other teams.
+- Strive to achieve high quality in both the processes and products of work produced.
+- Uphold, promote, and respect the principles of the Code of Conduct.
+- If a problem arises with a certain team member breaking any of these rules, then a group discussion must be held to address the problem. If a problem persists then it must be brought up with the group tutor, and the appropriate action must be taken as necessary.
+- Aim to help every member of the team understand the copyright laws and their implications surrounding any person's work so that they stay within the realms of the law.
 
-This Code of Conduct applies both within project spaces and in public spaces
-when an individual is representing the project or its community. Examples of
-representing a project or community include using an official project e-mail
-address, posting via an official social media account, or acting as an appointed
-representative at an online or offline event. Representation of a project may be
-further defined and clarified by project maintainers.
+### Individual duties
 
-## Enforcement
-
-Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by contacting the project team at w8.recipedia@gmail.com. All
-complaints will be reviewed and investigated and will result in a response that
-is deemed necessary and appropriate to the circumstances. The project team is
-obligated to maintain confidentiality with regard to the reporter of an incident.
-Further details of specific enforcement policies may be posted separately.
-
-Project maintainers who do not follow or enforce the Code of Conduct in good
-faith may face temporary or permanent repercussions as determined by other
-members of the project's leadership.
-
-## Attribution
-
-This Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.4,
-available at https://www.contributor-covenant.org/version/1/4/code-of-conduct.html
-
-[homepage]: https://www.contributor-covenant.org
-
-For answers to common questions about this code of conduct, see
-https://www.contributor-covenant.org/faq
+- Complete the task you are set to the highest standard and your highest capabilities.
+- Maintain the reputation of the team by ethically obtaining all information and not engaging in any academic malpractice.
+- To treat all persons fairly and with respect, try not to make someone in an uncomfortable situation.
+- Never interfere with, harm, or spy on other people and their data.
+- Respect privacy.
+- Be honest and trustworthy.
+- Be fair and do not discriminate.
+- Make sure you are always trying to learn and improve your abilities as a programmer.
