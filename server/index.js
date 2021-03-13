@@ -6,11 +6,50 @@ const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const request = require("request");
+const crypto = require("crypto");
+
 const saltRounds = 10;
+const algorithm = "aes-256-ctr";
+const secretKey = process.env.ENCRYPTIONKEY;
+const iv = crypto.randomBytes(16);
 
 const app = express();
 
+const con = mysql.createConnection({
+  host: process.env.HOST,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE,
+});
+
+const encrypt = (text) => {
+  const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
+
+  const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
+
+  return {
+    iv: iv.toString("hex"),
+    content: encrypted.toString("hex"),
+  };
+};
+
+const decrypt = (hash) => {
+  const decipher = crypto.createDecipheriv(
+    algorithm,
+    secretKey,
+    Buffer.from(hash.iv, "hex")
+  );
+
+  const decrypted = Buffer.concat([
+    decipher.update(Buffer.from(hash.content, "hex")),
+    decipher.final(),
+  ]);
+
+  return decrypted.toString();
+};
+
 app.use(express.json());
+
 app.use(
   cors({
     origin: process.env.LOCALHOST_CLIENT_URL
@@ -39,13 +78,6 @@ app.use((req, res, next) => {
   );
   res.setHeader("Access-Control-Allow-Credentials", true);
   next();
-});
-
-const con = mysql.createConnection({
-  host: process.env.HOST,
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
 });
 
 app.post("/recipes/random", (req, res) => {
@@ -87,33 +119,31 @@ app.post("/recipes/complexsearch", (req, res) => {
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  console.log(req.body);
-
   con.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
     if (err) {
-      console.log(err);
-
-      res.json({ err: err });
+      res.json({ message: err });
     } else if (result.length > 0) {
-      bcrypt.compare(password, result[0].password, (error, response) => {
-        console.log(error);
-
-        if (response) {
-          const user = result[0];
-          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-            expiresIn: "7d",
-          });
-          res.json({
-            token: token,
-          });
-        } else {
-          if (result[0].googlelogin) {
-            res.json({ message: "googleAccount" });
+      bcrypt.compare(
+        password,
+        decrypt(JSON.parse(result[0].password)),
+        (error, response) => {
+          if (response) {
+            const user = result[0];
+            const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+              expiresIn: "7d",
+            });
+            res.json({
+              token: token,
+            });
           } else {
-            res.json({ message: "wrongPassword" });
+            if (result[0].googlelogin) {
+              res.json({ message: "googleAccount" });
+            } else {
+              res.json({ message: "wrongPassword" });
+            }
           }
         }
-      });
+      );
     } else {
       res.json({ message: "noEmail" });
     }
@@ -121,24 +151,23 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/signup", (req, res) => {
-  const firstname = req.body.firstname;
-  const lastname = req.body.lastname;
-  const email = req.body.email;
-  const password = req.body.password;
-
-  bcrypt.hash(password, saltRounds, (err, hash) => {
+  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
     con.query(
       "INSERT INTO users (firstname, lastname, email, password) VALUES (?,?,?,?)",
-      [firstname, lastname, email, hash],
+      [
+        JSON.stringify(encrypt(req.body.firstname)),
+        JSON.stringify(encrypt(req.body.lastname)),
+        req.body.email,
+        JSON.stringify(encrypt(hash)),
+      ],
       (err, result) => {
         if (err) {
-          res.json({ err: err });
+          res.json({ message: err });
         } else {
           const user = {
-            email: email,
-            firstname: firstname,
-            lastname: lastname,
-            password: password,
+            email: req.body.email,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
           };
           const token = jwt.sign({ user }, process.env.JWT_SECRET, {
             expiresIn: "7d",
@@ -180,10 +209,16 @@ app.post("/glogin", (req, res) => {
 app.post("/gsignup", (req, res) => {
   con.query(
     "INSERT INTO users (firstname, lastname, googlelogin, email) VALUES (?,?,?,?)",
-    [req.body.user.givenName, req.body.user.familyName, 1, req.body.user.email],
+    [
+      JSON.stringify(encrypt(req.body.user.givenName)),
+      JSON.stringify(encrypt(req.body.user.familyName)),
+      1,
+      req.body.user.email,
+    ],
     (err, result) => {
       if (err) {
-        res.json({ message: "yesAccount" });
+        console.log(err);
+        res.json({ message: err });
       } else {
         const user = req.body.user;
         const token = jwt.sign({ user }, process.env.JWT_SECRET, {
@@ -218,12 +253,16 @@ app.get("/getuserpreferences", (req, res) => {
       token.user.email,
       (err, result) => {
         if (err) {
-          res.json({ err: err });
+          res.json({ message: err });
         } else if (result.length > 0) {
           res.json({
-            diet: result[0].diet,
-            allergens: JSON.parse(result[0].allergens),
-            health: JSON.parse(result[0].health),
+            diet: result[0].diet ? decrypt(JSON.parse(result[0].diet)) : null,
+            allergens: result[0].allergens
+              ? JSON.parse(decrypt(JSON.parse(result[0].allergens)))
+              : null,
+            health: result[0].health
+              ? JSON.parse(decrypt(JSON.parse(result[0].health)))
+              : null,
             loggedIn: true,
           });
         }
@@ -245,10 +284,12 @@ app.get("/getuserfavourites", (req, res) => {
       token.user.email,
       (err, result) => {
         if (err) {
-          res.json({ err: err });
+          res.json({ message: err });
         } else if (result.length > 0) {
           res.json({
-            favourites: JSON.parse(result[0].favourites),
+            favourites: result[0].favourites
+              ? JSON.parse(decrypt(JSON.parse(result[0].favourites)))
+              : null,
             loggedIn: true,
           });
         }
@@ -270,15 +311,20 @@ app.post("/addtofavourites", (req, res) => {
       token.user.email,
       (err, result) => {
         if (err) {
-          res.json({ err: err });
+          res.json({ message: err });
         } else {
           if (result[0].favourites) {
-            favouriteList = JSON.parse(result[0].favourites);
+            favouriteList = JSON.parse(
+              decrypt(JSON.parse(result[0].favourites))
+            );
             if (!favouriteList.includes(req.body.favourite.toString())) {
               favouriteList.push(req.body.favourite.toString());
               con.query(
                 "UPDATE users SET favourites = ? WHERE email = ?",
-                [JSON.stringify(favouriteList), token.user.email],
+                [
+                  JSON.stringify(encrypt(JSON.stringify(favouriteList))),
+                  token.user.email,
+                ],
                 (err, result) => {
                   if (err) {
                     res.json({ message: "DBError" });
@@ -289,10 +335,14 @@ app.post("/addtofavourites", (req, res) => {
               res.json({ message: "favouriteExists" });
             }
           } else {
-            initialFavourite = JSON.stringify([req.body.favourite.toString()]);
             con.query(
               "UPDATE users SET favourites = ? WHERE email = ?",
-              [initialFavourite, token.user.email],
+              [
+                JSON.stringify(
+                  encrypt(JSON.stringify([req.body.favourite.toString()]))
+                ),
+                token.user.email,
+              ],
               (err, result) => {
                 if (err) {
                   res.json({ message: "DBError" });
@@ -319,10 +369,12 @@ app.post("/removefromfavourites", (req, res) => {
       token.user.email,
       (err, result) => {
         if (err) {
-          res.json({ err: err });
+          res.json({ message: err });
         } else {
           if (result[0].favourites) {
-            favouriteList = JSON.parse(result[0].favourites);
+            favouriteList = JSON.parse(
+              decrypt(JSON.parse(result[0].favourites))
+            );
             if (favouriteList.includes(req.body.favourite.toString())) {
               const favouriteIndex = favouriteList.indexOf(
                 req.body.favourite.toString()
@@ -330,7 +382,10 @@ app.post("/removefromfavourites", (req, res) => {
               favouriteList.splice(favouriteIndex, 1);
               con.query(
                 "UPDATE users SET favourites = ? WHERE email = ?",
-                [JSON.stringify(favouriteList), token.user.email],
+                [
+                  JSON.stringify(encrypt(JSON.stringify(favouriteList))),
+                  token.user.email,
+                ],
                 (err, result) => {
                   if (err) {
                     res.json({ message: "DBError" });
@@ -358,7 +413,12 @@ app.post("/changeuserinfo", (req, res) => {
     const uid = token.user.userid;
     con.query(
       "UPDATE users SET firstname = ?, lastname = ?, email = ? WHERE email = ?",
-      [req.body.firstname, req.body.lastname, req.body.email, token.user.email],
+      [
+        JSON.stringify(encrypt(req.body.firstname)),
+        JSON.stringify(encrypt(req.body.lastname)),
+        req.body.email,
+        token.user.email,
+      ],
       (err, result) => {
         if (err) {
           res.json({ message: "emailExists" });
@@ -395,14 +455,14 @@ app.post("/changepreferences", (req, res) => {
     con.query(
       "UPDATE users SET diet = ?, allergens = ?, health = ? WHERE email = ?",
       [
-        req.body.diet,
-        JSON.stringify(req.body.allergens),
-        JSON.stringify(healthData),
+        JSON.stringify(encrypt(req.body.diet)),
+        JSON.stringify(encrypt(JSON.stringify(req.body.allergens))),
+        JSON.stringify(encrypt(JSON.stringify(healthData))),
         token.user.email,
       ],
       (err, result) => {
         if (err) {
-          res.json({ err: err });
+          res.json({ message: err });
         } else {
           res.json({ result: result });
         }
@@ -426,7 +486,7 @@ app.post("/changepassword", (req, res) => {
       token.user.email,
       (err, result) => {
         if (err) {
-          res.json({ err: err });
+          res.json({ message: err });
         } else if (result.length > 0) {
           bcrypt.compare(oldpassword, result[0].password, (error, response) => {
             if (response) {

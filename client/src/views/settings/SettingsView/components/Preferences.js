@@ -1,7 +1,5 @@
-import React, { useLayoutEffect, useState } from "react";
-import PropTypes from "prop-types";
-import clsx from "clsx";
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -12,22 +10,25 @@ import {
   DialogContent,
   DialogContentText,
   Divider,
-  Radio,
-  RadioGroup,
   FormControlLabel,
   Grid,
-  Typography,
-  TextField,
-  makeStyles,
-  Avatar,
-  colors,
+  Radio,
+  RadioGroup,
   Slider,
+  TextField,
+  Typography,
+  colors,
+  makeStyles,
 } from "@material-ui/core";
-import EqualizerOutlinedIcon from "@material-ui/icons/EqualizerOutlined";
+import React, { useLayoutEffect, useState } from "react";
 import {
-  getUserPreferences,
   changePreferences,
+  getUserPreferences,
 } from "src/components/auth/UserAuth";
+
+import EqualizerOutlinedIcon from "@material-ui/icons/EqualizerOutlined";
+import PropTypes from "prop-types";
+import clsx from "clsx";
 
 const useStyles = makeStyles({
   root: {},
@@ -113,7 +114,7 @@ const Preferences = ({ className, ...rest }) => {
     }
     changePreferences(diet, allergenList, height, weight, activity).then(
       (response) => {
-        if (response.data.err) {
+        if (response.data.message) {
           setError(true);
           setOpen(true);
         } else if (response) {

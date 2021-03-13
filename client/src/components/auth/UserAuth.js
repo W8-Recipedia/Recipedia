@@ -34,7 +34,7 @@ export const signUp = async (firstname, lastname, email, password) => {
     localStorage.setItem("usertoken", response.data.token);
     return "Success";
   } else {
-    return response.data.err;
+    return response.data.message;
   }
 };
 
