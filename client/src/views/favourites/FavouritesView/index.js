@@ -30,6 +30,7 @@ const Favourites = () => {
   const classes = useStyles();
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [favouritesList, setFavouritesList] = useState(true);
   const [selectedRecipeId, setSelectedRecipeId] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
   const [dlgOpen, setDlgOpen] = useState(false);
@@ -46,8 +47,12 @@ const Favourites = () => {
   useLayoutEffect(() => {
     getUserFavourites().then((res) => {
       if (res.data.favourites) {
+        console.log(res.data.favourites);
+        setFavouritesList(true);
         if (res.data.favourites.length > 0) {
           loadMultipleRecipes(res.data.favourites);
+        } else if (!res.data.favourites.length) {
+          setFavouritesList(false);
         }
       }
     });
@@ -77,11 +82,27 @@ const Favourites = () => {
           </Container>
           <Container maxWidth={false}>
             <Box mt={3}>
-              <RecipeList
-                recipes={recipes}
-                onRecipeClick={onRecipeClick}
-                loading={loading}
-              />
+              {favouritesList ? (
+                <>
+                  <RecipeList
+                    recipes={recipes}
+                    onRecipeClick={onRecipeClick}
+                    loading={loading}
+                  />
+                </>
+              ) : (
+                <>
+                  <Box>
+                    <Typography
+                      color="textSecondary"
+                      align="center"
+                      variant="h1"
+                    >
+                      You haven't favourited any recipes yet!
+                    </Typography>
+                  </Box>
+                </>
+              )}
               <Grid
                 item
                 xs={12}
