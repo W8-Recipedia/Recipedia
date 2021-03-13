@@ -84,6 +84,20 @@ app.post("/recipes/complexsearch", (req, res) => {
   );
 });
 
+app.post("/recipes/shuffledcomplexsearch", (req, res) => {
+  const diet = req.body.diet ? `&diet=${req.body.diet}` : ``;
+  const intolerances = req.body.intolerances
+    ? `&intolerances=${req.body.intolerances}`
+    : ``;
+
+  request(
+    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.RECIPE_API_KEY}&instructionsRequired=${req.body.instructions}&addRecipeInformation=${req.body.recipeinformation}&fillIngredients=${req.body.fillingredients}&number=${process.env.RECIPE_NUMBER}&diet=${diet}&intolerances=${intolerances}&offset=${req.body.offset}&sort=random`,
+    (error, response, body) => {
+      res.json(JSON.parse(body));
+    }
+  );
+});
+
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;

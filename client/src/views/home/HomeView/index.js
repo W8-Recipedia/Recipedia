@@ -13,7 +13,7 @@ import {
 import PropTypes from "prop-types";
 import Page from "src/components/theme/page";
 // import { getExampleRecipes } from "src/api/mockAPI";
-import { getRandomRecommendedRecipes } from "src/components/api/SpoonacularAPI";
+import { getShuffledRecommendedRecipes } from "src/components/api/SpoonacularAPI";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -41,10 +41,9 @@ const Home = () => {
   const [selectedRecipeId, setSelectedRecipeId] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [offset, setOffset] = useState(0);
+  const [offset] = useState(0);
   const [intolerances, setIntolerances] = useState([]);
   const [diet, setDiet] = useState("");
-  const [tags, setTags] = useState("");
 
   const onRecipeClick = (id) => {
     loadRecipeById(id);
@@ -59,23 +58,20 @@ const Home = () => {
     getUserPreferences().then((res) => {
       setIntolerances(res.data.allergens);
       setDiet(res.data.diet);
-      const userDietLowerCase = res.data.diet
-        ? res.data.diet.toLowerCase()
-        : null;
-      const userIntolerancesArray = res.data.allergens
-        ? res.data.allergens.join(",").toLowerCase()
-        : null;
-      const tags = userIntolerancesArray
-        ? [userDietLowerCase, userIntolerancesArray]
-        : [userDietLowerCase];
-      console.log(tags);
-      setTags(tags);
-      loadRandomRecommendedRecipes(tags, 0);
+      loadShuffledRecommendedRecipes(
+        res.data.allergens,
+        res.data.diet,
+        0,
+      );
     });
   }, []);
 
   const loadMoreRecipes = () => {
-    loadRandomRecommendedRecipes(tags);
+    let newOffset = offset + parseInt(process.env.REACT_APP_OFFSET)
+    loadShuffledRecommendedRecipes(
+      intolerances,
+      diet,
+      newOffset);
   };
 
   return (
@@ -134,16 +130,16 @@ const Home = () => {
     </Scrollbars>
   );
 
-  function loadRandomRecommendedRecipes(tagsArray) {
+  function loadShuffledRecommendedRecipes(intolerancesArray, diet, offset) {
     setLoading(true);
-    let tagsString = tagsArray ? tagsArray.join(",") : null;
-    if (tagsString == "none") {
-      tagsString = "";
-    }
-    getRandomRecommendedRecipes(tagsString)
+    let intolerancesString = intolerancesArray.join(",");
+    getShuffledRecommendedRecipes(intolerancesString, diet, offset)
       .then((res) => {
-        if (res.data.recipes) {
-          setRecipes([...recipes, ...res.data.recipes]);
+        if (res.data.results) {
+          offset
+          ? setRecipes([...recipes, ...res.data.results])
+          : setRecipes(res.data.results);
+          console.log("recipes:", res.data);
         }
       })
       .finally(() => {
