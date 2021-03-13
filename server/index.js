@@ -241,7 +241,7 @@ app.post("/reverify", (req, res) => {
     "SELECT * FROM users WHERE email = ?",
     req.body.email,
     (err, result) => {
-      if (result.length === 0) {
+      if (!result) {
         res.json({ message: "noAccount" });
       } else {
         if (result[0].verifiedemail == 0) {
