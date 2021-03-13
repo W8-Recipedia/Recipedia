@@ -132,7 +132,7 @@ const Home = () => {
 
   function loadShuffledRecommendedRecipes(intolerancesArray, diet, offset) {
     setLoading(true);
-    let intolerancesString = intolerancesArray.join(",");
+    let intolerancesString = intolerancesArray ? intolerancesArray.join(",") : null
     getShuffledRecommendedRecipes(intolerancesString, diet, offset)
       .then((res) => {
         if (res.data.results) {
