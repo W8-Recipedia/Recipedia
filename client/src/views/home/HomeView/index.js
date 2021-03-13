@@ -67,7 +67,7 @@ const Home = () => {
   }, []);
 
   const loadMoreRecipes = () => {
-    let newOffset = offset + parseInt(process.env.REACT_APP_OFFSET)
+    let newOffset = offset + parseInt(process.env.REACT_APP_SEARCH_OFFSET)
     loadShuffledRecommendedRecipes(
       intolerances,
       diet,
