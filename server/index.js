@@ -23,6 +23,9 @@ const con = mysql.createConnection({
 });
 
 const encrypt = (text) => {
+  if (!text) {
+    return NULL;
+  }
   const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
 
   const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
@@ -34,6 +37,9 @@ const encrypt = (text) => {
 };
 
 const decrypt = (hash) => {
+  if (!hash) {
+    return NULL;
+  }
   const decipher = crypto.createDecipheriv(
     algorithm,
     secretKey,
@@ -47,7 +53,6 @@ const decrypt = (hash) => {
 
   return decrypted.toString();
 };
-
 
 app.use(
   cors({
