@@ -29,11 +29,28 @@ export const signUp = async (firstname, lastname, email, password) => {
       password: password,
     }
   );
-  if (response.data.token) {
-    localStorage.removeItem("gusertoken");
-    localStorage.setItem("usertoken", response.data.token);
-    return "Success";
-  } else {
+  return response.data.message;
+};
+
+export const resendEmail = async  (email) => {
+  const response = await Axios.post(
+    process.env.REACT_APP_SERVER_URL + "/reverify",
+    {
+      email: email,
+    }
+  );
+  return response.data.message;
+};
+
+export const googleSignUp = async (gtoken, userprofile) => {
+  if (gtoken) {
+    localStorage.removeItem("usertoken");
+    const response = await Axios.post(
+      process.env.REACT_APP_SERVER_URL + "/gsignup",
+      {
+        user: userprofile,
+      }
+    );
     return response.data.message;
   }
 };
@@ -53,23 +70,16 @@ export const googleLogin = async (token, userprofile) => {
     return response.data.message;
   }
 };
-
-export const googleSignUp = async (gtoken, userprofile) => {
-  if (gtoken) {
-    localStorage.removeItem("usertoken");
-    const response = await Axios.post(
-      process.env.REACT_APP_SERVER_URL + "/gsignup",
-      {
-        user: userprofile,
-      }
-    );
-    if (response.data.token) {
-      localStorage.setItem("gusertoken", response.data.token);
-      return "Success";
-    } else {
-      return response.data.message;
+export const verifyEmail = async (token) => {
+  const response = await Axios.get(
+    process.env.REACT_APP_SERVER_URL + "/verifyemail",
+    {
+      headers: {
+        "x-access-token": token,
+      },
     }
-  }
+  );
+  return response.data.message;
 };
 
 export const getUserInfo = async () => {
@@ -86,6 +96,14 @@ export const getUserInfo = async () => {
         },
       }
     );
+    if (response.data.token) {
+      localStorage.getItem("usertoken")
+        ? (localtoken = localStorage.setItem("usertoken", response.data.token))
+        : (localtoken = localStorage.setItem(
+            "gusertoken",
+            response.data.token
+          ));
+    }
     if (localStorage.getItem("gusertoken")) {
       response.data.user.firstname = response.data.user.givenName;
       response.data.user.lastname = response.data.user.familyName;
@@ -110,6 +128,14 @@ export const getUserPreferences = async () => {
         },
       }
     );
+    if (response.data.token) {
+      localStorage.getItem("usertoken")
+        ? (localtoken = localStorage.setItem("usertoken", response.data.token))
+        : (localtoken = localStorage.setItem(
+            "gusertoken",
+            response.data.token
+          ));
+    }
     return response;
   } else {
     return { data: { loggedIn: false } };
@@ -130,6 +156,14 @@ export const getUserFavourites = async () => {
         },
       }
     );
+    if (response.data.token) {
+      localStorage.getItem("usertoken")
+        ? (localtoken = localStorage.setItem("usertoken", response.data.token))
+        : (localtoken = localStorage.setItem(
+            "gusertoken",
+            response.data.token
+          ));
+    }
     return response;
   } else {
     return { data: { loggedIn: false } };
@@ -195,7 +229,13 @@ export const changeUserInfo = async (firstname, lastname, email) => {
   }
 };
 
-export const changePreferences = async (diet, allergens, height, weight, activity) => {
+export const changePreferences = async (
+  diet,
+  allergens,
+  height,
+  weight,
+  activity
+) => {
   var localtoken;
   localStorage.getItem("usertoken")
     ? (localtoken = localStorage.getItem("usertoken"))
@@ -215,6 +255,11 @@ export const changePreferences = async (diet, allergens, height, weight, activit
       },
     }
   );
+  if (response.data.token) {
+    localStorage.getItem("usertoken")
+      ? (localtoken = localStorage.setItem("usertoken", response.data.token))
+      : (localtoken = localStorage.setItem("gusertoken", response.data.token));
+  }
   return response;
 };
 
@@ -257,6 +302,11 @@ export const submitFeeback = async (feedback) => {
       headers: { "x-access-token": localtoken },
     }
   );
+  if (response.data.token) {
+    localStorage.getItem("usertoken")
+      ? (localtoken = localStorage.setItem("usertoken", response.data.token))
+      : (localtoken = localStorage.setItem("gusertoken", response.data.token));
+  }
   return response;
 };
 
@@ -274,7 +324,7 @@ export const deleteAccount = async () => {
       },
     }
   );
-  if (response.data.message === "success") {
+  if (response.data.message === "Success") {
     localStorage.removeItem("usertoken");
     localStorage.removeItem("gusertoken");
   }

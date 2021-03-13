@@ -1,31 +1,32 @@
-import React, { useState } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { Formik, Form } from "formik";
-import { signUp, googleSignUp } from "src/components/auth/UserAuth";
 
 import {
   Box,
   Button,
   Checkbox,
   Container,
-  FormHelperText,
-  Grid,
-  Link,
-  TextField,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
+  FormHelperText,
+  Grid,
   IconButton,
-  LinearProgress,
   InputAdornment,
+  LinearProgress,
+  Link,
+  SvgIcon,
+  TextField,
   Typography,
   makeStyles,
-  SvgIcon,
 } from "@material-ui/core";
-import Page from "src/components/theme/page";
+import { Form, Formik } from "formik";
+import React, { useState } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { googleSignUp, signUp } from "src/components/auth/UserAuth";
+
 import GoogleLogin from "react-google-login";
+import Page from "src/components/theme/page";
 import { Scrollbars } from "react-custom-scrollbars";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
@@ -62,6 +63,7 @@ const SignUpView = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [googleSignUpOpen, setGoogleSignUpOpen] = useState(false);
+  const [verifyEmailOpen, setVerifyEmailOpen] = useState(false);
   const [initialRender, setInitialRender] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -75,7 +77,7 @@ const SignUpView = () => {
       values.password
     ).then((authResponse) => {
       if (authResponse === "Success") {
-        navigate("/app/home");
+        setVerifyEmailOpen(true);
       } else {
         setOpen(true);
       }
@@ -89,7 +91,8 @@ const SignUpView = () => {
   const handleGoogleSubmit = (response) => {
     googleSignUp(response.tokenId, response.profileObj).then((authResponse) => {
       if (authResponse === "Success") {
-        navigate("/app/home");
+        setGoogleSignUpOpen(false);
+        setVerifyEmailOpen(true);
       } else {
         setGoogleSignUpOpen(false);
         setOpen(true);
@@ -389,10 +392,23 @@ const SignUpView = () => {
               </DialogActions>
             </Dialog>
             <Dialog
+              open={verifyEmailOpen}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              onClose={() => {
+                setVerifyEmailOpen(false);
+              }}
+            >
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Account created! Please verify your email before logging in.
+                </DialogContentText>
+              </DialogContent>
+            </Dialog>
+            <Dialog
               open={googleSignUpOpen}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
-
               onClose={() => {
                 setGoogleSignUpOpen(false);
               }}
