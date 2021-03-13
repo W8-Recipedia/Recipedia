@@ -46,7 +46,9 @@ const Favourites = () => {
 
   useLayoutEffect(() => {
     getUserFavourites().then((res) => {
-      if (res.data.favourites) {
+      if (res.data.favourites === null) {
+        setFavouritesList(false);
+      } else if (res.data.favourites) {
         console.log(res.data.favourites);
         setFavouritesList(true);
         if (res.data.favourites.length > 0) {
