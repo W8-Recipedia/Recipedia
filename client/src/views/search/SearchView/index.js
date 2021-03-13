@@ -255,9 +255,9 @@ const SearchView = () => {
       query
     )
       .then((res) => {
-        offset
-          ? setRecipes([...recipes, ...res.data.results])
-          : setRecipes(res.data.results);
+        if (res.data.results) {
+          setRecipes([...recipes, ...res.data.results]);
+        }
       })
       .finally(() => {
         setLoading(false);
