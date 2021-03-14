@@ -50,11 +50,11 @@ const Home = () => {
     showRecipeByID(id);
     setSelectedRecipeID(id);
   };
-  const loadRecipes = () => {
+  const loadRecipes = (localAllergens = allergens, localDiet = diet) => {
     setLoading(true);
     getRecipesComplex(
-      allergens ? allergens.join(",") : null,
-      diet,
+      localAllergens ? localAllergens.join(",") : null,
+      localDiet,
       null,
       null,
       recipeOffset,
@@ -82,7 +82,7 @@ const Home = () => {
     getUserData().then((response) => {
       setAllergens(response.data.allergens);
       setDiet(response.data.diet);
-      loadRecipes();
+      loadRecipes(response.data.allergens, response.data.diet);
     });
   }, []);
 
