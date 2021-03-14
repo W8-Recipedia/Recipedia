@@ -46,9 +46,9 @@ const VerifyView = () => {
   const [emailSent, setEmailSent] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const resendVerification = (values) => {
-    resendVerificationEmail(values.email).then((authResponse) => {
-      console.log(authResponse);
-      if (authResponse === "success") {
+    resendVerificationEmail(values.email).then((response) => {
+      console.log(response);
+      if (response.data.message === "emailSuccess") {
         setEmailSent(true);
         setEmailError(false);
       } else {
@@ -61,10 +61,10 @@ const VerifyView = () => {
   useLayoutEffect(() => {
     verifyEmail(window.location.pathname.replace("/verify/", "")).then(
       (authResponse) => {
-        if (authResponse === "accountNotVerified") {
-          setVerified(false);
-        } else {
+        if (authResponse === "userVerified") {
           setVerified(true);
+        } else {
+          setVerified(false);
         }
       }
     );

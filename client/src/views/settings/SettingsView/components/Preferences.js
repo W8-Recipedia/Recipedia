@@ -64,24 +64,24 @@ const Preferences = ({ className, ...rest }) => {
   const [activity, setActivity] = useState(0);
 
   useLayoutEffect(() => {
-    getUserData().then((authResponse) => {
-      if (authResponse.data.loggedIn) {
-        if (authResponse.data.diet) {
-          setDiet(authResponse.data.diet);
+    getUserData().then((response) => {
+      if (response.data.loggedIn) {
+        if (response.data.diet) {
+          setDiet(response.data.diet);
         }
-        if (authResponse.data.allergens) {
+        if (response.data.allergens) {
           var allergenJSON = {};
-          authResponse.data.allergens.forEach((item) => {
+          response.data.allergens.forEach((item) => {
             const allergen = item === "Tree Nut" ? "TreeNut" : item;
             allergenJSON[allergen] = true;
           });
           setAllergens(allergenJSON);
         }
 
-        if (authResponse.data.health) {
-          setHeight(authResponse.data.health.height);
-          setWeight(authResponse.data.health.weight);
-          setActivity(authResponse.data.health.activity);
+        if (response.data.health) {
+          setHeight(response.data.health.height);
+          setWeight(response.data.health.weight);
+          setActivity(response.data.health.activity);
         }
       }
       setButtonDisabled(true);

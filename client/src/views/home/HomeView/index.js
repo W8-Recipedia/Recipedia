@@ -57,14 +57,14 @@ const Home = () => {
   // }, []);
 
   useLayoutEffect(() => {
-    getUserData().then((res) => {
-      setIntolerances(res.data.allergens);
-      setDiet(res.data.diet);
-      const userDietLowerCase = res.data.diet
-        ? res.data.diet.toLowerCase()
+    getUserData().then((response) => {
+      setIntolerances(response.data.allergens);
+      setDiet(response.data.diet);
+      const userDietLowerCase = response.data.diet
+        ? response.data.diet.toLowerCase()
         : null;
-      const userIntolerancesArray = res.data.allergens
-        ? res.data.allergens.join(",").toLowerCase()
+      const userIntolerancesArray = response.data.allergens
+        ? response.data.allergens.join(",").toLowerCase()
         : null;
       const tags = userIntolerancesArray
         ? [userDietLowerCase, userIntolerancesArray]

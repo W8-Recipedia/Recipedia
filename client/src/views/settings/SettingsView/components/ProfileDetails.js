@@ -15,7 +15,7 @@ import {
 } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useLayoutEffect, useState } from "react";
-import { changeUserInfo, getUserInfo } from "src/components/auth/UserAuth";
+import { changeUserInfo, getUserData } from "src/components/auth/UserAuth";
 
 import PropTypes from "prop-types";
 
@@ -30,14 +30,14 @@ const ProfileDetails = ({ className, ...rest }) => {
     email: "",
   });
   useLayoutEffect(() => {
-    getUserInfo().then((authResponse) => {
-      if (authResponse.data.loggedIn) {
+    getUserData().then((response) => {
+      if (response.data.message === "loggedIn") {
         setValues({
-          firstName: authResponse.data.user.firstname,
-          lastName: authResponse.data.user.lastname,
-          email: authResponse.data.user.email,
+          firstName: response.data.user.firstname,
+          lastName: response.data.user.lastname,
+          email: response.data.user.email,
         });
-        if (authResponse.data.user.googleId) {
+        if (response.data.user.googleId) {
           setGoogleAccount(true);
         }
       }

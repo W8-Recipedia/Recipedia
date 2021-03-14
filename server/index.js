@@ -206,6 +206,7 @@ app.post("/login", (req, res) => {
               });
               res.json({
                 token: token,
+                message: "loggedIn",
               });
             }
           }
@@ -235,6 +236,7 @@ app.post("/glogin", (req, res) => {
         });
         res.json({
           token: token,
+          message: "loggedIn"
         });
       }
     }
@@ -262,7 +264,7 @@ app.post("/signup", (req, res) => {
             if (response === "error") {
               res.json({ message: "emailError" });
             } else {
-              res.json({ message: "emailSuccess" });
+              res.json({ message: "signUpSuccess" });
             }
           });
         }
@@ -291,7 +293,7 @@ app.post("/gsignup", (req, res) => {
           if (response === "error") {
             res.json({ message: "emailError" });
           } else {
-            res.json({ message: "emailSuccess" });
+            res.json({ message: "signUpSuccess" });
           }
         });
       }

@@ -54,12 +54,12 @@ const LoginView = () => {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const responseGoogle = (response) => {
-    googleLogin(response.tokenId, response.profileObj).then((authResponse) => {
-      if (authResponse === "success") {
+    googleLogin(response.tokenId, response.profileObj).then((response) => {
+      if (response.data.message === "loggedIn") {
         navigate("/app/home");
-      } else if (authResponse === "wrongAccountType") {
-        setLoginError(authResponse);
-      } else if (authResponse === "accountNotVerified") {
+      } else if (response.data.message === "wrongAccountType") {
+        setLoginError(response.data.message);
+      } else if (response.data.message === "accountNotVerified") {
         setVerifyError(true);
       } else {
         setOpen(true);
@@ -69,16 +69,16 @@ const LoginView = () => {
 
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
-    login(values.email, values.password).then((authResponse) => {
-      if (authResponse === "success") {
+    login(values.email, values.password).then((response) => {
+      if (response.data.message === "success") {
         navigate("/app/home");
       } else {
-        if (authResponse === "wrongAccountType") {
+        if (response.data.message === "wrongAccountType") {
           setGoogleAccount(true);
-        } else if (authResponse === "accountNotVerified") {
+        } else if (response.data.message === "accountNotVerified") {
           setVerifyError(true);
         } else {
-          setLoginError(authResponse);
+          setLoginError(response.data.message);
         }
       }
     });

@@ -14,7 +14,6 @@ import React, { useState } from "react";
 import {
   deleteAccount,
   getUserData,
-  getUserInfo,
 } from "src/components/auth/UserAuth";
 
 import PropTypes from "prop-types";
@@ -41,7 +40,7 @@ const ProfileCard = ({ className, ...rest }) => {
   const [userRank, setUserRank] = useState("");
 
   const [userName, setUserName] = useState(() => {
-    getUserInfo().then((authResponse) => {
+    getUserData().then((authResponse) => {
       if (authResponse.data.loggedIn) {
         setUserName(
           authResponse.data.user.firstname +

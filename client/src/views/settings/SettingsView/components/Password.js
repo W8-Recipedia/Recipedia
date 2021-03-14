@@ -1,3 +1,5 @@
+import {} from "src/components/auth/UserAuth";
+
 import * as Yup from "yup";
 
 import {
@@ -14,9 +16,7 @@ import {
 } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useLayoutEffect, useState } from "react";
-
-import { changePassword } from "src/components/auth/UserAuth";
-import { getUserInfo } from "src/components/auth/UserAuth";
+import { changePassword, getUserData } from "src/components/auth/UserAuth";
 
 const Password = () => {
   const [open, setOpen] = useState(false);
@@ -24,8 +24,8 @@ const Password = () => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [googleAccount, setGoogleAccount] = useState(false);
   useLayoutEffect(() => {
-    getUserInfo().then((authResponse) => {
-      if (authResponse.data.user.googleId) {
+    getUserData().then((response) => {
+      if (response.data.user.googleId) {
         setGoogleAccount(true);
       }
     });
@@ -33,16 +33,14 @@ const Password = () => {
   }, []);
 
   const handleSubmit = (values, actions) => {
-    changePassword(values.currentPassword, values.password).then(
-      (authResponse) => {
-        if (authResponse === "success") {
-          setOpen(true);
-          actions.resetForm({});
-        } else {
-          setWrongPassword(true);
-        }
+    changePassword(values.currentPassword, values.password).then((response) => {
+      if (response.data.message === "passwordChanged") {
+        setOpen(true);
+        actions.resetForm({});
+      } else {
+        setWrongPassword(true);
       }
-    );
+    });
   };
 
   return (

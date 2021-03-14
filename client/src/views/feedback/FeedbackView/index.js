@@ -14,7 +14,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useLayoutEffect, useState } from "react";
-import { getUserInfo, submitFeeback } from "src/components/auth/UserAuth";
+import { getUserData, submitFeeback } from "src/components/auth/UserAuth";
 
 import Page from "src/components/theme/page";
 import PropTypes from "prop-types";
@@ -46,12 +46,12 @@ const FeedbackView = ({ className, ...rest }) => {
     feedback: "",
   });
   useLayoutEffect(() => {
-    getUserInfo().then((authResponse) => {
-      if (authResponse.data.loggedIn) {
+    getUserData().then((response) => {
+      if (response.data.loggedIn) {
         setValues({
-          firstName: authResponse.data.user.firstname,
-          lastName: authResponse.data.user.lastname,
-          email: authResponse.data.user.email,
+          firstName: response.data.user.firstname,
+          lastName: response.data.user.lastname,
+          email: response.data.user.email,
         });
       }
     });
@@ -67,8 +67,8 @@ const FeedbackView = ({ className, ...rest }) => {
     if (values.feedback.length < 150) {
       setFeedbackError(true);
     } else {
-      submitFeeback(values.feedback).then((authResponse) => {
-        setFeedbackStatus(authResponse.data.message);
+      submitFeeback(values.feedback).then((response) => {
+        setFeedbackStatus(response.data.message);
         setOpen(true);
       });
     }
