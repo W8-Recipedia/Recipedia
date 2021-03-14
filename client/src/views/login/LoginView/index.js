@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 const LoginView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [verifyError, setVerifyError] = useState(false);
   const [googleAccount, setGoogleAccount] = useState(false);

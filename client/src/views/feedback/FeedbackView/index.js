@@ -47,7 +47,7 @@ const FeedbackView = ({ className, ...rest }) => {
   });
   useLayoutEffect(() => {
     getUserData().then((response) => {
-      if (response.data.loggedIn) {
+      if (response.data.message === "loggedIn") {
         setValues({
           firstName: response.data.user.firstname,
           lastName: response.data.user.lastname,
