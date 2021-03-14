@@ -35,8 +35,12 @@ const transporter = nodemailer.createTransport({
 
 const encrypt = (text) => {
   if (text) {
+    textString = JSON.stringify(hash);
     const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
-    const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
+    const encrypted = Buffer.concat([
+      cipher.update(textString),
+      cipher.final(),
+    ]);
     return JSON.stringify({
       iv: iv.toString("hex"),
       content: encrypted.toString("hex"),
@@ -58,7 +62,7 @@ const decrypt = (hash) => {
       decipher.update(Buffer.from(hash.content, "hex")),
       decipher.final(),
     ]);
-    return decrypted.toString();
+    return JSON.parse(decrypted.toString());
   } else {
     return null;
   }
@@ -378,15 +382,11 @@ app.get("/getuserdata", (req, res) => {
                 if (result[0].diet) {
                   jsonResponse.diet = decrypt(result[0].diet);
                 } else if (result[0].allergens) {
-                  jsonResponse.allergens = JSON.parse(
-                    decrypt(result[0].allergens)
-                  );
+                  jsonResponse.allergens = decrypt(result[0].allergens);
                 } else if (result[0].health) {
-                  jsonResponse.health = JSON.parse(decrypt(result[0].health));
+                  jsonResponse.health = decrypt(result[0].health);
                 } else if (result[0].favourites) {
-                  jsonResponse.favourites = JSON.parse(
-                    decrypt(result[0].favourites)
-                  );
+                  jsonResponse.favourites = decrypt(result[0].favourites);
                 }
                 jsonResponse.message = "loggedIn";
                 jsonResponse.token = token;
@@ -424,7 +424,7 @@ app.post("/addtofavourites", (req, res) => {
                 con.query(
                   "UPDATE users SET favourites = ? WHERE email = ?",
                   [
-                    encrypt(JSON.stringify([req.body.favourite.toString()])),
+                    encrypt([req.body.favourite.toString()]),
                     decoded.user.email,
                   ],
                   (err) => {
@@ -436,8 +436,8 @@ app.post("/addtofavourites", (req, res) => {
                   }
                 );
               } else {
-                favouriteList = JSON.parse(
-                  decrypt(JSON.parse(result[0].favourites))
+                favouriteList =
+                  decrypt(result[0].favourites
                 );
                 if (favouriteList.includes(req.body.favourite.toString())) {
                   res.json({ message: "favouriteExists" });
@@ -446,7 +446,7 @@ app.post("/addtofavourites", (req, res) => {
                   con.query(
                     "UPDATE users SET favourites = ? WHERE email = ?",
                     [
-                      encrypt(JSON.stringify(favouriteList)),
+                      encrypt(favouriteList),
                       decoded.user.email,
                     ],
                     (err) => {
@@ -491,7 +491,7 @@ app.post("/removefromfavourites", (req, res) => {
               } else if (!result[0].favourites) {
                 res.json({ message: "noFavourites" });
               } else {
-                favouriteList = JSON.parse(decrypt(result[0].favourites));
+                favouriteList = decrypt(result[0].favourites);
                 if (favouriteList.includes(req.body.favourite.toString())) {
                   const favouriteIndex = favouriteList.indexOf(
                     req.body.favourite.toString()
@@ -500,7 +500,7 @@ app.post("/removefromfavourites", (req, res) => {
                   con.query(
                     "UPDATE users SET favourites = ? WHERE email = ?",
                     [
-                      encrypt(JSON.stringify(favouriteList)),
+                      encrypt(favouriteList),
                       decoded.user.email,
                     ],
                     (err) => {
@@ -578,8 +578,8 @@ app.post("/changeuserpreferences", (req, res) => {
             "UPDATE users SET diet = ?, allergens = ?, health = ? WHERE email = ?",
             [
               encrypt(req.body.diet),
-              encrypt(JSON.stringify(req.body.allergens)),
-              encrypt(JSON.stringify(healthData)),
+              encrypt(req.body.allergens),
+              encrypt(healthData),
               decoded.user.email,
             ],
             (err) => {
