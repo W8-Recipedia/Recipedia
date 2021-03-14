@@ -24,10 +24,10 @@ const getToken = async () => {
 };
 
 const updateToken = async (token) => {
-  const token = await tokenType();
-  if (token === "usertoken") {
+  const oldToken = await tokenType();
+  if (oldToken === "usertoken") {
     return localStorage.setItem("usertoken", token);
-  } else if (token === "gusertoken") {
+  } else if (oldToken === "gusertoken") {
     return localStorage.setItem("gusertoken", token);
   } else {
     return null;
