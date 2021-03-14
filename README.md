@@ -125,6 +125,10 @@ npm run dev
 - [Stefan Tutugan](https://github.com/tutugan)
 - [Max Lawley](https://github.com/lawleymax)
 
+## Code of Conduct
+
+W8 has a strinct code of conduct, that we endeavour to follow at all times - see the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) file for more details about our ethical values and principles.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for more details.
