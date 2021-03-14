@@ -70,12 +70,12 @@ const Home = () => {
         ? [userDietLowerCase, userIntolerancesArray]
         : [userDietLowerCase];
       setTags(tags);
-      loadRandomRecommendedRecipes(tags, 0);
+      loadRandomRecommendedRecipes();
     });
   }, []);
 
   const loadMoreRecipes = () => {
-    loadRandomRecommendedRecipes(tags);
+    loadRandomRecommendedRecipes();
   };
 
   return (
@@ -134,9 +134,9 @@ const Home = () => {
     </Scrollbars>
   );
 
-  function loadRandomRecommendedRecipes(tagsArray) {
+  function loadRandomRecommendedRecipes() {
     setLoading(true);
-    let tagsString = tagsArray ? tagsArray.join(",") : null;
+    let tagsString = tags ? tags.join(",") : null;
     if (tagsString === "none") {
       tagsString = "";
     }
