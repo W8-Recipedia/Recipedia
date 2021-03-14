@@ -200,7 +200,7 @@ const LoginView = () => {
                     onChange={handleChange}
                     value={values.password}
                     variant="outlined"
-                    type={showPassword ? "text" : "password"} // <-- This is where the magic happens
+                    type={showPassword ? "text" : "password"}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">

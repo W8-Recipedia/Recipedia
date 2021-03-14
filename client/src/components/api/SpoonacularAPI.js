@@ -1,53 +1,34 @@
 import Axios from "axios";
 
-export const getComplexRecipes = async (
-  intolerances,
+export const getRecipesComplex = async (
+  allergens,
   diet,
   dishtypes,
   cuisines,
   offset = 0,
-  query
+  query,
+  random
 ) => {
   return await Axios.post(
-    process.env.REACT_APP_SERVER_URL + "/recipes/complexsearch",
+    process.env.REACT_APP_SERVER_URL + "/recipes/getRecipesComplex",
     {
       instructions: true,
       recipeinformation: true,
       fillingredients: true,
       diet: diet,
-      intolerances: intolerances,
+      intolerances: allergens,
       type: dishtypes,
       cuisine: cuisines,
       offset,
       query,
-    }
-  );
-};
-//
-// MERGE getComplexRecipes and getShuffledRecommendedRecipes
-//
-export const getShuffledRecommendedRecipes = async (
-  intolerances,
-  diet,
-  offset
-) => {
-  return await Axios.post(
-    process.env.REACT_APP_SERVER_URL + "/recipes/complexsearch",
-    {
-      instructions: true,
-      recipeinformation: true,
-      fillingredients: true,
-      diet: diet,
-      intolerances: intolerances,
-      offset,
-      random: true,
+      random: random,
     }
   );
 };
 
 export const getRecipesByID = async (favourites) => {
   return await Axios.post(
-    process.env.REACT_APP_SERVER_URL + "/recipes/informationbulk",
+    process.env.REACT_APP_SERVER_URL + "/recipes/getRecipesByID",
     {
       favourites: favourites,
     }

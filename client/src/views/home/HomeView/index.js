@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
-import { getShuffledRecommendedRecipes } from "src/components/api/SpoonacularAPI";
+import { getRecipesComplex } from "src/components/api/SpoonacularAPI";
 import { getUserData } from "src/components/auth/UserAuth";
 
 const useStyles = makeStyles((theme) => ({
@@ -52,14 +52,18 @@ const Home = () => {
   };
   const loadRecipes = () => {
     setLoading(true);
-    getShuffledRecommendedRecipes(
+    getRecipesComplex(
       allergens ? allergens.join(",") : null,
       diet,
-      recipeOffset
+      null,
+      null,
+      recipeOffset,
+      null,
+      true
     )
       .then((response) => {
         if (!response.data.results) {
-          // SHOW POPUP FOR ERROR
+          // SHOW TEXT FOR ERROR
         } else {
           setRecipeList([...recipeList, ...response.data.results]);
         }

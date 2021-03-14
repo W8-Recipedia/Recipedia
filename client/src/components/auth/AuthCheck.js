@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 
 import DashboardView from "src/views/dashboard/DashboardView";
 import LandingView from "src/views/landing/LandingView";

@@ -43,11 +43,8 @@ const Favourites = () => {
     setLoading(true);
     getRecipesByID(idsArray ? idsArray.join(",") : null)
       .then((response) => {
-        console.log(response);
-        if (!response.data.results) {
-          // SHOW POPUP FOR NO FAVOURITES
-        } else {
-          setRecipeList([...recipeList, ...response.data.results]);
+        if (response.data) {
+          setRecipeList([...recipeList, ...response.data]);
         }
       })
       .finally(() => {
@@ -64,6 +61,7 @@ const Favourites = () => {
   useLayoutEffect(() => {
     getUserData().then((response) => {
       if (response.data.favourites) {
+        console.log(response.data);
         if (response.data.favourites.length > 0) {
           loadMultipleRecipes(response.data.favourites);
         } else {
@@ -113,7 +111,7 @@ const Favourites = () => {
                     <Typography
                       color="textSecondary"
                       align="center"
-                      variant="h1"
+                      variant="h3"
                     >
                       You haven't favourited any recipes yet!
                     </Typography>

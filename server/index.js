@@ -126,24 +126,13 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-app.post("/recipes/informationbulk", (req, res) => {
+app.post("/recipes/getRecipesComplex", (req, res) => {
   const apiKey = `apiKey=${process.env.RECIPE_API_KEY}`;
-  const recipeIDs = `&ids=${req.body.favourites}`;
-
-  request(
-    `https://api.spoonacular.com/recipes/informationBulk?${apiKey}${recipeIDs}`,
-    (error, response, body) => {
-      res.json(JSON.parse(body));
-    }
-  );
-});
-
-app.post("/recipes/complexsearch", (req, res) => {
-  const apiKey = `apiKey=${process.env.RECIPE_API_KEY}`;
+  const recipeNumber = `&number=${process.env.RECIPE_NUMBER}`;
   const instructions = `&instructionsRequired=${req.body.instructions}`;
   const recipeInformation = `&addRecipeInformation=${req.body.recipeinformation}`;
   const ingredients = `&fillIngredients=${req.body.fillingredients}`;
-  const recipeNumber = `&number=${process.env.RECIPE_NUMBER}`;
+
   const diet = req.body.diet ? `&diet=${req.body.diet}` : ``;
   const intolerances = req.body.intolerances
     ? `&intolerances=${req.body.intolerances}`
@@ -161,6 +150,20 @@ app.post("/recipes/complexsearch", (req, res) => {
     }
   );
 });
+
+app.post("/recipes/getRecipesByID", (req, res) => {
+  const apiKey = `apiKey=${process.env.RECIPE_API_KEY}`;
+  const recipeIDs = `&ids=${req.body.favourites}`;
+
+  request(
+    `https://api.spoonacular.com/recipes/informationBulk?${apiKey}${recipeIDs}`,
+    (error, response, body) => {
+      res.json(JSON.parse(body));
+    }
+  );
+});
+
+
 
 app.post("/login", (req, res) => {
   con.query(
