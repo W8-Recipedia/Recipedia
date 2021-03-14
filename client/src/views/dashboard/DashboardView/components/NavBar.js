@@ -17,12 +17,12 @@ import {
   Search as SearchIcon,
   Settings as SettingsIcon,
 } from "react-feather";
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { getUserFavourites, getUserInfo } from "src/components/auth/UserAuth";
 
 import NavItem from "src/views/dashboard/DashboardView/components/NavItem";
 import PropTypes from "prop-types";
+import { getUserData } from "src/components/auth/UserAuth";
 
 const items = [
   {
@@ -86,27 +86,29 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const [userName, setUserName] = useState("");
 
   useLayoutEffect(() => {
-    getUserInfo().then((authResponse) => {
-      if (authResponse.data.loggedIn) {
+    getUserData().then((response) => {
+      if (response.data.message === "loggedIn") {
         setUserName(
-          authResponse.data.user.firstname +
-            " " +
-            authResponse.data.user.lastname
+          response.data.user.firstname + " " + response.data.user.lastname
         );
       }
-      if (authResponse.data.user.imageUrl) {
-        setImageURL(authResponse.data.user.imageUrl);
+      if (response.data.user.imageUrl) {
+        setImageURL(response.data.user.imageUrl);
       }
-      getUserFavourites().then((res) => {
-        if (res.data.favourites) {
-          const userFavouritesLength = res.data.favourites.length;
-          setUserRank(userFavouritesLength < 5
-            ? "Recipedia Beginner"
-            : userFavouritesLength < 10
-            ? "Food Connoisseur"
-            : userFavouritesLength < 15
-            ? "Sustenance Master"
-            : "Nourishment God")
+      getUserData().then((response) => {
+        if (response.data.favourites) {
+          const userFavouritesLength = response.data.favourites.length;
+          setUserRank(
+            userFavouritesLength < 5
+              ? "Recipedia Beginner"
+              : userFavouritesLength < 10
+              ? "Food Connoisseur"
+              : userFavouritesLength < 15
+              ? "Sustenance Master"
+              : "Nourishment God"
+          );
+        } else {
+          setUserRank("Recipedia Beginner");
         }
       });
     });

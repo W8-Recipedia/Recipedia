@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
-import { makeStyles } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+
 import NavBar from "src/views/dashboard/DashboardView/components/NavBar";
+import { Outlet } from "react-router-dom";
 import TopBar from "src/views/dashboard/DashboardView/components/TopBar";
+import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,6 +37,14 @@ const useStyles = makeStyles((theme) => ({
 const DashboardView = () => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
+  const [time, setTime] = useState(Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => setTime(Date.now()), 300000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <div className={classes.root}>

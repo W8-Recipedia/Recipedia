@@ -6,11 +6,94 @@ const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const request = require("request");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+
 const saltRounds = 10;
+const algorithm = "aes-256-ctr";
+const secretKey = process.env.ENCRYPTION_KEY;
+const iv = crypto.randomBytes(16);
 
 const app = express();
 
-app.use(express.json());
+const con = mysql.createConnection({
+  host: process.env.DATABASE_HOST,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
+});
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.RECIPEDIA_EMAIL,
+    pass: process.env.RECIPEDIA_PASSWORD,
+  },
+});
+
+const encrypt = (text) => {
+  if (text) {
+    textString = JSON.stringify(text);
+    const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
+    const encrypted = Buffer.concat([
+      cipher.update(textString),
+      cipher.final(),
+    ]);
+    return JSON.stringify({
+      iv: iv.toString("hex"),
+      content: encrypted.toString("hex"),
+    });
+  } else {
+    return null;
+  }
+};
+
+const decrypt = (hash) => {
+  if (hash) {
+    hashJSON = JSON.parse(hash);
+    const decipher = crypto.createDecipheriv(
+      algorithm,
+      secretKey,
+      Buffer.from(hashJSON.iv, "hex")
+    );
+    const decrypted = Buffer.concat([
+      decipher.update(Buffer.from(hashJSON.content, "hex")),
+      decipher.final(),
+    ]);
+    return JSON.parse(decrypted.toString());
+  } else {
+    return null;
+  }
+};
+
+const sendVerificationEmail = async (email) => {
+  const user = {
+    email: email,
+  };
+  const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
+  var mailOptions = {
+    from: "w8.recipedia@gmail.com",
+    to: email,
+    subject: "Verify your Recipedia account",
+    text: `Click here to verify your Recipedia account (this link is valid for 1 hour): ${
+      process.env.LOCALHOST_CLIENT_URL
+        ? [process.env.LOCALHOST_CLIENT_URL]
+        : [process.env.NETLIFY_CLIENT_URL]
+    }/verify/${token}`,
+  };
+  transporter.sendMail(mailOptions, (err) => {
+    if (err) {
+      return "error";
+    } else {
+      return "success";
+    }
+  });
+};
+
 app.use(
   cors({
     origin: process.env.LOCALHOST_CLIENT_URL
@@ -41,26 +124,26 @@ app.use((req, res, next) => {
   next();
 });
 
-const con = mysql.createConnection({
-  host: process.env.HOST,
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
-});
+app.use(express.json());
 
 app.post("/recipes/random", (req, res) => {
-  const tags = req.body.tags ? `&tags=${req.body.tags}` : ``;
+  const apiKey = `apiKey=${process.env.RECIPE_API_KEY}`;
+  const recipeTags = req.body.tags ? `&tags=${req.body.tags}` : ``;
+  const recipeNumber = `&number=${process.env.RECIPE_NUMBER}`;
   request(
-    `https://api.spoonacular.com/recipes/random?apiKey=${process.env.RECIPE_API_KEY}${tags}&number=${process.env.RECIPE_NUMBER}`,
+    `https://api.spoonacular.com/recipes/random?${apiKey}${recipeTags}${recipeNumber}`,
     (error, response, body) => {
-      res.json({ recipes: JSON.parse(body).recipes });
+      res.json(JSON.parse(body).recipes);
     }
   );
 });
 
 app.post("/recipes/informationbulk", (req, res) => {
+  const apiKey = `apiKey=${process.env.RECIPE_API_KEY}`;
+  const recipeIDs = `&ids=${req.body.favourites}`;
+
   request(
-    `https://api.spoonacular.com/recipes/informationBulk?apiKey=${process.env.RECIPE_API_KEY}&ids=${req.body.favourites}`,
+    `https://api.spoonacular.com/recipes/informationBulk?${apiKey}${recipeIDs}`,
     (error, response, body) => {
       res.json(JSON.parse(body));
     }
@@ -68,16 +151,22 @@ app.post("/recipes/informationbulk", (req, res) => {
 });
 
 app.post("/recipes/complexsearch", (req, res) => {
+  const apiKey = `apiKey=${process.env.RECIPE_API_KEY}`;
+  const instructions = `&instructionsRequired=${req.body.instructions}`;
+  const recipeInformation = `&addRecipeInformation=${req.body.recipeinformation}`;
+  const ingredients = `&fillIngredients=${req.body.fillingredients}`;
+  const recipeNumber = `&number=${process.env.RECIPE_NUMBER}`;
   const diet = req.body.diet ? `&diet=${req.body.diet}` : ``;
   const intolerances = req.body.intolerances
     ? `&intolerances=${req.body.intolerances}`
     : ``;
   const type = req.body.type ? `&type=${req.body.type}` : ``;
   const cuisine = req.body.cuisine ? `&cuisine=${req.body.cuisine}` : ``;
+  const offset = `&offset=${req.body.offset}`;
   const query = req.body.query ? `&query=${req.body.query}` : ``;
 
   request(
-    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.RECIPE_API_KEY}&instructionsRequired=${req.body.instructions}&addRecipeInformation=${req.body.recipeinformation}&fillIngredients=${req.body.fillingredients}&number=${process.env.RECIPE_NUMBER}${diet}${intolerances}${type}${cuisine}&offset=${req.body.offset}${query}`,
+    `https://api.spoonacular.com/recipes/complexSearch?${apiKey}${instructions}${recipeInformation}${ingredients}${recipeNumber}${diet}${intolerances}${type}${cuisine}${offset}${query}`,
     (error, response, body) => {
       res.json(JSON.parse(body));
     }
@@ -99,421 +188,538 @@ app.post("/recipes/shuffledcomplexsearch", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  console.log(req.body);
-
-  con.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
-    if (err) {
-      console.log(err);
-
-      res.json({ err: err });
-    } else if (result.length > 0) {
-      bcrypt.compare(password, result[0].password, (error, response) => {
-        console.log(error);
-
-        if (response) {
-          const user = result[0];
-          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-            expiresIn: "7d",
-          });
-          res.json({
-            token: token,
-          });
-        } else {
-          if (result[0].googlelogin) {
-            res.json({ message: "googleAccount" });
-          } else {
-            res.json({ message: "wrongPassword" });
+  con.query(
+    "SELECT * FROM users WHERE email = ?",
+    req.body.email,
+    (err, result) => {
+      if (err) {
+        res.json({ message: err });
+      } else if (result.length !== 1) {
+        res.json({ message: "noAccount" });
+      } else if (result[0].googlelogin) {
+        res.json({ message: "wrongAccountType" });
+      } else if (result[0].verifiedemail !== 1) {
+        res.json({ message: "accountNotVerified" });
+      } else {
+        const userID = result[0].userid;
+        const email = result[0].email;
+        const firstName = decrypt(result[0].firstname);
+        const lastName = decrypt(result[0].lastname);
+        bcrypt.compare(
+          req.body.password,
+          decrypt(result[0].password),
+          (err) => {
+            if (err) {
+              res.json({ message: "wrongPassword" });
+            } else {
+              const user = {
+                userid: userID,
+                email: email,
+                firstname: firstName,
+                lastname: lastName,
+              };
+              const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+                expiresIn: "30m",
+              });
+              res.json({
+                token: token,
+                message: "loggedIn",
+              });
+            }
           }
-        }
-      });
-    } else {
-      res.json({ message: "noEmail" });
-    }
-  });
-});
-
-app.post("/signup", (req, res) => {
-  const firstname = req.body.firstname;
-  const lastname = req.body.lastname;
-  const email = req.body.email;
-  const password = req.body.password;
-
-  bcrypt.hash(password, saltRounds, (err, hash) => {
-    con.query(
-      "INSERT INTO users (firstname, lastname, email, password) VALUES (?,?,?,?)",
-      [firstname, lastname, email, hash],
-      (err, result) => {
-        if (err) {
-          res.json({ err: err });
-        } else {
-          const user = {
-            email: email,
-            firstname: firstname,
-            lastname: lastname,
-            password: password,
-          };
-          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-            expiresIn: "7d",
-          });
-          res.json({
-            token: token,
-            result: result,
-          });
-        }
+        );
       }
-    );
-  });
+    }
+  );
 });
 
-app.post("/glogin", (req, res) => {
+app.post("/googlelogin", (req, res) => {
   con.query(
     "SELECT * FROM users WHERE email = ?",
     req.body.userprofile.email,
     (err, result) => {
-      if (result.length === 0) {
-        res.json({ message: "noAccount" });
-      } else {
-        if (result[0].googlelogin) {
-          const user = req.body.userprofile;
-          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-            expiresIn: "7d",
-          });
-          res.json({
-            token: token,
-          });
-        } else {
-          res.json({ message: "noGoogle" });
-        }
-      }
-    }
-  );
-});
-
-app.post("/gsignup", (req, res) => {
-  con.query(
-    "INSERT INTO users (firstname, lastname, googlelogin, email) VALUES (?,?,?,?)",
-    [req.body.user.givenName, req.body.user.familyName, 1, req.body.user.email],
-    (err, result) => {
       if (err) {
-        res.json({ message: "yesAccount" });
+        res.json({ message: err });
+      } else if (result.length !== 1) {
+        res.json({ message: "noAccount" });
+      } else if (!result[0].googlelogin) {
+        res.json({ message: "wrongAccountType" });
+      } else if (result[0].verifiedemail !== 1) {
+        res.json({ message: "accountNotVerified" });
       } else {
-        const user = req.body.user;
+        const user = req.body.userprofile;
         const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-          expiresIn: "7d",
+          expiresIn: "30m",
         });
-        res.json({ token: token, result: result });
+        res.json({
+          token: token,
+          message: "loggedIn",
+        });
       }
     }
   );
 });
 
-app.get("/getuserinfo", (req, res) => {
-  if (req.headers["x-access-token"]) {
-    const token = jwt.verify(
-      req.headers["x-access-token"],
-      process.env.JWT_SECRET
-    );
-    res.json({ loggedIn: true, user: token.user });
-  } else {
-    res.json({ loggedIn: false });
-  }
-});
-
-app.get("/getuserpreferences", (req, res) => {
-  if (req.headers["x-access-token"]) {
-    const token = jwt.verify(
-      req.headers["x-access-token"],
-      process.env.JWT_SECRET
-    );
+app.post("/signup", (req, res) => {
+  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
     con.query(
-      "SELECT * FROM users WHERE email = ?",
-      token.user.email,
-      (err, result) => {
-        if (err) {
-          res.json({ err: err });
-        } else if (result.length > 0) {
-          res.json({
-            diet: result[0].diet,
-            allergens: JSON.parse(result[0].allergens),
-            health: JSON.parse(result[0].health),
-            loggedIn: true,
-          });
-        }
-      }
-    );
-  } else {
-    res.json({ loggedIn: false });
-  }
-});
-
-app.get("/getuserfavourites", (req, res) => {
-  if (req.headers["x-access-token"]) {
-    const token = jwt.verify(
-      req.headers["x-access-token"],
-      process.env.JWT_SECRET
-    );
-    con.query(
-      "SELECT * FROM users WHERE email = ?",
-      token.user.email,
-      (err, result) => {
-        if (err) {
-          res.json({ err: err });
-        } else if (result.length > 0) {
-          res.json({
-            favourites: JSON.parse(result[0].favourites),
-            loggedIn: true,
-          });
-        }
-      }
-    );
-  } else {
-    res.json({ loggedIn: false });
-  }
-});
-
-app.post("/addtofavourites", (req, res) => {
-  if (req.headers["x-access-token"]) {
-    const token = jwt.verify(
-      req.headers["x-access-token"],
-      process.env.JWT_SECRET
-    );
-    con.query(
-      "SELECT * FROM users WHERE email = ?",
-      token.user.email,
-      (err, result) => {
-        if (err) {
-          res.json({ err: err });
-        } else {
-          if (result[0].favourites) {
-            favouriteList = JSON.parse(result[0].favourites);
-            if (!favouriteList.includes(req.body.favourite.toString())) {
-              favouriteList.push(req.body.favourite.toString());
-              con.query(
-                "UPDATE users SET favourites = ? WHERE email = ?",
-                [JSON.stringify(favouriteList), token.user.email],
-                (err, result) => {
-                  if (err) {
-                    res.json({ message: "DBError" });
-                  }
-                }
-              );
-            } else {
-              res.json({ message: "favouriteExists" });
-            }
-          } else {
-            initialFavourite = JSON.stringify([req.body.favourite.toString()]);
-            con.query(
-              "UPDATE users SET favourites = ? WHERE email = ?",
-              [initialFavourite, token.user.email],
-              (err, result) => {
-                if (err) {
-                  res.json({ message: "DBError" });
-                }
-              }
-            );
-          }
-        }
-      }
-    );
-  } else {
-    res.json({ loggedIn: false });
-  }
-});
-
-app.post("/removefromfavourites", (req, res) => {
-  if (req.headers["x-access-token"]) {
-    const token = jwt.verify(
-      req.headers["x-access-token"],
-      process.env.JWT_SECRET
-    );
-    con.query(
-      "SELECT * FROM users WHERE email = ?",
-      token.user.email,
-      (err, result) => {
-        if (err) {
-          res.json({ err: err });
-        } else {
-          if (result[0].favourites) {
-            favouriteList = JSON.parse(result[0].favourites);
-            if (favouriteList.includes(req.body.favourite.toString())) {
-              const favouriteIndex = favouriteList.indexOf(
-                req.body.favourite.toString()
-              );
-              favouriteList.splice(favouriteIndex, 1);
-              con.query(
-                "UPDATE users SET favourites = ? WHERE email = ?",
-                [JSON.stringify(favouriteList), token.user.email],
-                (err, result) => {
-                  if (err) {
-                    res.json({ message: "DBError" });
-                  }
-                }
-              );
-            } else {
-              res.json({ message: "favouriteDoesNotExist" });
-            }
-          }
-        }
-      }
-    );
-  } else {
-    res.json({ loggedIn: false });
-  }
-});
-
-app.post("/changeuserinfo", (req, res) => {
-  if (req.headers["x-access-token"]) {
-    const token = jwt.verify(
-      req.headers["x-access-token"],
-      process.env.JWT_SECRET
-    );
-    const uid = token.user.userid;
-    con.query(
-      "UPDATE users SET firstname = ?, lastname = ?, email = ? WHERE email = ?",
-      [req.body.firstname, req.body.lastname, req.body.email, token.user.email],
-      (err, result) => {
-        if (err) {
-          res.json({ message: "emailExists" });
-        } else {
-          const user = {
-            userid: uid,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            email: req.body.email,
-          };
-          const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-            expiresIn: "7d",
-          });
-          res.json({ token: token, result: result });
-        }
-      }
-    );
-  } else {
-    res.json({ message: "noToken" });
-  }
-});
-
-app.post("/changepreferences", (req, res) => {
-  if (req.headers["x-access-token"]) {
-    const token = jwt.verify(
-      req.headers["x-access-token"],
-      process.env.JWT_SECRET
-    );
-    const healthData = {
-      height: req.body.height,
-      weight: req.body.weight,
-      activity: req.body.activity,
-    };
-    con.query(
-      "UPDATE users SET diet = ?, allergens = ?, health = ? WHERE email = ?",
+      "INSERT INTO users (firstname, lastname, email, password) VALUES (?,?,?,?)",
       [
-        req.body.diet,
-        JSON.stringify(req.body.allergens),
-        JSON.stringify(healthData),
-        token.user.email,
+        encrypt(req.body.firstname),
+        encrypt(req.body.lastname),
+        req.body.email,
+        encrypt(hash),
       ],
-      (err, result) => {
-        if (err) {
-          res.json({ err: err });
-        } else {
-          res.json({ result: result });
-        }
-      }
-    );
-  } else {
-    res.json({ message: "noToken" });
-  }
-});
-
-app.post("/changepassword", (req, res) => {
-  if (req.headers["x-access-token"]) {
-    const token = jwt.verify(
-      req.headers["x-access-token"],
-      process.env.JWT_SECRET
-    );
-    const oldpassword = req.body.oldpassword;
-    const newpassword = req.body.newpassword;
-    con.query(
-      "SELECT * FROM users WHERE email = ?",
-      token.user.email,
-      (err, result) => {
-        if (err) {
-          res.json({ err: err });
-        } else if (result.length > 0) {
-          bcrypt.compare(oldpassword, result[0].password, (error, response) => {
-            if (response) {
-              bcrypt.hash(newpassword, saltRounds, (err, hash) => {
-                con.query(
-                  "UPDATE users SET password = ? WHERE email = ?",
-                  [hash, token.user.email],
-                  (err, result) => {
-                    if (err) {
-                      res.json({ message: "DBError" });
-                    }
-                  }
-                );
-              });
-              const user = result[0];
-              const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-                expiresIn: "7d",
-              });
-              res.json({ passwordChanged: true, token: token });
-            } else {
-              res.json({ message: "wrongPassword" });
-            }
-          });
-        }
-      }
-    );
-  } else {
-    res.json({ loggedIn: false });
-  }
-});
-
-app.post("/submitfeedback", (req, res) => {
-  if (req.headers["x-access-token"]) {
-    const token = jwt.verify(
-      req.headers["x-access-token"],
-      process.env.JWT_SECRET
-    );
-    con.query(
-      "INSERT INTO feedback (email, message) VALUES (?,?)",
-      [token.user.email, req.body.feedback],
-      (err, result) => {
+      (err) => {
         if (err) {
           res.json({ message: err });
         } else {
-          res.json({ message: "Success" });
+          const user = {
+            email: req.body.email,
+          };
+          sendVerificationEmail(user).then((response) => {
+            if (response === "error") {
+              res.json({ message: "emailError" });
+            } else {
+              res.json({ message: "signUpSuccess" });
+            }
+          });
         }
       }
     );
+  });
+});
+
+app.post("/googlesignup", (req, res) => {
+  con.query(
+    "INSERT INTO users (firstname, lastname, googlelogin, email) VALUES (?,?,?,?)",
+    [
+      encrypt(req.body.user.givenName),
+      encrypt(req.body.user.familyName),
+      1,
+      req.body.user.email,
+    ],
+    (err) => {
+      if (err) {
+        res.json({ message: err });
+      } else {
+        sendVerificationEmail(req.body.user.email).then((response) => {
+          if (response === "error") {
+            res.json({ message: "emailError" });
+          } else {
+            res.json({ message: "signUpSuccess" });
+          }
+        });
+      }
+    }
+  );
+});
+
+app.get("/verifyemail", (req, res) => {
+  if (!req.headers["x-access-token"]) {
+    res.json({ message: "noToken" });
   } else {
-    res.json({ loggedIn: false });
+    jwt.verify(
+      req.headers["x-access-token"],
+      process.env.JWT_SECRET,
+      (err, decoded) => {
+        if (err) {
+          res.json({ message: err });
+        } else {
+          con.query(
+            "UPDATE users SET verifiedemail = ? WHERE email = ?",
+            [1, decoded.user.email],
+            (err) => {
+              if (err) {
+                res.json({ message: err });
+              } else {
+                res.json({ message: "userVerified" });
+              }
+            }
+          );
+        }
+      }
+    );
   }
 });
 
-app.get("/deleteaccount", (req, res) => {
-  if (req.headers["x-access-token"]) {
-    const token = jwt.verify(
-      req.headers["x-access-token"],
-      process.env.JWT_SECRET
-    );
-    con.query(
-      "DELETE FROM users WHERE email = ?",
-      token.user.email,
-      (err, result) => {
-        if (err) {
-          res.json({ message: "error" });
-        } else {
-          res.json({ message: "success" });
-        }
+app.post("/resendverification", (req, res) => {
+  con.query(
+    "SELECT * FROM users WHERE email = ?",
+    req.body.email,
+    (err, result) => {
+      if (err) {
+        res.json({ message: err });
+      } else if (result.length !== 1) {
+        res.json({ message: "noAccount" });
+      } else if (result[0].verifiedemail === 1) {
+        res.json({ message: "accountAlreadyVerified" });
+      } else {
+        const user = {
+          email: req.body.email,
+        };
+        sendVerificationEmail(user).then((response) => {
+          if (response === "error") {
+            res.json({ message: "emailError" });
+          } else {
+            res.json({ message: "emailSuccess" });
+          }
+        });
       }
-    );
-  } else {
-    res.json({ loggedIn: false });
-  }
+    }
+  );
+});
+
+app.get("/getuserdata", (req, res) => {
+  jwt.verify(
+    req.headers["x-access-token"],
+    process.env.JWT_SECRET,
+    (err, decoded) => {
+      if (err) {
+        res.json({ message: err });
+      } else {
+        con.query(
+          "SELECT * FROM users WHERE email = ?",
+          decoded.user.email,
+          (err, result) => {
+            if (err) {
+              res.json({ message: err });
+            } else if (result.length !== 1) {
+              res.json({ message: "noAccount" });
+            } else {
+              user = decoded.user;
+              const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+                expiresIn: "30m",
+              });
+              const jsonResponse = {};
+              if (result[0].diet) {
+                jsonResponse.diet = decrypt(result[0].diet);
+              }
+              if (result[0].allergens) {
+                jsonResponse.allergens = decrypt(result[0].allergens);
+              }
+              if (result[0].health) {
+                jsonResponse.health = decrypt(result[0].health);
+              }
+              if (result[0].favourites) {
+                jsonResponse.favourites = decrypt(result[0].favourites);
+              }
+              jsonResponse.message = "loggedIn";
+              jsonResponse.token = token;
+              jsonResponse.user = decoded.user;
+              res.json(jsonResponse);
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+app.post("/addtofavourites", (req, res) => {
+  jwt.verify(
+    req.headers["x-access-token"],
+    process.env.JWT_SECRET,
+    (err, decoded) => {
+      if (err) {
+        res.json({ message: "invalidToken" });
+      } else {
+        con.query(
+          "SELECT * FROM users WHERE email = ?",
+          decoded.user.email,
+          (err, result) => {
+            if (err) {
+              res.json({ message: err });
+            } else if (result.length !== 1) {
+              res.json({ message: "noAccount" });
+            } else if (!result[0].favourites) {
+              con.query(
+                "UPDATE users SET favourites = ? WHERE email = ?",
+                [encrypt([req.body.favourite.toString()]), decoded.user.email],
+                (err) => {
+                  if (err) {
+                    res.json({ message: err });
+                  } else {
+                    res.json({ message: "favouritesUpdated" });
+                  }
+                }
+              );
+            } else {
+              favouriteList = decrypt(result[0].favourites);
+              if (favouriteList.includes(req.body.favourite.toString())) {
+                res.json({ message: "favouriteExists" });
+              } else {
+                favouriteList.push(req.body.favourite.toString());
+                con.query(
+                  "UPDATE users SET favourites = ? WHERE email = ?",
+                  [encrypt(favouriteList), decoded.user.email],
+                  (err) => {
+                    if (err) {
+                      res.json({ message: err });
+                    } else {
+                      res.json({
+                        message: "favouritesUpdated",
+                      });
+                    }
+                  }
+                );
+              }
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+app.post("/removefromfavourites", (req, res) => {
+  jwt.verify(
+    req.headers["x-access-token"],
+    process.env.JWT_SECRET,
+    (err, decoded) => {
+      if (err) {
+        res.json({ message: "invalidToken" });
+      } else {
+        con.query(
+          "SELECT * FROM users WHERE email = ?",
+          decoded.user.email,
+          (err, result) => {
+            if (err) {
+              res.json({ message: err });
+            } else if (result.length !== 1) {
+              res.json({ message: "noAccount" });
+            } else if (!result[0].favourites) {
+              res.json({ message: "noFavourites" });
+            } else {
+              favouriteList = decrypt(result[0].favourites);
+              if (favouriteList.includes(req.body.favourite.toString())) {
+                const favouriteIndex = favouriteList.indexOf(
+                  req.body.favourite.toString()
+                );
+                favouriteList.splice(favouriteIndex, 1);
+                con.query(
+                  "UPDATE users SET favourites = ? WHERE email = ?",
+                  [encrypt(favouriteList), decoded.user.email],
+                  (err) => {
+                    if (err) {
+                      res.json({ message: err });
+                    } else {
+                      res.json({ message: "favouriteRemoves" });
+                    }
+                  }
+                );
+              }
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+app.post("/changeuserinfo", (req, res) => {
+  jwt.verify(
+    req.headers["x-access-token"],
+    process.env.JWT_SECRET,
+    (err, decoded) => {
+      if (err) {
+        res.json({ message: "invalidToken" });
+      } else {
+        con.query(
+          "UPDATE users SET firstname = ?, lastname = ?, email = ? WHERE email = ?",
+          [
+            encrypt(req.body.firstname),
+            encrypt(req.body.lastname),
+            req.body.email,
+            decoded.user.email,
+          ],
+          (err) => {
+            if (err) {
+              res.json({ message: err });
+            } else {
+              const user = decoded.user;
+              const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+                expiresIn: "30m",
+              });
+              res.json({ message: "updateSuccess", token: token });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+app.post("/changeuserpreferences", (req, res) => {
+  jwt.verify(
+    req.headers["x-access-token"],
+    process.env.JWT_SECRET,
+    (err, decoded) => {
+      if (err) {
+        res.json({ message: "invalidToken" });
+      } else {
+        const healthData = {
+          height: req.body.height,
+          weight: req.body.weight,
+          activity: req.body.activity,
+        };
+        con.query(
+          "UPDATE users SET diet = ?, allergens = ?, health = ? WHERE email = ?",
+          [
+            encrypt(req.body.diet),
+            encrypt(req.body.allergens),
+            encrypt(healthData),
+            decoded.user.email,
+          ],
+          (err) => {
+            if (err) {
+              res.json({ message: err });
+            } else {
+              user = decoded.user;
+              const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+                expiresIn: "30m",
+              });
+              res.json({ message: "updateSuccess", token: token });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+app.post("/changeuserpassword", (req, res) => {
+  jwt.verify(
+    req.headers["x-access-token"],
+    process.env.JWT_SECRET,
+    (err, decoded) => {
+      if (err) {
+        res.json({ message: "invalidToken" });
+      } else {
+        con.query(
+          "SELECT * FROM users WHERE email = ?",
+          decoded.user.email,
+          (err, result) => {
+            if (err) {
+              res.json({ message: err });
+            } else if (result.length !== 1) {
+              res.json({ message: "noAccount" });
+            } else {
+              bcrypt.compare(
+                req.body.oldpassword,
+                decrypt(result[0].password),
+                (err) => {
+                  if (err) {
+                    res.json({ message: err });
+                  } else {
+                    bcrypt.hash(
+                      req.body.newpassword,
+                      saltRounds,
+                      (err, hash) => {
+                        if (err) {
+                          res.json({
+                            message: err,
+                          });
+                        } else {
+                          con.query(
+                            "UPDATE users SET password = ? WHERE email = ?",
+                            [hash, decoded.user.email],
+                            (err) => {
+                              if (err) {
+                                res.json({
+                                  message: err,
+                                });
+                              } else {
+                                const userID = result[0].userid;
+                                const email = result[0].email;
+                                const firstName = decrypt(result[0].firstname);
+                                const lastName = decrypt(result[0].lastname);
+                                const user = {
+                                  userid: userID,
+                                  email: email,
+                                  firstname: firstName,
+                                  lastname: lastName,
+                                };
+                                const token = jwt.sign(
+                                  { user },
+                                  process.env.JWT_SECRET,
+                                  {
+                                    expiresIn: "30m",
+                                  }
+                                );
+                                res.json({
+                                  message: "passwordChanged",
+                                  token: token,
+                                });
+                              }
+                            }
+                          );
+                        }
+                      }
+                    );
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+app.post("/submitfeedback", (req, res) => {
+  jwt.verify(
+    req.headers["x-access-token"],
+    process.env.JWT_SECRET,
+    (err, decoded) => {
+      if (err) {
+        res.json({ message: "invalidToken" });
+      } else {
+        user = decoded.user;
+        const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+          expiresIn: "30m",
+        });
+        const mailOptions = {
+          from: "w8.recipedia@gmail.com",
+          to: "w8.recipedia@gmail.com",
+          subject: `Feedback from ${decoded.user.email}`,
+          text: req.body.feedback,
+        };
+        transporter.sendMail(mailOptions, (err) => {
+          if (err) {
+            res.json({ message: err, token: token });
+          } else {
+            res.json({ message: "feedbackSent", token: token });
+          }
+        });
+      }
+    }
+  );
+});
+
+app.get("/deleteaccount", (req, res) => {
+  jwt.verify(
+    req.headers["x-access-token"],
+    process.env.JWT_SECRET,
+    (err, decoded) => {
+      if (err) {
+        res.json({ message: "invalidToken" });
+      } else {
+        con.query(
+          "DELETE FROM users WHERE email = ?",
+          decoded.user.email,
+          (err) => {
+            if (err) {
+              res.json({ message: err });
+            } else {
+              res.json({ message: "accountDeleted" });
+            }
+          }
+        );
+      }
+    }
+  );
 });
 
 app.listen(process.env.PORT, () => {});

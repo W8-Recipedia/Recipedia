@@ -1,25 +1,26 @@
-import { React, useState, useLayoutEffect } from "react";
-import PropTypes from "prop-types";
 import {
   Card,
-  CardContent,
-  Typography,
   CardActions,
+  CardContent,
   Grid,
+  Typography,
   makeStyles,
 } from "@material-ui/core";
+import { React, useLayoutEffect, useState } from "react";
 import {
   addToFavourites,
+  getUserData,
   removeFromFavourites,
-  getUserFavourites,
 } from "src/components/auth/UserAuth";
-import ScheduleIcon from "@material-ui/icons/Schedule";
+
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import IconButton from "@material-ui/core/IconButton";
 import LocalDiningIcon from "@material-ui/icons/LocalDining";
-import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import PropTypes from "prop-types";
+import ScheduleIcon from "@material-ui/icons/Schedule";
+import Snackbar from "@material-ui/core/Snackbar";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -84,9 +85,9 @@ const RecipeCard = ({ recipe, ...props }) => {
   const [open, setOpen] = useState(false);
 
   useLayoutEffect(() => {
-    getUserFavourites().then((res) => {
-      if (res.data.favourites) {
-        if (res.data.favourites.includes(recipe.id.toString())) {
+    getUserData().then((response) => {
+      if (response.data.favourites) {
+        if (response.data.favourites.includes(recipe.id.toString())) {
           setFavourited(true);
         }
       }

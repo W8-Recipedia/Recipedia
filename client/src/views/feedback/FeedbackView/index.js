@@ -1,24 +1,25 @@
-import React, { useState, useLayoutEffect } from "react";
-import clsx from "clsx";
-import PropTypes from "prop-types";
 import {
-  Container,
-  Grid,
-  makeStyles,
   Box,
   Button,
   Card,
   CardContent,
+  Container,
   Dialog,
   DialogContent,
   DialogContentText,
-  Typography,
   Divider,
+  Grid,
   TextField,
+  Typography,
+  makeStyles,
 } from "@material-ui/core";
+import React, { useLayoutEffect, useState } from "react";
+import { getUserData, submitFeeback } from "src/components/auth/UserAuth";
+
 import Page from "src/components/theme/page";
+import PropTypes from "prop-types";
 import { Scrollbars } from "react-custom-scrollbars";
-import { getUserInfo, submitFeeback } from "src/components/auth/UserAuth";
+import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -45,12 +46,12 @@ const FeedbackView = ({ className, ...rest }) => {
     feedback: "",
   });
   useLayoutEffect(() => {
-    getUserInfo().then((authResponse) => {
-      if (authResponse.data.loggedIn) {
+    getUserData().then((response) => {
+      if (response.data.loggedIn) {
         setValues({
-          firstName: authResponse.data.user.firstname,
-          lastName: authResponse.data.user.lastname,
-          email: authResponse.data.user.email,
+          firstName: response.data.user.firstname,
+          lastName: response.data.user.lastname,
+          email: response.data.user.email,
         });
       }
     });
@@ -66,8 +67,8 @@ const FeedbackView = ({ className, ...rest }) => {
     if (values.feedback.length < 150) {
       setFeedbackError(true);
     } else {
-      submitFeeback(values.feedback).then((authResponse) => {
-        setFeedbackStatus(authResponse.data.message);
+      submitFeeback(values.feedback).then((response) => {
+        setFeedbackStatus(response.data.message);
         setOpen(true);
       });
     }
@@ -188,7 +189,7 @@ const FeedbackView = ({ className, ...rest }) => {
           >
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                {feedbackStatus === "Success"
+                {feedbackStatus === "feedbackSent"
                   ? "Thank you for your feedback!"
                   : "There was an error submitting your feedback. Please try again later."}
               </DialogContentText>

@@ -1,21 +1,23 @@
-import React, { useState, useLayoutEffect, useEffect } from "react";
-import { getUserFavourites } from "src/components/auth/UserAuth";
 import {
   Box,
-  Container,
-  makeStyles,
   Card,
-  Typography,
   CardContent,
+  Container,
   Grid,
+  Typography,
+  makeStyles,
 } from "@material-ui/core";
-import Page from "src/components/theme/page";
-// import { getExampleRecipes } from "src/api/mockAPI";
-import { getMultipleRecipes } from "src/components/api/SpoonacularAPI";
-import { Scrollbars } from "react-custom-scrollbars";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Page from "src/components/theme/page";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
+import { Scrollbars } from "react-custom-scrollbars";
+import { getMultipleRecipes } from "src/components/api/SpoonacularAPI";
+import { getUserData } from "src/components/auth/UserAuth";
+
+// import { getExampleRecipes } from "src/api/mockAPI";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,22 +42,16 @@ const Favourites = () => {
     setSelectedRecipeId(id);
   };
 
-  // useEffect(() => {
-  //   setRecipes(getExampleRecipes());
-  // }, []);
-
   useLayoutEffect(() => {
-    getUserFavourites().then((res) => {
-      if (res.data.favourites === null) {
-        setFavouritesList(false);
-      } else if (res.data.favourites) {
-        console.log(res.data.favourites);
-        setFavouritesList(true);
-        if (res.data.favourites.length > 0) {
-          loadMultipleRecipes(res.data.favourites);
-        } else if (!res.data.favourites.length) {
+    getUserData().then((response) => {
+      if (response.data.favourites) {
+        if (response.data.favourites.length > 0) {
+          loadMultipleRecipes(response.data.favourites);
+        } else {
           setFavouritesList(false);
         }
+      } else {
+        setFavouritesList(false);
       }
     });
   }, []);
@@ -134,10 +130,8 @@ const Favourites = () => {
     let idsString = idsArray ? idsArray.join(",") : null;
     getMultipleRecipes(idsString)
       .then((res) => {
-        console.log(res.data);
         setRecipes([...recipes, ...res.data]);
       })
-      .catch((error) => console.log(error))
       .finally(() => {
         setLoading(false);
       });

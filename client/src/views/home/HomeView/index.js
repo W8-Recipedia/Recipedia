@@ -1,24 +1,25 @@
-import React, { useState, useLayoutEffect } from "react";
-import { getUserPreferences } from "src/components/auth/UserAuth";
 import {
   Box,
-  Container,
-  makeStyles,
+  Button,
   Card,
   CardContent,
-  Typography,
-  Button,
+  Container,
   Grid,
+  Typography,
+  makeStyles,
 } from "@material-ui/core";
-import PropTypes from "prop-types";
-import Page from "src/components/theme/page";
-// import { getExampleRecipes } from "src/api/mockAPI";
-import { getShuffledRecommendedRecipes } from "src/components/api/SpoonacularAPI";
-import RecipeDialog from "src/components/recipe/RecipeDialog";
-import RecipeList from "src/components/recipe/RecipeList";
+import React, { useLayoutEffect, useState } from "react";
+
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Page from "src/components/theme/page";
+import { getShuffledRecommendedRecipes } from "src/components/api/SpoonacularAPI";
+import PropTypes from "prop-types";
+import RecipeDialog from "src/components/recipe/RecipeDialog";
+import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
+import { getRandomRecommendedRecipes } from "src/components/api/SpoonacularAPI";
+import { getUserData } from "src/components/auth/UserAuth";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,14 +51,18 @@ const Home = () => {
     setSelectedRecipeId(id);
   };
 
-  // useEffect(() => {
-  //   setRecipes(getExampleRecipes());
-  // }, []);
-
   useLayoutEffect(() => {
     getUserPreferences().then((res) => {
       setIntolerances(res.data.allergens);
       setDiet(res.data.diet);
+      loadShuffledRecommendedRecipes(
+        res.data.allergens,
+        res.data.diet,
+        0,
+      );
+    getUserData().then((response) => {
+      setIntolerances(response.data.allergens);
+      setDiet(response.data.diet);
       loadShuffledRecommendedRecipes(
         res.data.allergens,
         res.data.diet,

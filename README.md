@@ -1,10 +1,10 @@
 # Recipedia
-<p>
-<img src="https://img.shields.io/github/license/W8-Recipedia/Recipedia" />
-<img src="https://img.shields.io/snyk/vulnerabilities/github/W8-Recipedia/Recipedia" />
-<img src="https://img.shields.io/github/repo-size/W8-Recipedia/Recipedia" />
-<img src="https://img.shields.io/netlify/f95d5909-051d-4a94-ad17-4f8c86c80fc1" />
-</p>
+
+!["License"](https://img.shields.io/github/license/W8-Recipedia/Recipedia)
+!["Vulnerabilities"](https://img.shields.io/snyk/vulnerabilities/github/W8-Recipedia/Recipedia)
+!["Repository size"](https://img.shields.io/github/repo-size/W8-Recipedia/Recipedia)
+!["Version"](https://img.shields.io/github/package-json/v/W8-Recipedia/Recipedia)
+!["Deploy"](https://img.shields.io/netlify/f95d5909-051d-4a94-ad17-4f8c86c80fc1)
 
 Recipedia is a web application that seeks to revolutionize the way that people find personalised recipes. It recommends the most suitable recipes to users based on their dietary preferences, allergies, and health data. It also has a search function, which allows users to filter recipes by cuisine and/or diet.
 
@@ -19,7 +19,10 @@ You need `node` and `npm` installed globally on your machine. You will also need
 ### Installing
 
 Cloning the repository:
-`git clone https://github.com/W8-Recipedia/Recipedia.git`
+
+```cmd
+git clone https://github.com/W8-Recipedia/Recipedia.git
+```
 
 ---
 
@@ -29,29 +32,32 @@ Add a `.env` file to your client and server directories, and replace `[...]` wit
 
 client/.env
 
-```
+```dosini
 REACT_APP_SERVER_URL=http://localhost:3001
 ```
 
 server/.env
 
-```
+```dosini
+DATABASE=[DATABASE NAME]
+ENCRYPTIONKEY=[RANDOM ALPHANUMERICAL STRING]
+HOST=[DATABASE URL]
 JWT_SECRET=[RANDOM ALPHABETICAL STRING]
 LOCALHOST_CLIENT_URL=http://localhost:3000
-HOST=[DATABASE URL]
-USER=[DATABASE USER]
 PASSWORD=[DATABASE PASSWORD]
-DATABASE=[DATABASE NAME]
 PORT=3001
 RECIPE_API_KEY=[SPOONACULAR API KEY]
 RECIPE_NUMBER=24
+RECIPEDIA_EMAIL=[VERIFICATION EMAIL ADDRESS]
+RECIPEDIA_PASSWORD=[VERIFICATION EMAIL PASSWORD]
+USER=[DATABASE USER]
 ```
 
 ---
 
 Database setup (replace `+XX:XX` with your time zone):
 
-```
+```sql
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+XX:XX";
 
@@ -68,9 +74,9 @@ CREATE TABLE `users` (
   `email` varchar(254) COLLATE utf8_unicode_ci NOT NULL,
   `password` text COLLATE utf8_unicode_ci,
   `diet` text COLLATE utf8_unicode_ci,
-  `allergens` json DEFAULT NULL,
-  `health` json DEFAULT NULL,
-  `favourites` json DEFAULT NULL
+  `allergens` text DEFAULT NULL,
+  `health` text DEFAULT NULL,
+  `favourites` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `users`
@@ -81,17 +87,19 @@ ALTER TABLE `users`
   MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT;
 ```
 
-If you get errors for the `json` columns, you can change them to `text` columns.
-
 ---
 
 Installation:
 
-`npm run install-all`
+```cmd
+npm run install-all
+```
 
 Starting Recipedia:
 
-`npm run dev`
+```cmd
+npm run dev
+```
 
 ## Built With
 
