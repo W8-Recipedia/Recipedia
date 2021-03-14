@@ -34,6 +34,7 @@ client/.env
 
 ```dosini
 REACT_APP_SERVER_URL=http://localhost:3001
+REACT_APP_SEARCH_OFFSET=24
 ```
 
 server/.env
