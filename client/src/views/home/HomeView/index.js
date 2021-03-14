@@ -13,12 +13,11 @@ import React, { useLayoutEffect, useState } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Page from "src/components/theme/page";
-import { getShuffledRecommendedRecipes } from "src/components/api/SpoonacularAPI";
 import PropTypes from "prop-types";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
-import { getRandomRecommendedRecipes } from "src/components/api/SpoonacularAPI";
+import { getShuffledRecommendedRecipes } from "src/components/api/SpoonacularAPI";
 import { getUserData } from "src/components/auth/UserAuth";
 
 const useStyles = makeStyles((theme) => ({
@@ -37,46 +36,57 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
   const classes = useStyles();
-  const [recipes, setRecipes] = useState([]);
+
   const [loading, setLoading] = useState(false);
-  const [selectedRecipeId, setSelectedRecipeId] = useState(0);
+  const [selectedRecipeID, setSelectedRecipeID] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [offset] = useState(0);
-  const [intolerances, setIntolerances] = useState([]);
+  const [recipeList, setRecipeList] = useState([]);
+  const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
+  const [recipeOffset, setRecipeOffset] = useState(0);
+  const [allergens, setAllergens] = useState([]);
   const [diet, setDiet] = useState("");
 
-  const onRecipeClick = (id) => {
-    loadRecipeById(id);
-    setSelectedRecipeId(id);
+  const handleRecipeClick = (id) => {
+    showRecipeByID(id);
+    setSelectedRecipeID(id);
+  };
+  const loadRecipes = () => {
+    setLoading(true);
+    getShuffledRecommendedRecipes(
+      allergens ? allergens.join(",") : null,
+      diet,
+      recipeOffset
+    )
+      .then((response) => {
+        if (!response.data.results) {
+          // SHOW POPUP FOR ERROR
+        } else {
+          setRecipeList([...recipeList, ...response.data.results]);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const showRecipeByID = (id) => {
+    setSelectedRecipeInfo(recipeList.find((recipe) => recipe.id === id));
+    setRecipeDialogOpen(true);
   };
 
   useLayoutEffect(() => {
-    getUserPreferences().then((res) => {
-      setIntolerances(res.data.allergens);
-      setDiet(res.data.diet);
-      loadShuffledRecommendedRecipes(
-        res.data.allergens,
-        res.data.diet,
-        0,
-      );
     getUserData().then((response) => {
-      setIntolerances(response.data.allergens);
+      setAllergens(response.data.allergens);
       setDiet(response.data.diet);
-      loadShuffledRecommendedRecipes(
-        res.data.allergens,
-        res.data.diet,
-        0,
-      );
+      loadRecipes();
     });
   }, []);
 
   const loadMoreRecipes = () => {
-    let newOffset = offset + parseInt(process.env.REACT_APP_SEARCH_OFFSET)
-    loadShuffledRecommendedRecipes(
-      intolerances,
-      diet,
-      newOffset);
+    setRecipeOffset(
+      recipeOffset + parseInt(process.env.REACT_APP_SEARCH_OFFSET)
+    );
+    loadRecipes();
   };
 
   return (
@@ -105,8 +115,8 @@ const Home = () => {
           <Container maxWidth={false}>
             <Box mt={3}>
               <RecipeList
-                recipes={recipes}
-                onRecipeClick={onRecipeClick}
+                recipes={recipeList}
+                onRecipeClick={handleRecipeClick}
                 loading={loading}
               />
             </Box>
@@ -125,38 +135,15 @@ const Home = () => {
             </Grid>
           </Container>
           <RecipeDialog
-            open={dialogOpen}
-            handleClose={() => setDialogOpen(false)}
-            recipeId={selectedRecipeId}
+            open={recipeDialogOpen}
+            handleClose={() => setRecipeDialogOpen(false)}
+            recipeId={selectedRecipeID}
             recipeInfo={selectedRecipeInfo}
           />
         </Box>
       </Page>
     </Scrollbars>
   );
-
-  function loadShuffledRecommendedRecipes(intolerancesArray, diet, offset) {
-    setLoading(true);
-    let intolerancesString = intolerancesArray ? intolerancesArray.join(",") : null
-    getShuffledRecommendedRecipes(intolerancesString, diet, offset)
-      .then((res) => {
-        if (res.data.results) {
-          offset
-          ? setRecipes([...recipes, ...res.data.results])
-          : setRecipes(res.data.results);
-          console.log("recipes:", res.data);
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }
-
-  function loadRecipeById(id) {
-    const clickedRecipe = recipes.find((recipe) => recipe.id === id);
-    setSelectedRecipeInfo(clickedRecipe);
-    setDialogOpen(true);
-  }
 };
 
 RecipeList.propTypes = {

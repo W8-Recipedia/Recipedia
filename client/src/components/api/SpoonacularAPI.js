@@ -23,10 +23,16 @@ export const getComplexRecipes = async (
     }
   );
 };
-
-export const getShuffledRecommendedRecipes = async (intolerances, diet, offset) => {
+//
+// MERGE getComplexRecipes and getShuffledRecommendedRecipes
+//
+export const getShuffledRecommendedRecipes = async (
+  intolerances,
+  diet,
+  offset
+) => {
   return await Axios.post(
-    process.env.REACT_APP_SERVER_URL + "/recipes/shuffledcomplexsearch",
+    process.env.REACT_APP_SERVER_URL + "/recipes/complexsearch",
     {
       instructions: true,
       recipeinformation: true,
@@ -34,11 +40,12 @@ export const getShuffledRecommendedRecipes = async (intolerances, diet, offset) 
       diet: diet,
       intolerances: intolerances,
       offset,
+      random: true,
     }
   );
 };
 
-export const getMultipleRecipes = async (favourites) => {
+export const getRecipesByID = async (favourites) => {
   return await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/recipes/informationbulk",
     {

@@ -7,17 +7,15 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Page from "src/components/theme/page";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
-import { getMultipleRecipes } from "src/components/api/SpoonacularAPI";
+import { getRecipesByID } from "src/components/api/SpoonacularAPI";
 import { getUserData } from "src/components/auth/UserAuth";
-
-// import { getExampleRecipes } from "src/api/mockAPI";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,16 +28,37 @@ const useStyles = makeStyles((theme) => ({
 
 const Favourites = () => {
   const classes = useStyles();
-  const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [favouritesList, setFavouritesList] = useState(true);
-  const [selectedRecipeId, setSelectedRecipeId] = useState(0);
+  const [selectedRecipeID, setSelectedRecipeID] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
-  const [dlgOpen, setDlgOpen] = useState(false);
+  const [recipeList, setRecipeList] = useState([]);
+  const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
+  const [hasFavourites, setHasFavourites] = useState(true);
 
   const onRecipeClick = (id) => {
-    loadRecipeById(id);
-    setSelectedRecipeId(id);
+    loadRecipeByID(id);
+    setSelectedRecipeID(id);
+  };
+  const loadMultipleRecipes = (idsArray) => {
+    setLoading(true);
+    getRecipesByID(idsArray ? idsArray.join(",") : null)
+      .then((response) => {
+        console.log(response);
+        if (!response.data.results) {
+          // SHOW POPUP FOR NO FAVOURITES
+        } else {
+          setRecipeList([...recipeList, ...response.data.results]);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const loadRecipeByID = (id) => {
+    const clickedRecipe = recipeList.find((recipe) => recipe.id === id);
+    setSelectedRecipeInfo(clickedRecipe);
+    setRecipeDialogOpen(true);
   };
 
   useLayoutEffect(() => {
@@ -48,10 +67,10 @@ const Favourites = () => {
         if (response.data.favourites.length > 0) {
           loadMultipleRecipes(response.data.favourites);
         } else {
-          setFavouritesList(false);
+          setHasFavourites(false);
         }
       } else {
-        setFavouritesList(false);
+        setHasFavourites(false);
       }
     });
   }, []);
@@ -80,10 +99,10 @@ const Favourites = () => {
           </Container>
           <Container maxWidth={false}>
             <Box mt={3}>
-              {favouritesList ? (
+              {hasFavourites ? (
                 <>
                   <RecipeList
-                    recipes={recipes}
+                    recipes={recipeList}
                     onRecipeClick={onRecipeClick}
                     loading={loading}
                   />
@@ -115,33 +134,15 @@ const Favourites = () => {
             </Box>
           </Container>
           <RecipeDialog
-            open={dlgOpen}
-            handleClose={() => setDlgOpen(false)}
-            recipeId={selectedRecipeId}
+            open={recipeDialogOpen}
+            handleClose={() => setRecipeDialogOpen(false)}
+            recipeId={selectedRecipeID}
             recipeInfo={selectedRecipeInfo}
           />
         </Box>
       </Page>
     </Scrollbars>
   );
-
-  function loadMultipleRecipes(idsArray) {
-    setLoading(true);
-    let idsString = idsArray ? idsArray.join(",") : null;
-    getMultipleRecipes(idsString)
-      .then((res) => {
-        setRecipes([...recipes, ...res.data]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }
-
-  function loadRecipeById(id) {
-    const clickedRecipe = recipes.find((recipe) => recipe.id === id);
-    setSelectedRecipeInfo(clickedRecipe);
-    setDlgOpen(true);
-  }
 };
 
 export default Favourites;

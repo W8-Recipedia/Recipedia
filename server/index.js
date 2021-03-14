@@ -126,18 +126,6 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-app.post("/recipes/random", (req, res) => {
-  const apiKey = `apiKey=${process.env.RECIPE_API_KEY}`;
-  const recipeTags = req.body.tags ? `&tags=${req.body.tags}` : ``;
-  const recipeNumber = `&number=${process.env.RECIPE_NUMBER}`;
-  request(
-    `https://api.spoonacular.com/recipes/random?${apiKey}${recipeTags}${recipeNumber}`,
-    (error, response, body) => {
-      res.json(JSON.parse(body).recipes);
-    }
-  );
-});
-
 app.post("/recipes/informationbulk", (req, res) => {
   const apiKey = `apiKey=${process.env.RECIPE_API_KEY}`;
   const recipeIDs = `&ids=${req.body.favourites}`;
@@ -164,23 +152,10 @@ app.post("/recipes/complexsearch", (req, res) => {
   const cuisine = req.body.cuisine ? `&cuisine=${req.body.cuisine}` : ``;
   const offset = `&offset=${req.body.offset}`;
   const query = req.body.query ? `&query=${req.body.query}` : ``;
+  const random = req.body.random ? `&sort=random` : ``;
 
   request(
-    `https://api.spoonacular.com/recipes/complexSearch?${apiKey}${instructions}${recipeInformation}${ingredients}${recipeNumber}${diet}${intolerances}${type}${cuisine}${offset}${query}`,
-    (error, response, body) => {
-      res.json(JSON.parse(body));
-    }
-  );
-});
-
-app.post("/recipes/shuffledcomplexsearch", (req, res) => {
-  const diet = req.body.diet ? `&diet=${req.body.diet}` : ``;
-  const intolerances = req.body.intolerances
-    ? `&intolerances=${req.body.intolerances}`
-    : ``;
-
-  request(
-    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.RECIPE_API_KEY}&instructionsRequired=${req.body.instructions}&addRecipeInformation=${req.body.recipeinformation}&fillIngredients=${req.body.fillingredients}&number=${process.env.RECIPE_NUMBER}&diet=${diet}&intolerances=${intolerances}&offset=${req.body.offset}&sort=random`,
+    `https://api.spoonacular.com/recipes/complexSearch?${apiKey}${instructions}${recipeInformation}${ingredients}${recipeNumber}${diet}${intolerances}${type}${cuisine}${offset}${query}${random}`,
     (error, response, body) => {
       res.json(JSON.parse(body));
     }
