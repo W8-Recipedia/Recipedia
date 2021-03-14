@@ -1,24 +1,25 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
 import {
+  AppBar,
+  Box,
+  Checkbox,
   Dialog,
   DialogContent,
-  Typography,
+  Grid,
+  IconButton,
+  Link,
   List,
   ListItem,
-  ListItemText,
   ListItemIcon,
-  IconButton,
-  AppBar,
-  Checkbox,
-  Box,
+  ListItemText,
   Toolbar,
-  Grid,
-  Link,
+  Typography,
   useMediaQuery,
 } from "@material-ui/core";
+import React, { useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+
 import CloseIcon from "@material-ui/icons/Close";
+import PropTypes from "prop-types";
 
 function convertTime(num) {
   if (num <= 60) {
@@ -140,7 +141,6 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
                 <ListItem
                   key={item}
                   onClick={handleToggle(item)}
-                  // title={`Metric: ${item.measures?.metric?.amount} ${item.measures?.metric?.unitShort} / US: ${item.measures?.us?.amount} ${item.measures?.us?.unitShort}`}
                   style={{
                     textDecoration:
                       checked.indexOf(item) !== -1 ? "line-through" : "none",

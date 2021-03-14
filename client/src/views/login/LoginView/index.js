@@ -54,12 +54,12 @@ const LoginView = () => {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const responseGoogle = (response) => {
-    googleLogin(response.tokenId, response.profileObj).then((authResponse) => {
-      if (authResponse === "Success") {
+    googleLogin(response.profileObj).then((response) => {
+      if (response.data.message === "loggedIn") {
         navigate("/app/home");
-      } else if (authResponse === "noGoogle") {
-        setLoginError(authResponse);
-      } else if (authResponse === "notVerified") {
+      } else if (response.data.message === "wrongAccountType") {
+        setLoginError(response.data.message);
+      } else if (response.data.message === "accountNotVerified") {
         setVerifyError(true);
       } else {
         setOpen(true);
@@ -69,16 +69,16 @@ const LoginView = () => {
 
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
-    login(values.email, values.password).then((authResponse) => {
-      if (authResponse === "Success") {
+    login(values.email, values.password).then((response) => {
+      if (response.data.message === "loggedIn") {
         navigate("/app/home");
       } else {
-        if (authResponse === "googleAccount") {
+        if (response.data.message === "wrongAccountType") {
           setGoogleAccount(true);
-        } else if (authResponse === "notVerified") {
+        } else if (response.data.message === "accountNotVerified") {
           setVerifyError(true);
         } else {
-          setLoginError(authResponse);
+          setLoginError(response.data.message);
         }
       }
     });
@@ -161,13 +161,14 @@ const LoginView = () => {
                   </Box>
                   <TextField
                     error={
-                      loginError === "noEmail" || loginError === "wrongPassword"
+                      loginError === "noAccount" ||
+                      loginError === "wrongPassword"
                         ? Boolean(true)
                         : Boolean(touched.password && errors.password)
                     }
                     fullWidth
                     helperText={
-                      loginError === "noEmail"
+                      loginError === "noAccount"
                         ? "Please sign up before logging in!"
                         : touched.email && errors.email
                     }
@@ -199,7 +200,7 @@ const LoginView = () => {
                     onChange={handleChange}
                     value={values.password}
                     variant="outlined"
-                    type={showPassword ? "text" : "password"} // <-- This is where the magic happens
+                    type={showPassword ? "text" : "password"}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -273,14 +274,12 @@ const LoginView = () => {
             </Dialog>
             <Dialog
               open={open}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
               onClose={() => {
                 setOpen(false);
               }}
             >
               <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText>
                   You must sign up with Google before logging in!
                 </DialogContentText>
               </DialogContent>
@@ -298,8 +297,6 @@ const LoginView = () => {
             </Dialog>
             <Dialog
               open={verifyError}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
               onClose={() => {
                 setVerifyError(false);
               }}
@@ -311,7 +308,7 @@ const LoginView = () => {
               </DialogContent>
             </Dialog>
             <Dialog
-              open={Boolean(loginError === "noGoogle")}
+              open={Boolean(loginError === "wrongAccountType")}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
               onClose={() => {

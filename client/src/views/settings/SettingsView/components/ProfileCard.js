@@ -13,8 +13,7 @@ import {
 import React, { useState } from "react";
 import {
   deleteAccount,
-  getUserFavourites,
-  getUserInfo,
+  getUserData,
 } from "src/components/auth/UserAuth";
 
 import PropTypes from "prop-types";
@@ -41,8 +40,8 @@ const ProfileCard = ({ className, ...rest }) => {
   const [userRank, setUserRank] = useState("");
 
   const [userName, setUserName] = useState(() => {
-    getUserInfo().then((authResponse) => {
-      if (authResponse.data.loggedIn) {
+    getUserData().then((authResponse) => {
+      if (authResponse.data.message === "loggedIn") {
         setUserName(
           authResponse.data.user.firstname +
             " " +
@@ -53,7 +52,7 @@ const ProfileCard = ({ className, ...rest }) => {
         }
       }
     });
-    getUserFavourites().then((res) => {
+    getUserData().then((res) => {
       if (res.data.favourites) {
         const userFavouritesLength = res.data.favourites.length;
         setUserRank(
@@ -73,7 +72,7 @@ const ProfileCard = ({ className, ...rest }) => {
 
   const deleteAcc = () => {
     deleteAccount().then((response) => {
-      if (response === "Success") {
+      if (response === "accountDeleted") {
         setOpen(false);
         setDeleteStatus(true);
       }

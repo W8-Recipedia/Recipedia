@@ -1,21 +1,21 @@
-import React, { useState, useLayoutEffect, useEffect } from "react";
-import { getUserFavourites } from "src/components/auth/UserAuth";
 import {
   Box,
-  Container,
-  makeStyles,
   Card,
-  Typography,
   CardContent,
+  Container,
   Grid,
+  Typography,
+  makeStyles,
 } from "@material-ui/core";
-import Page from "src/components/theme/page";
-// import { getExampleRecipes } from "src/api/mockAPI";
-import { getMultipleRecipes } from "src/components/api/SpoonacularAPI";
-import { Scrollbars } from "react-custom-scrollbars";
+import React, { useLayoutEffect, useState } from "react";
+
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Page from "src/components/theme/page";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
+import { Scrollbars } from "react-custom-scrollbars";
+import { getRecipesByID } from "src/components/api/SpoonacularAPI";
+import { getUserData } from "src/components/auth/UserAuth";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,27 +28,47 @@ const useStyles = makeStyles((theme) => ({
 
 const Favourites = () => {
   const classes = useStyles();
-  const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedRecipeId, setSelectedRecipeId] = useState(0);
+  const [selectedRecipeID, setSelectedRecipeID] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
-  const [dlgOpen, setDlgOpen] = useState(false);
+  const [recipeList, setRecipeList] = useState([]);
+  const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
+  const [hasFavourites, setHasFavourites] = useState(true);
 
   const onRecipeClick = (id) => {
-    loadRecipeById(id);
-    setSelectedRecipeId(id);
+    loadRecipeByID(id);
+    setSelectedRecipeID(id);
+  };
+  const loadMultipleRecipes = (idsArray) => {
+    setLoading(true);
+    getRecipesByID(idsArray ? idsArray.join(",") : null)
+      .then((response) => {
+        if (response.data) {
+          setRecipeList([...recipeList, ...response.data]);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-  // useEffect(() => {
-  //   setRecipes(getExampleRecipes());
-  // }, []);
+  const loadRecipeByID = (id) => {
+    const clickedRecipe = recipeList.find((recipe) => recipe.id === id);
+    setSelectedRecipeInfo(clickedRecipe);
+    setRecipeDialogOpen(true);
+  };
 
   useLayoutEffect(() => {
-    getUserFavourites().then((res) => {
-      if (res.data.favourites) {
-        if (res.data.favourites.length > 0) {
-          loadMultipleRecipes(res.data.favourites);
+    getUserData().then((response) => {
+      if (response.data.favourites) {
+        console.log(response.data);
+        if (response.data.favourites.length > 0) {
+          loadMultipleRecipes(response.data.favourites);
+        } else {
+          setHasFavourites(false);
         }
+      } else {
+        setHasFavourites(false);
       }
     });
   }, []);
@@ -77,11 +97,27 @@ const Favourites = () => {
           </Container>
           <Container maxWidth={false}>
             <Box mt={3}>
-              <RecipeList
-                recipes={recipes}
-                onRecipeClick={onRecipeClick}
-                loading={loading}
-              />
+              {hasFavourites ? (
+                <>
+                  <RecipeList
+                    recipes={recipeList}
+                    onRecipeClick={onRecipeClick}
+                    loading={loading}
+                  />
+                </>
+              ) : (
+                <>
+                  <Box mt={10}>
+                    <Typography
+                      color="textSecondary"
+                      align="center"
+                      variant="h3"
+                    >
+                      You haven't favourited any recipes yet!
+                    </Typography>
+                  </Box>
+                </>
+              )}
               <Grid
                 item
                 xs={12}
@@ -96,33 +132,15 @@ const Favourites = () => {
             </Box>
           </Container>
           <RecipeDialog
-            open={dlgOpen}
-            handleClose={() => setDlgOpen(false)}
-            recipeId={selectedRecipeId}
+            open={recipeDialogOpen}
+            handleClose={() => setRecipeDialogOpen(false)}
+            recipeId={selectedRecipeID}
             recipeInfo={selectedRecipeInfo}
           />
         </Box>
       </Page>
     </Scrollbars>
   );
-
-  function loadMultipleRecipes(idsArray) {
-    setLoading(true);
-    let idsString = idsArray ? idsArray.join(",") : null;
-    getMultipleRecipes(idsString)
-      .then((res) => {
-        setRecipes([...recipes, ...res.data]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }
-
-  function loadRecipeById(id) {
-    const clickedRecipe = recipes.find((recipe) => recipe.id === id);
-    setSelectedRecipeInfo(clickedRecipe);
-    setDlgOpen(true);
-  }
 };
 
 export default Favourites;

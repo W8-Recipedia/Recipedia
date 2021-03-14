@@ -13,7 +13,10 @@ import {
 } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useLayoutEffect, useState } from "react";
-import { resendEmail, verifyEmail } from "src/components/auth/UserAuth";
+import {
+  resendVerificationEmail,
+  verifyEmail,
+} from "src/components/auth/UserAuth";
 
 import { Link } from "react-router-dom";
 import Page from "src/components/theme/page";
@@ -35,21 +38,25 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 84,
     },
   },
+  button: {
+    display: "flex",
+    flexDirection: "column",
+    margin: "auto",
+  },
 }));
 
 const VerifyView = () => {
   const classes = useStyles();
-  const [verified, setVerified] = useState(false);
+  const [verified, setVerified] = useState();
   const [emailSent, setEmailSent] = useState(false);
   const [emailError, setEmailError] = useState(false);
+
   const resendVerification = (values) => {
-    resendEmail(values.email).then((authResponse) => {
-      console.log(authResponse);
-      if (authResponse === "Success") {
-        setEmailSent(true);
+    resendVerificationEmail(values.email).then((response) => {
+      setEmailSent(true);
+      if (response.data.message === "emailSuccess") {
         setEmailError(false);
       } else {
-        setEmailSent(true);
         setEmailError(true);
       }
     });
@@ -57,11 +64,11 @@ const VerifyView = () => {
 
   useLayoutEffect(() => {
     verifyEmail(window.location.pathname.replace("/verify/", "")).then(
-      (authResponse) => {
-        if (authResponse === "notVerified") {
-          setVerified(false);
-        } else {
+      (response) => {
+        if (response.data.message === "userVerified") {
           setVerified(true);
+        } else {
+          setVerified(false);
         }
       }
     );
@@ -120,7 +127,7 @@ const VerifyView = () => {
                         variant="contained"
                         size="large"
                         type="submit"
-                        className={classes.buttonText}
+                        className={classes.button}
                       >
                         Verify
                       </Button>
@@ -137,19 +144,20 @@ const VerifyView = () => {
               <DialogContentText>
                 Your email has been verified!
               </DialogContentText>
+            </Box>
+            <Box alignItems="center" justifyContent="center" m={2}>
               <DialogActions>
-                <Link to="/login">
-                  <Button
-                    color="primary"
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    onClick={resendVerification}
-                    className={classes.buttonText}
-                  >
-                    Log in
-                  </Button>
-                </Link>
+                <Button
+                  component={Link}
+                  to={"/login"}
+                  color="primary"
+                  variant="contained"
+                  size="large"
+                  onClick={resendVerification}
+                  className={classes.button}
+                >
+                  Log in
+                </Button>
               </DialogActions>
             </Box>
           </DialogContent>

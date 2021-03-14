@@ -1,28 +1,28 @@
-import React, { useLayoutEffect, useState } from "react";
-import { getUserPreferences } from "src/components/auth/UserAuth";
 import {
   Box,
-  Grid,
-  Container,
   Card,
   CardContent,
+  Checkbox,
+  Container,
+  Grid,
+  Input,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  Select,
   Typography,
   makeStyles,
-  Select,
-  InputLabel,
-  Input,
-  Checkbox,
-  MenuItem,
-  ListItemText,
 } from "@material-ui/core";
+import React, { useLayoutEffect, useState } from "react";
+
+import LinearProgress from "@material-ui/core/LinearProgress";
 import Page from "src/components/theme/page";
-// import { getExampleRecipes } from "src/api/mockAPI";
-import { getComplexRecipes } from "src/components/api/SpoonacularAPI";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
-import Searchbar from "src/views/search/SearchView/components/Searchbar";
 import { Scrollbars } from "react-custom-scrollbars";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import Searchbar from "src/views/search/SearchView/components/Searchbar";
+import { getRecipesComplex } from "src/components/api/SpoonacularAPI";
+import { getUserData } from "src/components/auth/UserAuth";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "100%",
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
+  },
+  placeholderText: {
+    paddingTop: theme.spacing(4),
   },
 }));
 
@@ -94,20 +97,61 @@ const typeNames = [
 const SearchView = () => {
   const classes = useStyles();
 
-  const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
-  const [selectedRecipeID, setSelectedRecipeID] = useState(0);
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedRecipeID, setSelectedRecipeID] = useState(0);
+  const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
+  const [recipeList, setRecipeList] = useState([]);
+  const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
   const [cuisineName, setCuisineName] = useState([]);
   const [typeName, setTypeName] = useState([]);
-  const [recipes, setRecipes] = useState([]);
   const [intolerances, setIntolerances] = useState([]);
   const [diet, setDiet] = useState("");
+  const [initialSearch, setInitialSearch] = useState(true);
+  const [emptySearch, setEmptySearch] = useState(false);
+
+  const loadRecipes = (
+    intolerancesArray,
+    diet,
+    typesArray,
+    cuisineArray,
+    offset,
+    query
+  ) => {
+    setRecipeList([]);
+    setLoading(true);
+    getRecipesComplex(
+      intolerancesArray ? intolerancesArray.join(",") : null,
+      diet,
+      typesArray.join(",").toLowerCase(),
+      cuisineArray.join(","),
+      offset,
+      query,
+      false
+    )
+      .then((response) => {
+        if (response.data.results) {
+          if (response.data.results.length === 0) {
+            setEmptySearch(true);
+          } else {
+            setRecipeList([...recipeList, ...response.data.results]);
+          }
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const loadRecipeByID = (id) => {
+    const clickedRecipe = recipeList.find((recipe) => recipe.id === id);
+    setSelectedRecipeInfo(clickedRecipe);
+    setRecipeDialogOpen(true);
+  };
 
   useLayoutEffect(() => {
-    getUserPreferences().then((res) => {
-      setIntolerances(res.data.allergens);
-      setDiet(res.data.diet);
+    getUserData().then((response) => {
+      setIntolerances(response.data.allergens);
+      setDiet(response.data.diet);
     });
   }, []);
 
@@ -120,17 +164,15 @@ const SearchView = () => {
   };
 
   const handleQuerySearch = (query) => {
+    setInitialSearch(false);
+    setEmptySearch(false);
     loadRecipes(intolerances, diet, typeName, cuisineName, 0, query);
   };
 
   const onRecipeClick = (id) => {
-    loadRecipeById(id);
+    loadRecipeByID(id);
     setSelectedRecipeID(id);
   };
-
-  // useEffect(() => {
-  //   setRecipes(getExampleRecipes());
-  // }, []);
 
   return (
     <Scrollbars>
@@ -210,19 +252,46 @@ const SearchView = () => {
               </Card>
             </Box>
             <Box mt={3}>
-              <RecipeList
-                recipes={recipes}
-                loading={loading}
-                onRecipeClick={onRecipeClick}
-              />
+              {initialSearch ? (
+                <>
+                  <Typography
+                    className={classes.placeholderText}
+                    color="textSecondary"
+                    align="center"
+                    variant="h3"
+                  >
+                    Start searching to find your new favourite recipes!
+                  </Typography>
+                </>
+              ) : (
+                <>
+                  <RecipeList
+                    recipes={recipeList}
+                    onRecipeClick={onRecipeClick}
+                    loading={loading}
+                  />
+                </>
+              )}
+              {emptySearch ? (
+                <>
+                  <Typography
+                    className={classes.placeholderText}
+                    color="textSecondary"
+                    align="center"
+                    variant="h3"
+                  >
+                    No results found for your dietary preferences.
+                  </Typography>
+                </>
+              ) : null}
               <Grid item xs={12}>
                 {loading ? <LinearProgress /> : null}
               </Grid>
             </Box>
           </Container>
           <RecipeDialog
-            open={dialogOpen}
-            handleClose={() => setDialogOpen(false)}
+            open={recipeDialogOpen}
+            handleClose={() => setRecipeDialogOpen(false)}
             recipeId={selectedRecipeID}
             recipeInfo={selectedRecipeInfo}
           />
@@ -230,45 +299,6 @@ const SearchView = () => {
       </Page>
     </Scrollbars>
   );
-
-  function loadRecipes(
-    intolerancesArray,
-    diet,
-    typesArray,
-    cuisineArray,
-    offset,
-    query
-  ) {
-    setRecipes([]);
-    setLoading(true);
-    let intolerancesString = intolerancesArray
-      ? intolerancesArray.join(",")
-      : null;
-    let dishTypesString = typesArray.join(",").toLowerCase();
-    let cuisinesString = cuisineArray.join(",");
-    getComplexRecipes(
-      intolerancesString,
-      diet,
-      dishTypesString,
-      cuisinesString,
-      offset,
-      query
-    )
-      .then((res) => {
-        if (res.data.results) {
-          setRecipes([...recipes, ...res.data.results]);
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }
-
-  function loadRecipeById(id) {
-    const clickedRecipe = recipes.find((recipe) => recipe.id === id);
-    setSelectedRecipeInfo(clickedRecipe);
-    setDialogOpen(true);
-  }
 };
 
 export default SearchView;

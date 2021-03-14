@@ -21,10 +21,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useLayoutEffect, useState } from "react";
-import {
-  changePreferences,
-  getUserPreferences,
-} from "src/components/auth/UserAuth";
+import { changePreferences, getUserData } from "src/components/auth/UserAuth";
 
 import EqualizerOutlinedIcon from "@material-ui/icons/EqualizerOutlined";
 import PropTypes from "prop-types";
@@ -67,24 +64,25 @@ const Preferences = ({ className, ...rest }) => {
   const [activity, setActivity] = useState(0);
 
   useLayoutEffect(() => {
-    getUserPreferences().then((authResponse) => {
-      if (authResponse.data.loggedIn) {
-        if (authResponse.data.diet) {
-          setDiet(authResponse.data.diet);
+    getUserData().then((response) => {
+      console.log(response.data);
+      if (response.data.message === "loggedIn") {
+        if (response.data.diet) {
+          setDiet(response.data.diet);
         }
-        if (authResponse.data.allergens) {
+        if (response.data.allergens) {
           var allergenJSON = {};
-          authResponse.data.allergens.forEach((item) => {
+          response.data.allergens.forEach((item) => {
             const allergen = item === "Tree Nut" ? "TreeNut" : item;
             allergenJSON[allergen] = true;
           });
           setAllergens(allergenJSON);
         }
 
-        if (authResponse.data.health) {
-          setHeight(authResponse.data.health.height);
-          setWeight(authResponse.data.health.weight);
-          setActivity(authResponse.data.health.activity);
+        if (response.data.health) {
+          setHeight(response.data.health.height);
+          setWeight(response.data.health.weight);
+          setActivity(response.data.health.activity);
         }
       }
       setButtonDisabled(true);
@@ -114,12 +112,11 @@ const Preferences = ({ className, ...rest }) => {
     }
     changePreferences(diet, allergenList, height, weight, activity).then(
       (response) => {
-        if (response.data.message) {
-          setError(true);
-          setOpen(true);
-        } else if (response) {
+        setOpen(true);
+        if (response.data.message === "updateSuccess") {
           setError(false);
-          setOpen(true);
+        } else if (response) {
+          setError(true);
         }
       }
     );

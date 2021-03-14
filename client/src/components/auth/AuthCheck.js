@@ -1,23 +1,26 @@
-import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import { getUserInfo } from "src/components/auth/UserAuth";
+
+import DashboardView from "src/views/dashboard/DashboardView";
 import LandingView from "src/views/landing/LandingView";
 import LoginView from "src/views/login/LoginView";
-import DashboardView from "src/views/dashboard/DashboardView";
+import { getUserData } from "src/components/auth/UserAuth";
+import { useNavigate } from "react-router-dom";
 
 export const LoginCheck = () => {
   const navigate = useNavigate();
-  const pathname = window.location.pathname;
   const [isloggedIn, setIsLoggedIn] = useState(() => {
-    getUserInfo().then((authResponse) => {
-      setIsLoggedIn(authResponse.data.loggedIn);
-      if (authResponse.data.loggedIn) {
+    getUserData().then((response) => {
+      if (response.data.message === "loggedIn") {
+        setIsLoggedIn(true);
         navigate("/app/home");
+      } else {
+        setIsLoggedIn(false);
       }
     });
   });
+
   return isloggedIn === false ? (
-    pathname === "/login" ? (
+    window.location.pathname === "/login" ? (
       <LoginView />
     ) : (
       <LandingView />
@@ -28,13 +31,16 @@ export const LoginCheck = () => {
 export const AccessCheck = () => {
   const navigate = useNavigate();
   const [isloggedIn, setIsLoggedIn] = useState(() => {
-    getUserInfo().then((authResponse) => {
-      setIsLoggedIn(authResponse.data.loggedIn);
-      if (!authResponse.data.loggedIn) {
+    getUserData().then((response) => {
+      if (response.data.message !== "loggedIn") {
+        setIsLoggedIn(false);
         navigate("/");
+      } else {
+        setIsLoggedIn(true);
       }
     });
   });
+
   return isloggedIn ? <DashboardView /> : null;
 };
 
