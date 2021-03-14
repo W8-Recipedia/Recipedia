@@ -181,7 +181,7 @@ export const changeUserInfo = async (firstname, lastname, email) => {
       }
     );
     if (response.data.token) {
-      updateToken(response.data.token);
+      await updateToken(response.data.token);
     }
     return response;
   } else {
@@ -214,7 +214,7 @@ export const changePreferences = async (
       }
     );
     if (response.data.token) {
-      updateToken(response.data.token);
+      await updateToken(response.data.token);
     }
     return response;
   } else {
@@ -236,7 +236,7 @@ export const changePassword = async (oldpassword, newpassword) => {
       }
     );
     if (response.data.token) {
-      updateToken(response.data.token);
+      await updateToken(response.data.token);
     }
     return response;
   } else {
@@ -257,7 +257,7 @@ export const submitFeeback = async (feedback) => {
       }
     );
     if (response.data.token) {
-      updateToken(response.data.token);
+      await updateToken(response.data.token);
     }
     return response;
   } else {
