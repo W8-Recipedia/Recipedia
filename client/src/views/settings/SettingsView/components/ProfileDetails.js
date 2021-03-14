@@ -47,8 +47,8 @@ const ProfileDetails = ({ className, ...rest }) => {
 
   const handleSubmit = (values, actions) => {
     changeUserInfo(values.firstName, values.lastName, values.email).then(
-      (authResponse) => {
-        if (authResponse === "success") {
+      (response) => {
+        if (response === "updateSuccess") {
           setChangeDetailsSuccess(true);
         } else {
           setChangeDetailsSuccess(false);

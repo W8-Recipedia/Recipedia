@@ -60,8 +60,8 @@ const VerifyView = () => {
 
   useLayoutEffect(() => {
     verifyEmail(window.location.pathname.replace("/verify/", "")).then(
-      (authResponse) => {
-        if (authResponse === "userVerified") {
+      (response) => {
+        if (response === "userVerified") {
           setVerified(true);
         } else {
           setVerified(false);

@@ -189,7 +189,7 @@ const FeedbackView = ({ className, ...rest }) => {
           >
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                {feedbackStatus === "success"
+                {feedbackStatus === "feedbackSent"
                   ? "Thank you for your feedback!"
                   : "There was an error submitting your feedback. Please try again later."}
               </DialogContentText>

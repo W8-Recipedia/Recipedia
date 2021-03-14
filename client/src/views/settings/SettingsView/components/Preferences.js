@@ -111,12 +111,11 @@ const Preferences = ({ className, ...rest }) => {
     }
     changePreferences(diet, allergenList, height, weight, activity).then(
       (response) => {
-        if (response.data.message) {
-          setError(true);
-          setOpen(true);
-        } else if (response) {
+        setOpen(true);
+        if (response.data.message == "updateSuccess") {
           setError(false);
-          setOpen(true);
+        } else if (response) {
+          setError(true);
         }
       }
     );

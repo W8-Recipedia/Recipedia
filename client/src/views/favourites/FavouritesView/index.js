@@ -45,10 +45,10 @@ const Favourites = () => {
   // }, []);
 
   useLayoutEffect(() => {
-    getUserData().then((reesponse) => {
-      if (reesponse.data.favourites) {
-        if (reesponse.data.favourites.length > 0) {
-          loadMultipleRecipes(reesponse.data.favourites);
+    getUserData().then((response) => {
+      if (response.data.favourites) {
+        if (response.data.favourites.length > 0) {
+          loadMultipleRecipes(response.data.favourites);
         }
       }
     });

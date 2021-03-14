@@ -70,7 +70,7 @@ const LoginView = () => {
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
     login(values.email, values.password).then((response) => {
-      if (response.data.message === "success") {
+      if (response.data.message === "loggedIn") {
         navigate("/app/home");
       } else {
         if (response.data.message === "wrongAccountType") {
@@ -161,13 +161,14 @@ const LoginView = () => {
                   </Box>
                   <TextField
                     error={
-                      loginError === "noEmail" || loginError === "wrongPassword"
+                      loginError === "noAccount" ||
+                      loginError === "wrongPassword"
                         ? Boolean(true)
                         : Boolean(touched.password && errors.password)
                     }
                     fullWidth
                     helperText={
-                      loginError === "noEmail"
+                      loginError === "noAccount"
                         ? "Please sign up before logging in!"
                         : touched.email && errors.email
                     }
