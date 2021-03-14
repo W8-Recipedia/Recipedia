@@ -44,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
+  placeholderText: {
+    paddingTop: theme.spacing(4)
+  }
 }));
 
 const cuisineNames = [
@@ -104,6 +107,8 @@ const SearchView = () => {
   const [recipes, setRecipes] = useState([]);
   const [intolerances, setIntolerances] = useState([]);
   const [diet, setDiet] = useState("");
+  const [initialSearch, setInitialSearch] = useState(true);
+  const [emptySearch, setEmptySearch] = useState(false);
 
   useLayoutEffect(() => {
     getUserData().then((response) => {
@@ -121,6 +126,8 @@ const SearchView = () => {
   };
 
   const handleQuerySearch = (query) => {
+    setInitialSearch(false);
+    setEmptySearch(false);
     loadRecipes(intolerances, diet, typeName, cuisineName, 0, query);
   };
 
@@ -211,11 +218,38 @@ const SearchView = () => {
               </Card>
             </Box>
             <Box mt={3}>
-              <RecipeList
-                recipes={recipes}
-                loading={loading}
-                onRecipeClick={onRecipeClick}
-              />
+              {initialSearch ? (
+                <>
+                    <Typography
+                      className={classes.placeholderText}
+                      color="textSecondary"
+                      align="center"
+                      variant="h1"
+                    >
+                      Start searching to find your new favourite recipes!
+                    </Typography>
+                </>
+              ) : (
+                <>
+                  <RecipeList
+                    recipes={recipes}
+                    onRecipeClick={onRecipeClick}
+                    loading={loading}
+                  />
+                </>
+              )}
+              {emptySearch ? (
+                <>
+                    <Typography
+                      className={classes.placeholderText}
+                      color="textSecondary"
+                      align="center"
+                      variant="h1"
+                    >
+                      No results found for your dietary preferences.
+                    </Typography>
+                </>
+              ) : null }
               <Grid item xs={12}>
                 {loading ? <LinearProgress /> : null}
               </Grid>
@@ -257,7 +291,11 @@ const SearchView = () => {
     )
       .then((res) => {
         if (res.data.results) {
-          setRecipes([...recipes, ...res.data.results]);
+          if (!res.data.results.length) {
+            setEmptySearch(true);
+          } else {
+            setRecipes([...recipes, ...res.data.results]);
+          }
         }
       })
       .finally(() => {

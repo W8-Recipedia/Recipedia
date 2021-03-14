@@ -14,9 +14,10 @@ import Page from "src/components/theme/page";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
-// import { getExampleRecipes } from "src/api/mockAPI";
 import { getMultipleRecipes } from "src/components/api/SpoonacularAPI";
 import { getUserData } from "src/components/auth/UserAuth";
+
+// import { getExampleRecipes } from "src/api/mockAPI";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,6 +32,7 @@ const Favourites = () => {
   const classes = useStyles();
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [favouritesList, setFavouritesList] = useState(true);
   const [selectedRecipeId, setSelectedRecipeId] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
   const [dlgOpen, setDlgOpen] = useState(false);
@@ -40,16 +42,16 @@ const Favourites = () => {
     setSelectedRecipeId(id);
   };
 
-  // useEffect(() => {
-  //   setRecipes(getExampleRecipes());
-  // }, []);
-
   useLayoutEffect(() => {
     getUserData().then((response) => {
       if (response.data.favourites) {
         if (response.data.favourites.length > 0) {
           loadMultipleRecipes(response.data.favourites);
+        } else {
+          setFavouritesList(false);
         }
+      } else {
+        setFavouritesList(false);
       }
     });
   }, []);
@@ -78,11 +80,27 @@ const Favourites = () => {
           </Container>
           <Container maxWidth={false}>
             <Box mt={3}>
-              <RecipeList
-                recipes={recipes}
-                onRecipeClick={onRecipeClick}
-                loading={loading}
-              />
+              {favouritesList ? (
+                <>
+                  <RecipeList
+                    recipes={recipes}
+                    onRecipeClick={onRecipeClick}
+                    loading={loading}
+                  />
+                </>
+              ) : (
+                <>
+                  <Box mt={10}>
+                    <Typography
+                      color="textSecondary"
+                      align="center"
+                      variant="h1"
+                    >
+                      You haven't favourited any recipes yet!
+                    </Typography>
+                  </Box>
+                </>
+              )}
               <Grid
                 item
                 xs={12}

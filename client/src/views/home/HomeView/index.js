@@ -13,11 +13,11 @@ import React, { useLayoutEffect, useState } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Page from "src/components/theme/page";
+import { getShuffledRecommendedRecipes } from "src/components/api/SpoonacularAPI";
 import PropTypes from "prop-types";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
-// import { getExampleRecipes } from "src/api/mockAPI";
 import { getRandomRecommendedRecipes } from "src/components/api/SpoonacularAPI";
 import { getUserData } from "src/components/auth/UserAuth";
 
@@ -42,40 +42,41 @@ const Home = () => {
   const [selectedRecipeId, setSelectedRecipeId] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [offset, setOffset] = useState(0);
+  const [offset] = useState(0);
   const [intolerances, setIntolerances] = useState([]);
   const [diet, setDiet] = useState("");
-  const [tags, setTags] = useState("");
 
   const onRecipeClick = (id) => {
     loadRecipeById(id);
     setSelectedRecipeId(id);
   };
 
-  // useEffect(() => {
-  //   setRecipes(getExampleRecipes());
-  // }, []);
-
   useLayoutEffect(() => {
+    getUserPreferences().then((res) => {
+      setIntolerances(res.data.allergens);
+      setDiet(res.data.diet);
+      loadShuffledRecommendedRecipes(
+        res.data.allergens,
+        res.data.diet,
+        0,
+      );
     getUserData().then((response) => {
       setIntolerances(response.data.allergens);
       setDiet(response.data.diet);
-      const userDietLowerCase = response.data.diet
-        ? response.data.diet.toLowerCase()
-        : null;
-      const userIntolerancesArray = response.data.allergens
-        ? response.data.allergens.join(",").toLowerCase()
-        : null;
-      const tags = userIntolerancesArray
-        ? [userDietLowerCase, userIntolerancesArray]
-        : [userDietLowerCase];
-      setTags(tags);
-      loadRandomRecommendedRecipes();
+      loadShuffledRecommendedRecipes(
+        res.data.allergens,
+        res.data.diet,
+        0,
+      );
     });
   }, []);
 
   const loadMoreRecipes = () => {
-    loadRandomRecommendedRecipes();
+    let newOffset = offset + parseInt(process.env.REACT_APP_SEARCH_OFFSET)
+    loadShuffledRecommendedRecipes(
+      intolerances,
+      diet,
+      newOffset);
   };
 
   return (
@@ -134,16 +135,16 @@ const Home = () => {
     </Scrollbars>
   );
 
-  function loadRandomRecommendedRecipes() {
+  function loadShuffledRecommendedRecipes(intolerancesArray, diet, offset) {
     setLoading(true);
-    let tagsString = tags ? tags.join(",") : null;
-    if (tagsString === "none") {
-      tagsString = "";
-    }
-    getRandomRecommendedRecipes(tagsString)
+    let intolerancesString = intolerancesArray ? intolerancesArray.join(",") : null
+    getShuffledRecommendedRecipes(intolerancesString, diet, offset)
       .then((res) => {
-        if (res.data) {
-          setRecipes([...recipes, ...res.data]);
+        if (res.data.results) {
+          offset
+          ? setRecipes([...recipes, ...res.data.results])
+          : setRecipes(res.data.results);
+          console.log("recipes:", res.data);
         }
       })
       .finally(() => {

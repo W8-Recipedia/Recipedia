@@ -24,11 +24,16 @@ export const getComplexRecipes = async (
   );
 };
 
-export const getRandomRecommendedRecipes = async (tags) => {
+export const getShuffledRecommendedRecipes = async (intolerances, diet, offset) => {
   return await Axios.post(
-    process.env.REACT_APP_SERVER_URL + "/recipes/random",
+    process.env.REACT_APP_SERVER_URL + "/recipes/shuffledcomplexsearch",
     {
-      tags: tags,
+      instructions: true,
+      recipeinformation: true,
+      fillingredients: true,
+      diet: diet,
+      intolerances: intolerances,
+      offset,
     }
   );
 };
