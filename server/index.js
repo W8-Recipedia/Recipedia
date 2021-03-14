@@ -163,8 +163,6 @@ app.post("/recipes/getRecipesByID", (req, res) => {
   );
 });
 
-
-
 app.post("/login", (req, res) => {
   con.query(
     "SELECT * FROM users WHERE email = ?",

@@ -11,10 +11,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import {
-  deleteAccount,
-  getUserData,
-} from "src/components/auth/UserAuth";
+import { deleteAccount, getUserData } from "src/components/auth/UserAuth";
 
 import PropTypes from "prop-types";
 import { red } from "@material-ui/core/colors";
