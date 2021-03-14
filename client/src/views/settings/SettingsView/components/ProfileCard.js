@@ -41,7 +41,7 @@ const ProfileCard = ({ className, ...rest }) => {
 
   const [userName, setUserName] = useState(() => {
     getUserData().then((authResponse) => {
-      if (authResponse.data.loggedIn) {
+      if (authResponse.data.message === "loggedIn") {
         setUserName(
           authResponse.data.user.firstname +
             " " +

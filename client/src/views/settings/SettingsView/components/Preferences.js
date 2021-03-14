@@ -65,7 +65,8 @@ const Preferences = ({ className, ...rest }) => {
 
   useLayoutEffect(() => {
     getUserData().then((response) => {
-      if (response.data.loggedIn) {
+      console.log(response.data);
+      if (response.data.message === "loggedIn") {
         if (response.data.diet) {
           setDiet(response.data.diet);
         }
@@ -112,7 +113,7 @@ const Preferences = ({ className, ...rest }) => {
     changePreferences(diet, allergenList, height, weight, activity).then(
       (response) => {
         setOpen(true);
-        if (response.data.message == "updateSuccess") {
+        if (response.data.message === "updateSuccess") {
           setError(false);
         } else if (response) {
           setError(true);

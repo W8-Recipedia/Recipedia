@@ -87,11 +87,10 @@ const NavBar = ({ onMobileClose, openMobile }) => {
 
   useLayoutEffect(() => {
     getUserData().then((response) => {
+      console.log(response.data);
       if (response.data.message === "loggedIn") {
         setUserName(
-          response.data.user.firstname +
-            " " +
-            response.data.user.lastname
+          response.data.user.firstname + " " + response.data.user.lastname
         );
       }
       if (response.data.user.imageUrl) {

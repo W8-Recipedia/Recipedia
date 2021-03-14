@@ -2,7 +2,7 @@ import Axios from "axios";
 
 Axios.defaults.withCredentials = true;
 
-const tokenType = () => {
+const tokenType = async () => {
   if (localStorage.getItem("usertoken")) {
     return "usertoken";
   } else if (localStorage.getItem("gusertoken")) {
@@ -13,9 +13,10 @@ const tokenType = () => {
 };
 
 const getToken = async () => {
-  if (tokenType == "usertoken") {
+  const token = await tokenType();
+  if (token === "usertoken") {
     return localStorage.getItem("usertoken");
-  } else if (tokenType == "gusertoken") {
+  } else if (token === "gusertoken") {
     return localStorage.getItem("gusertoken");
   } else {
     return null;
@@ -23,9 +24,10 @@ const getToken = async () => {
 };
 
 const updateToken = async (token) => {
-  if (tokenType == "usertoken") {
+  const token = await tokenType();
+  if (token === "usertoken") {
     return localStorage.setItem("usertoken", token);
-  } else if (tokenType == "gusertoken") {
+  } else if (token === "gusertoken") {
     return localStorage.setItem("gusertoken", token);
   } else {
     return null;
@@ -43,29 +45,21 @@ export const login = async (email, password) => {
   if (response.data.token) {
     localStorage.removeItem("gusertoken");
     localStorage.setItem("usertoken", response.data.token);
-    // return "success";
   }
-  // else {
-  //   return response.data.message;
-  // }
   return response;
 };
 
-export const googleLogin = async (token, userprofile) => {
+export const googleLogin = async (userprofile) => {
   const response = await Axios.post(
-    process.env.REACT_APP_SERVER_URL + "/glogin",
+    process.env.REACT_APP_SERVER_URL + "/googlelogin",
     {
-      userprofile,
+      userprofile: userprofile,
     }
   );
   if (response.data.token) {
     localStorage.removeItem("usertoken");
     localStorage.setItem("gusertoken", response.data.token);
-    // return "success";
   }
-  // else {
-  //   return response.data.message;
-  // }
   return response;
 };
 
@@ -79,20 +73,17 @@ export const signUp = async (firstname, lastname, email, password) => {
       password: password,
     }
   );
-  // return response.data.message;
   return response;
 };
 
 export const googleSignUp = async (gtoken, userprofile) => {
   if (gtoken) {
-    localStorage.removeItem("usertoken");
     const response = await Axios.post(
-      process.env.REACT_APP_SERVER_URL + "/gsignup",
+      process.env.REACT_APP_SERVER_URL + "/googlesignup",
       {
         user: userprofile,
       }
     );
-    // return response.data.message;
     return response;
   }
 };
@@ -106,7 +97,6 @@ export const verifyEmail = async (token) => {
       },
     }
   );
-  // return response.data.message;
   return response;
 };
 
@@ -117,12 +107,11 @@ export const resendVerificationEmail = async (email) => {
       email: email,
     }
   );
-  // return response.data.message;
   return response;
 };
 
 export const getUserData = async () => {
-  const localtoken = getToken();
+  const localtoken = await getToken();
   if (localtoken) {
     const response = await Axios.get(
       process.env.REACT_APP_SERVER_URL + "/getuserdata",
@@ -133,20 +122,20 @@ export const getUserData = async () => {
       }
     );
     if (response.data.token) {
-      updateToken(response.data.token);
-      if (tokenType == "gusertoken") {
+      await updateToken(response.data.token);
+      if (localStorage.getItem("gusertoken")) {
         response.data.user.firstname = response.data.user.givenName;
         response.data.user.lastname = response.data.user.familyName;
       }
     }
     return response;
   } else {
-    return { data: { message: "notLoggedIn" } }; // { data: { loggedIn: false } };
+    return { data: { message: "notLoggedIn" } };
   }
 };
 
 export const addToFavourites = async (favourite) => {
-  const localtoken = getToken();
+  const localtoken = await getToken();
   if (localtoken) {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/addtofavourites",
@@ -159,12 +148,12 @@ export const addToFavourites = async (favourite) => {
     );
     return response;
   } else {
-    return { data: { message: "notLoggedIn" } }; // { data: { loggedIn: false } };
+    return { data: { message: "notLoggedIn" } };
   }
 };
 
 export const removeFromFavourites = async (favourite) => {
-  const localtoken = getToken();
+  const localtoken = await getToken();
   if (localtoken) {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/removefromfavourites",
@@ -177,12 +166,12 @@ export const removeFromFavourites = async (favourite) => {
     );
     return response;
   } else {
-    return { data: { message: "notLoggedIn" } }; // { data: { loggedIn: false } };
+    return { data: { message: "notLoggedIn" } };
   }
 };
 
 export const changeUserInfo = async (firstname, lastname, email) => {
-  const localtoken = getToken();
+  const localtoken = await getToken();
   if (localtoken) {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/changeuserinfo",
@@ -191,18 +180,12 @@ export const changeUserInfo = async (firstname, lastname, email) => {
         headers: { "x-access-token": localtoken },
       }
     );
-    // if (response.data.message === "emailExists") {
-    //   return response.data.message;
-    // } else {
-    //   updateToken(response.data.token);
-    //   return "success";
-    // }
     if (response.data.token) {
       updateToken(response.data.token);
     }
     return response;
   } else {
-    return { data: { message: "notLoggedIn" } }; // { data: { loggedIn: false } };
+    return { data: { message: "notLoggedIn" } };
   }
 };
 
@@ -213,7 +196,7 @@ export const changePreferences = async (
   weight,
   activity
 ) => {
-  const localtoken = getToken();
+  const localtoken = await getToken();
   if (localtoken) {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/changeuserpreferences",
@@ -235,12 +218,12 @@ export const changePreferences = async (
     }
     return response;
   } else {
-    return { data: { message: "notLoggedIn" } }; // { data: { loggedIn: false } };
+    return { data: { message: "notLoggedIn" } };
   }
 };
 
 export const changePassword = async (oldpassword, newpassword) => {
-  const localtoken = getToken();
+  const localtoken = await getToken();
   if (localtoken) {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/changeuserpassword",
@@ -254,16 +237,15 @@ export const changePassword = async (oldpassword, newpassword) => {
     );
     if (response.data.token) {
       updateToken(response.data.token);
-      // return "success";
     }
-    return response; // response.data.message;
+    return response;
   } else {
-    return { data: { message: "notLoggedIn" } }; // { data: { loggedIn: false } };
+    return { data: { message: "notLoggedIn" } };
   }
 };
 
 export const submitFeeback = async (feedback) => {
-  const localtoken = getToken();
+  const localtoken = await getToken();
   if (localtoken) {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/submitfeedback",
@@ -279,12 +261,12 @@ export const submitFeeback = async (feedback) => {
     }
     return response;
   } else {
-    return { data: { message: "notLoggedIn" } }; // { data: { loggedIn: false } };
+    return { data: { message: "notLoggedIn" } };
   }
 };
 
 export const deleteAccount = async () => {
-  const localtoken = getToken();
+  const localtoken = await getToken();
   if (localtoken) {
     const response = await Axios.get(
       process.env.REACT_APP_SERVER_URL + "/deleteaccount",
@@ -298,9 +280,9 @@ export const deleteAccount = async () => {
       localStorage.removeItem("usertoken");
       localStorage.removeItem("gusertoken");
     }
-    return response; // response.data.message;
+    return response;
   } else {
-    return { data: { message: "notLoggedIn" } }; // { data: { loggedIn: false } };
+    return { data: { message: "notLoggedIn" } };
   }
 };
 

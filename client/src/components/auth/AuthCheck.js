@@ -34,7 +34,7 @@ export const AccessCheck = () => {
 
   useLayoutEffect(() => {
     getUserData().then((response) => {
-      if (response.data.message != "loggedIn") {
+      if (response.data.message !== "loggedIn") {
         setIsLoggedIn(false);
         navigate("/");
       }

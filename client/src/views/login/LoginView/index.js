@@ -54,7 +54,7 @@ const LoginView = () => {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const responseGoogle = (response) => {
-    googleLogin(response.tokenId, response.profileObj).then((response) => {
+    googleLogin(response.profileObj).then((response) => {
       if (response.data.message === "loggedIn") {
         navigate("/app/home");
       } else if (response.data.message === "wrongAccountType") {
@@ -274,14 +274,12 @@ const LoginView = () => {
             </Dialog>
             <Dialog
               open={open}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
               onClose={() => {
                 setOpen(false);
               }}
             >
               <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText>
                   You must sign up with Google before logging in!
                 </DialogContentText>
               </DialogContent>
@@ -299,8 +297,6 @@ const LoginView = () => {
             </Dialog>
             <Dialog
               open={verifyError}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
               onClose={() => {
                 setVerifyError(false);
               }}
