@@ -127,7 +127,7 @@ npm run dev
 
 ## Code of Conduct
 
-W8 has a strinct code of conduct, that we endeavour to follow at all times - see the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) file for more details about our ethical values and principles.
+W8 has a strict code of conduct, that we endeavour to follow at all times - see the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) file for more details about our ethical values and principles.
 
 ## License
 
