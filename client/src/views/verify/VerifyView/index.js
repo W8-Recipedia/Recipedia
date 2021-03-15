@@ -164,7 +164,9 @@ const VerifyView = () => {
                     ? "Please log in to your account!"
                     : emailStatus === "noAccount"
                     ? "Please sign up first!"
-                    : "A verification email has been sent to your email adress."}
+                    : emailStatus === "emailSuccess"
+                    ? "A verification email has been sent to your email adress."
+                    : "Unkown error"}
                 </Box>
               </DialogContentText>
             </DialogContent>
