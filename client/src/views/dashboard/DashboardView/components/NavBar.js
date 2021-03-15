@@ -19,6 +19,7 @@ import {
 } from "react-feather";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
+import { Scrollbars } from "react-custom-scrollbars";
 
 import NavItem from "src/views/dashboard/DashboardView/components/NavItem";
 import { getUserData } from "src/components/auth/UserAuth";
@@ -120,41 +121,47 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   }, [location.pathname]);
 
   const content = (
-    <Box height="100%" display="flex" flexDirection="column">
-      <Box alignItems="center" display="flex" flexDirection="column" p={2}>
-        <Box pb={2}>
-          <Avatar
-            className={classes.avatar}
-            component={RouterLink}
-            src={imageURL}
-            to="/app/settings"
-          />
-        </Box>
-        <Box pb={1}>
-          <Typography className={classes.name} color="textPrimary" variant="h5">
-            {userName}
-          </Typography>
-        </Box>
-        <Box pb={1}>
-          <Typography color="textSecondary" variant="body2">
-            {userRank}
-          </Typography>
-        </Box>
-      </Box>
-      <Divider />
-      <Box p={2}>
-        <List>
-          {items.map((item) => (
-            <NavItem
-              href={item.href}
-              key={item.title}
-              title={item.title}
-              icon={item.icon}
+    <Scrollbars>
+      <Box height="100%" display="flex" flexDirection="column">
+        <Box alignItems="center" display="flex" flexDirection="column" p={2}>
+          <Box pb={2}>
+            <Avatar
+              className={classes.avatar}
+              component={RouterLink}
+              src={imageURL}
+              to="/app/settings"
             />
-          ))}
-        </List>
+          </Box>
+          <Box pb={1}>
+            <Typography
+              className={classes.name}
+              color="textPrimary"
+              variant="h5"
+            >
+              {userName}
+            </Typography>
+          </Box>
+          <Box pb={1}>
+            <Typography color="textSecondary" variant="body2">
+              {userRank}
+            </Typography>
+          </Box>
+        </Box>
+        <Divider />
+        <Box p={2}>
+          <List>
+            {items.map((item) => (
+              <NavItem
+                href={item.href}
+                key={item.title}
+                title={item.title}
+                icon={item.icon}
+              />
+            ))}
+          </List>
+        </Box>
       </Box>
-    </Box>
+    </Scrollbars>
   );
 
   return (
