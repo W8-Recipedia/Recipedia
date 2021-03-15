@@ -83,30 +83,47 @@ const verifyToken = (req, res, next) => {
   );
 };
 
-const sendVerificationEmail = async (email) => {
-  const user = {
-    email: email,
-  };
-  const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
-  });
+const databaseSelect = (req, res, next) => {
+  con.query(
+    "SELECT * FROM users WHERE email = ?",
+    req.body.email ? req.body.email : res.user.email,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.json({ message: err });
+      } else if (result.length !== 1) {
+        res.json({ message: "noAccount" });
+      } else {
+        res.result = result[0];
+        next();
+      }
+    }
+  );
+};
+
+const sendVerificationEmail = (email) => {
   const mailOptions = {
     from: "w8.recipedia@gmail.com",
     to: email,
     subject: "Verify your Recipedia account",
     text: `Click here to verify your Recipedia account (this link is valid for 1 hour): ${
       process.env.LOCALHOST_CLIENT_URL
-        ? [process.env.LOCALHOST_CLIENT_URL]
-        : [process.env.NETLIFY_CLIENT_URL]
-    }/verify/${token}`,
+        ? process.env.LOCALHOST_CLIENT_URL
+        : process.env.NETLIFY_CLIENT_URL
+    }/verify/${jwt.sign(
+      {
+        user: {
+          email: email,
+        },
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    )}`,
   };
-  transporter.sendMail(mailOptions, (err) => {
-    if (err) {
-      return "error";
-    } else {
-      return "success";
-    }
-  });
+
+  transporter.sendMail(mailOptions);
 };
 
 app.use(express.json());
@@ -178,54 +195,40 @@ app.post("/recipes/getRecipesByID", (req, res) => {
   );
 });
 
-app.post("/login", (req, res) => {
-  con.query(
-    "SELECT * FROM users WHERE email = ?",
-    req.body.email,
-    (err, result) => {
+app.post("/login", databaseSelect, (req, res) => {
+  if (res.result.googlelogin) {
+    res.json({ message: "wrongAccountType" });
+  } else if (res.result.verifiedemail !== 1) {
+    res.json({ message: "accountNotVerified" });
+  } else {
+    const userID = res.result.userid;
+    const email = res.result.email;
+    const firstName = decrypt(res.result.firstname);
+    const lastName = decrypt(res.result.lastname);
+    bcrypt.compare(req.body.password, decrypt(res.result.password), (err) => {
       if (err) {
-        res.json({ message: err });
-      } else if (result.length !== 1) {
-        res.json({ message: "noAccount" });
-      } else if (result[0].googlelogin) {
-        res.json({ message: "wrongAccountType" });
-      } else if (result[0].verifiedemail !== 1) {
-        res.json({ message: "accountNotVerified" });
+        res.json({ message: "wrongPassword" });
       } else {
-        const userID = result[0].userid;
-        const email = result[0].email;
-        const firstName = decrypt(result[0].firstname);
-        const lastName = decrypt(result[0].lastname);
-        bcrypt.compare(
-          req.body.password,
-          decrypt(result[0].password),
-          (err) => {
-            if (err) {
-              res.json({ message: "wrongPassword" });
-            } else {
-              res.json({
-                token: jwt.sign(
-                  {
-                    user: {
-                      userid: userID,
-                      email: email,
-                      firstname: firstName,
-                      lastname: lastName,
-                    },
-                  },
-                  process.env.JWT_SECRET,
-                  {
-                    expiresIn: "30m",
-                  }
-                ),
-                message: "loggedIn",
-              });
+        res.json({
+          token: jwt.sign(
+            {
+              user: {
+                userid: userID,
+                email: email,
+                firstname: firstName,
+                lastname: lastName,
+              },
+            },
+            process.env.JWT_SECRET,
+            {
+              expiresIn: "30m",
             }
-          }
-        );
+          ),
+          message: "loggedIn",
+        });
       }
-    }
-  );
+    });
+  }
 });
 
 app.post("/googlelogin", (req, res) => {
@@ -271,16 +274,8 @@ app.post("/signup", (req, res) => {
         if (err) {
           res.json({ message: err });
         } else {
-          const user = {
-            email: req.body.email,
-          };
-          sendVerificationEmail(user).then((response) => {
-            if (response === "error") {
-              res.json({ message: "emailError" });
-            } else {
-              res.json({ message: "signUpSuccess" });
-            }
-          });
+          sendVerificationEmail(req.body.email);
+          res.json({ message: "signUpSuccess" });
         }
       }
     );
@@ -300,13 +295,8 @@ app.post("/googlesignup", (req, res) => {
       if (err) {
         res.json({ message: err });
       } else {
-        sendVerificationEmail(req.body.user.email).then((response) => {
-          if (response === "error") {
-            res.json({ message: "emailError" });
-          } else {
-            res.json({ message: "signUpSuccess" });
-          }
-        });
+        sendVerificationEmail(req.body.user.email);
+        res.json({ message: "signUpSuccess" });
       }
     }
   );
@@ -326,113 +316,71 @@ app.get("/verifyemail", verifyToken, (req, res) => {
   );
 });
 
-app.post("/resendverification", (req, res) => {
-  con.query(
-    "SELECT * FROM users WHERE email = ?",
-    req.body.email,
-    (err, result) => {
-      if (err) {
-        res.json({ message: err });
-      } else if (result.length !== 1) {
-        res.json({ message: "noAccount" });
-      } else if (result[0].verifiedemail === 1) {
-        res.json({ message: "accountAlreadyVerified" });
-      } else {
-        const user = {
-          email: req.body.email,
-        };
-        sendVerificationEmail(user).then((response) => {
-          if (response === "error") {
-            res.json({ message: "emailError" });
-          } else {
-            res.json({ message: "emailSuccess" });
-          }
-        });
-      }
-    }
-  );
+app.post("/resendverification", databaseSelect, (req, res) => {
+  if (res.result.verifiedemail === 1) {
+    res.json({ message: "accountAlreadyVerified" });
+  } else {
+    sendVerificationEmail(req.body.email);
+    res.json({ message: "emailSuccess" });
+  }
 });
 
-app.get("/getuserdata", verifyToken, (req, res) => {
-  con.query(
-    "SELECT * FROM users WHERE email = ?",
-    res.user.email,
-    (err, result) => {
-      if (err) {
-        res.json({ message: err });
-      } else if (result.length !== 1) {
-        res.json({ message: "noAccount" });
-      } else {
-        user = res.user;
-        const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-          expiresIn: "30m",
-        });
-        const jsonResponse = {};
-        if (result[0].diet) {
-          jsonResponse.diet = decrypt(result[0].diet);
-        }
-        if (result[0].allergens) {
-          jsonResponse.allergens = decrypt(result[0].allergens);
-        }
-        if (result[0].health) {
-          jsonResponse.health = decrypt(result[0].health);
-        }
-        if (result[0].favourites) {
-          jsonResponse.favourites = decrypt(result[0].favourites);
-        }
-        jsonResponse.message = "loggedIn";
-        jsonResponse.token = token;
-        jsonResponse.user = res.user;
-        res.json(jsonResponse);
-      }
-    }
-  );
+app.get("/getuserdata", verifyToken, databaseSelect, (req, res) => {
+  const jsonResponse = {};
+  if (res.result.diet) {
+    jsonResponse.diet = decrypt(res.result.diet);
+  }
+  if (res.result.allergens) {
+    jsonResponse.allergens = decrypt(res.result.allergens);
+  }
+  if (res.result.health) {
+    jsonResponse.health = decrypt(res.result.health);
+  }
+  if (res.result.favourites) {
+    jsonResponse.favourites = decrypt(res.result.favourites);
+  }
+  jsonResponse.message = "loggedIn";
+  jsonResponse.token = jwt.sign({ user: res.user }, process.env.JWT_SECRET, {
+    expiresIn: "30m",
+  });
+  jsonResponse.user = res.user;
+  res.json(jsonResponse);
 });
 
-app.post("/addtofavourites", verifyToken, (req, res) => {
-  con.query(
-    "SELECT * FROM users WHERE email = ?",
-    res.user.email,
-    (err, result) => {
-      if (err) {
-        res.json({ message: err });
-      } else if (result.length !== 1) {
-        res.json({ message: "noAccount" });
-      } else if (!result[0].favourites) {
-        con.query(
-          "UPDATE users SET favourites = ? WHERE email = ?",
-          [encrypt([req.body.favourite.toString()]), res.user.email],
-          (err) => {
-            if (err) {
-              res.json({ message: err });
-            } else {
-              res.json({ message: "favouritesUpdated" });
-            }
-          }
-        );
-      } else {
-        favouriteList = decrypt(result[0].favourites);
-        if (favouriteList.includes(req.body.favourite.toString())) {
-          res.json({ message: "favouriteExists" });
+app.post("/addtofavourites", verifyToken, databaseSelect, (req, res) => {
+  if (!res.result.favourites) {
+    con.query(
+      "UPDATE users SET favourites = ? WHERE email = ?",
+      [encrypt([req.body.favourite.toString()]), res.user.email],
+      (err) => {
+        if (err) {
+          res.json({ message: err });
         } else {
-          favouriteList.push(req.body.favourite.toString());
-          con.query(
-            "UPDATE users SET favourites = ? WHERE email = ?",
-            [encrypt(favouriteList), res.user.email],
-            (err) => {
-              if (err) {
-                res.json({ message: err });
-              } else {
-                res.json({
-                  message: "favouritesUpdated",
-                });
-              }
-            }
-          );
+          res.json({ message: "favouritesUpdated" });
         }
       }
+    );
+  } else {
+    favouriteList = decrypt(res.result.favourites);
+    if (favouriteList.includes(req.body.favourite.toString())) {
+      res.json({ message: "favouriteExists" });
+    } else {
+      favouriteList.push(req.body.favourite.toString());
+      con.query(
+        "UPDATE users SET favourites = ? WHERE email = ?",
+        [encrypt(favouriteList), res.user.email],
+        (err) => {
+          if (err) {
+            res.json({ message: err });
+          } else {
+            res.json({
+              message: "favouritesUpdated",
+            });
+          }
+        }
+      );
     }
-  );
+  }
 });
 
 app.post("/removefromfavourites", verifyToken, (req, res) => {
@@ -444,10 +392,10 @@ app.post("/removefromfavourites", verifyToken, (req, res) => {
         res.json({ message: err });
       } else if (result.length !== 1) {
         res.json({ message: "noAccount" });
-      } else if (!result[0].favourites) {
+      } else if (!res.result.favourites) {
         res.json({ message: "noFavourites" });
       } else {
-        favouriteList = decrypt(result[0].favourites);
+        favouriteList = decrypt(res.result.favourites);
         if (favouriteList.includes(req.body.favourite.toString())) {
           favouriteList.splice(
             favouriteList.indexOf(req.body.favourite.toString()),
@@ -522,66 +470,50 @@ app.post("/changeuserpreferences", verifyToken, (req, res) => {
   );
 });
 
-app.post("/changeuserpassword", verifyToken, (req, res) => {
-  con.query(
-    "SELECT * FROM users WHERE email = ?",
-    res.user.email,
-    (err, result) => {
-      if (err) {
-        res.json({ message: err });
-      } else if (result.length !== 1) {
-        res.json({ message: "noAccount" });
-      } else {
-        bcrypt.compare(
-          req.body.oldpassword,
-          decrypt(result[0].password),
-          (err) => {
-            if (err) {
-              res.json({ message: err });
-            } else {
-              bcrypt.hash(req.body.newpassword, saltRounds, (err, hash) => {
-                if (err) {
-                  res.json({
-                    message: err,
-                  });
-                } else {
-                  con.query(
-                    "UPDATE users SET password = ? WHERE email = ?",
-                    [hash, res.user.email],
-                    (err) => {
-                      if (err) {
-                        res.json({
-                          message: err,
-                        });
-                      } else {
-                        res.json({
-                          message: "passwordChanged",
-                          token: jwt.sign(
-                            {
-                              user: {
-                                userid: result[0].userid,
-                                email: result[0].email,
-                                firstname: decrypt(result[0].firstname),
-                                lastname: decrypt(result[0].lastname),
-                              },
-                            },
-                            process.env.JWT_SECRET,
-                            {
-                              expiresIn: "30m",
-                            }
-                          ),
-                        });
-                      }
+app.post("/changeuserpassword", verifyToken, databaseSelect, (req, res) => {
+  bcrypt.compare(req.body.oldpassword, decrypt(res.result.password), (err) => {
+    if (err) {
+      res.json({ message: err });
+    } else {
+      bcrypt.hash(req.body.newpassword, saltRounds, (err, hash) => {
+        if (err) {
+          res.json({
+            message: err,
+          });
+        } else {
+          con.query(
+            "UPDATE users SET password = ? WHERE email = ?",
+            [hash, res.user.email],
+            (err) => {
+              if (err) {
+                res.json({
+                  message: err,
+                });
+              } else {
+                res.json({
+                  message: "passwordChanged",
+                  token: jwt.sign(
+                    {
+                      user: {
+                        userid: res.result.userid,
+                        email: res.result.email,
+                        firstname: decrypt(res.result.firstname),
+                        lastname: decrypt(res.result.lastname),
+                      },
+                    },
+                    process.env.JWT_SECRET,
+                    {
+                      expiresIn: "30m",
                     }
-                  );
-                }
-              });
+                  ),
+                });
+              }
             }
-          }
-        );
-      }
+          );
+        }
+      });
     }
-  );
+  });
 });
 
 app.post("/submitfeedback", verifyToken, (req, res) => {
