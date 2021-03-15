@@ -287,7 +287,7 @@ const SearchView = () => {
                       align="center"
                       variant="h3"
                     >
-                      No results found for your dietary preferences.
+                      We couldn't find any recipes for your dietary preferences.
                     </Typography>
                   </Box>
                 </>
