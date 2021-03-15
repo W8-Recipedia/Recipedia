@@ -34,13 +34,14 @@ client/.env
 
 ```dosini
 REACT_APP_SERVER_URL=http://localhost:3001
+REACT_APP_SEARCH_OFFSET=24
 ```
 
 server/.env
 
 ```dosini
 DATABASE=[DATABASE NAME]
-ENCRYPTIONKEY=[RANDOM ALPHANUMERICAL STRING]
+ENCRYPTION_KEY=[RANDOM ALPHANUMERICAL STRING]
 HOST=[DATABASE URL]
 JWT_SECRET=[RANDOM ALPHABETICAL STRING]
 LOCALHOST_CLIENT_URL=http://localhost:3000
@@ -124,6 +125,10 @@ npm run dev
 - [AJ Singh](https://github.com/asjsingh)
 - [Stefan Tutugan](https://github.com/tutugan)
 - [Max Lawley](https://github.com/lawleymax)
+
+## Code of Conduct
+
+W8 has a strict code of conduct, that we endeavour to follow at all times - see the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) file for more details about our ethical values and principles.
 
 ## License
 
