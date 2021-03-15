@@ -31,13 +31,6 @@ const useStyles = makeStyles(() => ({
   },
   title: {
     flexGrow: 4,
-    color: "#FFF",
-  },
-  topBarBtn: {
-    color: "#FFF",
-    alignItems: "center",
-    justifyContent: "center",
-    textDecoration: "none",
   },
 }));
 
@@ -54,20 +47,16 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
         </Hidden>
         <ThemeProvider theme={theme}>
           <Typography
-            variant="h5"
+            variant="h6"
             className={classes.title}
+            color="inherit"
             component={Link}
             to={"/app/home"}
           >
             Recipedia
           </Typography>
         </ThemeProvider>
-        <IconButton
-          color="inherit"
-          className={classes.topBarBtn}
-          component={Link}
-          to={"/app/settings"}
-        >
+        <IconButton color="inherit" component={Link} to={"/app/settings"}>
           <AccountCircle />
         </IconButton>
         <IconButton color="inherit" onClick={logOut} href="/">

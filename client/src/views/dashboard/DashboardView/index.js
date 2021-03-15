@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import NavBar from "src/views/dashboard/DashboardView/components/NavBar";
 import { Outlet } from "react-router-dom";
@@ -37,14 +37,6 @@ const useStyles = makeStyles((theme) => ({
 const DashboardView = () => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-  const [time, setTime] = useState(Date.now());
-
-  useEffect(() => {
-    const interval = setInterval(() => setTime(Date.now()), 300000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
 
   return (
     <div className={classes.root}>
