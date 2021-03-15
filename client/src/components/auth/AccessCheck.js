@@ -4,7 +4,7 @@ import DashboardView from "src/views/dashboard/DashboardView";
 import { getUserData } from "src/components/ServerRequests";
 import { useNavigate } from "react-router-dom";
 
-export const AccessCheck = () => {
+export const AccessCheck = ({ toggleDarkMode }) => {
   const navigate = useNavigate();
   const [isloggedIn, setIsLoggedIn] = useState(() => {
     getUserData().then((response) => {
@@ -17,7 +17,7 @@ export const AccessCheck = () => {
     });
   });
 
-  return isloggedIn ? <DashboardView /> : null;
+  return isloggedIn ? <DashboardView toggleDarkMode={toggleDarkMode} /> : null;
 };
 
 export default AccessCheck;
