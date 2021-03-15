@@ -122,6 +122,7 @@ npm run dev
 - **[Aryan Agrawal](https://github.com/ary4n99)**
 - **[Shadi Abumattar](https://github.com/AbumattarSA)**
 - [Ahmed Soliman](https://github.com/LEGENDSOLI)
+- [Yuxuan Lei](https://github.com/yuxuanlei)
 - [AJ Singh](https://github.com/asjsingh)
 - [Stefan Tutugan](https://github.com/tutugan)
 - [Max Lawley](https://github.com/lawleymax)
