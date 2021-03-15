@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   CardActions,
   CardContent,
@@ -135,24 +136,38 @@ const RecipeCard = ({ recipe, ...props }) => {
       </CardContent>
       <CardActions>
         <Grid container justify="center">
-          <Grid className={classes.statsItem} item md={6}>
-            <IconButton disabled>
-              <LocalDiningIcon color="primary" />
-            </IconButton>
-            <Typography color="textSecondary" display="inline" variant="body2">
-              Servings: {recipe.servings}
-            </Typography>
+          <Grid item md={6}>
+            <Box justifyContent="flex-start" alignItems="center">
+              <IconButton disabled>
+                <LocalDiningIcon color="primary" />
+              </IconButton>
+              <Typography
+                color="textSecondary"
+                display="inline"
+                variant="body2"
+              >
+                Servings: {recipe.servings}
+              </Typography>
+            </Box>
           </Grid>
-          <Grid className={classes.statsItem} item md={6}>
-            <IconButton disabled>
-              <ScheduleIcon color="primary" />
-            </IconButton>
-            <Typography color="textSecondary" display="inline" variant="body2">
-              Time: {convertTime(recipe.readyInMinutes)}
-            </Typography>
+          <Box justifyContent="center" alignItems="center">
+          </Box>
+          <Grid item md={6}>
+            <Box justifyContent="flex-end" alignItems="center">
+              <IconButton disabled>
+                <ScheduleIcon color="primary" />
+              </IconButton>
+              <Typography
+                color="textSecondary"
+                display="inline"
+                variant="body2"
+              >
+                Time: {convertTime(recipe.readyInMinutes)}
+              </Typography>
+            </Box>
           </Grid>
 
-          <Grid className={classes.statsItem} item>
+          <Grid item>
             <IconButton onClick={handleFavouriteClick}>
               {favourited ? (
                 <FavoriteIcon style={{ color: "red" }} />
@@ -165,7 +180,10 @@ const RecipeCard = ({ recipe, ...props }) => {
               autoHideDuration={1200}
               onClose={handleSnackbarClose}
             >
-              <Alert onClose={handleSnackbarClose} severity={favourited ? "success" : "info"}>
+              <Alert
+                onClose={handleSnackbarClose}
+                severity={favourited ? "success" : "info"}
+              >
                 {favourited
                   ? recipe.title + " has been added to your favourites."
                   : recipe.title + " has been removed from your favourites."}

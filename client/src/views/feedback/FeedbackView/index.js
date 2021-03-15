@@ -77,8 +77,8 @@ const FeedbackView = ({ className, ...rest }) => {
     <Scrollbars>
       <Page className={classes.root} title="Recipedia | Feedback">
         <Box m={2}>
-          <Container maxWidth="xl">
-            <Card variant="outlined">
+          <Container maxWidth="false">
+            <Card>
               <CardContent>
                 <Box p={1}>
                   <Typography gutterBottom variant="h1">
@@ -96,87 +96,88 @@ const FeedbackView = ({ className, ...rest }) => {
               </CardContent>
             </Card>
           </Container>
-          <Container maxWidth="xl">
-            <form
-              autoComplete="off"
-              noValidate
-              className={clsx(classes.root, className)}
-              {...rest}
-            >
+          <Container maxWidth="false">
+            <Box mt={3}>
               <Card>
-                <CardContent>
-                  <Grid container spacing={3}>
-                    <Grid item md={6} xs={12}>
-                      <TextField
-                        fullWidth
-                        label="First name"
-                        name="firstName"
-                        required
-                        disabled
-                        value={values.firstName}
-                        variant="outlined"
-                      />
+                <form
+                  autoComplete="off"
+                  noValidate
+                  {...rest}
+                >
+                  <CardContent>
+                    <Grid container spacing={3}>
+                      <Grid item md={6} xs={12}>
+                        <TextField
+                          fullWidth
+                          label="First name"
+                          name="firstName"
+                          required
+                          disabled
+                          value={values.firstName}
+                          variant="outlined"
+                        />
+                      </Grid>
+                      <Grid item md={6} xs={12}>
+                        <TextField
+                          fullWidth
+                          label="Last name"
+                          name="lastName"
+                          required
+                          disabled
+                          value={values.lastName}
+                          variant="outlined"
+                        />
+                      </Grid>
+                      <Grid item md={12} xs={12}>
+                        <TextField
+                          fullWidth
+                          label="Email address"
+                          name="email"
+                          required
+                          disabled
+                          value={values.email}
+                          variant="outlined"
+                        />
+                      </Grid>
+                      <Grid item md={12} xs={12}>
+                        <TextField
+                          helperText={
+                            feedbackError
+                              ? "Please enter at least 150 characters."
+                              : null
+                          }
+                          fullWidth
+                          label="Feedback"
+                          name="feedback"
+                          onChange={(e) => {
+                            handleChange(e);
+                            setButtonDisabled(false);
+                            setFeedbackError(false);
+                          }}
+                          required
+                          multiline
+                          rows={8}
+                          error={feedbackError}
+                          value={values.feedback}
+                          variant="outlined"
+                        />
+                      </Grid>
                     </Grid>
-                    <Grid item md={6} xs={12}>
-                      <TextField
-                        fullWidth
-                        label="Last name"
-                        name="lastName"
-                        required
-                        disabled
-                        value={values.lastName}
-                        variant="outlined"
-                      />
-                    </Grid>
-                    <Grid item md={12} xs={12}>
-                      <TextField
-                        fullWidth
-                        label="Email address"
-                        name="email"
-                        required
-                        disabled
-                        value={values.email}
-                        variant="outlined"
-                      />
-                    </Grid>
-                    <Grid item md={12} xs={12}>
-                      <TextField
-                        helperText={
-                          feedbackError
-                            ? "Please enter at least 150 characters."
-                            : null
-                        }
-                        fullWidth
-                        label="Feedback"
-                        name="feedback"
-                        onChange={(e) => {
-                          handleChange(e);
-                          setButtonDisabled(false);
-                          setFeedbackError(false);
-                        }}
-                        required
-                        multiline
-                        rows={8}
-                        error={feedbackError}
-                        value={values.feedback}
-                        variant="outlined"
-                      />
-                    </Grid>
-                  </Grid>
-                </CardContent>
-                <Divider />
-                <Box display="flex" justifyContent="flex-end" p={2}>
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    disabled={buttonDisabled}
-                    onClick={handleSubmit}
-                  >
-                    Send
-                  </Button>
-                </Box>
+                  </CardContent>
+                  <Divider />
+                  <Box display="flex" justifyContent="flex-end" p={2}>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      disabled={buttonDisabled}
+                      onClick={handleSubmit}
+                    >
+                      Send
+                    </Button>
+                  </Box>
+                </form>
               </Card>
-            </form>
+            </Box>
           </Container>
           <Dialog
             open={open}

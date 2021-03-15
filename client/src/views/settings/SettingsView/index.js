@@ -1,18 +1,19 @@
-import React from "react";
 import {
   Box,
-  Container,
-  Grid,
   Card,
   CardContent,
+  Container,
+  Grid,
   Typography,
   makeStyles,
 } from "@material-ui/core";
+
 import Page from "src/components/theme/page";
-import Preferences from "src/views/settings/SettingsView/components/Preferences";
 import Password from "src/views/settings/SettingsView/components/Password";
+import Preferences from "src/views/settings/SettingsView/components/Preferences";
 import ProfileCard from "src/views/settings/SettingsView/components/ProfileCard";
 import ProfileDetails from "src/views/settings/SettingsView/components/ProfileDetails";
+import React from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +33,7 @@ const SettingsView = () => {
       <Page className={classes.root} title="Recipedia | Settings">
         <Box m={2}>
           <Container maxWidth="xl">
-            <Card variant="outlined">
+            <Card >
               <CardContent>
                 <Box p={1}>
                   <Typography gutterBottom variant="h1">

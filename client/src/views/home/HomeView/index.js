@@ -112,7 +112,7 @@ const Home = () => {
       <Page className={classes.root} title="Recipedia | Home">
         <Box m={2}>
           <Container maxWidth="false">
-            <Card variant="outlined">
+            <Card >
               <CardContent>
                 <Box p={1}>
                   <Typography gutterBottom variant="h1">

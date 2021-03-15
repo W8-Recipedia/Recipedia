@@ -5,9 +5,9 @@ import typography from "src/components/theme/typography";
 const dark = createMuiTheme({
   palette: {
     background: {
-      dark: colors.common.black,
-      default: "#2b2b2b",
-      paper: "#2b2b2b",
+      dark: "#1d2021",
+      default: "#181a1b",
+      paper: "#181a1b",
     },
     primary: {
       main: colors.teal[800],
@@ -16,8 +16,9 @@ const dark = createMuiTheme({
       main: colors.teal[800],
     },
     text: {
-      primary: colors.blueGrey[50],
-      secondary: colors.blueGrey[200],
+      primary: "#beb8b0",
+      secondary: "#beb8b0",
+      disabled: "#beb8b0",
     },
   },
   typography,
@@ -27,8 +28,8 @@ const light = createMuiTheme({
   palette: {
     background: {
       dark: "#F4F6F8",
-      default: colors.common.white,
-      paper: colors.common.white,
+      default: "#FFF",
+      paper: "#FFF",
     },
     primary: {
       main: colors.teal[900],

@@ -1,13 +1,14 @@
-import React from "react";
 import {
+  Box,
   Card,
-  Container,
   CardContent,
+  Container,
   Typography,
   makeStyles,
-  Box,
 } from "@material-ui/core";
+
 import Page from "src/components/theme/page";
+import React from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +28,7 @@ const LegalView = () => {
       <Page className={classes.root} title="Recipedia | Legal">
         <Box m={2}>
           <Container maxWidth="xl">
-            <Card variant="outlined">
+            <Card >
               <CardContent>
                 <Box p={1}>
                   <Typography gutterBottom variant="h1">
