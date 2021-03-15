@@ -165,7 +165,7 @@ const RecipeCard = ({ recipe, ...props }) => {
               autoHideDuration={1200}
               onClose={handleSnackbarClose}
             >
-              <Alert severity={favourited ? "success" : "info"}>
+              <Alert onClose={handleSnackbarClose} severity={favourited ? "success" : "info"}>
                 {favourited
                   ? recipe.title + " has been added to your favourites."
                   : recipe.title + " has been removed from your favourites."}
