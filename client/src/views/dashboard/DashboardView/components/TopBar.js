@@ -1,26 +1,34 @@
 import {
   AppBar,
+  Box,
   Hidden,
   IconButton,
   Toolbar,
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import { LogOut, Moon, User } from "react-feather";
 import {
   ThemeProvider,
   createMuiTheme,
   responsiveFontSizes,
 } from "@material-ui/core/styles";
 
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import Brightness4Icon from "@material-ui/icons/Brightness4";
 import { Link } from "react-router-dom";
-import { LogOut as LogoutIcon } from "react-feather";
 import MenuIcon from "@material-ui/icons/Menu";
+import React from "react";
+import RestaurantIcon from "@material-ui/icons/Restaurant";
 import { logOut } from "src/components/ServerRequests";
 
-let theme = createMuiTheme();
+let theme = createMuiTheme({
+  typography: {
+    overline: {
+      fontWeight: 400,
+      fontSize: 20,
+      paddingLeft: 10,
+    },
+  },
+});
 theme = responsiveFontSizes(theme);
 
 const useStyles = makeStyles(() => ({
@@ -29,13 +37,12 @@ const useStyles = makeStyles(() => ({
     height: 60,
   },
   title: {
-    flexGrow: 4,
+    flexGrow: 1,
   },
 }));
 
 const TopBar = ({ className, onMobileNavOpen, toggleDarkMode, ...rest }) => {
   const classes = useStyles();
-  const [darkMode, setDarkMode] = useState(false);
 
   return (
     <AppBar elevation={0} {...rest}>
@@ -46,8 +53,9 @@ const TopBar = ({ className, onMobileNavOpen, toggleDarkMode, ...rest }) => {
           </IconButton>
         </Hidden>
         <ThemeProvider theme={theme}>
+          <RestaurantIcon />
           <Typography
-            variant="h6"
+            variant="overline"
             className={classes.title}
             color="inherit"
             component={Link}
@@ -56,15 +64,18 @@ const TopBar = ({ className, onMobileNavOpen, toggleDarkMode, ...rest }) => {
             Recipedia
           </Typography>
         </ThemeProvider>
-        <IconButton color="inherit" onClick={toggleDarkMode}>
-          <Brightness4Icon />
-        </IconButton>
-        <IconButton color="inherit" component={Link} to={"/app/settings"}>
-          <AccountCircle />
-        </IconButton>
-        <IconButton color="inherit" onClick={logOut} href="/">
-          <LogoutIcon />
-        </IconButton>
+
+        <Box>
+          <IconButton color="inherit" onClick={toggleDarkMode}>
+            <Moon />
+          </IconButton>
+          <IconButton color="inherit" component={Link} to={"/app/settings"}>
+            <User />
+          </IconButton>
+          <IconButton color="inherit" onClick={logOut} href="/">
+            <LogOut />
+          </IconButton>
+        </Box>
       </Toolbar>
     </AppBar>
   );
