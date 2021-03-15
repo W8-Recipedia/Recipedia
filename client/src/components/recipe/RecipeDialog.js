@@ -162,7 +162,7 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
                 key={`step_${step.number}_${recipeId}`}
               >
                 <ListItemIcon style={{ minWidth: 32 }}>
-                  <Typography>{step.number})</Typography>
+                  <Typography >{step.number})</Typography>
                 </ListItemIcon>
                 <ListItemText primary={step.step} />
               </ListItem>

@@ -1,14 +1,15 @@
-import React from "react";
 import {
+  Box,
   Card,
   CardContent,
-  Typography,
-  Box,
   CardHeader,
   Container,
+  Typography,
   makeStyles,
 } from "@material-ui/core";
+
 import Page from "src/components/theme/page";
+import React from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +29,7 @@ const FAQView = () => {
       <Page className={classes.root} title="Recipedia | FAQ">
         <Box m={2}>
           <Container maxWidth="xl">
-            <Card variant="outlined">
+            <Card >
               <CardContent>
                 <Box p={1}>
                   <Typography gutterBottom variant="h1">
