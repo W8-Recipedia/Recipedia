@@ -32,8 +32,8 @@ const ProfileCard = ({ className, ...rest }) => {
   const navigate = useNavigate();
 
   const [imageURL, setImageURL] = useState("");
-  const [open, setOpen] = React.useState(false);
-  const [deleteStatus, setDeleteStatus] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [deleteStatus, setDeleteStatus] = useState(false);
   const [userRank, setUserRank] = useState("");
 
   const [userName, setUserName] = useState(() => {
