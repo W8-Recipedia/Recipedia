@@ -383,39 +383,29 @@ app.post("/addtofavourites", verifyToken, databaseSelect, (req, res) => {
   }
 });
 
-app.post("/removefromfavourites", verifyToken, (req, res) => {
-  con.query(
-    "SELECT * FROM users WHERE email = ?",
-    res.user.email,
-    (err, result) => {
-      if (err) {
-        res.json({ message: err });
-      } else if (result.length !== 1) {
-        res.json({ message: "noAccount" });
-      } else if (!res.result.favourites) {
-        res.json({ message: "noFavourites" });
-      } else {
-        favouriteList = decrypt(res.result.favourites);
-        if (favouriteList.includes(req.body.favourite.toString())) {
-          favouriteList.splice(
-            favouriteList.indexOf(req.body.favourite.toString()),
-            1
-          );
-          con.query(
-            "UPDATE users SET favourites = ? WHERE email = ?",
-            [encrypt(favouriteList), res.user.email],
-            (err) => {
-              if (err) {
-                res.json({ message: err });
-              } else {
-                res.json({ message: "favouriteRemoves" });
-              }
-            }
-          );
+app.post("/removefromfavourites", verifyToken, databaseSelect, (req, res) => {
+  if (!res.result.favourites) {
+    res.json({ message: "noFavourites" });
+  } else {
+    favouriteList = decrypt(res.result.favourites);
+    if (favouriteList.includes(req.body.favourite.toString())) {
+      favouriteList.splice(
+        favouriteList.indexOf(req.body.favourite.toString()),
+        1
+      );
+      con.query(
+        "UPDATE users SET favourites = ? WHERE email = ?",
+        [encrypt(favouriteList), res.user.email],
+        (err) => {
+          if (err) {
+            res.json({ message: err });
+          } else {
+            res.json({ message: "favouriteRemoves" });
+          }
         }
-      }
+      );
     }
-  );
+  }
 });
 
 app.post("/changeuserinfo", verifyToken, (req, res) => {
