@@ -62,7 +62,7 @@ const VerifyView = () => {
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia">
+      <Page className={classes.root} title="Verify Email | Recipedia">
         <Dialog open={verificationStatus}>
           <Formik
             initialValues={{

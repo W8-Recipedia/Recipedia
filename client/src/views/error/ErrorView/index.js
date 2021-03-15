@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   Button,
@@ -6,8 +5,10 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import Page from "src/components/theme/page";
+
 import { Link } from "react-router-dom";
+import Page from "src/components/theme/page";
+import React from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +31,7 @@ const NotFoundView = () => {
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia | Page Not Found">
+      <Page className={classes.root} title="Page Not Found | Recipedia">
         <Box
           display="flex"
           flexDirection="column"
@@ -50,11 +51,15 @@ const NotFoundView = () => {
             </Box>
           </Container>
           <Box textAlign="center" pt={6}>
-            <Link to="/app/home">
-              <Button color="primary" variant="contained" size="large">
-                Go home
-              </Button>
-            </Link>
+            <Button
+              color="primary"
+              variant="contained"
+              size="large"
+              component={Link}
+              to="/app/home"
+            >
+              Go home
+            </Button>
           </Box>
         </Box>
       </Page>
