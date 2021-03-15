@@ -10,6 +10,7 @@
     "clsx": "^1.1.1",
     "formik": "^2.1.5",
     "history": "^5.0.0",
+    "notistack": "^1.0.5",
     "react": "^16.13.1",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.13.1",
