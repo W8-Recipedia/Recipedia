@@ -11,7 +11,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { deleteAccount, getUserData } from "src/components/auth/UserAuth";
+import { deleteAccount, getUserData } from "src/components/ServerRequests";
 
 import { red } from "@material-ui/core/colors";
 import { useNavigate } from "react-router-dom";

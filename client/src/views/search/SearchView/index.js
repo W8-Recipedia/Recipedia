@@ -1,3 +1,5 @@
+import {} from "src/components/ServerRequests";
+
 import {
   Box,
   Card,
@@ -13,8 +15,11 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import React, { useLayoutEffect, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import {
+  getRecipesComplex,
+  getUserData,
+} from "src/components/ServerRequests";
 
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Page from "src/components/theme/page";
@@ -22,8 +27,7 @@ import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
 import Searchbar from "src/views/search/SearchView/components/Searchbar";
-import { getRecipesComplex } from "src/components/api/SpoonacularAPI";
-import { getUserData } from "src/components/auth/UserAuth";
+import { useNavigate } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

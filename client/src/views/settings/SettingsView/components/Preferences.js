@@ -21,7 +21,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useLayoutEffect, useState } from "react";
-import { changePreferences, getUserData } from "src/components/auth/UserAuth";
+import { changePreferences, getUserData } from "src/components/ServerRequests";
 
 import EqualizerOutlinedIcon from "@material-ui/icons/EqualizerOutlined";
 import clsx from "clsx";

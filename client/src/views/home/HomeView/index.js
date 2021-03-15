@@ -8,8 +8,11 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import React, { useLayoutEffect, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import {
+  getRecipesComplex,
+  getUserData,
+} from "src/components/ServerRequests";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -17,8 +20,7 @@ import Page from "src/components/theme/page";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
-import { getRecipesComplex } from "src/components/api/SpoonacularAPI";
-import { getUserData } from "src/components/auth/UserAuth";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -15,7 +15,7 @@ import {
 } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useLayoutEffect, useState } from "react";
-import { changeUserInfo, getUserData } from "src/components/auth/UserAuth";
+import { changeUserInfo, getUserData } from "src/components/ServerRequests";
 
 const ProfileDetails = ({ className, ...rest }) => {
   const [googleAccount, setGoogleAccount] = useState(false);

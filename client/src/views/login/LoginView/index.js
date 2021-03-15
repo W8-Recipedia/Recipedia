@@ -20,7 +20,7 @@ import {
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { googleLogin, login } from "src/components/auth/UserAuth";
+import { googleLogin, login } from "src/components/ServerRequests";
 
 import GoogleLogin from "react-google-login";
 import Page from "src/components/theme/page";
@@ -301,7 +301,7 @@ const LoginView = () => {
                   Please verify your email before logging in! Click below to
                   resend the verification email.
                 </DialogContentText>
-                <DialogActions>
+                <DialogActions className={classes.signupbutton}>
                   <Button
                     onClick={() => {
                       navigate("/verify");

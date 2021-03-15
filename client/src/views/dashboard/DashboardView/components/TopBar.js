@@ -1,6 +1,3 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import clsx from "clsx";
 import {
   AppBar,
   Hidden,
@@ -9,15 +6,19 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import { LogOut as LogoutIcon } from "react-feather";
-import { logOut } from "src/components/auth/UserAuth";
 import {
+  ThemeProvider,
   createMuiTheme,
   responsiveFontSizes,
-  ThemeProvider,
 } from "@material-ui/core/styles";
+
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import { Link } from "react-router-dom";
+import { LogOut as LogoutIcon } from "react-feather";
+import MenuIcon from "@material-ui/icons/Menu";
+import React from "react";
+import clsx from "clsx";
+import { logOut } from "src/components/ServerRequests";
 
 let theme = createMuiTheme();
 theme = responsiveFontSizes(theme);

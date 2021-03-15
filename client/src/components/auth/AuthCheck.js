@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import DashboardView from "src/views/dashboard/DashboardView";
 import LandingView from "src/views/landing/LandingView";
 import LoginView from "src/views/login/LoginView";
-import { getUserData } from "src/components/auth/UserAuth";
+import { getUserData } from "src/components/ServerRequests";
 import { useNavigate } from "react-router-dom";
 
 export const LoginCheck = () => {
@@ -19,7 +19,7 @@ export const LoginCheck = () => {
     });
   });
 
-  return isloggedIn === false ? (
+  return !isloggedIn ? (
     window.location.pathname === "/login" ? (
       <LoginView />
     ) : (

@@ -16,7 +16,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   resendVerificationEmail,
   verifyEmail,
-} from "src/components/auth/UserAuth";
+} from "src/components/ServerRequests";
 
 import { Link } from "react-router-dom";
 import Page from "src/components/theme/page";
@@ -177,29 +177,37 @@ const VerifyView = () => {
         </Dialog>
         <Dialog open={emailSent}>
           <DialogContent>
-            <Box alignItems="center" justifyContent="center" m={2}>
-              <DialogContentText>
-                {emailError
-                  ? "Please log into your account!"
-                  : "A verification email has been sent to your email adress."}
-              </DialogContentText>
-              {emailError ? (
-                <DialogActions>
-                  <Link to="/login">
-                    <Button
-                      color="primary"
-                      fullWidth
-                      variant="contained"
-                      size="large"
-                      onClick={resendVerification}
-                      className={classes.buttonText}
-                    >
-                      Log in
-                    </Button>
-                  </Link>
-                </DialogActions>
-              ) : null}
-            </Box>
+            <DialogContentText>
+              {emailError
+                ? "Please sign up/log in to your account!"
+                : "A verification email has been sent to your email adress."}
+            </DialogContentText>
+            {emailError ? (
+              <DialogActions>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  size="large"
+                  component={Link}
+                  to="/signup"
+                  onClick={resendVerification}
+                  className={classes.button}
+                >
+                  Sign Up
+                </Button>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  size="large"
+                  component={Link}
+                  to="/login"
+                  onClick={resendVerification}
+                  className={classes.button}
+                >
+                  Log in
+                </Button>
+              </DialogActions>
+            ) : null}
           </DialogContent>
         </Dialog>
       </Page>

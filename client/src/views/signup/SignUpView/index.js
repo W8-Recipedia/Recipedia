@@ -23,7 +23,7 @@ import {
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { googleSignUp, signUp } from "src/components/auth/UserAuth";
+import { googleSignUp, signUp } from "src/components/ServerRequests";
 
 import GoogleLogin from "react-google-login";
 import Page from "src/components/theme/page";

@@ -14,7 +14,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useLayoutEffect, useState } from "react";
-import { getUserData, submitFeeback } from "src/components/auth/UserAuth";
+import { getUserData, submitFeeback } from "src/components/ServerRequests";
 
 import Page from "src/components/theme/page";
 import { Scrollbars } from "react-custom-scrollbars";

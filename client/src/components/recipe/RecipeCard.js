@@ -11,7 +11,7 @@ import {
   addToFavourites,
   getUserData,
   removeFromFavourites,
-} from "src/components/auth/UserAuth";
+} from "src/components/ServerRequests";
 
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
