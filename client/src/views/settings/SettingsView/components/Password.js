@@ -1,4 +1,4 @@
-import {} from "src/components/auth/UserAuth";
+import {} from "src/components/ServerRequests";
 
 import * as Yup from "yup";
 
@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useLayoutEffect, useState } from "react";
-import { changePassword, getUserData } from "src/components/auth/UserAuth";
+import { changePassword, getUserData } from "src/components/ServerRequests";
 
 const Password = () => {
   const [open, setOpen] = useState(false);
@@ -162,11 +162,9 @@ const Password = () => {
         onClose={() => {
           setOpen(false);
         }}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
       >
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText>
             Your password has successfully been changed.
           </DialogContentText>
         </DialogContent>

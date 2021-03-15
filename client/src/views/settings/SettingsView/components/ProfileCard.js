@@ -11,9 +11,8 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { deleteAccount, getUserData } from "src/components/auth/UserAuth";
+import { deleteAccount, getUserData } from "src/components/ServerRequests";
 
-import PropTypes from "prop-types";
 import { red } from "@material-ui/core/colors";
 import { useNavigate } from "react-router-dom";
 
@@ -32,8 +31,8 @@ const ProfileCard = ({ className, ...rest }) => {
   const navigate = useNavigate();
 
   const [imageURL, setImageURL] = useState("");
-  const [open, setOpen] = React.useState(false);
-  const [deleteStatus, setDeleteStatus] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [deleteStatus, setDeleteStatus] = useState(false);
   const [userRank, setUserRank] = useState("");
 
   const [userName, setUserName] = useState(() => {
@@ -113,11 +112,9 @@ const ProfileCard = ({ className, ...rest }) => {
         onClose={() => {
           setOpen(false);
         }}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
       >
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText>
             Are you sure you would like to delete your account? This will delete
             all your data from our databases, including your favourites and
             dietary preferences.
@@ -158,24 +155,18 @@ const ProfileCard = ({ className, ...rest }) => {
       </Dialog>
       <Dialog
         open={deleteStatus}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
         onClose={() => {
           navigate("/");
         }}
       >
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText >
             Your account has been deleted. We're sorry to see you go!
           </DialogContentText>
         </DialogContent>
       </Dialog>
     </Card>
   );
-};
-
-ProfileCard.propTypes = {
-  className: PropTypes.string,
 };
 
 export default ProfileCard;

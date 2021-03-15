@@ -11,14 +11,13 @@ import {
   addToFavourites,
   getUserData,
   removeFromFavourites,
-} from "src/components/auth/UserAuth";
+} from "src/components/ServerRequests";
 
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import IconButton from "@material-ui/core/IconButton";
 import LocalDiningIcon from "@material-ui/icons/LocalDining";
 import MuiAlert from "@material-ui/lab/Alert";
-import PropTypes from "prop-types";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import Snackbar from "@material-ui/core/Snackbar";
 
@@ -177,11 +176,6 @@ const RecipeCard = ({ recipe, ...props }) => {
       </CardActions>
     </Card>
   );
-};
-
-RecipeCard.propTypes = {
-  recipe: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired,
 };
 
 export default RecipeCard;

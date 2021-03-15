@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { IconButton, TextField, Grid, InputAdornment } from "@material-ui/core";
 import { Search as SearchIcon } from "react-feather";
 
@@ -46,8 +45,3 @@ export default function Searchbar(props) {
     </Grid>
   );
 }
-
-Searchbar.propTypes = {
-  className: PropTypes.string,
-  onSubmit: PropTypes.func.isRequired,
-};

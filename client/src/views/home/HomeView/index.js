@@ -8,17 +8,19 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import {
+  getRecipesComplex,
+  getUserData,
+} from "src/components/ServerRequests";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Page from "src/components/theme/page";
-import PropTypes from "prop-types";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
-import { getRecipesComplex } from "src/components/api/SpoonacularAPI";
-import { getUserData } from "src/components/auth/UserAuth";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Home = () => {
+  const navigate = useNavigate();
   const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
@@ -47,8 +50,12 @@ const Home = () => {
   const [diet, setDiet] = useState("");
 
   const handleRecipeClick = (id) => {
+    navigate(`/app/home/${id}`);
     showRecipeByID(id);
     setSelectedRecipeID(id);
+    window.addEventListener("popstate", () => {
+      setRecipeDialogOpen(false);
+    });
   };
   const loadRecipes = (localAllergens = allergens, localDiet = diet) => {
     setLoading(true);
@@ -84,6 +91,10 @@ const Home = () => {
       setDiet(response.data.diet);
       loadRecipes(response.data.allergens, response.data.diet);
     });
+  }, []);
+
+  useEffect(() => {
+    navigate(`/app/home`);
   }, []);
 
   const loadMoreRecipes = () => {
@@ -140,7 +151,10 @@ const Home = () => {
           </Container>
           <RecipeDialog
             open={recipeDialogOpen}
-            handleClose={() => setRecipeDialogOpen(false)}
+            handleClose={() => {
+              setRecipeDialogOpen(false);
+              navigate(`/app/home`);
+            }}
             recipeId={selectedRecipeID}
             recipeInfo={selectedRecipeInfo}
           />
@@ -148,10 +162,6 @@ const Home = () => {
       </Page>
     </Scrollbars>
   );
-};
-
-RecipeList.propTypes = {
-  loading: PropTypes.bool,
 };
 
 export default Home;

@@ -1,7 +1,3 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import clsx from "clsx";
-import PropTypes from "prop-types";
 import {
   AppBar,
   Hidden,
@@ -10,34 +6,29 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import { LogOut as LogoutIcon } from "react-feather";
-import { logOut } from "src/components/auth/UserAuth";
 import {
+  ThemeProvider,
   createMuiTheme,
   responsiveFontSizes,
-  ThemeProvider,
 } from "@material-ui/core/styles";
+
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import { Link } from "react-router-dom";
+import { LogOut as LogoutIcon } from "react-feather";
+import MenuIcon from "@material-ui/icons/Menu";
+import React from "react";
+import { logOut } from "src/components/ServerRequests";
 
 let theme = createMuiTheme();
 theme = responsiveFontSizes(theme);
 
 const useStyles = makeStyles(() => ({
-  root: {},
   avatar: {
     width: 60,
     height: 60,
   },
   title: {
     flexGrow: 4,
-    color: "#FFF",
-  },
-  topBarBtn: {
-    color: "#FFF",
-    alignItems: "center",
-    justifyContent: "center",
-    textDecoration: "none",
   },
 }));
 
@@ -45,7 +36,7 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
   const classes = useStyles();
 
   return (
-    <AppBar className={clsx(classes.root, className)} elevation={0} {...rest}>
+    <AppBar elevation={0} {...rest}>
       <Toolbar>
         <Hidden lgUp>
           <IconButton color="inherit" onClick={onMobileNavOpen}>
@@ -54,20 +45,16 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
         </Hidden>
         <ThemeProvider theme={theme}>
           <Typography
-            variant="h5"
+            variant="h6"
             className={classes.title}
+            color="inherit"
             component={Link}
             to={"/app/home"}
           >
             Recipedia
           </Typography>
         </ThemeProvider>
-        <IconButton
-          color="inherit"
-          className={classes.topBarBtn}
-          component={Link}
-          to={"/app/settings"}
-        >
+        <IconButton color="inherit" component={Link} to={"/app/settings"}>
           <AccountCircle />
         </IconButton>
         <IconButton color="inherit" onClick={logOut} href="/">
@@ -76,11 +63,6 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
       </Toolbar>
     </AppBar>
   );
-};
-
-TopBar.propTypes = {
-  className: PropTypes.string,
-  onMobileNavOpen: PropTypes.func,
 };
 
 export default TopBar;

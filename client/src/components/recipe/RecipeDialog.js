@@ -19,7 +19,6 @@ import React, { useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import CloseIcon from "@material-ui/icons/Close";
-import PropTypes from "prop-types";
 
 function convertTime(num) {
   if (num <= 60) {
@@ -84,7 +83,6 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
       open={open}
       keepMounted
       onClose={handleClose}
-      aria-labelledby="recipe-dialog"
       fullScreen={fullScreen}
       scroll="body"
     >
@@ -93,12 +91,7 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
           <Typography variant="h4" className={classes.title}>
             {recipeInfo.title}
           </Typography>
-          <IconButton
-            edge="end"
-            color="inherit"
-            onClick={handleClose}
-            aria-label="close"
-          >
+          <IconButton edge="end" color="inherit" onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </Toolbar>
@@ -136,7 +129,6 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
         <List className={classes.list} dense>
           {recipeInfo.extendedIngredients &&
             recipeInfo.extendedIngredients.map((item) => {
-              const labelId = `checkbox-list-label-${item}`;
               return (
                 <ListItem
                   key={item}
@@ -152,7 +144,6 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
                       checked={checked.indexOf(item) !== -1}
                       tabIndex={-1}
                       disableRipple
-                      inputProps={{ "aria-labelledby": labelId }}
                     />
                   </ListItemIcon>
                   <ListItemText primary={item.original} />
@@ -185,20 +176,13 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              {recipeInfo.sourceName || "source"}
+              {recipeInfo.sourceName || "Unknown"}
             </Link>
           </Typography>
         </Box>
       </DialogContent>
     </Dialog>
   );
-};
-
-RecipeDialog.propTypes = {
-  open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
-  recipeId: PropTypes.number,
-  recipeInfo: PropTypes.object.isRequired,
 };
 
 export default RecipeDialog;

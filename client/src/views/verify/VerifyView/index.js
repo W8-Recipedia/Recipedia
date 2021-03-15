@@ -7,20 +7,20 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  Grid,
   TextField,
   makeStyles,
 } from "@material-ui/core";
 import { Form, Formik } from "formik";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   resendVerificationEmail,
   verifyEmail,
-} from "src/components/auth/UserAuth";
+} from "src/components/ServerRequests";
 
 import { Link } from "react-router-dom";
 import Page from "src/components/theme/page";
 import { Scrollbars } from "react-custom-scrollbars";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,15 +39,16 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   button: {
-    display: "flex",
-    flexDirection: "column",
     margin: "auto",
   },
 }));
 
 const VerifyView = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
+
   const [verified, setVerified] = useState();
+  const [verificationError, setVerificationError] = useState();
   const [emailSent, setEmailSent] = useState(false);
   const [emailError, setEmailError] = useState(false);
 
@@ -63,15 +64,25 @@ const VerifyView = () => {
   };
 
   useLayoutEffect(() => {
-    verifyEmail(window.location.pathname.replace("/verify/", "")).then(
-      (response) => {
-        if (response.data.message === "userVerified") {
-          setVerified(true);
-        } else {
-          setVerified(false);
+    if (window.location.pathname !== "/verify") {
+      verifyEmail(window.location.pathname.replace("/verify/", "")).then(
+        (response) => {
+          if (response.data.message === "userVerified") {
+            setVerified(true);
+            setVerificationError(false);
+          } else {
+            setVerified(false);
+            setVerificationError(true);
+          }
         }
-      }
-    );
+      );
+    } else {
+      setVerificationError(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    navigate(`/verify`);
   }, []);
 
   return (
@@ -102,9 +113,11 @@ const VerifyView = () => {
                 <Form>
                   <Box alignItems="center" justifyContent="center" m={2}>
                     <DialogContentText>
-                      Your email could not be verified. Please click below to
-                      send a new verification email.
-                      <Grid container spacing={3}>
+                      {verificationError
+                        ? "Your email could not be verified. Please enter your email to send a new verification email."
+                        : "Please enter your email to send a new verification email. "}
+
+                      <Box>
                         <TextField
                           error={Boolean(touched.email && errors.email)}
                           fullWidth
@@ -118,12 +131,11 @@ const VerifyView = () => {
                           value={values.email}
                           variant="outlined"
                         />
-                      </Grid>
+                      </Box>
                     </DialogContentText>
                     <DialogActions>
                       <Button
                         color="primary"
-                        fullWidth
                         variant="contained"
                         size="large"
                         type="submit"
@@ -164,29 +176,37 @@ const VerifyView = () => {
         </Dialog>
         <Dialog open={emailSent}>
           <DialogContent>
-            <Box alignItems="center" justifyContent="center" m={2}>
-              <DialogContentText>
-                {emailError
-                  ? "Please log into your account!"
-                  : "A verification email has been sent to your email adress."}
-              </DialogContentText>
-              {emailError ? (
-                <DialogActions>
-                  <Link to="/login">
-                    <Button
-                      color="primary"
-                      fullWidth
-                      variant="contained"
-                      size="large"
-                      onClick={resendVerification}
-                      className={classes.buttonText}
-                    >
-                      Log in
-                    </Button>
-                  </Link>
-                </DialogActions>
-              ) : null}
-            </Box>
+            <DialogContentText>
+              {emailError
+                ? "Please sign up/log in to your account!"
+                : "A verification email has been sent to your email adress."}
+            </DialogContentText>
+            {emailError ? (
+              <DialogActions>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  size="large"
+                  component={Link}
+                  to="/signup"
+                  onClick={resendVerification}
+                  className={classes.button}
+                >
+                  Sign Up
+                </Button>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  size="large"
+                  component={Link}
+                  to="/login"
+                  onClick={resendVerification}
+                  className={classes.button}
+                >
+                  Log in
+                </Button>
+              </DialogActions>
+            ) : null}
           </DialogContent>
         </Dialog>
       </Page>

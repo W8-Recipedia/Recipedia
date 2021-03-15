@@ -23,7 +23,7 @@ import {
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { googleSignUp, signUp } from "src/components/auth/UserAuth";
+import { googleSignUp, signUp } from "src/components/ServerRequests";
 
 import GoogleLogin from "react-google-login";
 import Page from "src/components/theme/page";
@@ -254,7 +254,6 @@ const SignUpView = () => {
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
-                            aria-label="toggle password visibility"
                             onClick={handleClickShowPassword}
                           >
                             {showPassword ? <VisibilityOff /> : <Visibility />}
@@ -367,14 +366,12 @@ const SignUpView = () => {
             </Formik>
             <Dialog
               open={open}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
               onClose={() => {
                 setOpen(false);
               }}
             >
               <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText >
                   There is already an account linked to this email address!
                   Please log in to use Recipedia.
                 </DialogContentText>
@@ -393,22 +390,18 @@ const SignUpView = () => {
             </Dialog>
             <Dialog
               open={verifyEmailOpen}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
               onClose={() => {
                 setVerifyEmailOpen(false);
               }}
             >
               <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText>
                   Account created! Please verify your email before logging in.
                 </DialogContentText>
               </DialogContent>
             </Dialog>
             <Dialog
               open={googleSignUpOpen}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
               onClose={() => {
                 setGoogleSignUpOpen(false);
               }}
@@ -435,7 +428,7 @@ const SignUpView = () => {
                 }) => (
                   <Form>
                     <DialogContent>
-                      <DialogContentText id="alert-dialog-description">
+                      <DialogContentText >
                         <Box
                           alignItems="center"
                           justifyContent="center"

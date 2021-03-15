@@ -20,7 +20,7 @@ import {
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { googleLogin, login } from "src/components/auth/UserAuth";
+import { googleLogin, login } from "src/components/ServerRequests";
 
 import GoogleLogin from "react-google-login";
 import Page from "src/components/theme/page";
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 const LoginView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [verifyError, setVerifyError] = useState(false);
   const [googleAccount, setGoogleAccount] = useState(false);
@@ -204,10 +204,7 @@ const LoginView = () => {
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                          >
+                          <IconButton onClick={handleClickShowPassword}>
                             {showPassword ? <VisibilityOff /> : <Visibility />}
                           </IconButton>
                         </InputAdornment>
@@ -237,14 +234,12 @@ const LoginView = () => {
             </Formik>
             <Dialog
               open={googleAccount}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
               onClose={() => {
                 setGoogleAccount(false);
               }}
             >
               <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText>
                   Please log in with your Google account!
                 </DialogContentText>
               </DialogContent>
@@ -302,21 +297,31 @@ const LoginView = () => {
               }}
             >
               <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Please verify your email before logging in!
+                <DialogContentText>
+                  Please verify your email before logging in! Click below to
+                  resend the verification email.
                 </DialogContentText>
+                <DialogActions className={classes.signupbutton}>
+                  <Button
+                    onClick={() => {
+                      navigate("/verify");
+                    }}
+                    color="primary"
+                    variant="contained"
+                  >
+                    Verify
+                  </Button>
+                </DialogActions>
               </DialogContent>
             </Dialog>
             <Dialog
               open={Boolean(loginError === "wrongAccountType")}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
               onClose={() => {
                 setLoginError("");
               }}
             >
               <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText>
                   Please login with your email and password!
                 </DialogContentText>
               </DialogContent>

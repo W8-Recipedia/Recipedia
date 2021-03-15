@@ -21,8 +21,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
 import NavItem from "src/views/dashboard/DashboardView/components/NavItem";
-import PropTypes from "prop-types";
-import { getUserData } from "src/components/auth/UserAuth";
+import { getUserData } from "src/components/ServerRequests";
 
 const items = [
   {
@@ -81,7 +80,7 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
-  const [imageURL, setImageURL] = useState("");
+  const [userImage, setUserImage] = useState("");
   const [userRank, setUserRank] = useState("");
   const [userName, setUserName] = useState("");
 
@@ -93,7 +92,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         );
       }
       if (response.data.user.imageUrl) {
-        setImageURL(response.data.user.imageUrl);
+        setUserImage(response.data.user.imageUrl);
       }
       getUserData().then((response) => {
         if (response.data.favourites) {
@@ -127,7 +126,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           <Avatar
             className={classes.avatar}
             component={RouterLink}
-            src={imageURL}
+            src={userImage}
             to="/app/settings"
           />
         </Box>
@@ -183,11 +182,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
       </Hidden>
     </>
   );
-};
-
-NavBar.propTypes = {
-  onMobileClose: PropTypes.func,
-  openMobile: PropTypes.bool,
 };
 
 NavBar.defaultProps = {
