@@ -10,7 +10,7 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import { GitHub, User } from "react-feather";
+import { GitHub, User, Coffee } from "react-feather";
 import MenuIcon from "@material-ui/icons/Menu";
 import { LogOut as LogoutIcon } from "react-feather";
 import { logOut } from "src/components/auth/UserAuth";
@@ -20,7 +20,15 @@ import {
   ThemeProvider,
 } from "@material-ui/core/styles";
 
-let theme = createMuiTheme();
+let theme = createMuiTheme({
+  typography: {
+    overline: {
+      fontWeight: 400,
+      fontSize: 20,
+      paddingLeft: 10,
+    },
+  },
+});
 theme = responsiveFontSizes(theme);
 
 const useStyles = makeStyles(() => ({
@@ -50,8 +58,9 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
           </IconButton>
         </Hidden>
         <ThemeProvider theme={theme}>
+          <Coffee />
           <Typography
-            variant="h5"
+            variant="overline"
             className={classes.title}
             component={Link}
             to={"/app/home"}
