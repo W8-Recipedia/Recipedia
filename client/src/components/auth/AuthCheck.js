@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
 import DashboardView from "src/views/dashboard/DashboardView";
-
+import LandingView from "src/views/landing/LandingView";
+import LoginView from "src/views/login/LoginView";
 import { getUserData } from "src/components/auth/UserAuth";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +19,13 @@ export const LoginCheck = () => {
     });
   });
 
-  return null;
+  return isloggedIn === false ? (
+    window.location.pathname === "/login" ? (
+      <LoginView />
+    ) : (
+      <LandingView />
+    )
+  ) : null;
 };
 
 export const AccessCheck = () => {

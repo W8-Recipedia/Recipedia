@@ -12,9 +12,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { Form, Formik } from "formik";
-import React, { useLayoutEffect, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   resendVerificationEmail,
   verifyEmail,
@@ -23,6 +21,7 @@ import {
 import { Link } from "react-router-dom";
 import Page from "src/components/theme/page";
 import { Scrollbars } from "react-custom-scrollbars";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,8 +40,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   button: {
-    display: "flex",
-    flexDirection: "column",
     margin: "auto",
   },
 }));
@@ -52,6 +49,7 @@ const VerifyView = () => {
   const navigate = useNavigate();
 
   const [verified, setVerified] = useState();
+  const [verificationError, setVerificationError] = useState();
   const [emailSent, setEmailSent] = useState(false);
   const [emailError, setEmailError] = useState(false);
 
@@ -67,15 +65,21 @@ const VerifyView = () => {
   };
 
   useLayoutEffect(() => {
-    verifyEmail(window.location.pathname.replace("/verify/", "")).then(
-      (response) => {
-        if (response.data.message === "userVerified") {
-          setVerified(true);
-        } else {
-          setVerified(false);
+    if (window.location.pathname !== "/verify") {
+      verifyEmail(window.location.pathname.replace("/verify/", "")).then(
+        (response) => {
+          if (response.data.message === "userVerified") {
+            setVerified(true);
+            setVerificationError(false);
+          } else {
+            setVerified(false);
+            setVerificationError(true);
+          }
         }
-      }
-    );
+      );
+    } else {
+      setVerificationError(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -110,9 +114,11 @@ const VerifyView = () => {
                 <Form>
                   <Box alignItems="center" justifyContent="center" m={2}>
                     <DialogContentText>
-                      Your email could not be verified. Please click below to
-                      send a new verification email.
-                      <Grid container spacing={3}>
+                      {verificationError
+                        ? "Your email could not be verified. Please enter your email to send a new verification email."
+                        : "Please enter your email to send a new verification email. "}
+
+                      <Box>
                         <TextField
                           error={Boolean(touched.email && errors.email)}
                           fullWidth
@@ -126,12 +132,11 @@ const VerifyView = () => {
                           value={values.email}
                           variant="outlined"
                         />
-                      </Grid>
+                      </Box>
                     </DialogContentText>
                     <DialogActions>
                       <Button
                         color="primary"
-                        fullWidth
                         variant="contained"
                         size="large"
                         type="submit"

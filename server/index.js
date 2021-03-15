@@ -312,7 +312,7 @@ app.post("/googlesignup", (req, res) => {
   );
 });
 
-app.get("/verifyemail", (req, res) => {
+app.get("/verifyemail", verifyToken, (req, res) => {
   con.query(
     "UPDATE users SET verifiedemail = ? WHERE email = ?",
     [1, res.user.email],

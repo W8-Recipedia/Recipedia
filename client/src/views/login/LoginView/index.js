@@ -204,9 +204,7 @@ const LoginView = () => {
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
-                          <IconButton
-                            onClick={handleClickShowPassword}
-                          >
+                          <IconButton onClick={handleClickShowPassword}>
                             {showPassword ? <VisibilityOff /> : <Visibility />}
                           </IconButton>
                         </InputAdornment>
@@ -300,8 +298,20 @@ const LoginView = () => {
             >
               <DialogContent>
                 <DialogContentText>
-                  Please verify your email before logging in!
+                  Please verify your email before logging in! Click below to
+                  resend the verification email.
                 </DialogContentText>
+                <DialogActions>
+                  <Button
+                    onClick={() => {
+                      navigate("/verify");
+                    }}
+                    color="primary"
+                    variant="contained"
+                  >
+                    Verify
+                  </Button>
+                </DialogActions>
               </DialogContent>
             </Dialog>
             <Dialog
