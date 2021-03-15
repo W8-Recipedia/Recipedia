@@ -80,7 +80,6 @@ const VerifyView = () => {
               errors,
               handleBlur,
               handleChange,
-              isSubmitting,
               touched,
               values,
             }) => (
@@ -134,7 +133,6 @@ const VerifyView = () => {
                         to={"/login"}
                         color="primary"
                         variant="contained"
-                        onClick={resendVerification}
                       >
                         Log in
                       </Button>

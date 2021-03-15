@@ -207,7 +207,7 @@ app.post("/login", databaseSelect, (req, res) => {
     const lastName = decrypt(res.result.lastname);
     bcrypt.compare(req.body.password, decrypt(res.result.password), (err) => {
       if (err) {
-        res.json({ message: "wrongPassword" });
+        res.json({ message: err });
       } else {
         res.json({
           token: jwt.sign(
@@ -518,7 +518,7 @@ app.post("/submitfeedback", verifyToken, (req, res) => {
   };
   transporter.sendMail(mailOptions, (err) => {
     if (err) {
-      res.json({ message: err, token: token });
+      res.json({ message: err });
     } else {
       res.json({ message: "feedbackSent", token: token });
     }
