@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 import {
   AppBar,
+  Box,
   Hidden,
   IconButton,
   Toolbar,
@@ -11,6 +12,7 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import GitHubIcon from "@material-ui/icons/GitHub";
 import { LogOut as LogoutIcon } from "react-feather";
 import { logOut } from "src/components/auth/UserAuth";
 import {
@@ -29,7 +31,7 @@ const useStyles = makeStyles(() => ({
     height: 60,
   },
   title: {
-    flexGrow: 4,
+    flexGrow: 1,
     color: "#FFF",
   },
   topBarBtn: {
@@ -58,17 +60,28 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
             Recipedia
           </Typography>
         </ThemeProvider>
-        <IconButton
-          color="inherit"
-          className={classes.topBarBtn}
-          component={Link}
-          to={"/app/settings"}
-        >
-          <AccountCircle />
-        </IconButton>
-        <IconButton color="inherit" onClick={logOut} href="/">
-          <LogoutIcon />
-        </IconButton>
+        <Box>
+          <IconButton
+            color="inherit"
+            className={classes.topBarBtn}
+            onClick={() =>
+              window.open("https://github.com/W8-Recipedia/Recipedia")
+            }
+          >
+            <GitHubIcon fontSize="small" />
+          </IconButton>
+          <IconButton
+            color="inherit"
+            className={classes.topBarBtn}
+            component={Link}
+            to={"/app/settings"}
+          >
+            <AccountCircle />
+          </IconButton>
+          <IconButton color="inherit" onClick={logOut} href="/">
+            <LogoutIcon />
+          </IconButton>
+        </Box>
       </Toolbar>
     </AppBar>
   );
