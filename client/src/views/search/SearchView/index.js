@@ -278,7 +278,7 @@ const SearchView = () => {
                   />
                 </>
               )}
-              {emptySearch ? (
+              {emptySearch && (
                 <>
                   <Box mt={2}>
                     <Typography
@@ -291,7 +291,7 @@ const SearchView = () => {
                     </Typography>
                   </Box>
                 </>
-              ) : null}
+              )}
               <Grid item xs={12}>
                 {loading ? <LinearProgress /> : null}
               </Grid>
