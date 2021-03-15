@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
-import PropTypes from "prop-types";
 import {
   AppBar,
   Hidden,
@@ -76,11 +75,6 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
       </Toolbar>
     </AppBar>
   );
-};
-
-TopBar.propTypes = {
-  className: PropTypes.string,
-  onMobileNavOpen: PropTypes.func,
 };
 
 export default TopBar;

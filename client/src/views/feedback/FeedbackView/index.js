@@ -17,7 +17,6 @@ import React, { useLayoutEffect, useState } from "react";
 import { getUserData, submitFeeback } from "src/components/auth/UserAuth";
 
 import Page from "src/components/theme/page";
-import PropTypes from "prop-types";
 import { Scrollbars } from "react-custom-scrollbars";
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
@@ -181,14 +180,12 @@ const FeedbackView = ({ className, ...rest }) => {
           </Container>
           <Dialog
             open={open}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
             onClose={() => {
               navigate("/app/home");
             }}
           >
             <DialogContent>
-              <DialogContentText id="alert-dialog-description">
+              <DialogContentText>
                 {feedbackStatus === "feedbackSent"
                   ? "Thank you for your feedback!"
                   : "There was an error submitting your feedback. Please try again later."}
@@ -199,10 +196,6 @@ const FeedbackView = ({ className, ...rest }) => {
       </Page>
     </Scrollbars>
   );
-};
-
-FeedbackView.propTypes = {
-  className: PropTypes.string,
 };
 
 export default FeedbackView;

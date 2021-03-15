@@ -13,7 +13,8 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Page from "src/components/theme/page";
@@ -95,8 +96,8 @@ const typeNames = [
 ];
 
 const SearchView = () => {
+  const navigate = useNavigate();
   const classes = useStyles();
-
   const [loading, setLoading] = useState(false);
   const [selectedRecipeID, setSelectedRecipeID] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
@@ -143,9 +144,12 @@ const SearchView = () => {
   };
 
   const loadRecipeByID = (id) => {
-    const clickedRecipe = recipeList.find((recipe) => recipe.id === id);
-    setSelectedRecipeInfo(clickedRecipe);
+    navigate(`/app/search/${id}`);
+    setSelectedRecipeInfo(recipeList.find((recipe) => recipe.id === id));
     setRecipeDialogOpen(true);
+    window.addEventListener("popstate", () => {
+      setRecipeDialogOpen(false);
+    });
   };
 
   useLayoutEffect(() => {
@@ -153,6 +157,10 @@ const SearchView = () => {
       setIntolerances(response.data.allergens);
       setDiet(response.data.diet);
     });
+  }, []);
+
+  useEffect(() => {
+    navigate(`/app/search`);
   }, []);
 
   const handleChangeCuisine = (event) => {
@@ -204,10 +212,8 @@ const SearchView = () => {
                   <Grid container spacing={3}>
                     <Searchbar onSubmit={handleQuerySearch} />
                     <Grid item md={3} xs={12}>
-                      <InputLabel id="type-label">Type</InputLabel>
+                      <InputLabel>Type</InputLabel>
                       <Select
-                        labelId="type-label"
-                        id="type"
                         multiple
                         fullWidth
                         value={typeName}
@@ -225,10 +231,8 @@ const SearchView = () => {
                       </Select>
                     </Grid>
                     <Grid item md={3} xs={12}>
-                      <InputLabel id="cuisine-label">Cuisine</InputLabel>
+                      <InputLabel>Cuisine</InputLabel>
                       <Select
-                        labelId="cuisine-label"
-                        id="cuisine"
                         multiple
                         fullWidth
                         value={cuisineName}
@@ -291,7 +295,10 @@ const SearchView = () => {
           </Container>
           <RecipeDialog
             open={recipeDialogOpen}
-            handleClose={() => setRecipeDialogOpen(false)}
+            handleClose={() => {
+              setRecipeDialogOpen(false);
+              navigate(`/app/search`);
+            }}
             recipeId={selectedRecipeID}
             recipeInfo={selectedRecipeInfo}
           />

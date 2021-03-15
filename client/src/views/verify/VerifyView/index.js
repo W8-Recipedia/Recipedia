@@ -12,7 +12,9 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { Form, Formik } from "formik";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   resendVerificationEmail,
   verifyEmail,
@@ -47,6 +49,8 @@ const useStyles = makeStyles((theme) => ({
 
 const VerifyView = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
+
   const [verified, setVerified] = useState();
   const [emailSent, setEmailSent] = useState(false);
   const [emailError, setEmailError] = useState(false);
@@ -72,6 +76,10 @@ const VerifyView = () => {
         }
       }
     );
+  }, []);
+
+  useEffect(() => {
+    navigate(`/verify`);
   }, []);
 
   return (

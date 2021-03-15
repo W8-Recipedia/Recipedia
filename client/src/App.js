@@ -1,6 +1,7 @@
 import LoginCheck, { AccessCheck } from "src/components/auth/AuthCheck";
 import { Navigate, useRoutes } from "react-router-dom";
-
+import LandingView from "src/views/landing/LandingView";
+import LoginView from "src/views/login/LoginView";
 import FAQView from "src/views/faq/FAQView";
 import FavouritesView from "src/views/favourites/FavouritesView";
 import FeedbackView from "src/views/feedback/FeedbackView";
@@ -25,25 +26,26 @@ const App = () => {
           path: "app",
           element: <AccessCheck />,
           children: [
-            { path: "search", element: <SearchView /> },
-            { path: "favourites", element: <FavouritesView /> },
+            { path: "search/*", element: <SearchView /> },
+            { path: "favourites/*", element: <FavouritesView /> },
             { path: "legal", element: <LegalView /> },
             { path: "feedback", element: <FeedbackView /> },
             { path: "faq", element: <FAQView /> },
             { path: "settings", element: <SettingsView /> },
-            { path: "home", element: <HomeView /> },
+            { path: "home/*", element: <HomeView /> },
             { path: "", element: <Navigate to="/app/home" /> },
             { path: "*", element: <Navigate to="/404" /> },
           ],
         },
         {
           path: "/",
+          element: <LoginCheck />,
           children: [
-            { path: "login", element: <LoginCheck /> },
+            { path: "login", element: <LoginView /> },
             { path: "signup", element: <SignUpView /> },
             { path: "legal", element: <LegalView /> },
             { path: "verify/*", element: <VerifyView /> },
-            { path: "", element: <LoginCheck /> },
+            { path: "", element: <LandingView /> },
             { path: "*", element: <NotFoundView /> },
           ],
         },

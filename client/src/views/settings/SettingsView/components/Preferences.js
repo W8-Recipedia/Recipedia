@@ -24,7 +24,6 @@ import React, { useLayoutEffect, useState } from "react";
 import { changePreferences, getUserData } from "src/components/auth/UserAuth";
 
 import EqualizerOutlinedIcon from "@material-ui/icons/EqualizerOutlined";
-import PropTypes from "prop-types";
 import clsx from "clsx";
 
 const useStyles = makeStyles({
@@ -65,7 +64,6 @@ const Preferences = ({ className, ...rest }) => {
 
   useLayoutEffect(() => {
     getUserData().then((response) => {
-      console.log(response.data);
       if (response.data.message === "loggedIn") {
         if (response.data.diet) {
           setDiet(response.data.diet);
@@ -150,12 +148,7 @@ const Preferences = ({ className, ...rest }) => {
               <Typography color="textPrimary" gutterBottom variant="h6">
                 Diet
               </Typography>
-              <RadioGroup
-                aria-label="diet"
-                name="diet"
-                value={diet}
-                onChange={handleDietChange}
-              >
+              <RadioGroup name="diet" value={diet} onChange={handleDietChange}>
                 <FormControlLabel
                   value="None"
                   control={<Radio />}
@@ -436,7 +429,6 @@ const Preferences = ({ className, ...rest }) => {
                         setActivity(value);
                         setButtonDisabled(false);
                       }}
-                      aria-labelledby="activity"
                       valueLabelDisplay="auto"
                       step={0.5}
                       min={0}
@@ -461,14 +453,12 @@ const Preferences = ({ className, ...rest }) => {
         </Box>
         <Dialog
           open={open}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
           onClose={() => {
             setOpen(false);
           }}
         >
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
+            <DialogContentText>
               {error
                 ? "Your preferences could not be updated. Please try again later."
                 : "Your preferences have been updated."}
@@ -478,10 +468,6 @@ const Preferences = ({ className, ...rest }) => {
       </Card>
     </form>
   );
-};
-
-Preferences.propTypes = {
-  className: PropTypes.string,
 };
 
 export default Preferences;

@@ -7,7 +7,8 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Page from "src/components/theme/page";
@@ -28,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Favourites = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [selectedRecipeID, setSelectedRecipeID] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
@@ -35,10 +38,15 @@ const Favourites = () => {
   const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
   const [hasFavourites, setHasFavourites] = useState(true);
 
-  const onRecipeClick = (id) => {
-    loadRecipeByID(id);
+  const handleRecipeClick = (id) => {
+    navigate(`/app/favourites/${id}`);
+    showRecipeByID(id);
     setSelectedRecipeID(id);
+    window.addEventListener("popstate", () => {
+      setRecipeDialogOpen(false);
+    });
   };
+
   const loadMultipleRecipes = (idsArray) => {
     setLoading(true);
     getRecipesByID(idsArray ? idsArray.join(",") : null)
@@ -52,7 +60,7 @@ const Favourites = () => {
       });
   };
 
-  const loadRecipeByID = (id) => {
+  const showRecipeByID = (id) => {
     const clickedRecipe = recipeList.find((recipe) => recipe.id === id);
     setSelectedRecipeInfo(clickedRecipe);
     setRecipeDialogOpen(true);
@@ -61,7 +69,6 @@ const Favourites = () => {
   useLayoutEffect(() => {
     getUserData().then((response) => {
       if (response.data.favourites) {
-        console.log(response.data);
         if (response.data.favourites.length > 0) {
           loadMultipleRecipes(response.data.favourites);
         } else {
@@ -71,6 +78,9 @@ const Favourites = () => {
         setHasFavourites(false);
       }
     });
+  }, []);
+  useEffect(() => {
+    navigate(`/app/favourites`);
   }, []);
 
   return (
@@ -101,7 +111,7 @@ const Favourites = () => {
                 <>
                   <RecipeList
                     recipes={recipeList}
-                    onRecipeClick={onRecipeClick}
+                    onRecipeClick={handleRecipeClick}
                     loading={loading}
                   />
                 </>
@@ -133,7 +143,10 @@ const Favourites = () => {
           </Container>
           <RecipeDialog
             open={recipeDialogOpen}
-            handleClose={() => setRecipeDialogOpen(false)}
+            handleClose={() => {
+              setRecipeDialogOpen(false);
+              navigate(`/app/favourites`);
+            }}
             recipeId={selectedRecipeID}
             recipeInfo={selectedRecipeInfo}
           />

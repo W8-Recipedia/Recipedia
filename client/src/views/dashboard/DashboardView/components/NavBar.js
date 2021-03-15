@@ -21,7 +21,6 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
 import NavItem from "src/views/dashboard/DashboardView/components/NavItem";
-import PropTypes from "prop-types";
 import { getUserData } from "src/components/auth/UserAuth";
 
 const items = [
@@ -183,11 +182,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
       </Hidden>
     </>
   );
-};
-
-NavBar.propTypes = {
-  onMobileClose: PropTypes.func,
-  openMobile: PropTypes.bool,
 };
 
 NavBar.defaultProps = {

@@ -17,8 +17,6 @@ import { Form, Formik } from "formik";
 import React, { useLayoutEffect, useState } from "react";
 import { changeUserInfo, getUserData } from "src/components/auth/UserAuth";
 
-import PropTypes from "prop-types";
-
 const ProfileDetails = ({ className, ...rest }) => {
   const [googleAccount, setGoogleAccount] = useState(false);
   const [changeUserInfoSuccess, setChangeDetailsSuccess] = useState(false);
@@ -150,14 +148,12 @@ const ProfileDetails = ({ className, ...rest }) => {
           </Card>
           <Dialog
             open={open}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
             onClose={() => {
               window.location.reload(false);
             }}
           >
             <DialogContent>
-              <DialogContentText id="alert-dialog-description">
+              <DialogContentText >
                 {changeUserInfoSuccess
                   ? "Your details have been changed successfully!"
                   : "The email address specified is already linked to a Recipedia account! Please use another email address."}
@@ -168,10 +164,6 @@ const ProfileDetails = ({ className, ...rest }) => {
       )}
     </Formik>
   );
-};
-
-ProfileDetails.propTypes = {
-  className: PropTypes.string,
 };
 
 export default ProfileDetails;

@@ -162,11 +162,9 @@ const Password = () => {
         onClose={() => {
           setOpen(false);
         }}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
       >
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText>
             Your password has successfully been changed.
           </DialogContentText>
         </DialogContent>

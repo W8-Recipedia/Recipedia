@@ -205,7 +205,6 @@ const LoginView = () => {
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
-                            aria-label="toggle password visibility"
                             onClick={handleClickShowPassword}
                           >
                             {showPassword ? <VisibilityOff /> : <Visibility />}
@@ -237,14 +236,12 @@ const LoginView = () => {
             </Formik>
             <Dialog
               open={googleAccount}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
               onClose={() => {
                 setGoogleAccount(false);
               }}
             >
               <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText>
                   Please log in with your Google account!
                 </DialogContentText>
               </DialogContent>
@@ -302,21 +299,19 @@ const LoginView = () => {
               }}
             >
               <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText>
                   Please verify your email before logging in!
                 </DialogContentText>
               </DialogContent>
             </Dialog>
             <Dialog
               open={Boolean(loginError === "wrongAccountType")}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
               onClose={() => {
                 setLoginError("");
               }}
             >
               <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText>
                   Please login with your email and password!
                 </DialogContentText>
               </DialogContent>

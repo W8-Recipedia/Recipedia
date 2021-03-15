@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import RecipeCard from "src/components/recipe/RecipeCard";
 import { Grid } from "@material-ui/core";
 
@@ -13,11 +12,6 @@ const RecipeCardList = ({ recipes, onRecipeClick }) => {
       ))}
     </Grid>
   );
-};
-
-RecipeCardList.propTypes = {
-  recipes: PropTypes.array.isRequired,
-  onRecipeClick: PropTypes.func.isRequired,
 };
 
 export default RecipeCardList;
