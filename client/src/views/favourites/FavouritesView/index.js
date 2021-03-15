@@ -1,4 +1,4 @@
-import {  } from "src/components/ServerRequests";
+import {} from "src/components/ServerRequests";
 
 import {
   Box,
@@ -10,10 +10,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import {
-  getRecipesByID,
-  getUserData,
-} from "src/components/ServerRequests";
+import { getRecipesByID, getUserData } from "src/components/ServerRequests";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Page from "src/components/theme/page";
@@ -55,7 +52,11 @@ const Favourites = () => {
     setLoading(true);
     getRecipesByID(idsArray ? idsArray.join(",") : null)
       .then((response) => {
-        if (response.data) {
+        console.log(response);
+        if (response.data.code === 402) {
+          // set popup for api
+        }
+        else if (response.data) {
           setRecipeList([...recipeList, ...response.data]);
         }
       })

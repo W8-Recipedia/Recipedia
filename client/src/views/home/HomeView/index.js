@@ -9,10 +9,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import {
-  getRecipesComplex,
-  getUserData,
-} from "src/components/ServerRequests";
+import { getRecipesComplex, getUserData } from "src/components/ServerRequests";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -73,7 +70,9 @@ const Home = () => {
       true
     )
       .then((response) => {
-        if (!response.data.results) {
+        if (response.data.code === 402) {
+          // set popup for api
+        } else if (!response.data.results) {
           setNoResultsFound(true);
         } else {
           setRecipeList([...recipeList, ...response.data.results]);

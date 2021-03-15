@@ -132,7 +132,9 @@ const SearchView = () => {
     )
       .then((response) => {
         if (response.data.results) {
-          if (response.data.results.length === 0) {
+          if (response.data.code === 402) {
+            // set popup for api
+          } else if (response.data.results.length === 0) {
             setEmptySearch(true);
           } else {
             setRecipeList([...recipeList, ...response.data.results]);
@@ -188,7 +190,7 @@ const SearchView = () => {
       <Page className={classes.root} title="Recipedia | Search">
         <Box m={2}>
           <Container maxWidth="false">
-            <Card variant="outlined">
+            <Card>
               <CardContent>
                 <Box p={1}>
                   <Typography gutterBottom variant="h1">

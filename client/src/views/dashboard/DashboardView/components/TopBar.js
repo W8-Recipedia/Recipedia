@@ -7,7 +7,7 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import { LogOut, Moon, User } from "react-feather";
+import { LogOut, Moon, Sun, User } from "react-feather";
 import {
   ThemeProvider,
   createMuiTheme,
@@ -43,7 +43,7 @@ const useStyles = makeStyles(() => ({
 
 const TopBar = ({ className, onMobileNavOpen, toggleDarkMode, ...rest }) => {
   const classes = useStyles();
-
+  const [darkMode, setDarkMode] = React.useState(false);
   return (
     <AppBar elevation={0} {...rest}>
       <Toolbar>
@@ -53,7 +53,9 @@ const TopBar = ({ className, onMobileNavOpen, toggleDarkMode, ...rest }) => {
           </IconButton>
         </Hidden>
         <ThemeProvider theme={theme}>
-          <RestaurantIcon />
+          <Hidden only={["xs", "sm", "md"]}>
+            <RestaurantIcon />
+          </Hidden>
           <Typography
             variant="overline"
             className={classes.title}
@@ -66,8 +68,14 @@ const TopBar = ({ className, onMobileNavOpen, toggleDarkMode, ...rest }) => {
         </ThemeProvider>
 
         <Box>
-          <IconButton color="inherit" onClick={toggleDarkMode}>
-            <Moon />
+          <IconButton
+            color="inherit"
+            onClick={() => {
+              setDarkMode(!darkMode);
+              toggleDarkMode();
+            }}
+          >
+            {darkMode ? <Sun /> : <Moon />}
           </IconButton>
           <IconButton color="inherit" component={Link} to={"/app/settings"}>
             <User />
