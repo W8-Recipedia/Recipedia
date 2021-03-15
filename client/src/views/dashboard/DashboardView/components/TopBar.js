@@ -34,9 +34,6 @@ const useStyles = makeStyles(() => ({
   },
   topBarBtn: {
     color: "#FFF",
-    alignItems: "center",
-    justifyContent: "center",
-    textDecoration: "none",
   },
 }));
 
