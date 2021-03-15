@@ -1,4 +1,5 @@
 import { Navigate, useRoutes } from "react-router-dom";
+import React, { useState } from "react";
 
 import AccessCheck from "src/components/auth/AccessCheck";
 import FAQView from "src/views/faq/FAQView";
@@ -8,7 +9,6 @@ import HomeView from "src/views/home/HomeView";
 import LegalView from "src/views/legal/LegalView";
 import LoginCheck from "src/components/auth/LoginCheck";
 import NotFoundView from "src/views/error/ErrorView";
-import React from "react";
 import SearchView from "src/views/search/SearchView";
 import SettingsView from "src/views/settings/SettingsView";
 import SignUpView from "src/views/signup/SignUpView";
@@ -18,13 +18,23 @@ import { ThemeProvider } from "@material-ui/core";
 import VerifyView from "src/views/verify/VerifyView";
 
 const App = () => {
+  const [theme, setTheme] = useState(Theme.light);
+
   return (
-    <ThemeProvider theme={Theme}>
+    <ThemeProvider theme={theme}>
       <Styles />
       {useRoutes([
         {
           path: "app",
-          element: <AccessCheck />,
+          element: (
+            <AccessCheck
+              toggleDarkMode={() => {
+                theme === Theme.light
+                  ? setTheme(Theme.dark)
+                  : setTheme(Theme.light);
+              }}
+            />
+          ),
           children: [
             { path: "home/*", element: <HomeView /> },
             { path: "search/*", element: <SearchView /> },

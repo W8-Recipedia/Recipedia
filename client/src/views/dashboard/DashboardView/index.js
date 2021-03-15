@@ -34,13 +34,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DashboardView = () => {
+const DashboardView = ({ toggleDarkMode }) => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
     <div className={classes.root}>
-      <TopBar onMobileNavOpen={() => setMobileNavOpen(true)} />
+      <TopBar
+        onMobileNavOpen={() => setMobileNavOpen(true)}
+        toggleDarkMode={toggleDarkMode}
+      />
       <NavBar
         onMobileClose={() => setMobileNavOpen(false)}
         openMobile={isMobileNavOpen}

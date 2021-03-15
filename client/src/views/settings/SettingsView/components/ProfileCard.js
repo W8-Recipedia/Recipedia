@@ -117,7 +117,8 @@ const ProfileCard = ({ className, ...rest }) => {
           <DialogContentText>
             Are you sure you would like to delete your account? This will delete
             all your data from our databases, including your favourites and
-            dietary preferences.
+            dietary preferences, allergens and health data. This action is
+            irreversible.
             <Box
               pt={2}
               alignItems="center"
@@ -160,7 +161,7 @@ const ProfileCard = ({ className, ...rest }) => {
         }}
       >
         <DialogContent>
-          <DialogContentText >
+          <DialogContentText>
             Your account has been deleted. We're sorry to see you go!
           </DialogContentText>
         </DialogContent>
