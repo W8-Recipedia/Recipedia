@@ -10,9 +10,8 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
+import { GitHub, User } from "react-feather";
 import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import GitHubIcon from "@material-ui/icons/GitHub";
 import { LogOut as LogoutIcon } from "react-feather";
 import { logOut } from "src/components/auth/UserAuth";
 import {
@@ -68,7 +67,7 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
               window.open("https://github.com/W8-Recipedia/Recipedia")
             }
           >
-            <GitHubIcon fontSize="small" />
+            <GitHub />
           </IconButton>
           <IconButton
             color="inherit"
@@ -76,7 +75,7 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
             component={Link}
             to={"/app/settings"}
           >
-            <AccountCircle />
+            <User />
           </IconButton>
           <IconButton color="inherit" onClick={logOut} href="/">
             <LogoutIcon />
