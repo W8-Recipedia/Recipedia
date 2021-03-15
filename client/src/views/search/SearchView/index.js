@@ -255,17 +255,19 @@ const SearchView = () => {
                 </Box>
               </Card>
             </Box>
-            <Box mt={3}>
+            <Box mt={2}>
               {initialSearch ? (
                 <>
-                  <Typography
-                    className={classes.placeholderText}
-                    color="textSecondary"
-                    align="center"
-                    variant="h3"
-                  >
-                    Start searching to find your new favourite recipes!
-                  </Typography>
+                  <Box mt={2}>
+                    <Typography
+                      className={classes.placeholderText}
+                      color="textSecondary"
+                      align="center"
+                      variant="h3"
+                    >
+                      Start searching to find your new favourite recipes!
+                    </Typography>
+                  </Box>
                 </>
               ) : (
                 <>
@@ -278,14 +280,16 @@ const SearchView = () => {
               )}
               {emptySearch ? (
                 <>
-                  <Typography
-                    className={classes.placeholderText}
-                    color="textSecondary"
-                    align="center"
-                    variant="h3"
-                  >
-                    No results found for your dietary preferences.
-                  </Typography>
+                  <Box mt={2}>
+                    <Typography
+                      className={classes.placeholderText}
+                      color="textSecondary"
+                      align="center"
+                      variant="h3"
+                    >
+                      No results found for your dietary preferences.
+                    </Typography>
+                  </Box>
                 </>
               ) : null}
               <Grid item xs={12}>
