@@ -80,7 +80,7 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
-  const [imageURL, setImageURL] = useState("");
+  const [userImage, setUserImage] = useState("");
   const [userRank, setUserRank] = useState("");
   const [userName, setUserName] = useState("");
 
@@ -92,7 +92,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         );
       }
       if (response.data.user.imageUrl) {
-        setImageURL(response.data.user.imageUrl);
+        setUserImage(response.data.user.imageUrl);
       }
       getUserData().then((response) => {
         if (response.data.favourites) {
@@ -126,7 +126,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           <Avatar
             className={classes.avatar}
             component={RouterLink}
-            src={imageURL}
+            src={userImage}
             to="/app/settings"
           />
         </Box>

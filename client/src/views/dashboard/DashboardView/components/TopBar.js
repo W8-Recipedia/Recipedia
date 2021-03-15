@@ -17,14 +17,12 @@ import { Link } from "react-router-dom";
 import { LogOut as LogoutIcon } from "react-feather";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
-import clsx from "clsx";
 import { logOut } from "src/components/ServerRequests";
 
 let theme = createMuiTheme();
 theme = responsiveFontSizes(theme);
 
 const useStyles = makeStyles(() => ({
-  root: {},
   avatar: {
     width: 60,
     height: 60,
@@ -38,7 +36,7 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
   const classes = useStyles();
 
   return (
-    <AppBar className={clsx(classes.root, className)} elevation={0} {...rest}>
+    <AppBar elevation={0} {...rest}>
       <Toolbar>
         <Hidden lgUp>
           <IconButton color="inherit" onClick={onMobileNavOpen}>
