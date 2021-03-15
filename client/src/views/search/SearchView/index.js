@@ -16,10 +16,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import {
-  getRecipesComplex,
-  getUserData,
-} from "src/components/ServerRequests";
+import { getRecipesComplex, getUserData } from "src/components/ServerRequests";
 
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Page from "src/components/theme/page";
@@ -260,7 +257,7 @@ const SearchView = () => {
               </Card>
             </Box>
             <Box mt={3}>
-              {initialSearch ? (
+              {initialSearch || emptySearch ? (
                 <>
                   <Typography
                     className={classes.placeholderText}
@@ -268,7 +265,9 @@ const SearchView = () => {
                     align="center"
                     variant="h3"
                   >
-                    Start searching to find your new favourite recipes!
+                    {initialSearch
+                      ? "Start searching to find your new favourite recipes!"
+                      : "No results found (for your dietary preferences)."}
                   </Typography>
                 </>
               ) : (
@@ -280,18 +279,6 @@ const SearchView = () => {
                   />
                 </>
               )}
-              {emptySearch ? (
-                <>
-                  <Typography
-                    className={classes.placeholderText}
-                    color="textSecondary"
-                    align="center"
-                    variant="h3"
-                  >
-                    No results found for your dietary preferences.
-                  </Typography>
-                </>
-              ) : null}
               <Grid item xs={12}>
                 {loading ? <LinearProgress /> : null}
               </Grid>

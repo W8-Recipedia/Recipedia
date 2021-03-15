@@ -1,11 +1,12 @@
-import LoginCheck, { AccessCheck } from "src/components/auth/AuthCheck";
 import { Navigate, useRoutes } from "react-router-dom";
 
+import AccessCheck from "src/components/auth/AccessCheck";
 import FAQView from "src/views/faq/FAQView";
 import FavouritesView from "src/views/favourites/FavouritesView";
 import FeedbackView from "src/views/feedback/FeedbackView";
 import HomeView from "src/views/home/HomeView";
 import LegalView from "src/views/legal/LegalView";
+import LoginCheck from "src/components/auth/LoginCheck";
 import NotFoundView from "src/views/error/ErrorView";
 import React from "react";
 import SearchView from "src/views/search/SearchView";
