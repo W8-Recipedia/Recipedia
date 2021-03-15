@@ -9,6 +9,7 @@ import {
   AppBar,
   Toolbar,
   IconButton,
+  CardMedia,
   // MenuIcon,
 } from "@material-ui/core";
 import Page from "src/components/theme/page";
@@ -33,6 +34,11 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonText: {
     fontSize: 24,
+  },
+  media: {
+    height: 0,
+    paddingTop: "56.25%", // 16:9,
+    marginTop: "30",
   },
 }));
 
