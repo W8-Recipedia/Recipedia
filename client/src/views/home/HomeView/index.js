@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     paddingTop: "15px",
   },
+  placeholderText: {
+    paddingTop: theme.spacing(4),
+  },
 }));
 
 const Home = () => {
@@ -46,6 +49,7 @@ const Home = () => {
   const [recipeOffset, setRecipeOffset] = useState(0);
   const [allergens, setAllergens] = useState([]);
   const [diet, setDiet] = useState("");
+  const [noResultsFound, setNoResultsFound] = useState(false);
 
   const handleRecipeClick = (id) => {
     navigate(`/app/home/${id}`);
@@ -68,7 +72,7 @@ const Home = () => {
     )
       .then((response) => {
         if (!response.data.results) {
-          // SHOW TEXT FOR ERROR
+          setNoResultsFound(true);
         } else {
           setRecipeList([...recipeList, ...response.data.results]);
         }
@@ -127,14 +131,31 @@ const Home = () => {
           </Container>
           <Container maxWidth={false}>
             <Box mt={3}>
-              <RecipeList
-                recipes={recipeList}
-                onRecipeClick={handleRecipeClick}
-                loading={loading}
-              />
+              {noResultsFound ? (
+                <>
+                  <Box mt={2}>
+                    <Typography
+                      className={classes.placeholderText}
+                      color="textSecondary"
+                      align="center"
+                      variant="h3"
+                    >
+                      We couldn't find any recipes for your dietary preferences.
+                    </Typography>
+                  </Box>
+                </>
+              ) : (
+                <>
+                  <RecipeList
+                    recipes={recipeList}
+                    onRecipeClick={handleRecipeClick}
+                    loading={loading}
+                  />
+                </>
+              )}
             </Box>
             <Grid item xs={12} className={classes.loadMoreGridBtn}>
-              <Box mt={3}>
+              <Box mt={3} style={{ display: noResultsFound && "none" }}>
                 {loading ? (
                   <CircularProgress />
                 ) : (
