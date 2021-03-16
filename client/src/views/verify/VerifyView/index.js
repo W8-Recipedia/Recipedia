@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
   TextField,
@@ -29,37 +28,19 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
-  title: {
-    fontSize: 84,
-    [theme.breakpoints.up("xs")]: {
-      fontSize: 64,
-    },
-    [theme.breakpoints.up("md")]: {
-      fontSize: 84,
-    },
-  },
-  button: {
-    margin: "auto",
-  },
 }));
 
 const VerifyView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
 
-  const [verified, setVerified] = useState();
-  const [verificationError, setVerificationError] = useState();
-  const [emailSent, setEmailSent] = useState(false);
-  const [emailError, setEmailError] = useState(false);
+  const [verificationStatus, setVerificationStatus] = useState();
+  const [emailStatus, setEmailStatus] = useState();
 
   const resendVerification = (values) => {
     resendVerificationEmail(values.email).then((response) => {
-      setEmailSent(true);
-      if (response.data.message === "emailSuccess") {
-        setEmailError(false);
-      } else {
-        setEmailError(true);
-      }
+      console.log(response.data.message);
+      setEmailStatus(response.data.message);
     });
   };
 
@@ -67,17 +48,11 @@ const VerifyView = () => {
     if (window.location.pathname !== "/verify") {
       verifyEmail(window.location.pathname.replace("/verify/", "")).then(
         (response) => {
-          if (response.data.message === "userVerified") {
-            setVerified(true);
-            setVerificationError(false);
-          } else {
-            setVerified(false);
-            setVerificationError(true);
-          }
+          setVerificationStatus(response.data.message);
         }
       );
     } else {
-      setVerificationError(false);
+      setVerificationStatus("noToken");
     }
   }, []);
 
@@ -87,127 +62,147 @@ const VerifyView = () => {
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia">
-        <Dialog open={!verified}>
-          <DialogContent>
-            <Formik
-              initialValues={{
-                email: "",
-              }}
-              validationSchema={Yup.object().shape({
-                email: Yup.string()
-                  .email("Must be a valid email")
-                  .max(255)
-                  .required("Email is required"),
-              })}
-              onSubmit={resendVerification}
-            >
-              {({
-                errors,
-                handleBlur,
-                handleChange,
-                isSubmitting,
-                touched,
-                values,
-              }) => (
-                <Form>
-                  <Box alignItems="center" justifyContent="center" m={2}>
+      <Page className={classes.root} title="Verify Email | Recipedia">
+        <Dialog open={verificationStatus}>
+          <Formik
+            initialValues={{
+              email: "",
+            }}
+            validationSchema={Yup.object().shape({
+              email: Yup.string()
+                .email("Must be a valid email")
+                .max(255)
+                .required("Email is required"),
+            })}
+            onSubmit={resendVerification}
+          >
+            {({ errors, handleBlur, handleChange, touched, values }) => (
+              <Form>
+                <Box p={1}>
+                  <DialogContent>
                     <DialogContentText>
-                      {verificationError
-                        ? "Your email could not be verified. Please enter your email to send a new verification email."
-                        : "Please enter your email to send a new verification email. "}
-
-                      <Box>
-                        <TextField
-                          error={Boolean(touched.email && errors.email)}
-                          fullWidth
-                          helperText={touched.email && errors.email}
-                          label="Email address"
-                          margin="normal"
-                          name="email"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          type="email"
-                          value={values.email}
-                          variant="outlined"
-                        />
+                      <Box
+                        alignItems="center"
+                        justifyContent="center"
+                        display="flex"
+                      >
+                        {verificationStatus === "userVerified"
+                          ? "Your email has been verified!"
+                          : verificationStatus === "noToken"
+                          ? "Please enter your email to send a new verification email."
+                          : "Your email could not be verified. Please enter your email to send a new verification email."}
+                      </Box>
+                      <Box
+                        alignItems="center"
+                        justifyContent="center"
+                        display="flex"
+                      >
+                        {verificationStatus === "userVerified" ? (
+                          <Button
+                            component={Link}
+                            to={"/login"}
+                            color="primary"
+                            variant="contained"
+                          >
+                            Log in
+                          </Button>
+                        ) : (
+                          <TextField
+                            error={Boolean(touched.email && errors.email)}
+                            fullWidth
+                            helperText={touched.email && errors.email}
+                            label="Email address"
+                            margin="normal"
+                            name="email"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            type="email"
+                            value={values.email}
+                            variant="outlined"
+                          />
+                        )}
                       </Box>
                     </DialogContentText>
-                    <DialogActions>
+                  </DialogContent>
+                  <Box
+                    alignItems="center"
+                    justifyContent="center"
+                    display="flex"
+                    pb={2}
+                  >
+                    {verificationStatus === "userVerified" ? (
+                      <Button
+                        component={Link}
+                        to={"/login"}
+                        color="primary"
+                        variant="contained"
+                      >
+                        Log in
+                      </Button>
+                    ) : (
                       <Button
                         color="primary"
                         variant="contained"
                         size="large"
                         type="submit"
-                        className={classes.button}
                       >
                         Verify
                       </Button>
-                    </DialogActions>
+                    )}
                   </Box>
-                </Form>
-              )}
-            </Formik>
-          </DialogContent>
+                </Box>
+              </Form>
+            )}
+          </Formik>
         </Dialog>
-        <Dialog open={verified}>
-          <DialogContent>
-            <Box alignItems="center" justifyContent="center" m={2}>
+
+        <Dialog open={emailStatus}>
+          <Box p={1}>
+            <DialogContent>
               <DialogContentText>
-                Your email has been verified!
+                <Box alignItems="center" justifyContent="center" display="flex">
+                  {emailStatus === "accountAlreadyVerified"
+                    ? "Please log in to your account!"
+                    : emailStatus === "noAccount"
+                    ? "Please sign up first!"
+                    : emailStatus === "emailSuccess"
+                    ? "A verification email has been sent to your email adress. You can now close this tab."
+                    : "Unkown error."}
+                </Box>
               </DialogContentText>
-            </Box>
-            <Box alignItems="center" justifyContent="center" m={2}>
-              <DialogActions>
-                <Button
-                  component={Link}
-                  to={"/login"}
-                  color="primary"
-                  variant="contained"
-                  size="large"
-                  onClick={resendVerification}
-                  className={classes.button}
-                >
-                  Log in
-                </Button>
-              </DialogActions>
-            </Box>
-          </DialogContent>
-        </Dialog>
-        <Dialog open={emailSent}>
-          <DialogContent>
-            <DialogContentText>
-              {emailError
-                ? "Please sign up/log in to your account!"
-                : "A verification email has been sent to your email adress."}
-            </DialogContentText>
-            {emailError ? (
-              <DialogActions>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  size="large"
-                  component={Link}
-                  to="/signup"
-                  onClick={resendVerification}
-                  className={classes.button}
-                >
-                  Sign Up
-                </Button>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  size="large"
-                  component={Link}
-                  to="/login"
-                  onClick={resendVerification}
-                  className={classes.button}
-                >
-                  Log in
-                </Button>
-              </DialogActions>
+            </DialogContent>
+            {emailStatus === "accountAlreadyVerified" ||
+            emailStatus === "noAccount" ? (
+              <Box
+                alignItems="center"
+                justifyContent="center"
+                display="flex"
+                pb={2}
+              >
+                {emailStatus === "noAccount" ? (
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    size="large"
+                    component={Link}
+                    to="/signup"
+                  >
+                    Sign Up
+                  </Button>
+                ) : (
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    size="large"
+                    component={Link}
+                    to="/login"
+                  >
+                    Log in
+                  </Button>
+                )}
+              </Box>
             ) : null}
-          </DialogContent>
+          </Box>
         </Dialog>
       </Page>
     </Scrollbars>

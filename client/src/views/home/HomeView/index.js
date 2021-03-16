@@ -55,7 +55,7 @@ const Home = () => {
     showRecipeByID(id);
     setSelectedRecipeID(id);
     window.addEventListener("popstate", () => {
-      setRecipeDialogOpen(false);
+      handleRecipeClose();
     });
   };
   const loadRecipes = (localAllergens = allergens, localDiet = diet) => {
@@ -88,6 +88,13 @@ const Home = () => {
     setRecipeDialogOpen(true);
   };
 
+  const handleRecipeClose = () => {
+    setRecipeDialogOpen(false);
+    setTimeout(() => {
+      document.getElementById("header").scrollIntoView();
+    }, 300);
+    navigate(`/app/home`);
+  };
   useLayoutEffect(() => {
     getUserData().then((response) => {
       setAllergens(response.data.allergens);
@@ -109,10 +116,10 @@ const Home = () => {
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia | Home">
+      <Page className={classes.root} title="Home | Recipedia">
         <Box m={2}>
           <Container maxWidth="false">
-            <Card >
+            <Card>
               <CardContent>
                 <Box p={1}>
                   <Typography gutterBottom variant="h1">
@@ -171,10 +178,7 @@ const Home = () => {
           </Container>
           <RecipeDialog
             open={recipeDialogOpen}
-            handleClose={() => {
-              setRecipeDialogOpen(false);
-              navigate(`/app/home`);
-            }}
+            handleClose={handleRecipeClose}
             recipeId={selectedRecipeID}
             recipeInfo={selectedRecipeInfo}
           />

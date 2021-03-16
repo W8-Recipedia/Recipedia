@@ -2,6 +2,7 @@ import {} from "src/components/ServerRequests";
 
 import {
   Box,
+  Button,
   Card,
   CardContent,
   Checkbox,
@@ -18,6 +19,7 @@ import {
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { getRecipesComplex, getUserData } from "src/components/ServerRequests";
 
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Page from "src/components/theme/page";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
@@ -47,6 +49,11 @@ const useStyles = makeStyles((theme) => ({
   },
   placeholderText: {
     paddingTop: theme.spacing(4),
+  },
+  loadMoreGridBtn: {
+    display: "flex",
+    justifyContent: "center",
+    paddingTop: "15px",
   },
 }));
 
@@ -100,6 +107,7 @@ const SearchView = () => {
   const navigate = useNavigate();
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
+  const [loadMore, setLoadMore] = useState(false);
   const [selectedRecipeID, setSelectedRecipeID] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
   const [recipeList, setRecipeList] = useState([]);
@@ -108,26 +116,20 @@ const SearchView = () => {
   const [typeName, setTypeName] = useState([]);
   const [intolerances, setIntolerances] = useState([]);
   const [diet, setDiet] = useState("");
+  const [query, setQuery] = useState("");
+  const [recipeOffset, setRecipeOffset] = useState(0);
   const [initialSearch, setInitialSearch] = useState(true);
   const [emptySearch, setEmptySearch] = useState(false);
 
-  const loadRecipes = (
-    intolerancesArray,
-    diet,
-    typesArray,
-    cuisineArray,
-    offset,
-    query
-  ) => {
-    setRecipeList([]);
+  const loadRecipes = (queryNew = undefined, offset) => {
     setLoading(true);
     getRecipesComplex(
-      intolerancesArray ? intolerancesArray.join(",") : null,
+      intolerances ? intolerances.join(",") : null,
       diet,
-      typesArray.join(",").toLowerCase(),
-      cuisineArray.join(","),
+      typeName.join(",").toLowerCase(),
+      cuisineName.join(","),
       offset,
-      query,
+      queryNew ? queryNew : query,
       false
     )
       .then((response) => {
@@ -138,6 +140,7 @@ const SearchView = () => {
             setEmptySearch(true);
           } else {
             setRecipeList([...recipeList, ...response.data.results]);
+            setLoadMore(true);
           }
         }
       })
@@ -151,10 +154,16 @@ const SearchView = () => {
     setSelectedRecipeInfo(recipeList.find((recipe) => recipe.id === id));
     setRecipeDialogOpen(true);
     window.addEventListener("popstate", () => {
-      setRecipeDialogOpen(false);
+      handleRecipeClose();
     });
   };
-
+  const handleRecipeClose = () => {
+    setRecipeDialogOpen(false);
+    setTimeout(function () {
+      document.getElementById("header").scrollIntoView();
+    }, 300);
+    navigate(`/app/search`);
+  };
   useLayoutEffect(() => {
     getUserData().then((response) => {
       setIntolerances(response.data.allergens);
@@ -174,10 +183,22 @@ const SearchView = () => {
     setTypeName(event.target.value);
   };
 
-  const handleQuerySearch = (query) => {
+  const handleQuerySearch = (queryNew) => {
+    setRecipeList([]);
+    setQuery(queryNew);
     setInitialSearch(false);
     setEmptySearch(false);
-    loadRecipes(intolerances, diet, typeName, cuisineName, 0, query);
+    loadRecipes(queryNew);
+  };
+
+  const loadMoreRecipes = () => {
+    setRecipeOffset(
+      recipeOffset + parseInt(process.env.REACT_APP_SEARCH_OFFSET)
+    );
+    loadRecipes(
+      null,
+      recipeOffset + parseInt(process.env.REACT_APP_SEARCH_OFFSET)
+    );
   };
 
   const onRecipeClick = (id) => {
@@ -187,7 +208,7 @@ const SearchView = () => {
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia | Search">
+      <Page className={classes.root} title="Search | Recipedia">
         <Box m={2}>
           <Container maxWidth="false">
             <Card>
@@ -282,16 +303,25 @@ const SearchView = () => {
                 </>
               )}
               <Grid item xs={12}>
-                {loading ? <LinearProgress /> : null}
+                <Box mt={3}>{loading ? <LinearProgress /> : null}</Box>
+              </Grid>
+
+              <Grid item xs={12} className={classes.loadMoreGridBtn}>
+                <Box>
+                  {loadMore && !loading ? (
+                    <>
+                      <Button color="primary" onClick={loadMoreRecipes}>
+                        <ExpandMoreIcon /> Load more recipes! <ExpandMoreIcon />
+                      </Button>
+                    </>
+                  ) : null}
+                </Box>
               </Grid>
             </Box>
           </Container>
           <RecipeDialog
             open={recipeDialogOpen}
-            handleClose={() => {
-              setRecipeDialogOpen(false);
-              navigate(`/app/search`);
-            }}
+            handleClose={handleRecipeClose}
             recipeId={selectedRecipeID}
             recipeInfo={selectedRecipeInfo}
           />
