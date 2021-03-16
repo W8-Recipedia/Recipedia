@@ -339,6 +339,7 @@ app.get("/getuserdata", verifyToken, databaseSelect, (req, res) => {
     jsonResponse.favourites = decrypt(res.result.favourites);
   }
   jsonResponse.message = "loggedIn";
+  jsonResponse.google = res.result.googlelogin;
   jsonResponse.token = jwt.sign({ user: res.user }, process.env.JWT_SECRET, {
     expiresIn: "30m",
   });
