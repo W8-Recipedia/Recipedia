@@ -170,7 +170,7 @@ const SearchView = () => {
     setRecipeDialogOpen(false);
     setTimeout(function () {
       document.getElementById("header").scrollIntoView();
-    }, 300);
+    }, 500);
     navigate(`/app/search`);
   };
   useLayoutEffect(() => {

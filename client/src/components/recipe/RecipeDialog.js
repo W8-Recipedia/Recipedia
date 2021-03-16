@@ -86,7 +86,7 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
         handleClose();
         setTimeout(() => {
           document.getElementById("header").scrollIntoView();
-        }, 300);
+        }, 500);
       }}
       fullScreen={fullScreen}
       scroll="body"

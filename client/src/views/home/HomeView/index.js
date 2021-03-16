@@ -100,7 +100,7 @@ const Home = () => {
     setRecipeDialogOpen(false);
     setTimeout(() => {
       document.getElementById("header").scrollIntoView();
-    }, 300);
+    }, 500);
     navigate(`/app/home`);
   };
   useLayoutEffect(() => {

@@ -57,7 +57,7 @@ const Favourites = () => {
     setRecipeDialogOpen(false);
     setTimeout(function () {
       document.getElementById("header").scrollIntoView();
-    }, 300);
+    }, 500);
     navigate(`/app/favourites`);
   };
 
@@ -176,8 +176,8 @@ const Favourites = () => {
             <DialogContent>
               <DialogContentText>
                 <Box alignItems="center" justifyContent="center" display="flex">
-                  Unfortunately our API has ran out of requests for today. Please come back tomorrow to find more tasty
-                  recipes!
+                  Unfortunately our API has ran out of requests for today.
+                  Please come back tomorrow to find more tasty recipes!
                 </Box>
               </DialogContentText>
             </DialogContent>
