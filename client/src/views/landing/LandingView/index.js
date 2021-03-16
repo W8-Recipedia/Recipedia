@@ -25,6 +25,11 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
+  page2: {
+    backgroundColor: "black",
+    paddingBottom: theme.spacing(3),
+    paddingTop: theme.spacing(3),
+  },
   title: {
     fontSize: 84,
     [theme.breakpoints.up("xs")]: {
@@ -37,13 +42,11 @@ const useStyles = makeStyles((theme) => ({
   buttonText: {
     fontSize: 24,
   },
-  goDown: {
+  downArrow: {
     fontSize: "4rem",
   },
   image: {
     width: "100%",
-    transition: "opacity 250ms ease",
-    backfaceVisibility: "hidden",
   },
 }));
 
@@ -107,12 +110,11 @@ const LandingView = () => {
                   </Button>
                 </Link>
               </Grid>
-              <Hidden only={["xs", "sm", "md"]}>
                 <Grid item xs={12} md={12}>
                   <Box display="flex" justifyContent="center">
                     <IconButton>
                       <ExpandMoreIcon
-                        className={classes.goDown}
+                        className={classes.downArrow}
                         onClick={() =>
                           cardRef.current.scrollIntoView({
                             behavior: "smooth",
@@ -123,16 +125,16 @@ const LandingView = () => {
                     </IconButton>
                   </Box>
                 </Grid>
-              </Hidden>
             </Grid>
           </Container>
         </Box>
-        <Hidden only={["xs", "sm", "md"]}>
-          <Box pt={5}>
+      </Page>
+        <Page ref={cardRef} className={classes.page2}>
+          <Box>
             <Grid container>
               <Grid item md={6} xs={12}>
-                <Box mt={20} ml={10} mr={10}>
-                  <Card ref={cardRef}>
+                <Box m={10}>
+                  <Card>
                     <CardContent>
                       <Typography gutterBottom variant="h2">
                         Favourites
@@ -151,7 +153,7 @@ const LandingView = () => {
                 </Box>
               </Grid>
               <Grid item md={6} xs={12}>
-                <Box mb={20} mt={20} ml={10} mr={10}>
+                <Box m={10}>
                   <Card>
                     <CardContent>
                       <Typography gutterBottom variant="h2">
@@ -173,8 +175,7 @@ const LandingView = () => {
               </Grid>
             </Grid>
           </Box>
-        </Hidden>
-      </Page>
+        </Page>
     </Scrollbars>
   );
 };
