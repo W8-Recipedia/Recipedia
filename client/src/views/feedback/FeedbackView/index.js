@@ -75,7 +75,7 @@ const FeedbackView = ({ className, ...rest }) => {
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia | Feedback">
+      <Page className={classes.root} title="Feedback | Recipedia">
         <Box m={2}>
           <Container maxWidth="false">
             <Card>
@@ -99,11 +99,7 @@ const FeedbackView = ({ className, ...rest }) => {
           <Container maxWidth="false">
             <Box mt={3}>
               <Card>
-                <form
-                  autoComplete="off"
-                  noValidate
-                  {...rest}
-                >
+                <form autoComplete="off" noValidate {...rest}>
                   <CardContent>
                     <Grid container spacing={3}>
                       <Grid item md={6} xs={12}>

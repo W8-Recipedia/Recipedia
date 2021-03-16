@@ -66,7 +66,7 @@ const LoginView = () => {
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia | Log in">
+      <Page className={classes.root} title="Log in | Recipedia">
         <Box
           display="flex"
           flexDirection="column"
