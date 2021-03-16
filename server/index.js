@@ -89,7 +89,6 @@ const databaseSelect = (req, res, next) => {
     req.body.email ? req.body.email : res.user.email,
     (err, result) => {
       if (err) {
-        console.log(err);
         res.json({ message: err });
       } else if (result.length !== 1) {
         res.json({ message: "noAccount" });
@@ -197,7 +196,7 @@ app.post("/recipes/getRecipesByID", (req, res) => {
 
 app.post("/login", databaseSelect, (req, res) => {
   if (res.result.googlelogin) {
-    res.json({ message: "wrongAccountType" });
+    res.json({ message: "wrongAccountTypeGoogle" });
   } else if (res.result.verifiedemail !== 1) {
     res.json({ message: "accountNotVerified" });
   } else {
@@ -241,7 +240,7 @@ app.post("/googlelogin", (req, res) => {
       } else if (result.length !== 1) {
         res.json({ message: "noAccount" });
       } else if (!result[0].googlelogin) {
-        res.json({ message: "wrongAccountType" });
+        res.json({ message: "wrongAccountTypeNotGoogle" });
       } else if (result[0].verifiedemail !== 1) {
         res.json({ message: "accountNotVerified" });
       } else {
