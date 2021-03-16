@@ -19,14 +19,14 @@ import React, { useLayoutEffect, useState } from "react";
 import { changePassword, getUserData } from "src/components/ServerRequests";
 
 const Password = () => {
-  const [open, setOpen] = useState(false);
+  const [openSuccessDialog, setOpenSuccessDialog] = useState(false);
   const [wrongPassword, setWrongPassword] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [googleAccount, setGoogleAccount] = useState(false);
+  const [googleAccountStatus, setGoogleAccountStatus] = useState(false);
   useLayoutEffect(() => {
     getUserData().then((response) => {
       if (response.data.user.googleId) {
-        setGoogleAccount(true);
+        setGoogleAccountStatus(true);
       }
     });
     setButtonDisabled(true);
@@ -35,7 +35,7 @@ const Password = () => {
   const handleSubmit = (values, actions) => {
     changePassword(values.currentPassword, values.password).then((response) => {
       if (response.data.message === "passwordChanged") {
-        setOpen(true);
+        setOpenSuccessDialog(true);
         actions.resetForm({});
       } else {
         setWrongPassword(true);
@@ -47,7 +47,6 @@ const Password = () => {
     <Card>
       <CardHeader subheader="Update your password here" title="Password" />
       <Divider />
-
       <Formik
         initialValues={{
           password: "",
@@ -105,7 +104,7 @@ const Password = () => {
                 type="password"
                 value={values.currentPassword}
                 variant="outlined"
-                disabled={googleAccount}
+                disabled={googleAccountStatus}
               />
               <TextField
                 error={Boolean(touched.password && errors.password)}
@@ -121,7 +120,7 @@ const Password = () => {
                 type="password"
                 value={values.password}
                 variant="outlined"
-                disabled={googleAccount}
+                disabled={googleAccountStatus}
               />
               <TextField
                 error={Boolean(
@@ -140,7 +139,7 @@ const Password = () => {
                 type="password"
                 value={values.confirmPassword}
                 variant="outlined"
-                disabled={googleAccount}
+                disabled={googleAccountStatus}
               />
             </CardContent>
             <Divider />
@@ -149,7 +148,7 @@ const Password = () => {
                 color="primary"
                 variant="contained"
                 type="submit"
-                disabled={buttonDisabled || googleAccount}
+                disabled={buttonDisabled || googleAccountStatus}
               >
                 Update
               </Button>
@@ -158,16 +157,20 @@ const Password = () => {
         )}
       </Formik>
       <Dialog
-        open={open}
+        open={openSuccessDialog}
         onClose={() => {
-          setOpen(false);
+          setOpenSuccessDialog(false);
         }}
       >
-        <DialogContent>
-          <DialogContentText>
-            Your password has successfully been changed.
-          </DialogContentText>
-        </DialogContent>
+        <Box p={1}>
+          <DialogContent>
+            <DialogContentText>
+              <Box alignItems="center" justifyContent="center" display="flex">
+                Your password has been changed successfully.
+              </Box>
+            </DialogContentText>
+          </DialogContent>
+        </Box>
       </Dialog>
     </Card>
   );

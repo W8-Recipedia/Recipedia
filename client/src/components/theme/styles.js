@@ -32,7 +32,6 @@ const useStyles = makeStyles(() =>
 
 const Styles = () => {
   useStyles();
-
   return null;
 };
 

@@ -41,8 +41,8 @@ const useStyles = makeStyles({
 
 const Preferences = ({ className, ...rest }) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const [error, setError] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [updateError, setUpdateError] = useState(false);
   const [diet, setDiet] = useState("");
   const [allergens, setAllergens] = useState({
     Dairy: false,
@@ -59,8 +59,9 @@ const Preferences = ({ className, ...rest }) => {
   });
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
-  const [buttonDisabled, setButtonDisabled] = useState(true);
   const [activity, setActivity] = useState(0);
+
+  const [buttonDisabled, setButtonDisabled] = useState(true);
 
   useLayoutEffect(() => {
     getUserData().then((response) => {
@@ -110,11 +111,11 @@ const Preferences = ({ className, ...rest }) => {
     }
     changePreferences(diet, allergenList, height, weight, activity).then(
       (response) => {
-        setOpen(true);
+        setOpenDialog(true);
         if (response.data.message === "updateSuccess") {
-          setError(false);
+          setUpdateError(false);
         } else if (response) {
-          setError(true);
+          setUpdateError(true);
         }
       }
     );
@@ -422,7 +423,7 @@ const Preferences = ({ className, ...rest }) => {
                   >
                     How many hours do you exercise every week?
                   </Typography>
-                  <Box pt={2} pr={1}>
+                  <Box pt={2} pr={1} pl={1}>
                     <Slider
                       value={activity}
                       onChange={(e, value) => {
@@ -452,18 +453,22 @@ const Preferences = ({ className, ...rest }) => {
           </Button>
         </Box>
         <Dialog
-          open={open}
+          open={openDialog}
           onClose={() => {
-            setOpen(false);
+            setOpenDialog(false);
           }}
         >
-          <DialogContent>
-            <DialogContentText>
-              {error
-                ? "Your preferences could not be updated. Please try again later."
-                : "Your preferences have been updated."}
-            </DialogContentText>
-          </DialogContent>
+          <Box p={1}>
+            <DialogContent>
+              <DialogContentText>
+                <Box alignItems="center" justifyContent="center" display="flex">
+                  {updateError
+                    ? "Your preferences could not be updated. Please try again later."
+                    : "Your preferences have been updated."}{" "}
+                </Box>
+              </DialogContentText>
+            </DialogContent>
+          </Box>
         </Dialog>
       </Card>
     </form>

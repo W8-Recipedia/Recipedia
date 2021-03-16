@@ -40,8 +40,8 @@ const LegalView = () => {
                     component="p"
                   >
                     The legality of our website matters a lot to us. Please take
-                    the time to read these terms of use carefully - they are
-                    important for your safety.
+                    the time to read these terms &amp; conditions carefully -
+                    they're important for your health and safety.
                   </Typography>
                 </Box>
               </CardContent>

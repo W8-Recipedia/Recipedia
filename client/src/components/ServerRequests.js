@@ -142,9 +142,6 @@ export const changeUserInfo = async (firstname, lastname, email) => {
         headers: { "x-access-token": localStorage.getItem("token") },
       }
     );
-    if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
-    }
     return response;
   } else {
     return { data: { message: "notLoggedIn" } };
@@ -174,9 +171,6 @@ export const changePreferences = async (
         },
       }
     );
-    if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
-    }
     return response;
   } else {
     return { data: { message: "notLoggedIn" } };
@@ -195,9 +189,6 @@ export const changePassword = async (oldpassword, newpassword) => {
         headers: { "x-access-token": localStorage.getItem("token") },
       }
     );
-    if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
-    }
     return response;
   } else {
     return { data: { message: "notLoggedIn" } };
@@ -215,9 +206,6 @@ export const submitFeeback = async (feedback) => {
         headers: { "x-access-token": localStorage.getItem("token") },
       }
     );
-    if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
-    }
     return response;
   } else {
     return { data: { message: "notLoggedIn" } };

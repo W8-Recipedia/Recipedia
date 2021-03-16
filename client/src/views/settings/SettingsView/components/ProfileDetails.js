@@ -46,7 +46,7 @@ const ProfileDetails = ({ className, ...rest }) => {
   const handleSubmit = (values, actions) => {
     changeUserInfo(values.firstName, values.lastName, values.email).then(
       (response) => {
-        if (response === "updateSuccess") {
+        if (response.data.message === "updateSuccess") {
           setChangeDetailsSuccess(true);
         } else {
           setChangeDetailsSuccess(false);
@@ -152,13 +152,21 @@ const ProfileDetails = ({ className, ...rest }) => {
               window.location.reload(false);
             }}
           >
-            <DialogContent>
-              <DialogContentText >
-                {changeUserInfoSuccess
-                  ? "Your details have been changed successfully!"
-                  : "The email address specified is already linked to a Recipedia account! Please use another email address."}
-              </DialogContentText>
-            </DialogContent>
+            <Box p={1}>
+              <DialogContent>
+                <DialogContentText>
+                  <Box
+                    alignItems="center"
+                    justifyContent="center"
+                    display="flex"
+                  >
+                    {changeUserInfoSuccess
+                      ? "Your details have been changed successfully!"
+                      : "The email address specified is already linked to a Recipedia account! Please use another email address."}
+                  </Box>
+                </DialogContentText>
+              </DialogContent>
+            </Box>
           </Dialog>
         </Form>
       )}

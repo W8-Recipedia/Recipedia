@@ -18,16 +18,10 @@ import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import IconButton from "@material-ui/core/IconButton";
 import LocalDiningIcon from "@material-ui/icons/LocalDining";
-// import MuiAlert from "@material-ui/lab/Alert";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import { useSnackbar } from "notistack";
-// import Snackbar from "@material-ui/core/Snackbar";
 
-// function Alert(props) {
-//   return <MuiAlert elevation={6} variant="filled" {...props} />;
-// }
-
-function convertTime(num) {
+const convertTime = (num) => {
   if (num <= 60) {
     return `${num}m`;
   }
@@ -83,7 +77,6 @@ const useStyles = makeStyles((theme) => ({
 const RecipeCard = ({ recipe, ...props }) => {
   const classes = useStyles();
   const [favourited, setFavourited] = useState(false);
-  // const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   useLayoutEffect(() => {
@@ -110,18 +103,8 @@ const RecipeCard = ({ recipe, ...props }) => {
         autoHideDuration: 1200,
       });
     }
-
-    // setOpen(false);
     setFavourited((prevFavourited) => !prevFavourited);
-    // setOpen(true);
   };
-
-  // const handleSnackbarClose = (event, reason) => {
-  //   if (reason === "clickaway") {
-  //     return;
-  //   }
-  //   setOpen(false);
-  // };
 
   return (
     <Card className={classes.root} elevation={4}>
@@ -185,20 +168,6 @@ const RecipeCard = ({ recipe, ...props }) => {
                 <FavoriteBorderIcon style={{ color: "red" }} />
               )}
             </IconButton>
-            {/* <Snackbar
-              open={open}
-              autoHideDuration={1200}
-              onClose={handleSnackbarClose}
-            >
-              <Alert
-                onClose={handleSnackbarClose}
-                severity={favourited ? "success" : "info"}
-              >
-                {favourited
-                  ? recipe.title + " has been added to your favourites."
-                  : recipe.title + " has been removed from your favourites."}
-              </Alert>
-            </Snackbar> */}
           </Grid>
         </Grid>
       </CardActions>

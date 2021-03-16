@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-import NavBar from "src/views/dashboard/DashboardView/components/NavBar";
+import NavBar from "src/components/dashboard/components/NavBar";
 import { Outlet } from "react-router-dom";
-import TopBar from "src/views/dashboard/DashboardView/components/TopBar";
+import TopBar from "src/components/dashboard/components/TopBar";
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
