@@ -7,6 +7,9 @@ import {
   CardContent,
   Checkbox,
   Container,
+  Dialog,
+  DialogContent,
+  DialogContentText,
   Grid,
   Input,
   InputLabel,
@@ -17,7 +20,11 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { getRecipesComplex, getUserData } from "src/components/ServerRequests";
+import {
+  getRecipesComplex,
+  getUserData,
+  logOut,
+} from "src/components/ServerRequests";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -120,6 +127,7 @@ const SearchView = () => {
   const [recipeOffset, setRecipeOffset] = useState(0);
   const [initialSearch, setInitialSearch] = useState(true);
   const [emptySearch, setEmptySearch] = useState(false);
+  const [APIKeyUsed, setAPIKeyUsed] = useState(false);
 
   const loadRecipes = (queryNew = undefined, offset) => {
     setLoading(true);
@@ -133,10 +141,12 @@ const SearchView = () => {
       false
     )
       .then((response) => {
+        console.log(response.data);
+        if (response.data.code === 402) {
+          setAPIKeyUsed(true);
+        }
         if (response.data.results) {
-          if (response.data.code === 402) {
-            // set popup for api
-          } else if (response.data.results.length === 0) {
+          if (response.data.results.length === 0) {
             setEmptySearch(true);
           } else {
             setRecipeList([...recipeList, ...response.data.results]);
@@ -303,7 +313,9 @@ const SearchView = () => {
                 </>
               )}
               <Grid item xs={12}>
-                <Box mt={3}>{loading ? <LinearProgress /> : null}</Box>
+                <Box mt={3}>
+                  {loading && !APIKeyUsed ? <LinearProgress /> : null}
+                </Box>
               </Grid>
 
               <Grid item xs={12} className={classes.loadMoreGridBtn}>
@@ -311,6 +323,7 @@ const SearchView = () => {
                   {loadMore && !loading ? (
                     <>
                       <Button color="primary" onClick={loadMoreRecipes}>
+                        disabled={APIKeyUsed}
                         <ExpandMoreIcon /> Load more recipes! <ExpandMoreIcon />
                       </Button>
                     </>
@@ -327,6 +340,24 @@ const SearchView = () => {
           />
         </Box>
       </Page>
+      <Dialog
+        open={APIKeyUsed}
+        onClose={() => {
+          logOut();
+          navigate("/");
+        }}
+      >
+        <Box p={1}>
+          <DialogContent>
+            <DialogContentText>
+              <Box alignItems="center" justifyContent="center" display="flex">
+                Unfortunately our API has ran out of requests for today. Please
+                come back tomorrow to find more tasty recipes!
+              </Box>
+            </DialogContentText>
+          </DialogContent>
+        </Box>
+      </Dialog>
     </Scrollbars>
   );
 };

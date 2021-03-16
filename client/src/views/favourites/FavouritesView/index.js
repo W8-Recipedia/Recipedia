@@ -5,12 +5,19 @@ import {
   Card,
   CardContent,
   Container,
+  Dialog,
+  DialogContent,
+  DialogContentText,
   Grid,
   Typography,
   makeStyles,
 } from "@material-ui/core";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { getRecipesByID, getUserData } from "src/components/ServerRequests";
+import {
+  getRecipesByID,
+  getUserData,
+  logOut,
+} from "src/components/ServerRequests";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Page from "src/components/theme/page";
@@ -38,6 +45,7 @@ const Favourites = () => {
   const [recipeList, setRecipeList] = useState([]);
   const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
   const [hasFavourites, setHasFavourites] = useState(true);
+  const [APIKeyUsed, setAPIKeyUsed] = useState(false);
 
   const handleRecipeClick = (id) => {
     navigate(`/app/favourites/${id}`);
@@ -60,7 +68,7 @@ const Favourites = () => {
     getRecipesByID(idsArray ? idsArray.join(",") : null)
       .then((response) => {
         if (response.data.code === 402) {
-          // set popup for api
+          setAPIKeyUsed(true);
         } else if (response.data) {
           setRecipeList([...recipeList, ...response.data]);
         }
@@ -158,6 +166,25 @@ const Favourites = () => {
             recipeInfo={selectedRecipeInfo}
           />
         </Box>
+        <Dialog
+          open={APIKeyUsed}
+          onClose={() => {
+            logOut();
+            navigate("/");
+          }}
+        >
+          <Box p={1}>
+            <DialogContent>
+              <DialogContentText>
+                <Box alignItems="center" justifyContent="center" display="flex">
+                  Unfortunately our API has ran out of requests for today, but
+                  your favou. Please come back tomorrow to find more tasty
+                  recipes!
+                </Box>
+              </DialogContentText>
+            </DialogContent>
+          </Box>
+        </Dialog>
       </Page>
     </Scrollbars>
   );

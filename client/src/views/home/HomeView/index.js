@@ -4,12 +4,19 @@ import {
   Card,
   CardContent,
   Container,
+  Dialog,
+  DialogContent,
+  DialogContentText,
   Grid,
   Typography,
   makeStyles,
 } from "@material-ui/core";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { getRecipesComplex, getUserData } from "src/components/ServerRequests";
+import {
+  getRecipesComplex,
+  getUserData,
+  logOut,
+} from "src/components/ServerRequests";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -49,6 +56,7 @@ const Home = () => {
   const [allergens, setAllergens] = useState([]);
   const [diet, setDiet] = useState("");
   const [noResultsFound, setNoResultsFound] = useState(false);
+  const [APIKeyUsed, setAPIKeyUsed] = useState(false);
 
   const handleRecipeClick = (id) => {
     navigate(`/app/home/${id}`);
@@ -71,7 +79,7 @@ const Home = () => {
     )
       .then((response) => {
         if (response.data.code === 402) {
-          // set popup for api
+          setAPIKeyUsed(true);
         } else if (!response.data.results) {
           setNoResultsFound(true);
         } else {
@@ -164,11 +172,15 @@ const Home = () => {
             </Box>
             <Grid item xs={12} className={classes.loadMoreGridBtn}>
               <Box mt={3} style={{ display: noResultsFound && "none" }}>
-                {loading ? (
+                {loading && !APIKeyUsed ? (
                   <CircularProgress />
                 ) : (
                   <>
-                    <Button color="primary" onClick={loadMoreRecipes}>
+                    <Button
+                      color="primary"
+                      onClick={loadMoreRecipes}
+                      disabled={APIKeyUsed}
+                    >
                       <ExpandMoreIcon /> Load more recipes! <ExpandMoreIcon />
                     </Button>
                   </>
@@ -183,6 +195,24 @@ const Home = () => {
             recipeInfo={selectedRecipeInfo}
           />
         </Box>
+        <Dialog
+          open={APIKeyUsed}
+          onClose={() => {
+            logOut();
+            navigate("/");
+          }}
+        >
+          <Box p={1}>
+            <DialogContent>
+              <DialogContentText>
+                <Box alignItems="center" justifyContent="center" display="flex">
+                  Unfortunately our API has ran out of requests for today.
+                  Please come back tomorrow to find more tasty recipes!
+                </Box>
+              </DialogContentText>
+            </DialogContent>
+          </Box>
+        </Dialog>
       </Page>
     </Scrollbars>
   );
