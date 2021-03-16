@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
-import { makeStyles } from "@material-ui/core";
+
 import NavBar from "src/views/dashboard/DashboardView/components/NavBar";
+import { Outlet } from "react-router-dom";
 import TopBar from "src/views/dashboard/DashboardView/components/TopBar";
+import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,13 +34,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DashboardView = () => {
+const DashboardView = ({ toggleDarkMode }) => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
     <div className={classes.root}>
-      <TopBar onMobileNavOpen={() => setMobileNavOpen(true)} />
+      <TopBar
+        onMobileNavOpen={() => setMobileNavOpen(true)}
+        toggleDarkMode={toggleDarkMode}
+      />
       <NavBar
         onMobileClose={() => setMobileNavOpen(false)}
         openMobile={isMobileNavOpen}

@@ -17,12 +17,12 @@ import {
   Search as SearchIcon,
   Settings as SettingsIcon,
 } from "react-feather";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { getUserCredentials } from "src/components/auth/UserAuth";
 
 import NavItem from "src/views/dashboard/DashboardView/components/NavItem";
-import PropTypes from "prop-types";
+import { Scrollbars } from "react-custom-scrollbars";
+import { getUserData } from "src/components/ServerRequests";
 
 const items = [
   {
@@ -81,21 +81,38 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
-  const [imageURL, setImageURL] = useState("");
-  const [userName, setUserName] = useState(() => {
-    getUserCredentials().then((authResponse) => {
-      if (authResponse.data.loggedIn) {
+  const [userImage, setUserImage] = useState("");
+  const [userRank, setUserRank] = useState("");
+  const [userName, setUserName] = useState("");
+
+  useLayoutEffect(() => {
+    getUserData().then((response) => {
+      if (response.data.message === "loggedIn") {
         setUserName(
-          authResponse.data.user[0].firstname +
-            " " +
-            authResponse.data.user[0].lastname
+          response.data.user.firstname + " " + response.data.user.lastname
         );
       }
-      if (authResponse.data.user[0].imageUrl) {
-        setImageURL(authResponse.data.user[0].imageUrl);
+      if (response.data.user.imageUrl) {
+        setUserImage(response.data.user.imageUrl);
       }
+      getUserData().then((response) => {
+        if (response.data.favourites) {
+          const userFavouritesLength = response.data.favourites.length;
+          setUserRank(
+            userFavouritesLength < 5
+              ? "Recipedia Beginner"
+              : userFavouritesLength < 10
+              ? "Food Connoisseur"
+              : userFavouritesLength < 15
+              ? "Sustenance Master"
+              : "Nourishment God"
+          );
+        } else {
+          setUserRank("Recipedia Beginner");
+        }
+      });
     });
-  });
+  }, []);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -104,37 +121,47 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   }, [location.pathname]);
 
   const content = (
-    <Box height="100%" display="flex" flexDirection="column">
-      <Box alignItems="center" display="flex" flexDirection="column" p={2}>
-        <Box pb={2}>
-          <Avatar
-            className={classes.avatar}
-            component={RouterLink}
-            src={imageURL}
-            to="/app/settings"
-          />
-        </Box>
-        <Typography className={classes.name} color="textPrimary" variant="h5">
-          {userName}
-        </Typography>
-        <Typography color="textSecondary" variant="body2">
-          {""}
-        </Typography>
-      </Box>
-      <Divider />
-      <Box p={2}>
-        <List>
-          {items.map((item) => (
-            <NavItem
-              href={item.href}
-              key={item.title}
-              title={item.title}
-              icon={item.icon}
+    <Scrollbars>
+      <Box height="100%" display="flex" flexDirection="column">
+        <Box alignItems="center" display="flex" flexDirection="column" p={2}>
+          <Box pb={2}>
+            <Avatar
+              className={classes.avatar}
+              component={RouterLink}
+              src={userImage}
+              to="/app/settings"
             />
-          ))}
-        </List>
+          </Box>
+          <Box pb={1}>
+            <Typography
+              className={classes.name}
+              color="textPrimary"
+              variant="h5"
+            >
+              {userName}
+            </Typography>
+          </Box>
+          <Box pb={1}>
+            <Typography color="textSecondary" variant="body2">
+              {userRank}
+            </Typography>
+          </Box>
+        </Box>
+        <Divider />
+        <Box p={2}>
+          <List>
+            {items.map((item) => (
+              <NavItem
+                href={item.href}
+                key={item.title}
+                title={item.title}
+                icon={item.icon}
+              />
+            ))}
+          </List>
+        </Box>
       </Box>
-    </Box>
+    </Scrollbars>
   );
 
   return (
@@ -162,11 +189,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
       </Hidden>
     </>
   );
-};
-
-NavBar.propTypes = {
-  onMobileClose: PropTypes.func,
-  openMobile: PropTypes.bool,
 };
 
 NavBar.defaultProps = {

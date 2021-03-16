@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import {} from "src/components/ServerRequests";
+
 import * as Yup from "yup";
-import { Formik, Form } from "formik";
-import { changePassword } from "src/components/auth/UserAuth";
 
 import {
   Box,
@@ -9,27 +8,39 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Divider,
-  TextField,
   Dialog,
   DialogContent,
   DialogContentText,
+  Divider,
+  TextField,
 } from "@material-ui/core";
+import { Form, Formik } from "formik";
+import React, { useLayoutEffect, useState } from "react";
+import { changePassword, getUserData } from "src/components/ServerRequests";
 
 const Password = () => {
-  const [open, setOpen] = React.useState(false);
-  const [wrongPassword, setWrongPassword] = React.useState(false);
-  const handleSubmit = (values, actions) => {
-    changePassword(values.currentPassword, values.password).then(
-      (authResponse) => {
-        if (authResponse == "Success") {
-          setOpen(true);
-          actions.resetForm({});
-        } else {
-          setWrongPassword(true);
-        }
+  const [open, setOpen] = useState(false);
+  const [wrongPassword, setWrongPassword] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [googleAccount, setGoogleAccount] = useState(false);
+  useLayoutEffect(() => {
+    getUserData().then((response) => {
+      if (response.data.user.googleId) {
+        setGoogleAccount(true);
       }
-    );
+    });
+    setButtonDisabled(true);
+  }, []);
+
+  const handleSubmit = (values, actions) => {
+    changePassword(values.currentPassword, values.password).then((response) => {
+      if (response.data.message === "passwordChanged") {
+        setOpen(true);
+        actions.resetForm({});
+      } else {
+        setWrongPassword(true);
+      }
+    });
   };
 
   return (
@@ -51,7 +62,7 @@ const Password = () => {
             .max(255)
             .required("Password is required")
             .matches(
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
               "Password must contain an uppercase letter, a number, and a symbol"
             )
             .min(8, "Password must be at least 8 characters"),
@@ -86,10 +97,15 @@ const Password = () => {
                 margin="normal"
                 name="currentPassword"
                 onBlur={handleBlur}
-                onChange={(e) => { handleChange(e); setWrongPassword(false) }}
+                onChange={(e) => {
+                  handleChange(e);
+                  setWrongPassword(false);
+                  setButtonDisabled(false);
+                }}
                 type="password"
                 value={values.currentPassword}
                 variant="outlined"
+                disabled={googleAccount}
               />
               <TextField
                 error={Boolean(touched.password && errors.password)}
@@ -98,11 +114,14 @@ const Password = () => {
                 helperText={touched.password && errors.password}
                 margin="normal"
                 name="password"
-                onBlur={handleBlur}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  setButtonDisabled(false);
+                }}
                 type="password"
                 value={values.password}
                 variant="outlined"
+                disabled={googleAccount}
               />
               <TextField
                 error={Boolean(
@@ -114,10 +133,14 @@ const Password = () => {
                 margin="normal"
                 name="confirmPassword"
                 onBlur={handleBlur}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  setButtonDisabled(false);
+                }}
                 type="password"
                 value={values.confirmPassword}
                 variant="outlined"
+                disabled={googleAccount}
               />
             </CardContent>
             <Divider />
@@ -126,6 +149,7 @@ const Password = () => {
                 color="primary"
                 variant="contained"
                 type="submit"
+                disabled={buttonDisabled || googleAccount}
               >
                 Update
               </Button>
@@ -138,11 +162,9 @@ const Password = () => {
         onClose={() => {
           setOpen(false);
         }}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
       >
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText>
             Your password has successfully been changed.
           </DialogContentText>
         </DialogContent>

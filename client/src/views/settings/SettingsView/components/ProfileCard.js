@@ -1,22 +1,20 @@
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
-  Typography,
-  Divider,
-  Button,
   Dialog,
   DialogContent,
   DialogContentText,
+  Typography,
   makeStyles,
 } from "@material-ui/core";
 import React, { useState } from "react";
+import { deleteAccount, getUserData } from "src/components/ServerRequests";
 
-import { getUserCredentials } from "src/components/auth/UserAuth";
-import PropTypes from "prop-types";
-import clsx from "clsx";
 import { red } from "@material-ui/core/colors";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
   avatar: {
@@ -30,38 +28,72 @@ const useStyles = makeStyles(() => ({
 
 const ProfileCard = ({ className, ...rest }) => {
   const classes = useStyles();
+  const navigate = useNavigate();
+
   const [imageURL, setImageURL] = useState("");
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [deleteStatus, setDeleteStatus] = useState(false);
+  const [userRank, setUserRank] = useState("");
 
   const [userName, setUserName] = useState(() => {
-    getUserCredentials().then((authResponse) => {
-      if (authResponse.data.loggedIn) {
+    getUserData().then((authResponse) => {
+      if (authResponse.data.message === "loggedIn") {
         setUserName(
-          authResponse.data.user[0].firstname +
+          authResponse.data.user.firstname +
             " " +
-            authResponse.data.user[0].lastname
+            authResponse.data.user.lastname
         );
-        if (authResponse.data.user[0].imageUrl) {
-          setImageURL(authResponse.data.user[0].imageUrl);
+        if (authResponse.data.user.imageUrl) {
+          setImageURL(authResponse.data.user.imageUrl);
         }
       }
     });
+    getUserData().then((res) => {
+      if (res.data.favourites) {
+        const userFavouritesLength = res.data.favourites.length;
+        setUserRank(
+          userFavouritesLength < 5
+            ? "Recipedia Beginner"
+            : userFavouritesLength < 10
+            ? "Food Connoisseur"
+            : userFavouritesLength < 15
+            ? "Sustenance Master"
+            : "Nourishment God"
+        );
+      } else {
+        setUserRank("Recipedia Beginner");
+      }
+    });
   });
+
+  const deleteAcc = () => {
+    deleteAccount().then((response) => {
+      if (response === "accountDeleted") {
+        setOpen(false);
+        setDeleteStatus(true);
+      }
+    });
+  };
 
   return (
     <Card {...rest}>
       <CardContent>
         <Box alignItems="center" display="flex" flexDirection="column">
-          <Box pb={2}>
+          <Box pb={3}>
             <Avatar className={classes.avatar} src={imageURL} />
           </Box>
-          <Typography color="textPrimary" gutterBottom variant="h3">
-            {userName}
-          </Typography>
-          <Typography color="textSecondary" variant="body1">
-            {""}
-          </Typography>
-          <Box pt={2}>
+          <Box pb={1}>
+            <Typography color="textPrimary" gutterBottom variant="h3">
+              {userName}
+            </Typography>
+          </Box>
+          <Box pb={2}>
+            <Typography color="textSecondary" gutterBottom variant="body1">
+              {userRank}
+            </Typography>
+          </Box>
+
+          <Box>
             <Button
               color="secondary"
               variant="text"
@@ -80,24 +112,41 @@ const ProfileCard = ({ className, ...rest }) => {
         onClose={() => {
           setOpen(false);
         }}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
       >
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText>
             Are you sure you would like to delete your account? This will delete
             all your data from our databases, including your favourites and
-            dietary preferences.
+            dietary preferences, allergens and health data. This action is
+            irreversible.
             <Box
               pt={2}
               alignItems="center"
               display="flex"
               flexDirection="column"
             >
+              <Box
+                pb={2}
+                pt={2}
+                alignItems="center"
+                display="flex"
+                flexDirection="column"
+              >
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  No, take me back.
+                </Button>
+              </Box>
               <Button
                 color="secondary"
                 variant="text"
                 className={classes.button}
+                onClick={deleteAcc}
               >
                 Yes, I'm sure!
               </Button>
@@ -105,12 +154,20 @@ const ProfileCard = ({ className, ...rest }) => {
           </DialogContentText>
         </DialogContent>
       </Dialog>
+      <Dialog
+        open={deleteStatus}
+        onClose={() => {
+          navigate("/");
+        }}
+      >
+        <DialogContent>
+          <DialogContentText>
+            Your account has been deleted. We're sorry to see you go!
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
-};
-
-ProfileCard.propTypes = {
-  className: PropTypes.string,
 };
 
 export default ProfileCard;

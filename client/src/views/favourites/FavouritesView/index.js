@@ -1,10 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { Box, Container, makeStyles, Card, Typography, CardContent } from "@material-ui/core";
+import {} from "src/components/ServerRequests";
+
+import {
+  Box,
+  Card,
+  CardContent,
+  Container,
+  Grid,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { getRecipesByID, getUserData } from "src/components/ServerRequests";
+
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Page from "src/components/theme/page";
-// import { getExampleRecipes } from "src/api/mockAPI";
+import RecipeDialog from "src/components/recipe/RecipeDialog";
+import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
-import FavRecipeDialog from "src/views/favourites/FavouritesView/components/FavRecipeDialog";
-import FavRecipeList from "src/views/favourites/FavouritesView/components/FavRecipeList";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,61 +30,138 @@ const useStyles = makeStyles((theme) => ({
 
 const Favourites = () => {
   const classes = useStyles();
-  const [recipes, setRecipes] = useState([]);
-  const [selectedRecipeId, setSelectedRecipeId] = useState(0);
-  const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
-  const [dlgOpen, setDlgOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const onRecipeClick = (id) => {
-    loadRecipeById(id);
-    setSelectedRecipeId(id);
+  const [loading, setLoading] = useState(false);
+  const [selectedRecipeID, setSelectedRecipeID] = useState(0);
+  const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
+  const [recipeList, setRecipeList] = useState([]);
+  const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
+  const [hasFavourites, setHasFavourites] = useState(true);
+
+  const handleRecipeClick = (id) => {
+    navigate(`/app/favourites/${id}`);
+    showRecipeByID(id);
+    setSelectedRecipeID(id);
+    window.addEventListener("popstate", () => {
+      handleRecipeClose();
+    });
+  };
+  const handleRecipeClose = () => {
+    setRecipeDialogOpen(false);
+    setTimeout(function () {
+      document.getElementById("header").scrollIntoView();
+    }, 300);
+    navigate(`/app/favourites`);
   };
 
-  // USED FOR TESTING
-  // useEffect(() => {
-  //   setRecipes(getExampleRecipes());
-  // }, []);
+  const loadMultipleRecipes = (idsArray) => {
+    setLoading(true);
+    getRecipesByID(idsArray ? idsArray.join(",") : null)
+      .then((response) => {
+        console.log(response);
+        if (response.data.code === 402) {
+          // set popup for api
+        } else if (response.data) {
+          setRecipeList([...recipeList, ...response.data]);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const showRecipeByID = (id) => {
+    const clickedRecipe = recipeList.find((recipe) => recipe.id === id);
+    setSelectedRecipeInfo(clickedRecipe);
+    setRecipeDialogOpen(true);
+  };
+
+  useLayoutEffect(() => {
+    getUserData().then((response) => {
+      if (response.data.favourites) {
+        if (response.data.favourites.length > 0) {
+          loadMultipleRecipes(response.data.favourites);
+        } else {
+          setHasFavourites(false);
+        }
+      } else {
+        setHasFavourites(false);
+      }
+    });
+  }, []);
+  useEffect(() => {
+    navigate(`/app/favourites`);
+  }, []);
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia | Favourites">
-        <Container maxWidth="lg">
-          <Card variant="outlined">
-            <CardContent>
-              <Box p={1}>
-                <Typography gutterBottom variant="h1">
-                  Your favourites.
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  You can view and manage your favourite recipes right here.
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Container>
-        <Container maxWidth={false}>
-          <Box mt={3}>
-            <FavRecipeList recipes={recipes} onRecipeClick={onRecipeClick} />
-          </Box>
-        </Container>
-        <FavRecipeDialog
-          open={dlgOpen}
-          handleClose={() => setDlgOpen(false)}
-          recipeId={selectedRecipeId}
-          recipeInfo={selectedRecipeInfo}
-        />
+      <Page className={classes.root} title="Favourites | Recipedia ">
+        <Box m={2}>
+          <Container maxWidth="false">
+            <Card>
+              <CardContent>
+                <Box p={1}>
+                  <Typography gutterBottom variant="h1">
+                    Your favourites.
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    You can view and manage your favourite recipes right here.
+                  </Typography>
+                </Box>
+              </CardContent>
+            </Card>
+          </Container>
+          <Container maxWidth={false}>
+            <Box mt={3}>
+              {hasFavourites ? (
+                <>
+                  <RecipeList
+                    recipes={recipeList}
+                    onRecipeClick={handleRecipeClick}
+                    loading={loading}
+                  />
+                </>
+              ) : (
+                <>
+                  <Box mt={6}>
+                    <Typography
+                      color="textSecondary"
+                      align="center"
+                      variant="h3"
+                    >
+                      You haven't favourited any recipes yet!
+                    </Typography>
+                  </Box>
+                </>
+              )}
+              <Grid
+                item
+                xs={12}
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                {loading ? (
+                  <Box mt={6}>
+                    <CircularProgress />
+                  </Box>
+                ) : null}
+              </Grid>
+            </Box>
+          </Container>
+          <RecipeDialog
+            open={recipeDialogOpen}
+            handleClose={handleRecipeClose}
+            recipeId={selectedRecipeID}
+            recipeInfo={selectedRecipeInfo}
+          />
+        </Box>
       </Page>
     </Scrollbars>
   );
-
-
-  function loadRecipeById(id) {
-    const clickedRecipe = recipes.find((recipe) => recipe.id === id);
-    console.log(clickedRecipe);
-    setSelectedRecipeInfo(clickedRecipe);
-    setDlgOpen(true);
-  }
-
 };
 
 export default Favourites;

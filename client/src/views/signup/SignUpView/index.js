@@ -1,29 +1,34 @@
-import React, { useState, useRef } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { Formik, Form } from "formik";
-import { userSignUp, googleSignUp } from "src/components/auth/UserAuth";
 
 import {
   Box,
   Button,
   Checkbox,
   Container,
-  FormHelperText,
-  Grid,
-  Link,
-  TextField,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
+  FormHelperText,
+  Grid,
+  IconButton,
+  InputAdornment,
+  LinearProgress,
+  Link,
+  SvgIcon,
+  TextField,
   Typography,
   makeStyles,
-  SvgIcon,
 } from "@material-ui/core";
-import Page from "src/components/theme/page";
+import { Form, Formik } from "formik";
+import React, { useState } from "react";
+import { googleSignUp, signUp } from "src/components/ServerRequests";
+
 import GoogleLogin from "react-google-login";
+import Page from "src/components/theme/page";
+import { Link as RouterLink } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,56 +42,52 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     margin: "auto",
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3),
+  },
+  red: {
+    backgroundColor: "#ff4040",
+  },
+  fadedRed: {
+    backgroundColor: "#ffabab",
+  },
+  green: {
+    backgroundColor: "#52e36e",
+  },
+  fadedGreen: {
+    backgroundColor: "#99ffad",
   },
 }));
 
 const SignUpView = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
-  const [googleRegOpen, setGoogleRegOpen] = React.useState(false);
-  const googleref = useRef(null);
+  
+  const [signUpStatus, setSignUpStatus] = useState();
+  const [googleSignUpPopup, setGoogleSignUpPopup] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const [signupError, setSignUpError] = useState("");
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
-    userSignUp(
+    signUp(
       values.firstName,
       values.lastName,
       values.email,
       values.password
-    ).then((authResponse) => {
-      if (authResponse == "Success") {
-        navigate("/app/home");
-      } else {
-        setOpen(true);
-      }
+    ).then((response) => {
+      setSignUpStatus(response.data.message);
     });
   };
 
-  const responseGoogle = (response) => {
-    setGoogleRegOpen(true);
-  };
-
   const handleGoogleSubmit = (response) => {
-    googleSignUp(
-      response.tokenId,
-      response.profileObj,
-      googleref.current.values.gpassword
-    ).then((authResponse) => {
-      if (authResponse == "Success") {
-        navigate("/app/home");
-      } else {
-        setGoogleRegOpen(false);
-        setOpen(true);
-      }
+    googleSignUp(response.tokenId, response.profileObj).then((response) => {
+      response.data.message.code
+        ? setSignUpStatus(response.data.message.code)
+        : setSignUpStatus(response.data.message);
+      console.log();
     });
   };
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia | Sign Up">
+      <Page className={classes.root} title="Sign Up | Recipedia">
         <Box
           display="flex"
           flexDirection="column"
@@ -117,7 +118,7 @@ const SignUpView = () => {
                   .max(255)
                   .required("Password is required")
                   .matches(
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
                     "Password must contain an uppercase letter, a number, and a symbol"
                   )
                   .min(8, "Password must be at least 8 characters"),
@@ -138,6 +139,7 @@ const SignUpView = () => {
                 handleChange,
                 isSubmitting,
                 touched,
+                isValid,
                 values,
               }) => (
                 <Form>
@@ -157,7 +159,9 @@ const SignUpView = () => {
                         }
                         size="large"
                         variant="contained"
-                        onClick={responseGoogle}
+                        onClick={() => {
+                          setGoogleSignUpPopup(true);
+                        }}
                       >
                         Sign up with Google
                       </Button>
@@ -218,16 +222,72 @@ const SignUpView = () => {
                   <TextField
                     error={Boolean(touched.password && errors.password)}
                     fullWidth
-                    helperText={touched.password && errors.password}
+                    helperText={
+                      isValid && !touched.password
+                        ? "Use 8 or more characters with a mix of letters, numbers & symbols"
+                        : touched.password && errors.password
+                    }
                     label="Password"
                     margin="normal"
                     name="password"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    type="password"
                     value={values.password}
                     variant="outlined"
+                    type={showPassword ? "text" : "password"}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => {
+                              setShowPassword(!showPassword);
+                            }}
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
+                  {values.password ? (
+                    <Box pb={1}>
+                      <LinearProgress
+                        variant="determinate"
+                        classes={
+                          Boolean(errors.password)
+                            ? {
+                                colorPrimary: classes.fadedRed,
+                                barColorPrimary: classes.red,
+                              }
+                            : {
+                                colorPrimary: classes.fadedGreen,
+                                barColorPrimary: classes.green,
+                              }
+                        }
+                        value={
+                          values.password.match(
+                            /^((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]))/
+                          ) && values.password.length > 12
+                            ? 100
+                            : values.password.match(
+                                /^((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])|(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])|(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])|(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]))/
+                              ) || values.password.length > 8
+                            ? 75
+                            : values.password.match(
+                                /^((?=.*[a-z])(?=.*[A-Z])|(?=.*[a-z])(?=.*[0-9])|(?=.*[A-Z])(?=.*[0-9]))/
+                              ) || values.password.length > 8
+                            ? 50
+                            : (values.password.match(
+                                /^((?=.*[a-z])(?=.*[A-Z]))/
+                              ) &&
+                                values.password.length > 4) ||
+                              values.password.length > 6
+                            ? 25
+                            : 0
+                        }
+                      />
+                    </Box>
+                  ) : null}
                   <TextField
                     error={Boolean(
                       touched.confirmPassword && errors.confirmPassword
@@ -288,159 +348,138 @@ const SignUpView = () => {
                 </Form>
               )}
             </Formik>
-            <Dialog
-              open={open}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  There is already an account linked to this email address!
-                  Please log in to use Recipedia.
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions className={classes.loginbutton}>
-                <Button
-                  onClick={() => {
-                    navigate("/login");
-                  }}
-                  color="primary"
-                  variant="contained"
-                >
-                  Log in
-                </Button>
-              </DialogActions>
-            </Dialog>
-            <Dialog
-              open={googleRegOpen}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth
-            >
-              <Formik
-                innerRef={googleref}
-                initialValues={{
-                  gpassword: "",
-                  gconfirmPassword: "",
-                  gpolicy: false,
-                }}
-                validationSchema={Yup.object().shape({
-                  gpassword: Yup.string()
-                    .max(255)
-                    .required("Password is required")
-                    .matches(
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
-                      "Password must contain an uppercase letter, a number, and a symbol"
-                    )
-                    .min(8, "Password must be at least 8 characters"),
-                  gconfirmPassword: Yup.string().oneOf(
-                    [Yup.ref("gpassword"), null],
-                    "Passwords must match"
-                  ),
-                  gpolicy: Yup.boolean().oneOf(
-                    [true],
-                    "Please accept the Terms and Conditions"
-                  ),
-                })}
-              >
-                {({
-                  errors,
-                  handleBlur,
-                  handleChange,
-                  touched,
-                  values,
-                  isValid,
-                  dirty,
-                }) => (
-                  <Form>
-                    <DialogContent>
-                      <DialogContentText id="alert-dialog-description">
+          </Container>
+        </Box>
+        <Dialog
+          open={googleSignUpPopup}
+          onClose={() => {
+            setGoogleSignUpPopup(false);
+          }}
+        >
+          <Formik
+            initialValues={{
+              gpolicy: false,
+            }}
+            validationSchema={Yup.object().shape({
+              gpolicy: Yup.boolean().oneOf(
+                [true],
+                "Please accept the Terms and Conditions"
+              ),
+            })}
+          >
+            {({
+              errors,
+              handleBlur,
+              handleChange,
+              touched,
+              values,
+              isValid,
+              dirty,
+            }) => (
+              <Form>
+                <Box p={1}>
+                  <DialogContent>
+                    <DialogContentText>
+                      <Box
+                        alignItems="center"
+                        justifyContent="center"
+                        display="flex"
+                      >
+                        <Checkbox
+                          checked={values.gpolicy}
+                          name="gpolicy"
+                          onChange={handleChange}
+                        />
                         <Typography color="textSecondary" variant="body1">
-                          Please enter a password:
+                          I have read the{" "}
+                          <Link
+                            color="primary"
+                            component={RouterLink}
+                            to="/legal"
+                            underline="always"
+                            variant="h6"
+                          >
+                            Terms and Conditions
+                          </Link>
                         </Typography>
-                        <TextField
-                          error={Boolean(touched.gpassword && errors.gpassword)}
-                          fullWidth
-                          helperText={touched.gpassword && errors.gpassword}
-                          label="Password"
-                          margin="normal"
-                          name="gpassword"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          type="password"
-                          value={values.gpassword}
-                          variant="outlined"
-                        />
-                        <TextField
-                          error={Boolean(
-                            touched.gconfirmPassword && errors.gconfirmPassword
-                          )}
-                          fullWidth
-                          helperText={
-                            touched.gconfirmPassword && errors.gconfirmPassword
-                          }
-                          label="Confirm password"
-                          margin="normal"
-                          name="gconfirmPassword"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          type="password"
-                          value={values.gconfirmPassword}
-                          variant="outlined"
-                        />
-                        <Box alignItems="center" display="flex" ml={-1}>
-                          <Checkbox
-                            checked={values.gpolicy}
-                            name="gpolicy"
-                            onChange={handleChange}
-                          />
-                          <Typography color="textSecondary" variant="body1">
-                            I have read the{" "}
-                            <Link
-                              color="primary"
-                              component={RouterLink}
-                              to="/legal"
-                              underline="always"
-                              variant="h6"
-                            >
-                              Terms and Conditions
-                            </Link>
-                          </Typography>
-                        </Box>
+                      </Box>
+                      <Box
+                        alignItems="center"
+                        justifyContent="center"
+                        display="flex"
+                      >
                         {Boolean(touched.gpolicy && errors.gpolicy) && (
                           <FormHelperText error>
                             {errors.gpolicy}
                           </FormHelperText>
                         )}
-                      </DialogContentText>
-                    </DialogContent>
-                    <DialogActions className={classes.loginbutton}>
-                      <GoogleLogin
-                        clientId="265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
-                        buttonText="Log in with Google"
-                        onSuccess={handleGoogleSubmit}
-                        onFailure={handleGoogleSubmit}
-                        render={(renderProps) => (
-                          <Button
-                            color="primary"
-                            variant="contained"
-                            disabled={renderProps.disabled}
-                            onClick={
-                              isValid && dirty ? renderProps.onClick : null
-                            }
-                            type="submit"
-                          >
-                            Submit
-                          </Button>
-                        )}
-                      />
-                    </DialogActions>
-                  </Form>
-                )}
-              </Formik>
-            </Dialog>
-          </Container>
-        </Box>
+                      </Box>
+                    </DialogContentText>
+                  </DialogContent>
+                  <Box
+                    alignItems="center"
+                    justifyContent="center"
+                    display="flex"
+                    pb={2}
+                  >
+                    <GoogleLogin
+                      clientId="265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
+                      buttonText="Log in with Google"
+                      onSuccess={handleGoogleSubmit}
+                      onFailure={handleGoogleSubmit}
+                      render={(renderProps) => (
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          disabled={renderProps.disabled}
+                          onClick={
+                            isValid && dirty ? renderProps.onClick : null
+                          }
+                          type="submit"
+                        >
+                          Submit
+                        </Button>
+                      )}
+                    />
+                  </Box>
+                </Box>
+              </Form>
+            )}
+          </Formik>
+        </Dialog>
+        <Dialog open={signUpStatus}>
+          <Box p={1}>
+            <DialogContent>
+              <DialogContentText>
+                <Box alignItems="center" justifyContent="center" display="flex">
+                  {signUpStatus === "signUpSuccess"
+                    ? "Account created! Please verify your email before logging in. You can close this tab now."
+                    : signUpStatus === "ER_DUP_ENTRY"
+                    ? "There is already an account linked to this email address! Please log in to use Recipedia."
+                    : "Unkown error."}
+                </Box>
+              </DialogContentText>
+            </DialogContent>
+            {signUpStatus === "ER_DUP_ENTRY" ? (
+              <Box
+                alignItems="center"
+                justifyContent="center"
+                display="flex"
+                pb={2}
+              >
+                <Button
+                  color="primary"
+                  variant="contained"
+                  size="large"
+                  component={RouterLink}
+                  to="/login"
+                >
+                  Log in
+                </Button>
+              </Box>
+            ) : null}
+          </Box>
+        </Dialog>
       </Page>
     </Scrollbars>
   );

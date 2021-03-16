@@ -1,10 +1,19 @@
-import React from "react";
-import { Box, Container, Grid, Card, CardContent, Typography, makeStyles } from "@material-ui/core";
+import {
+  Box,
+  Card,
+  CardContent,
+  Container,
+  Grid,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
+
 import Page from "src/components/theme/page";
-import Preferences from "src/views/settings/SettingsView/components/Preferences";
 import Password from "src/views/settings/SettingsView/components/Password";
+import Preferences from "src/views/settings/SettingsView/components/Preferences";
 import ProfileCard from "src/views/settings/SettingsView/components/ProfileCard";
 import ProfileDetails from "src/views/settings/SettingsView/components/ProfileDetails";
+import React from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,38 +30,45 @@ const SettingsView = () => {
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia | Settings">
-        <Container maxWidth="lg">
-          <Card variant="outlined">
-            <CardContent>
-              <Box p={1}>
-                <Typography gutterBottom variant="h1">
-                  Your settings.
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  Adjust your personal details, dietary preferences, allergens and health data on this page.
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Container>
-        <Container maxWidth="lg">
-          <Box mb={3} mt={3}>
-            <Grid container spacing={3}>
-              <Grid item lg={4} md={6} xs={12}>
-                <ProfileCard />
-              </Grid>
+      <Page className={classes.root} title="Settings | Recipedia">
+        <Box m={2}>
+          <Container maxWidth="xl">
+            <Card>
+              <CardContent>
+                <Box p={1}>
+                  <Typography gutterBottom variant="h1">
+                    Your settings.
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    Adjust your personal details, dietary preferences, allergens
+                    and health data on this page.
+                  </Typography>
+                </Box>
+              </CardContent>
+            </Card>
+          </Container>
+          <Container maxWidth="xl">
+            <Box mb={3} mt={3}>
+              <Grid container spacing={3}>
+                <Grid item lg={4} md={6} xs={12}>
+                  <ProfileCard />
+                </Grid>
 
-              <Grid item lg={8} md={6} xs={12}>
-                <ProfileDetails />
+                <Grid item lg={8} md={6} xs={12}>
+                  <ProfileDetails />
+                </Grid>
               </Grid>
-            </Grid>
-          </Box>
-          <Preferences />
-          <Box mt={3}>
-            <Password />
-          </Box>
-        </Container>
+            </Box>
+            <Preferences />
+            <Box mt={3}>
+              <Password />
+            </Box>
+          </Container>
+        </Box>
       </Page>
     </Scrollbars>
   );

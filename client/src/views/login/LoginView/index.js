@@ -4,12 +4,14 @@ import {
   Box,
   Button,
   Container,
-  Grid,
-  Link,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Link,
   SvgIcon,
   TextField,
   Typography,
@@ -18,10 +20,13 @@ import {
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { userLogin, googleLogin } from "src/components/auth/UserAuth";
-import Page from "src/components/theme/page";
+import { googleLogin, login } from "src/components/ServerRequests";
+
 import GoogleLogin from "react-google-login";
+import Page from "src/components/theme/page";
 import { Scrollbars } from "react-custom-scrollbars";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,45 +35,38 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
-  signupbutton: {
-    display: "flex",
-    flexDirection: "column",
-    margin: "auto",
-    paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3),
-  },
 }));
 
 const LoginView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
-  const [loginError, setLoginError] = useState("");
 
-  const responseGoogle = (response) => {
-    googleLogin(response.tokenId, response.profileObj).then((authResponse) => {
-      if (authResponse == "Success") {
+  const [loginStatus, setLoginStatus] = useState();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleGoogleLogin = (response) => {
+    googleLogin(response.profileObj).then((response) => {
+      if (response.data.message === "loggedIn") {
         navigate("/app/home");
       } else {
-        setOpen(true);
+        setLoginStatus(response.data.message);
       }
     });
   };
 
-  const handleSubmit = (values, actions) => {
-    actions.setSubmitting(false);
-    userLogin(values.email, values.password).then((authResponse) => {
-      if (authResponse == "Success") {
+  const handleLogin = (values) => {
+    login(values.email, values.password).then((response) => {
+      if (response.data.message === "loggedIn") {
         navigate("/app/home");
       } else {
-        setLoginError(authResponse);
+        setLoginStatus(response.data.message);
       }
     });
   };
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia | Log in">
+      <Page className={classes.root} title="Log in | Recipedia">
         <Box
           display="flex"
           flexDirection="column"
@@ -90,7 +88,7 @@ const LoginView = () => {
                   .max(255)
                   .required("Password is required"),
               })}
-              onSubmit={handleSubmit}
+              onSubmit={handleLogin}
             >
               {({
                 errors,
@@ -111,8 +109,8 @@ const LoginView = () => {
                       <GoogleLogin
                         clientId="265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
                         buttonText="Log in with Google"
-                        onSuccess={responseGoogle}
-                        onFailure={responseGoogle}
+                        onSuccess={handleGoogleLogin}
+                        onFailure={handleGoogleLogin}
                         render={(renderProps) => (
                           <Button
                             fullWidth
@@ -143,12 +141,17 @@ const LoginView = () => {
                   </Box>
                   <TextField
                     error={
-                      loginError == "noEmail" || loginError == "wrongPassword"
+                      loginStatus === "noAccount" ||
+                      loginStatus === "wrongPassword"
                         ? Boolean(true)
                         : Boolean(touched.password && errors.password)
                     }
                     fullWidth
-                    helperText={touched.email && errors.email}
+                    helperText={
+                      loginStatus === "noAccount"
+                        ? "Please sign up before logging in!"
+                        : touched.email && errors.email
+                    }
                     label="Email Address"
                     margin="normal"
                     name="email"
@@ -157,33 +160,40 @@ const LoginView = () => {
                     type="email"
                     value={values.email}
                     variant="outlined"
-                    helperText={
-                      loginError == "noEmail"
-                        ? "Please sign up before logging in!"
-                        : ""
-                    }
                   />
                   <TextField
                     error={
-                      loginError == "wrongPassword"
+                      loginStatus === "wrongPassword"
                         ? Boolean(true)
                         : Boolean(touched.password && errors.password)
                     }
                     fullWidth
-                    helperText={touched.password && errors.password}
+                    helperText={
+                      loginStatus === "wrongPassword"
+                        ? "Incorrect email and/or password"
+                        : touched.password && errors.password
+                    }
                     label="Password"
                     margin="normal"
                     name="password"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    type="password"
                     value={values.password}
                     variant="outlined"
-                    helperText={
-                      loginError == "wrongPassword"
-                        ? "Incorrect email and/or password"
-                        : ""
-                    }
+                    type={showPassword ? "text" : "password"}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => {
+                              setShowPassword(!showPassword);
+                            }}
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                   <Box my={2}>
                     <Button
@@ -206,30 +216,67 @@ const LoginView = () => {
                 </Form>
               )}
             </Formik>
-            <Dialog
-              open={open}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  You must sign up with Google before logging in!
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions className={classes.signupbutton}>
-                <Button
-                  onClick={() => {
-                    navigate("/signup");
-                  }}
-                  color="primary"
-                  variant="contained"
-                >
-                  Sign up
-                </Button>
-              </DialogActions>
-            </Dialog>
           </Container>
         </Box>
+        {loginStatus ? (
+          <Dialog
+            open={loginStatus !== "noAccount" && loginStatus}
+            onClose={() => {
+              setLoginStatus();
+            }}
+          >
+            <Box p={1}>
+              <DialogContent>
+                <DialogContentText>
+                  <Box
+                    alignItems="center"
+                    justifyContent="center"
+                    display="flex"
+                  >
+                    {loginStatus === "wrongAccountTypeNotGoogle"
+                      ? "Please log in with your email and password!"
+                      : loginStatus === "wrongAccountTypeGoogle"
+                      ? "Please log in with your Google account!"
+                      : loginStatus === "accountNotVerified"
+                      ? "Please verify your email before logging in!"
+                      : "Unkown error."}
+                  </Box>
+                </DialogContentText>
+              </DialogContent>
+              {loginStatus === "accountNotVerified" ||
+              loginStatus === "noAccount" ? (
+                <Box
+                  alignItems="center"
+                  justifyContent="center"
+                  display="flex"
+                  pb={2}
+                >
+                  {loginStatus === "noAccount" ? (
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      size="large"
+                      component={RouterLink}
+                      to="/signup"
+                    >
+                      Sign Up
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        navigate("/verify");
+                      }}
+                      color="primary"
+                      variant="contained"
+                    >
+                      Verify
+                    </Button>
+                  )}
+                </Box>
+              ) : null}
+            </Box>
+          </Dialog>
+        ) : null}
       </Page>
     </Scrollbars>
   );

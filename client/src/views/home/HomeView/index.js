@@ -1,18 +1,23 @@
-import React, { useState, useEffect } from "react";
 import {
   Box,
-  Container,
-  makeStyles,
+  Button,
   Card,
   CardContent,
+  Container,
+  Grid,
   Typography,
+  makeStyles,
 } from "@material-ui/core";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { getRecipesComplex, getUserData } from "src/components/ServerRequests";
+
+import CircularProgress from "@material-ui/core/CircularProgress";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Page from "src/components/theme/page";
-// import { getExampleRecipes } from "src/api/mockAPI";
-import { getRandomRecipes } from "src/components/api/SpoonacularAPI";
-import RecipeInfoDialog from "src/views/home/HomeView/components/RecipeInfoDialog";
-import RecipeCardList from "src/views/home/HomeView/components/RecipeCardList";
+import RecipeDialog from "src/components/recipe/RecipeDialog";
+import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,93 +26,166 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
+  loadMoreGridBtn: {
+    display: "flex",
+    justifyContent: "center",
+    paddingTop: "15px",
+  },
+  placeholderText: {
+    paddingTop: theme.spacing(4),
+  },
 }));
 
 const Home = () => {
+  const navigate = useNavigate();
   const classes = useStyles();
-  const [recipes, setRecipes] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [selectedRecipeId, setSelectedRecipeId] = useState(0);
-  const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
-  const [dlgOpen, setDlgOpen] = useState(false);
 
-  const onRecipeClick = (id) => {
-    loadRecipeById(id);
-    setSelectedRecipeId(id);
+  const [loading, setLoading] = useState(false);
+  const [selectedRecipeID, setSelectedRecipeID] = useState(0);
+  const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
+  const [recipeList, setRecipeList] = useState([]);
+  const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
+  const [recipeOffset, setRecipeOffset] = useState(0);
+  const [allergens, setAllergens] = useState([]);
+  const [diet, setDiet] = useState("");
+  const [noResultsFound, setNoResultsFound] = useState(false);
+
+  const handleRecipeClick = (id) => {
+    navigate(`/app/home/${id}`);
+    showRecipeByID(id);
+    setSelectedRecipeID(id);
+    window.addEventListener("popstate", () => {
+      handleRecipeClose();
+    });
+  };
+  const loadRecipes = (localAllergens = allergens, localDiet = diet) => {
+    setLoading(true);
+    getRecipesComplex(
+      localAllergens ? localAllergens.join(",") : null,
+      localDiet,
+      null,
+      null,
+      recipeOffset,
+      null,
+      true
+    )
+      .then((response) => {
+        if (response.data.code === 402) {
+          // set popup for api
+        } else if (!response.data.results) {
+          setNoResultsFound(true);
+        } else {
+          setRecipeList([...recipeList, ...response.data.results]);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-  // USED FOR TESTING
-  // useEffect(() => {
-  //   setRecipes(getExampleRecipes());
-  // }, []);
+  const showRecipeByID = (id) => {
+    setSelectedRecipeInfo(recipeList.find((recipe) => recipe.id === id));
+    setRecipeDialogOpen(true);
+  };
+
+  const handleRecipeClose = () => {
+    setRecipeDialogOpen(false);
+    setTimeout(() => {
+      document.getElementById("header").scrollIntoView();
+    }, 300);
+    navigate(`/app/home`);
+  };
+  useLayoutEffect(() => {
+    getUserData().then((response) => {
+      setAllergens(response.data.allergens);
+      setDiet(response.data.diet);
+      loadRecipes(response.data.allergens, response.data.diet);
+    });
+  }, []);
 
   useEffect(() => {
-    loadRandomRecipes();
+    navigate(`/app/home`);
   }, []);
 
   const loadMoreRecipes = () => {
-    loadRandomRecipes();
+    setRecipeOffset(
+      recipeOffset + parseInt(process.env.REACT_APP_SEARCH_OFFSET)
+    );
+    loadRecipes();
   };
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia | Home">
-        <Container maxWidth="lg">
-          <Card variant="outlined">
-            <CardContent>
-              <Box p={1}>
-                <Typography gutterBottom variant="h1">
-                  Welcome home.
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  View our delightful assortment of recipes, curated just for
-                  you.
-                </Typography>
+      <Page className={classes.root} title="Home | Recipedia">
+        <Box m={2}>
+          <Container maxWidth="false">
+            <Card>
+              <CardContent>
+                <Box p={1}>
+                  <Typography gutterBottom variant="h1">
+                    Welcome home.
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    View our delightful assortment of recipes, curated just for
+                    you.
+                  </Typography>
+                </Box>
+              </CardContent>
+            </Card>
+          </Container>
+          <Container maxWidth={false}>
+            <Box mt={3}>
+              {noResultsFound ? (
+                <>
+                  <Box mt={2}>
+                    <Typography
+                      className={classes.placeholderText}
+                      color="textSecondary"
+                      align="center"
+                      variant="h3"
+                    >
+                      We couldn't find any recipes for your dietary preferences.
+                    </Typography>
+                  </Box>
+                </>
+              ) : (
+                <>
+                  <RecipeList
+                    recipes={recipeList}
+                    onRecipeClick={handleRecipeClick}
+                    loading={loading}
+                  />
+                </>
+              )}
+            </Box>
+            <Grid item xs={12} className={classes.loadMoreGridBtn}>
+              <Box mt={3} style={{ display: noResultsFound && "none" }}>
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  <>
+                    <Button color="primary" onClick={loadMoreRecipes}>
+                      <ExpandMoreIcon /> Load more recipes! <ExpandMoreIcon />
+                    </Button>
+                  </>
+                )}
               </Box>
-            </CardContent>
-          </Card>
-        </Container>
-        <Container maxWidth={false}>
-          <Box mt={3}>
-            <RecipeCardList
-              recipes={recipes}
-              onRecipeClick={onRecipeClick}
-              loadMore={loadMoreRecipes}
-              loading={loading}
-            />
-          </Box>
-        </Container>
-        <RecipeInfoDialog
-          open={dlgOpen}
-          handleClose={() => setDlgOpen(false)}
-          recipeId={selectedRecipeId}
-          recipeInfo={selectedRecipeInfo}
-        />
+            </Grid>
+          </Container>
+          <RecipeDialog
+            open={recipeDialogOpen}
+            handleClose={handleRecipeClose}
+            recipeId={selectedRecipeID}
+            recipeInfo={selectedRecipeInfo}
+          />
+        </Box>
       </Page>
     </Scrollbars>
   );
-
-  function loadRandomRecipes() {
-    setLoading(true);
-    getRandomRecipes()
-      .then((res) => {
-        console.log("recipes:", res.data);
-        setRecipes([...recipes, ...res.data.recipes]);
-        // setRecipes(getExampleRecipes());
-        return false;
-      })
-      .catch((error) => console.log(error))
-      .finally(() => {
-        setLoading(false);
-      });
-  }
-
-  function loadRecipeById(id) {
-    const clickedRecipe = recipes.find((recipe) => recipe.id === id);
-    console.log(clickedRecipe);
-    setSelectedRecipeInfo(clickedRecipe);
-    setDlgOpen(true);
-  }
 };
 
 export default Home;
