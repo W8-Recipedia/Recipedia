@@ -9,11 +9,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: 'green',
     [theme.breakpoints.down("md")]: {
       flexDirection: "column",
     },
   },
 }));
+
 export default function () {
   const classes = useStyles();
   const checked = useWindowPosition("header");

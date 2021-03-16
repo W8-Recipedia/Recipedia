@@ -8,6 +8,8 @@ import {
   Toolbar,
   Collapse,
   Typography,
+  Container,
+  Grid
 } from "@material-ui/core";
 import SortIcon from "@material-ui/icons/Sort";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -19,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
+    backgroundColor: 'black',
     // fontFamily: "Nunito",
   },
   appbar: {},
@@ -45,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
   // },
   title: {
     fontSize: 84,
+    flexGrow: 1,
     [theme.breakpoints.up("xs")]: {
       fontSize: 64,
     },
@@ -57,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "4rem",
   },
 }));
+
 export default function Header() {
   const classes = useStyles();
   const [checked, setChecked] = useState(false);
@@ -65,35 +70,6 @@ export default function Header() {
   }, []);
   return (
     <div className={classes.root} id="header">
-      <AppBar className={classes.appbar} elevation={0}>
-        <Toolbar className={classes.appbarWrapper}>
-          <h1 className={classes.appbarTitle}>
-            <span className={classes.colorText}>Recipedia.</span>
-          </h1>
-          <Link to="/login">
-            <Button
-              color="primary"
-              fullWidth
-              variant="contained"
-              size="large"
-              className={classes.buttonText}
-            >
-              Log in
-            </Button>
-          </Link>
-          <Link to="/signup">
-            <Button
-              color="primary"
-              fullWidth
-              variant="contained"
-              size="large"
-              className={classes.buttonText}
-            >
-              Sign Up
-            </Button>
-          </Link>
-        </Toolbar>
-      </AppBar>
 
       <Collapse
         in={checked}
@@ -117,6 +93,36 @@ export default function Header() {
           >
             Recipedia
           </Typography>
+          <Container maxWidth="sm">
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <Link to="/signup">
+                  <Button
+                    color="primary"
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    className={classes.buttonText}
+                  >
+                    Sign Up
+                  </Button>
+                </Link>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Link to="/login">
+                  <Button
+                    color="primary"
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    className={classes.buttonText}
+                  >
+                    Log in
+                  </Button>
+                </Link>
+              </Grid>
+            </Grid>
+          </Container>
           <Scroll to="site-functionality" smooth={true}>
             <IconButton>
               <ExpandMoreIcon className={classes.goDown} />
