@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   title: {
-    flexGrow: 1,
+    flex: 1,
   },
   list: {
     marginBottom: theme.spacing(1),
@@ -101,13 +101,11 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <DialogContent className={classes.dialog}>
         <img
           className={classes.image}
           src={`https://spoonacular.com/recipeImages/${recipeId}-636x393.${recipeInfo.imageType}`}
           alt={recipeInfo.title}
         />
-      </DialogContent>
       <DialogContent>
         <Grid container className={classes.extraInfo}>
           <Grid item>
