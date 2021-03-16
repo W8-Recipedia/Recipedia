@@ -59,32 +59,31 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUpView = () => {
   const classes = useStyles();
-  
+
   const [signUpStatus, setSignUpStatus] = useState();
   const [googleSignUpPopup, setGoogleSignUpPopup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (values, actions) => {
-    actions.setSubmitting(false);
-    signUp(
-      values.firstName,
-      values.lastName,
-      values.email,
-      values.password
-    ).then((response) => {
-      setSignUpStatus(response.data.message);
-    });
-  };
+
 
   const handleGoogleSubmit = (response) => {
     googleSignUp(response.tokenId, response.profileObj).then((response) => {
       response.data.message.code
         ? setSignUpStatus(response.data.message.code)
         : setSignUpStatus(response.data.message);
-      console.log();
     });
   };
 
+   const handleSubmit = (values, actions) => {
+     signUp(
+       values.firstName,
+       values.lastName,
+       values.email,
+       values.password
+     ).then((response) => {
+       setSignUpStatus(response.data.message);
+     });
+   };
   return (
     <Scrollbars>
       <Page className={classes.root} title="Sign Up | Recipedia">
@@ -453,7 +452,7 @@ const SignUpView = () => {
               <DialogContentText>
                 <Box alignItems="center" justifyContent="center" display="flex">
                   {signUpStatus === "signUpSuccess"
-                    ? "Account created! Please verify your email before logging in. You can close this tab now."
+                    ? "Account created! Please verify your email before logging in. You can now close this tab."
                     : signUpStatus === "ER_DUP_ENTRY"
                     ? "There is already an account linked to this email address! Please log in to use Recipedia."
                     : "Unkown error."}

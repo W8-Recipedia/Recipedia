@@ -39,7 +39,6 @@ const VerifyView = () => {
 
   const resendVerification = (values) => {
     resendVerificationEmail(values.email).then((response) => {
-      console.log(response.data.message);
       setEmailStatus(response.data.message);
     });
   };
@@ -97,16 +96,7 @@ const VerifyView = () => {
                         justifyContent="center"
                         display="flex"
                       >
-                        {verificationStatus === "userVerified" ? (
-                          <Button
-                            component={Link}
-                            to={"/login"}
-                            color="primary"
-                            variant="contained"
-                          >
-                            Log in
-                          </Button>
-                        ) : (
+                        {verificationStatus !== "userVerified" ? (
                           <TextField
                             error={Boolean(touched.email && errors.email)}
                             fullWidth
@@ -120,7 +110,7 @@ const VerifyView = () => {
                             value={values.email}
                             variant="outlined"
                           />
-                        )}
+                        ) : null}
                       </Box>
                     </DialogContentText>
                   </DialogContent>
@@ -162,7 +152,7 @@ const VerifyView = () => {
               <DialogContentText>
                 <Box alignItems="center" justifyContent="center" display="flex">
                   {emailStatus === "accountAlreadyVerified"
-                    ? "Please log in to your account!"
+                    ? "Your email is already verified. Please log in to your account!"
                     : emailStatus === "noAccount"
                     ? "Please sign up first!"
                     : emailStatus === "emailSuccess"
