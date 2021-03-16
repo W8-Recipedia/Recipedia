@@ -107,21 +107,23 @@ const LandingView = () => {
                   </Button>
                 </Link>
               </Grid>
-              <Grid item xs={12} md={12}>
-                <Box display="flex" justifyContent="center">
-                  <IconButton>
-                    <ExpandMoreIcon
-                      className={classes.goDown}
-                      onClick={() =>
-                        cardRef.current.scrollIntoView({
-                          behavior: "smooth",
-                          block: "start",
-                        })
-                      }
-                    />
-                  </IconButton>
-                </Box>
-              </Grid>
+              <Hidden only={["xs", "sm", "md"]}>
+                <Grid item xs={12} md={12}>
+                  <Box display="flex" justifyContent="center">
+                    <IconButton>
+                      <ExpandMoreIcon
+                        className={classes.goDown}
+                        onClick={() =>
+                          cardRef.current.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                          })
+                        }
+                      />
+                    </IconButton>
+                  </Box>
+                </Grid>
+              </Hidden>
             </Grid>
           </Container>
         </Box>
