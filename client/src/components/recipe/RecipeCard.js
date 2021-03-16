@@ -18,13 +18,14 @@ import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import IconButton from "@material-ui/core/IconButton";
 import LocalDiningIcon from "@material-ui/icons/LocalDining";
-import MuiAlert from "@material-ui/lab/Alert";
+// import MuiAlert from "@material-ui/lab/Alert";
 import ScheduleIcon from "@material-ui/icons/Schedule";
-import Snackbar from "@material-ui/core/Snackbar";
+import { useSnackbar } from "notistack";
+// import Snackbar from "@material-ui/core/Snackbar";
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+// function Alert(props) {
+//   return <MuiAlert elevation={6} variant="filled" {...props} />;
+// }
 
 function convertTime(num) {
   if (num <= 60) {
@@ -82,7 +83,8 @@ const useStyles = makeStyles((theme) => ({
 const RecipeCard = ({ recipe, ...props }) => {
   const classes = useStyles();
   const [favourited, setFavourited] = useState(false);
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   useLayoutEffect(() => {
     getUserData().then((response) => {
@@ -97,20 +99,29 @@ const RecipeCard = ({ recipe, ...props }) => {
   const handleFavouriteClick = () => {
     if (!favourited) {
       addToFavourites(recipe.id);
+      enqueueSnackbar(`${recipe.title} has been added to favourites.`, {
+        variant: "success",
+        autoHideDuration: 1200,
+      });
     } else {
       removeFromFavourites(recipe.id);
+      enqueueSnackbar(`${recipe.title} has been removed from favourites.`, {
+        variant: "info",
+        autoHideDuration: 1200,
+      });
     }
-    setOpen(false);
+
+    // setOpen(false);
     setFavourited((prevFavourited) => !prevFavourited);
-    setOpen(true);
+    // setOpen(true);
   };
 
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen(false);
-  };
+  // const handleSnackbarClose = (event, reason) => {
+  //   if (reason === "clickaway") {
+  //     return;
+  //   }
+  //   setOpen(false);
+  // };
 
   return (
     <Card className={classes.root} elevation={4}>
@@ -150,8 +161,7 @@ const RecipeCard = ({ recipe, ...props }) => {
               </Typography>
             </Box>
           </Grid>
-          <Box justifyContent="center" alignItems="center">
-          </Box>
+          <Box justifyContent="center" alignItems="center"></Box>
           <Grid item md={6}>
             <Box justifyContent="flex-end" alignItems="center">
               <IconButton disabled>
@@ -175,7 +185,7 @@ const RecipeCard = ({ recipe, ...props }) => {
                 <FavoriteBorderIcon style={{ color: "red" }} />
               )}
             </IconButton>
-            <Snackbar
+            {/* <Snackbar
               open={open}
               autoHideDuration={1200}
               onClose={handleSnackbarClose}
@@ -188,7 +198,7 @@ const RecipeCard = ({ recipe, ...props }) => {
                   ? recipe.title + " has been added to your favourites."
                   : recipe.title + " has been removed from your favourites."}
               </Alert>
-            </Snackbar>
+            </Snackbar> */}
           </Grid>
         </Grid>
       </CardActions>

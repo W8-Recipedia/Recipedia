@@ -15,6 +15,7 @@ import SignUpView from "src/views/signup/SignUpView";
 import Styles from "src/components/theme/styles";
 import Theme from "src/components/theme";
 import { ThemeProvider } from "@material-ui/core";
+import { SnackbarProvider } from "notistack";
 import VerifyView from "src/views/verify/VerifyView";
 
 const App = () => {
@@ -22,43 +23,45 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Styles />
-      {useRoutes([
-        {
-          path: "app",
-          element: (
-            <AccessCheck
-              toggleDarkMode={() => {
-                theme === Theme.light
-                  ? setTheme(Theme.dark)
-                  : setTheme(Theme.light);
-              }}
-            />
-          ),
-          children: [
-            { path: "home/*", element: <HomeView /> },
-            { path: "search/*", element: <SearchView /> },
-            { path: "favourites/*", element: <FavouritesView /> },
-            { path: "settings", element: <SettingsView /> },
-            { path: "faq", element: <FAQView /> },
-            { path: "feedback", element: <FeedbackView /> },
-            { path: "legal", element: <LegalView /> },
-            { path: "", element: <Navigate to="/app/home" /> },
-            { path: "*", element: <Navigate to="/404" /> },
-          ],
-        },
-        {
-          path: "/",
-          children: [
-            { path: "signup", element: <SignUpView /> },
-            { path: "login", element: <LoginCheck /> },
-            { path: "legal", element: <LegalView /> },
-            { path: "verify/*", element: <VerifyView /> },
-            { path: "", element: <LoginCheck /> },
-            { path: "*", element: <NotFoundView /> },
-          ],
-        },
-      ])}
+      <SnackbarProvider maxSnack={2} dense>
+        <Styles />
+        {useRoutes([
+          {
+            path: "app",
+            element: (
+              <AccessCheck
+                toggleDarkMode={() => {
+                  theme === Theme.light
+                    ? setTheme(Theme.dark)
+                    : setTheme(Theme.light);
+                }}
+              />
+            ),
+            children: [
+              { path: "home/*", element: <HomeView /> },
+              { path: "search/*", element: <SearchView /> },
+              { path: "favourites/*", element: <FavouritesView /> },
+              { path: "settings", element: <SettingsView /> },
+              { path: "faq", element: <FAQView /> },
+              { path: "feedback", element: <FeedbackView /> },
+              { path: "legal", element: <LegalView /> },
+              { path: "", element: <Navigate to="/app/home" /> },
+              { path: "*", element: <Navigate to="/404" /> },
+            ],
+          },
+          {
+            path: "/",
+            children: [
+              { path: "signup", element: <SignUpView /> },
+              { path: "login", element: <LoginCheck /> },
+              { path: "legal", element: <LegalView /> },
+              { path: "verify/*", element: <VerifyView /> },
+              { path: "", element: <LoginCheck /> },
+              { path: "*", element: <NotFoundView /> },
+            ],
+          },
+        ])}
+      </SnackbarProvider>
     </ThemeProvider>
   );
 };
