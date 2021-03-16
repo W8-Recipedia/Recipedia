@@ -82,11 +82,16 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
     <Dialog
       open={open}
       keepMounted
-      onClose={handleClose}
+      onClose={() => {
+        handleClose();
+        setTimeout(() => {
+          document.getElementById("header").scrollIntoView();
+        }, 300);
+      }}
       fullScreen={fullScreen}
       scroll="body"
     >
-      <AppBar className={classes.appBar}>
+      <AppBar className={classes.appBar} id="header">
         <Toolbar>
           <Typography variant="h4" className={classes.title}>
             {recipeInfo.title}
@@ -160,7 +165,7 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
                 key={`step_${step.number}_${recipeId}`}
               >
                 <ListItemIcon style={{ minWidth: 32 }}>
-                  <Typography >{step.number})</Typography>
+                  <Typography>{step.number})</Typography>
                 </ListItemIcon>
                 <ListItemText primary={step.step} />
               </ListItem>

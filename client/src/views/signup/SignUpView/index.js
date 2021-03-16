@@ -6,7 +6,6 @@ import {
   Checkbox,
   Container,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
   FormHelperText,
@@ -22,11 +21,11 @@ import {
 } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { googleSignUp, signUp } from "src/components/ServerRequests";
 
 import GoogleLogin from "react-google-login";
 import Page from "src/components/theme/page";
+import { Link as RouterLink } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
@@ -60,13 +59,10 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUpView = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [googleSignUpOpen, setGoogleSignUpOpen] = useState(false);
-  const [verifyEmailOpen, setVerifyEmailOpen] = useState(false);
-  const [initialRender, setInitialRender] = useState(true);
+  
+  const [signUpStatus, setSignUpStatus] = useState();
+  const [googleSignUpPopup, setGoogleSignUpPopup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleSubmit = (values, actions) => {
     actions.setSubmitting(false);
@@ -76,33 +72,22 @@ const SignUpView = () => {
       values.email,
       values.password
     ).then((response) => {
-      if (response.data.message === "signUpSuccess") {
-        setVerifyEmailOpen(true);
-      } else {
-        setOpen(true);
-      }
+      setSignUpStatus(response.data.message);
     });
-  };
-
-  const responseGoogle = (response) => {
-    setGoogleSignUpOpen(true);
   };
 
   const handleGoogleSubmit = (response) => {
     googleSignUp(response.tokenId, response.profileObj).then((response) => {
-      if (response.data.message === "signUpSuccess") {
-        setGoogleSignUpOpen(false);
-        setVerifyEmailOpen(true);
-      } else {
-        setGoogleSignUpOpen(false);
-        setOpen(true);
-      }
+      response.data.message.code
+        ? setSignUpStatus(response.data.message.code)
+        : setSignUpStatus(response.data.message);
+      console.log();
     });
   };
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia | Sign Up">
+      <Page className={classes.root} title="Sign Up | Recipedia">
         <Box
           display="flex"
           flexDirection="column"
@@ -154,6 +139,7 @@ const SignUpView = () => {
                 handleChange,
                 isSubmitting,
                 touched,
+                isValid,
                 values,
               }) => (
                 <Form>
@@ -173,7 +159,9 @@ const SignUpView = () => {
                         }
                         size="large"
                         variant="contained"
-                        onClick={responseGoogle}
+                        onClick={() => {
+                          setGoogleSignUpPopup(true);
+                        }}
                       >
                         Sign up with Google
                       </Button>
@@ -235,7 +223,7 @@ const SignUpView = () => {
                     error={Boolean(touched.password && errors.password)}
                     fullWidth
                     helperText={
-                      initialRender
+                      isValid && !touched.password
                         ? "Use 8 or more characters with a mix of letters, numbers & symbols"
                         : touched.password && errors.password
                     }
@@ -243,10 +231,7 @@ const SignUpView = () => {
                     margin="normal"
                     name="password"
                     onBlur={handleBlur}
-                    onChange={(e) => {
-                      handleChange(e);
-                      setInitialRender(false);
-                    }}
+                    onChange={handleChange}
                     value={values.password}
                     variant="outlined"
                     type={showPassword ? "text" : "password"}
@@ -254,7 +239,9 @@ const SignUpView = () => {
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
-                            onClick={handleClickShowPassword}
+                            onClick={() => {
+                              setShowPassword(!showPassword);
+                            }}
                           >
                             {showPassword ? <VisibilityOff /> : <Visibility />}
                           </IconButton>
@@ -313,10 +300,7 @@ const SignUpView = () => {
                     margin="normal"
                     name="confirmPassword"
                     onBlur={handleBlur}
-                    onChange={(e) => {
-                      handleChange(e);
-                      setInitialRender(false);
-                    }}
+                    onChange={handleChange}
                     type="password"
                     value={values.confirmPassword}
                     variant="outlined"
@@ -364,129 +348,138 @@ const SignUpView = () => {
                 </Form>
               )}
             </Formik>
-            <Dialog
-              open={open}
-              onClose={() => {
-                setOpen(false);
-              }}
-            >
-              <DialogContent>
-                <DialogContentText >
-                  There is already an account linked to this email address!
-                  Please log in to use Recipedia.
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions className={classes.loginbutton}>
-                <Button
-                  onClick={() => {
-                    navigate("/login");
-                  }}
-                  color="primary"
-                  variant="contained"
-                >
-                  Log in
-                </Button>
-              </DialogActions>
-            </Dialog>
-            <Dialog
-              open={verifyEmailOpen}
-              onClose={() => {
-                setVerifyEmailOpen(false);
-              }}
-            >
-              <DialogContent>
-                <DialogContentText>
-                  Account created! Please verify your email before logging in.
-                </DialogContentText>
-              </DialogContent>
-            </Dialog>
-            <Dialog
-              open={googleSignUpOpen}
-              onClose={() => {
-                setGoogleSignUpOpen(false);
-              }}
-            >
-              <Formik
-                initialValues={{
-                  gpolicy: false,
-                }}
-                validationSchema={Yup.object().shape({
-                  gpolicy: Yup.boolean().oneOf(
-                    [true],
-                    "Please accept the Terms and Conditions"
-                  ),
-                })}
-              >
-                {({
-                  errors,
-                  handleBlur,
-                  handleChange,
-                  touched,
-                  values,
-                  isValid,
-                  dirty,
-                }) => (
-                  <Form>
-                    <DialogContent>
-                      <DialogContentText >
-                        <Box
-                          alignItems="center"
-                          justifyContent="center"
-                          display="flex"
-                          pr={2}
-                        >
-                          <Checkbox
-                            checked={values.gpolicy}
-                            name="gpolicy"
-                            onChange={handleChange}
-                          />
-                          <Typography color="textSecondary" variant="body1">
-                            I have read the{" "}
-                            <Link
-                              color="primary"
-                              component={RouterLink}
-                              to="/legal"
-                              underline="always"
-                              variant="h6"
-                            >
-                              Terms and Conditions
-                            </Link>
-                          </Typography>
-                        </Box>
+          </Container>
+        </Box>
+        <Dialog
+          open={googleSignUpPopup}
+          onClose={() => {
+            setGoogleSignUpPopup(false);
+          }}
+        >
+          <Formik
+            initialValues={{
+              gpolicy: false,
+            }}
+            validationSchema={Yup.object().shape({
+              gpolicy: Yup.boolean().oneOf(
+                [true],
+                "Please accept the Terms and Conditions"
+              ),
+            })}
+          >
+            {({
+              errors,
+              handleBlur,
+              handleChange,
+              touched,
+              values,
+              isValid,
+              dirty,
+            }) => (
+              <Form>
+                <Box p={1}>
+                  <DialogContent>
+                    <DialogContentText>
+                      <Box
+                        alignItems="center"
+                        justifyContent="center"
+                        display="flex"
+                      >
+                        <Checkbox
+                          checked={values.gpolicy}
+                          name="gpolicy"
+                          onChange={handleChange}
+                        />
+                        <Typography color="textSecondary" variant="body1">
+                          I have read the{" "}
+                          <Link
+                            color="primary"
+                            component={RouterLink}
+                            to="/legal"
+                            underline="always"
+                            variant="h6"
+                          >
+                            Terms and Conditions
+                          </Link>
+                        </Typography>
+                      </Box>
+                      <Box
+                        alignItems="center"
+                        justifyContent="center"
+                        display="flex"
+                      >
                         {Boolean(touched.gpolicy && errors.gpolicy) && (
                           <FormHelperText error>
                             {errors.gpolicy}
                           </FormHelperText>
                         )}
-                      </DialogContentText>
-                      <Box justifyContent="center" display="flex" pb={2}>
-                        <GoogleLogin
-                          clientId="265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
-                          buttonText="Log in with Google"
-                          onSuccess={handleGoogleSubmit}
-                          onFailure={handleGoogleSubmit}
-                          render={(renderProps) => (
-                            <Button
-                              color="primary"
-                              variant="contained"
-                              disabled={renderProps.disabled}
-                              onClick={
-                                isValid && dirty ? renderProps.onClick : null
-                              }
-                              type="submit"
-                            >
-                              Submit
-                            </Button>
-                          )}
-                        />
                       </Box>
-                    </DialogContent>
-                  </Form>
-                )}
-              </Formik>
-            </Dialog>
-          </Container>
-        </Box>
+                    </DialogContentText>
+                  </DialogContent>
+                  <Box
+                    alignItems="center"
+                    justifyContent="center"
+                    display="flex"
+                    pb={2}
+                  >
+                    <GoogleLogin
+                      clientId="265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
+                      buttonText="Log in with Google"
+                      onSuccess={handleGoogleSubmit}
+                      onFailure={handleGoogleSubmit}
+                      render={(renderProps) => (
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          disabled={renderProps.disabled}
+                          onClick={
+                            isValid && dirty ? renderProps.onClick : null
+                          }
+                          type="submit"
+                        >
+                          Submit
+                        </Button>
+                      )}
+                    />
+                  </Box>
+                </Box>
+              </Form>
+            )}
+          </Formik>
+        </Dialog>
+        <Dialog open={signUpStatus}>
+          <Box p={1}>
+            <DialogContent>
+              <DialogContentText>
+                <Box alignItems="center" justifyContent="center" display="flex">
+                  {signUpStatus === "signUpSuccess"
+                    ? "Account created! Please verify your email before logging in. You can close this tab now."
+                    : signUpStatus === "ER_DUP_ENTRY"
+                    ? "There is already an account linked to this email address! Please log in to use Recipedia."
+                    : "Unkown error."}
+                </Box>
+              </DialogContentText>
+            </DialogContent>
+            {signUpStatus === "ER_DUP_ENTRY" ? (
+              <Box
+                alignItems="center"
+                justifyContent="center"
+                display="flex"
+                pb={2}
+              >
+                <Button
+                  color="primary"
+                  variant="contained"
+                  size="large"
+                  component={RouterLink}
+                  to="/login"
+                >
+                  Log in
+                </Button>
+              </Box>
+            ) : null}
+          </Box>
+        </Dialog>
       </Page>
     </Scrollbars>
   );

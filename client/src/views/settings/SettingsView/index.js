@@ -30,10 +30,10 @@ const SettingsView = () => {
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia | Settings">
+      <Page className={classes.root} title="Settings | Recipedia">
         <Box m={2}>
           <Container maxWidth="xl">
-            <Card >
+            <Card>
               <CardContent>
                 <Box p={1}>
                   <Typography gutterBottom variant="h1">

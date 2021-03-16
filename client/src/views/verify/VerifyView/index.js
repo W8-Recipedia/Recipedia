@@ -76,13 +76,7 @@ const VerifyView = () => {
             })}
             onSubmit={resendVerification}
           >
-            {({
-              errors,
-              handleBlur,
-              handleChange,
-              touched,
-              values,
-            }) => (
+            {({ errors, handleBlur, handleChange, touched, values }) => (
               <Form>
                 <Box p={1}>
                   <DialogContent>
@@ -98,12 +92,21 @@ const VerifyView = () => {
                           ? "Please enter your email to send a new verification email."
                           : "Your email could not be verified. Please enter your email to send a new verification email."}
                       </Box>
-                      {verificationStatus === "userVerified" ? null : (
-                        <Box
-                          alignItems="center"
-                          justifyContent="center"
-                          display="flex"
-                        >
+                      <Box
+                        alignItems="center"
+                        justifyContent="center"
+                        display="flex"
+                      >
+                        {verificationStatus === "userVerified" ? (
+                          <Button
+                            component={Link}
+                            to={"/login"}
+                            color="primary"
+                            variant="contained"
+                          >
+                            Log in
+                          </Button>
+                        ) : (
                           <TextField
                             error={Boolean(touched.email && errors.email)}
                             fullWidth
@@ -117,8 +120,8 @@ const VerifyView = () => {
                             value={values.email}
                             variant="outlined"
                           />
-                        </Box>
-                      )}
+                        )}
+                      </Box>
                     </DialogContentText>
                   </DialogContent>
                   <Box
@@ -163,12 +166,13 @@ const VerifyView = () => {
                     : emailStatus === "noAccount"
                     ? "Please sign up first!"
                     : emailStatus === "emailSuccess"
-                    ? "A verification email has been sent to your email adress."
-                    : "Unkown error"}
+                    ? "A verification email has been sent to your email adress. You can now close this tab."
+                    : "Unkown error."}
                 </Box>
               </DialogContentText>
             </DialogContent>
-            {emailStatus === "accountAlreadyVerified" || "noAccount" ? (
+            {emailStatus === "accountAlreadyVerified" ||
+            emailStatus === "noAccount" ? (
               <Box
                 alignItems="center"
                 justifyContent="center"
@@ -182,7 +186,6 @@ const VerifyView = () => {
                     size="large"
                     component={Link}
                     to="/signup"
-                    onClick={resendVerification}
                   >
                     Sign Up
                   </Button>
@@ -193,7 +196,6 @@ const VerifyView = () => {
                     size="large"
                     component={Link}
                     to="/login"
-                    onClick={resendVerification}
                   >
                     Log in
                   </Button>

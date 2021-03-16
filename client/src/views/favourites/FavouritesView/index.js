@@ -44,8 +44,15 @@ const Favourites = () => {
     showRecipeByID(id);
     setSelectedRecipeID(id);
     window.addEventListener("popstate", () => {
-      setRecipeDialogOpen(false);
+      handleRecipeClose();
     });
+  };
+  const handleRecipeClose = () => {
+    setRecipeDialogOpen(false);
+    setTimeout(function () {
+      document.getElementById("header").scrollIntoView();
+    }, 300);
+    navigate(`/app/favourites`);
   };
 
   const loadMultipleRecipes = (idsArray) => {
@@ -55,8 +62,7 @@ const Favourites = () => {
         console.log(response);
         if (response.data.code === 402) {
           // set popup for api
-        }
-        else if (response.data) {
+        } else if (response.data) {
           setRecipeList([...recipeList, ...response.data]);
         }
       })
@@ -90,10 +96,10 @@ const Favourites = () => {
 
   return (
     <Scrollbars>
-      <Page className={classes.root} title="Recipedia | Favourites">
+      <Page className={classes.root} title="Favourites | Recipedia ">
         <Box m={2}>
           <Container maxWidth="false">
-            <Card >
+            <Card>
               <CardContent>
                 <Box p={1}>
                   <Typography gutterBottom variant="h1">
@@ -122,7 +128,7 @@ const Favourites = () => {
                 </>
               ) : (
                 <>
-                  <Box mt={4}>
+                  <Box mt={6}>
                     <Typography
                       color="textSecondary"
                       align="center"
@@ -148,10 +154,7 @@ const Favourites = () => {
           </Container>
           <RecipeDialog
             open={recipeDialogOpen}
-            handleClose={() => {
-              setRecipeDialogOpen(false);
-              navigate(`/app/favourites`);
-            }}
+            handleClose={handleRecipeClose}
             recipeId={selectedRecipeID}
             recipeInfo={selectedRecipeInfo}
           />

@@ -19,7 +19,7 @@ const dark = createMuiTheme({
       primary: "#beb8b0",
       secondary: "#beb8b0",
     },
-    type: 'dark',
+    type: "dark",
   },
   typography,
 });
