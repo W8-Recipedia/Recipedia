@@ -513,7 +513,7 @@ app.post("/submitfeedback", verifyToken, (req, res) => {
   const mailOptions = {
     from: "w8.recipedia@gmail.com",
     to: "w8.recipedia@gmail.com",
-    subject: `Feedback from ${user.email}`,
+    subject: `Feedback from ${res.user.email}`,
     text: req.body.feedback,
   };
   transporter.sendMail(mailOptions, (err) => {

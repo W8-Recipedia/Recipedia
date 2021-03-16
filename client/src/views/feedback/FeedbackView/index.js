@@ -18,7 +18,6 @@ import { getUserData, submitFeeback } from "src/components/ServerRequests";
 
 import Page from "src/components/theme/page";
 import { Scrollbars } from "react-custom-scrollbars";
-import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +34,7 @@ const FeedbackView = ({ className, ...rest }) => {
   const navigate = useNavigate();
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [open, setOpen] = useState(false);
+  const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
   const [feedbackError, setFeedbackError] = useState(false);
   const [feedbackStatus, setFeedbackStatus] = useState("");
   const [values, setValues] = useState({
@@ -62,13 +61,13 @@ const FeedbackView = ({ className, ...rest }) => {
       [event.target.name]: event.target.value,
     });
   };
-  const handleSubmit = (event) => {
+  const handleSubmit = () => {
     if (values.feedback.length < 150) {
       setFeedbackError(true);
     } else {
       submitFeeback(values.feedback).then((response) => {
         setFeedbackStatus(response.data.message);
-        setOpen(true);
+        setFeedbackDialogOpen(true);
       });
     }
   };
@@ -176,18 +175,26 @@ const FeedbackView = ({ className, ...rest }) => {
             </Box>
           </Container>
           <Dialog
-            open={open}
+            open={feedbackDialogOpen}
             onClose={() => {
               navigate("/app/home");
             }}
           >
-            <DialogContent>
-              <DialogContentText>
-                {feedbackStatus === "feedbackSent"
-                  ? "Thank you for your feedback!"
-                  : "There was an error submitting your feedback. Please try again later."}
-              </DialogContentText>
-            </DialogContent>
+            <Box p={1}>
+              <DialogContent>
+                <DialogContentText>
+                  <Box
+                    alignItems="center"
+                    justifyContent="center"
+                    display="flex"
+                  >
+                    {feedbackStatus === "feedbackSent"
+                      ? "Thank you for your feedback!"
+                      : "There was an error submitting your feedback. Please try again later."}{" "}
+                  </Box>
+                </DialogContentText>
+              </DialogContent>
+            </Box>
           </Dialog>
         </Box>
       </Page>
