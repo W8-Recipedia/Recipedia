@@ -28,8 +28,8 @@ const light = createMuiTheme({
   palette: {
     background: {
       dark: "#F4F6F8",
-      default: "#FFF",
-      paper: "#FFF",
+      default: "#FFFFFF",
+      paper: "#FFFFFF",
     },
     primary: {
       main: colors.teal[900],
@@ -38,9 +38,10 @@ const light = createMuiTheme({
       main: colors.teal[900],
     },
     text: {
-      primary: colors.blueGrey[800],
-      secondary: colors.blueGrey[800],
+      primary: "#37474f",
+      secondary: "#37474f",
     },
+    type: "light",
   },
   typography,
 });
