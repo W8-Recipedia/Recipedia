@@ -166,7 +166,7 @@ const Password = () => {
           <DialogContent>
             <DialogContentText>
               <Box alignItems="center" justifyContent="center" display="flex">
-                Your password has successfully been changed.
+                Your password has been changed successfully.
               </Box>
             </DialogContentText>
           </DialogContent>

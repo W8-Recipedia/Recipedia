@@ -325,7 +325,7 @@ app.post("/resendverification", databaseSelect, (req, res) => {
 });
 
 app.get("/getuserdata", verifyToken, databaseSelect, (req, res) => {
-  const jsonResponse = {};
+  const jsonResponse = { user: {} };
   if (res.result.diet) {
     jsonResponse.diet = decrypt(res.result.diet);
   }
@@ -338,11 +338,20 @@ app.get("/getuserdata", verifyToken, databaseSelect, (req, res) => {
   if (res.result.favourites) {
     jsonResponse.favourites = decrypt(res.result.favourites);
   }
+  jsonResponse.user.firstname = decrypt(res.result.firstname);
+  jsonResponse.user.lastname = decrypt(res.result.lastname);
+  jsonResponse.user.email = res.result.email;
+  jsonResponse.user.userid = res.result.userid;
+
   jsonResponse.message = "loggedIn";
   jsonResponse.google = res.result.googlelogin;
-  jsonResponse.token = jwt.sign({ user: res.user }, process.env.JWT_SECRET, {
-    expiresIn: "30m",
-  });
+  jsonResponse.token = jwt.sign(
+    { user: jsonResponse.user },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "30m",
+    }
+  );
   jsonResponse.user = res.user;
   res.json(jsonResponse);
 });
@@ -423,9 +432,6 @@ app.post("/changeuserinfo", verifyToken, (req, res) => {
       } else {
         res.json({
           message: "updateSuccess",
-          token: (token = jwt.sign({ user: res.user }, process.env.JWT_SECRET, {
-            expiresIn: "30m",
-          })),
         });
       }
     }
@@ -451,9 +457,6 @@ app.post("/changeuserpreferences", verifyToken, (req, res) => {
       } else {
         res.json({
           message: "updateSuccess",
-          token: jwt.sign({ user: res.user }, process.env.JWT_SECRET, {
-            expiresIn: "30m",
-          }),
         });
       }
     }
@@ -482,20 +485,6 @@ app.post("/changeuserpassword", verifyToken, databaseSelect, (req, res) => {
               } else {
                 res.json({
                   message: "passwordChanged",
-                  token: jwt.sign(
-                    {
-                      user: {
-                        userid: res.result.userid,
-                        email: res.result.email,
-                        firstname: decrypt(res.result.firstname),
-                        lastname: decrypt(res.result.lastname),
-                      },
-                    },
-                    process.env.JWT_SECRET,
-                    {
-                      expiresIn: "30m",
-                    }
-                  ),
                 });
               }
             }
@@ -507,9 +496,6 @@ app.post("/changeuserpassword", verifyToken, databaseSelect, (req, res) => {
 });
 
 app.post("/submitfeedback", verifyToken, (req, res) => {
-  const token = jwt.sign({ user: res.user }, process.env.JWT_SECRET, {
-    expiresIn: "30m",
-  });
   const mailOptions = {
     from: "w8.recipedia@gmail.com",
     to: "w8.recipedia@gmail.com",
@@ -520,7 +506,7 @@ app.post("/submitfeedback", verifyToken, (req, res) => {
     if (err) {
       res.json({ message: err });
     } else {
-      res.json({ message: "feedbackSent", token: token });
+      res.json({ message: "feedbackSent" });
     }
   });
 });

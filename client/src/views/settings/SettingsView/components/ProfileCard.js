@@ -31,20 +31,18 @@ const ProfileCard = ({ className, ...rest }) => {
   const navigate = useNavigate();
 
   const [imageURL, setImageURL] = useState("");
-  const [open, setOpen] = useState(false);
-  const [deleteStatus, setDeleteStatus] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [deleteStatus, setDeleteStatus] = useState();
   const [userRank, setUserRank] = useState("");
 
   const [userName, setUserName] = useState(() => {
-    getUserData().then((authResponse) => {
-      if (authResponse.data.message === "loggedIn") {
+    getUserData().then((response) => {
+      if (response.data.message === "loggedIn") {
         setUserName(
-          authResponse.data.user.firstname +
-            " " +
-            authResponse.data.user.lastname
+          response.data.user.firstname + " " + response.data.user.lastname
         );
-        if (authResponse.data.user.imageUrl) {
-          setImageURL(authResponse.data.user.imageUrl);
+        if (response.data.user.imageUrl) {
+          setImageURL(response.data.user.imageUrl);
         }
       }
     });
@@ -66,12 +64,10 @@ const ProfileCard = ({ className, ...rest }) => {
     });
   });
 
-  const deleteAcc = () => {
+  const deleteUserAccount = () => {
     deleteAccount().then((response) => {
-      if (response === "accountDeleted") {
-        setOpen(false);
-        setDeleteStatus(true);
-      }
+      setOpenDeleteDialog(false);
+      setDeleteStatus(response.data.message);
     });
   };
 
@@ -83,7 +79,7 @@ const ProfileCard = ({ className, ...rest }) => {
             <Avatar className={classes.avatar} src={imageURL} />
           </Box>
           <Box pb={1}>
-            <Typography color="textPrimary" gutterBottom variant="h3">
+            <Typography color="textPrimary" gutterBottom variant="h3" align="center">
               {userName}
             </Typography>
           </Box>
@@ -99,7 +95,7 @@ const ProfileCard = ({ className, ...rest }) => {
               variant="text"
               className={classes.button}
               onClick={() => {
-                setOpen(true);
+                setOpenDeleteDialog(true);
               }}
             >
               Delete account
@@ -107,64 +103,59 @@ const ProfileCard = ({ className, ...rest }) => {
           </Box>
         </Box>
       </CardContent>
-      <Dialog
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-      >
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you would like to delete your account? This will delete
-            all your data from our databases, including your favourites and
-            dietary preferences, allergens and health data. This action is
-            irreversible.
-            <Box
-              pt={2}
-              alignItems="center"
-              display="flex"
-              flexDirection="column"
-            >
-              <Box
-                pb={2}
-                pt={2}
-                alignItems="center"
-                display="flex"
-                flexDirection="column"
-              >
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  onClick={() => {
-                    setOpen(false);
-                  }}
-                >
-                  No, take me back.
-                </Button>
-              </Box>
-              <Button
-                color="secondary"
-                variant="text"
-                className={classes.button}
-                onClick={deleteAcc}
-              >
-                Yes, I'm sure!
-              </Button>
-            </Box>
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
+
       <Dialog
         open={deleteStatus}
         onClose={() => {
           navigate("/");
         }}
       >
-        <DialogContent>
-          <DialogContentText>
-            Your account has been deleted. We're sorry to see you go!
-          </DialogContentText>
-        </DialogContent>
+        <Box p={1}>
+          <DialogContent>
+            <DialogContentText>
+              <Box alignItems="center" justifyContent="center" display="flex">
+                {deleteStatus === "accountDeleted"
+                  ? "Your account has been deleted. We're sorry to see you go!"
+                  : "Your account couldn't be deleted. Please try again later."}
+              </Box>
+            </DialogContentText>
+          </DialogContent>
+        </Box>
+      </Dialog>
+
+      <Dialog
+        open={openDeleteDialog}
+        onClose={() => {
+          setOpenDeleteDialog(false);
+        }}
+      >
+        <Box p={1}>
+          <DialogContent>
+            <DialogContentText>
+              <Box alignItems="center" justifyContent="center" display="flex">
+                Are you sure you would like to delete your account? This will
+                delete all your data from our databases, including your
+                favourites and dietary preferences, allergens and health data.
+                This action is irreversible.
+              </Box>
+            </DialogContentText>
+          </DialogContent>
+          <Box
+            alignItems="center"
+            justifyContent="center"
+            display="flex"
+            pb={2}
+          >
+            <Button
+              color="secondary"
+              variant="text"
+              className={classes.button}
+              onClick={deleteUserAccount}
+            >
+              Yes, I'm sure!
+            </Button>
+          </Box>
+        </Box>
       </Dialog>
     </Card>
   );
