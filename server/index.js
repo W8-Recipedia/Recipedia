@@ -338,20 +338,16 @@ app.get("/getuserdata", verifyToken, databaseSelect, (req, res) => {
   if (res.result.favourites) {
     jsonResponse.favourites = decrypt(res.result.favourites);
   }
-  jsonResponse.user.firstname = decrypt(res.result.firstname);
-  jsonResponse.user.lastname = decrypt(res.result.lastname);
-  jsonResponse.user.email = res.result.email;
-  jsonResponse.user.userid = res.result.userid;
 
+  res.user.firstname = decrypt(res.result.firstname);
+  res.user.lastname = decrypt(res.result.lastname);
+  res.user.email = res.result.email;
+  res.user.userid = res.result.userid;
   jsonResponse.message = "loggedIn";
   jsonResponse.google = res.result.googlelogin;
-  jsonResponse.token = jwt.sign(
-    { user: jsonResponse.user },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "30m",
-    }
-  );
+  jsonResponse.token = jwt.sign({ user: res.user }, process.env.JWT_SECRET, {
+    expiresIn: "30m",
+  });
   jsonResponse.user = res.user;
   res.json(jsonResponse);
 });
