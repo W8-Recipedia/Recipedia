@@ -20,7 +20,7 @@ import {
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
-import NavItem from "src/views/dashboard/DashboardView/components/NavItem";
+import NavItem from "src/components/dashboard/components/NavItem";
 import { Scrollbars } from "react-custom-scrollbars";
 import { getUserData } from "src/components/ServerRequests";
 
@@ -137,6 +137,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
               className={classes.name}
               color="textPrimary"
               variant="h5"
+              align="center"
             >
               {userName}
             </Typography>

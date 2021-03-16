@@ -64,27 +64,26 @@ const SignUpView = () => {
   const [googleSignUpPopup, setGoogleSignUpPopup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (values, actions) => {
-    actions.setSubmitting(false);
-    signUp(
-      values.firstName,
-      values.lastName,
-      values.email,
-      values.password
-    ).then((response) => {
-      setSignUpStatus(response.data.message);
-    });
-  };
+
 
   const handleGoogleSubmit = (response) => {
     googleSignUp(response.tokenId, response.profileObj).then((response) => {
       response.data.message.code
         ? setSignUpStatus(response.data.message.code)
         : setSignUpStatus(response.data.message);
-      console.log();
     });
   };
 
+   const handleSubmit = (values, actions) => {
+     signUp(
+       values.firstName,
+       values.lastName,
+       values.email,
+       values.password
+     ).then((response) => {
+       setSignUpStatus(response.data.message);
+     });
+   };
   return (
     <Scrollbars>
       <Page className={classes.root} title="Sign Up | Recipedia">

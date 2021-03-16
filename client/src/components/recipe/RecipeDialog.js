@@ -20,7 +20,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import CloseIcon from "@material-ui/icons/Close";
 
-function convertTime(num) {
+const convertTime = (num) => {
   if (num <= 60) {
     return `${num} minutes`;
   }
@@ -29,7 +29,7 @@ function convertTime(num) {
   let minutes = (hours - rHours) * 60;
   let rMinutes = Math.round(minutes);
   return `${rHours} hour${rHours > 1 ? "s" : ""} ${rMinutes} minutes`;
-}
+};
 
 const useStyles = makeStyles((theme) => ({
   extraInfo: {
@@ -101,11 +101,11 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
           </IconButton>
         </Toolbar>
       </AppBar>
-        <img
-          className={classes.image}
-          src={`https://spoonacular.com/recipeImages/${recipeId}-636x393.${recipeInfo.imageType}`}
-          alt={recipeInfo.title}
-        />
+      <img
+        className={classes.image}
+        src={`https://spoonacular.com/recipeImages/${recipeId}-636x393.${recipeInfo.imageType}`}
+        alt={recipeInfo.title}
+      />
       <DialogContent>
         <Grid container className={classes.extraInfo}>
           <Grid item>

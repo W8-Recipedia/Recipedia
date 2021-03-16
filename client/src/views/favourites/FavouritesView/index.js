@@ -59,7 +59,6 @@ const Favourites = () => {
     setLoading(true);
     getRecipesByID(idsArray ? idsArray.join(",") : null)
       .then((response) => {
-        console.log(response);
         if (response.data.code === 402) {
           // set popup for api
         } else if (response.data) {

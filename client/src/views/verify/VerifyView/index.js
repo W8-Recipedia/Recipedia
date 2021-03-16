@@ -39,7 +39,6 @@ const VerifyView = () => {
 
   const resendVerification = (values) => {
     resendVerificationEmail(values.email).then((response) => {
-      console.log(response.data.message);
       setEmailStatus(response.data.message);
     });
   };
