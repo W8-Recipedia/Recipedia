@@ -37,8 +37,8 @@ export default function ImageCard({ place, checked }) {
       <Card className={classes.root}>
         <CardMedia
           className={classes.media}
-          image={place.imageUrl}
-          title="Contemplative Reptile"
+          image={process.env.PUBLIC_URL + "assets/Sunflower_from_Silesia2.jpg"}
+          title="here"
         />
         <CardContent>
           <Typography

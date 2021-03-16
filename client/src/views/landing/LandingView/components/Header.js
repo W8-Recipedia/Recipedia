@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   AppBar,
+  Button,
+  Link,
   IconButton,
   Toolbar,
   Collapse,
@@ -19,9 +21,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
     // fontFamily: "Nunito",
   },
-  appbar: {
-    background: "none",
-  },
+  appbar: {},
   appbarWrapper: {
     width: "80%",
     margin: "0 auto",
@@ -70,9 +70,28 @@ export default function Header() {
           <h1 className={classes.appbarTitle}>
             <span className={classes.colorText}>Recipedia.</span>
           </h1>
-          <IconButton>
-            <SortIcon className={classes.icon} />
-          </IconButton>
+          <Link to="/login">
+            <Button
+              color="primary"
+              fullWidth
+              variant="contained"
+              size="large"
+              className={classes.buttonText}
+            >
+              Log in
+            </Button>
+          </Link>
+          <Link to="/signup">
+            <Button
+              color="primary"
+              fullWidth
+              variant="contained"
+              size="large"
+              className={classes.buttonText}
+            >
+              Sign Up
+            </Button>
+          </Link>
         </Toolbar>
       </AppBar>
 
