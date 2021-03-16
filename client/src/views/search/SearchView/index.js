@@ -1,5 +1,3 @@
-import {} from "src/components/ServerRequests";
-
 import {
   Box,
   Button,
@@ -13,6 +11,7 @@ import {
   Grid,
   Input,
   InputLabel,
+  LinearProgress,
   ListItemText,
   MenuItem,
   Select,
@@ -27,7 +26,6 @@ import {
 } from "src/components/ServerRequests";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import LinearProgress from "@material-ui/core/LinearProgress";
 import Page from "src/components/theme/page";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
@@ -57,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   placeholderText: {
     paddingTop: theme.spacing(4),
   },
-  loadMoreGridBtn: {
+  loadMoreButton: {
     display: "flex",
     justifyContent: "center",
     paddingTop: "15px",
@@ -113,7 +111,7 @@ const typeNames = [
 const SearchView = () => {
   const navigate = useNavigate();
   const classes = useStyles();
-  const [loading, setLoading] = useState(false);
+  const [loadingRecipes, setLoadingRecipes] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [selectedRecipeID, setSelectedRecipeID] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
@@ -123,25 +121,24 @@ const SearchView = () => {
   const [typeName, setTypeName] = useState([]);
   const [intolerances, setIntolerances] = useState([]);
   const [diet, setDiet] = useState("");
-  const [query, setQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [recipeOffset, setRecipeOffset] = useState(0);
   const [initialSearch, setInitialSearch] = useState(true);
   const [emptySearch, setEmptySearch] = useState(false);
   const [APIKeyUsed, setAPIKeyUsed] = useState(false);
 
-  const loadRecipes = (queryNew = undefined, offset) => {
-    setLoading(true);
+  const loadRecipes = (query = undefined, offset) => {
+    setLoadingRecipes(true);
     getRecipesComplex(
       intolerances ? intolerances.join(",") : null,
       diet,
       typeName.join(",").toLowerCase(),
       cuisineName.join(","),
       offset,
-      queryNew ? queryNew : query,
+      query ? query : searchQuery,
       false
     )
       .then((response) => {
-        console.log(response.data);
         if (response.data.code === 402) {
           setAPIKeyUsed(true);
         }
@@ -149,13 +146,15 @@ const SearchView = () => {
           if (response.data.results.length === 0) {
             setEmptySearch(true);
           } else {
-            setRecipeList([...recipeList, ...response.data.results]);
+            offset
+              ? setRecipeList([...recipeList, ...response.data.results])
+              : setRecipeList(response.data.results);
             setLoadMore(true);
           }
         }
       })
       .finally(() => {
-        setLoading(false);
+        setLoadingRecipes(false);
       });
   };
 
@@ -193,22 +192,17 @@ const SearchView = () => {
     setTypeName(event.target.value);
   };
 
-  const handleQuerySearch = (queryNew) => {
+  const handleQuerySearch = (query) => {
     setRecipeList([]);
-    setQuery(queryNew);
+    setSearchQuery(query);
     setInitialSearch(false);
     setEmptySearch(false);
-    loadRecipes(queryNew);
+    loadRecipes(query);
   };
 
   const loadMoreRecipes = () => {
-    setRecipeOffset(
-      recipeOffset + parseInt(process.env.REACT_APP_SEARCH_OFFSET)
-    );
-    loadRecipes(
-      null,
-      recipeOffset + parseInt(process.env.REACT_APP_SEARCH_OFFSET)
-    );
+    setRecipeOffset(recipeOffset + recipeList.length);
+    loadRecipes(null, recipeOffset + recipeList.length);
   };
 
   const onRecipeClick = (id) => {
@@ -233,7 +227,7 @@ const SearchView = () => {
                     component="p"
                   >
                     If you'd like to find recipes that match your specific
-                    taste, then you're in the right place.
+                    tastes, then you're in the right place.
                   </Typography>
                 </Box>
               </CardContent>
@@ -290,40 +284,44 @@ const SearchView = () => {
               </Card>
             </Box>
             <Box mt={3}>
+              {!initialSearch ? (
+                <RecipeList
+                  recipes={recipeList}
+                  onRecipeClick={onRecipeClick}
+                  loading={loadingRecipes}
+                />
+              ) : null}
               {initialSearch || emptySearch ? (
-                <>
-                  <Typography
-                    className={classes.placeholderText}
-                    color="textSecondary"
-                    align="center"
-                    variant="h3"
-                  >
-                    {initialSearch
-                      ? "Start searching to find your new favourite recipes!"
-                      : "No results found (for your dietary preferences)."}
-                  </Typography>
-                </>
-              ) : (
-                <>
-                  <RecipeList
-                    recipes={recipeList}
-                    onRecipeClick={onRecipeClick}
-                    loading={loading}
-                  />
-                </>
-              )}
+                <Typography
+                  className={classes.placeholderText}
+                  color="textSecondary"
+                  align="center"
+                  variant="h3"
+                >
+                  {initialSearch ? (
+                    "Start searching to find your new favourite recipes!"
+                  ) : emptySearch && recipeList.length !== 0 ? (
+                    <Box pt={2}>No more recipes found.</Box>
+                  ) : (
+                    "No recipes found (for your dietary preferences)"
+                  )}
+                </Typography>
+              ) : null}
               <Grid item xs={12}>
                 <Box mt={3}>
-                  {loading && !APIKeyUsed ? <LinearProgress /> : null}
+                  {loadingRecipes && !APIKeyUsed ? <LinearProgress /> : null}
                 </Box>
               </Grid>
 
-              <Grid item xs={12} className={classes.loadMoreGridBtn}>
+              <Grid item xs={12} className={classes.loadMoreButton}>
                 <Box>
-                  {loadMore && !loading ? (
+                  {loadMore && !loadingRecipes && !emptySearch ? (
                     <>
-                      <Button color="primary" onClick={loadMoreRecipes}>
+                      <Button
+                        color="primary"
+                        onClick={loadMoreRecipes}
                         disabled={APIKeyUsed}
+                      >
                         <ExpandMoreIcon /> Load more recipes! <ExpandMoreIcon />
                       </Button>
                     </>

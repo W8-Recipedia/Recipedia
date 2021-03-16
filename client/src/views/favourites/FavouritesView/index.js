@@ -1,5 +1,3 @@
-import {} from "src/components/ServerRequests";
-
 import {
   Box,
   Card,
@@ -39,7 +37,7 @@ const Favourites = () => {
   const classes = useStyles();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
+  const [loadingFavourites, setLoadingFavourites] = useState(false);
   const [selectedRecipeID, setSelectedRecipeID] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
   const [recipeList, setRecipeList] = useState([]);
@@ -64,7 +62,7 @@ const Favourites = () => {
   };
 
   const loadMultipleRecipes = (idsArray) => {
-    setLoading(true);
+    setLoadingFavourites(true);
     getRecipesByID(idsArray ? idsArray.join(",") : null)
       .then((response) => {
         if (response.data.code === 402) {
@@ -74,7 +72,7 @@ const Favourites = () => {
         }
       })
       .finally(() => {
-        setLoading(false);
+        setLoadingFavourites(false);
       });
   };
 
@@ -97,6 +95,7 @@ const Favourites = () => {
       }
     });
   }, []);
+
   useEffect(() => {
     navigate(`/app/favourites`);
   }, []);
@@ -130,7 +129,7 @@ const Favourites = () => {
                   <RecipeList
                     recipes={recipeList}
                     onRecipeClick={handleRecipeClick}
-                    loading={loading}
+                    loading={loadingFavourites}
                   />
                 </>
               ) : (
@@ -151,7 +150,7 @@ const Favourites = () => {
                 xs={12}
                 style={{ display: "flex", justifyContent: "center" }}
               >
-                {loading ? (
+                {loadingFavourites ? (
                   <Box mt={6}>
                     <CircularProgress />
                   </Box>
@@ -177,8 +176,7 @@ const Favourites = () => {
             <DialogContent>
               <DialogContentText>
                 <Box alignItems="center" justifyContent="center" display="flex">
-                  Unfortunately our API has ran out of requests for today, but
-                  your favou. Please come back tomorrow to find more tasty
+                  Unfortunately our API has ran out of requests for today. Please come back tomorrow to find more tasty
                   recipes!
                 </Box>
               </DialogContentText>

@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
-  loadMoreGridBtn: {
+  loadMoreButton: {
     display: "flex",
     justifyContent: "center",
     paddingTop: "15px",
@@ -66,11 +66,11 @@ const Home = () => {
       handleRecipeClose();
     });
   };
-  const loadRecipes = (localAllergens = allergens, localDiet = diet) => {
+  const loadRecipes = () => {
     setLoading(true);
     getRecipesComplex(
-      localAllergens ? localAllergens.join(",") : null,
-      localDiet,
+      allergens ? allergens.join(",") : null,
+      diet,
       null,
       null,
       recipeOffset,
@@ -116,9 +116,7 @@ const Home = () => {
   }, []);
 
   const loadMoreRecipes = () => {
-    setRecipeOffset(
-      recipeOffset + parseInt(process.env.REACT_APP_SEARCH_OFFSET)
-    );
+    setRecipeOffset(recipeOffset + recipeList.length);
     loadRecipes();
   };
 
@@ -170,7 +168,7 @@ const Home = () => {
                 </>
               )}
             </Box>
-            <Grid item xs={12} className={classes.loadMoreGridBtn}>
+            <Grid item xs={12} className={classes.loadMoreButton}>
               <Box mt={3} style={{ display: noResultsFound && "none" }}>
                 {loading && !APIKeyUsed ? (
                   <CircularProgress />
