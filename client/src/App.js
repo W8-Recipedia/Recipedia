@@ -14,25 +14,16 @@ import SettingsView from "src/views/settings/SettingsView";
 import SignUpView from "src/views/signup/SignUpView";
 import Styles from "src/components/theme/styles";
 import Theme from "src/components/theme";
-import { Button, ThemeProvider } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
 import VerifyView from "src/views/verify/VerifyView";
 
 const App = () => {
-  const notistackRef = React.createRef();
   const [theme, setTheme] = useState(Theme.light);
-  const onClickDismiss = (key) => () => {
-    notistackRef.current.closeSnackbar(key);
-  };
 
   return (
     <ThemeProvider theme={theme}>
-      <SnackbarProvider
-        ref={notistackRef}
-        action={(key) => <Button onClick={onClickDismiss(key)}>Dismiss</Button>}
-        maxSnack={2}
-        dense
-      >
+      <SnackbarProvider maxSnack={2} dense>
         <Styles />
         {useRoutes([
           {
