@@ -18,8 +18,8 @@ const dark = createMuiTheme({
     text: {
       primary: "#beb8b0",
       secondary: "#beb8b0",
-      disabled: "#beb8b0",
     },
+    type: 'dark',
   },
   typography,
 });
