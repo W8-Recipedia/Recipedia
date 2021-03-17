@@ -124,7 +124,7 @@ const Home = () => {
     <Scrollbars>
       <Page className={classes.root} title="Home | Recipedia">
         <Box m={2}>
-          <Container maxWidth="false">
+          <Container maxWidth={false}>
             <Card>
               <CardContent>
                 <Box p={1}>

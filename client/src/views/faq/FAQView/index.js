@@ -28,7 +28,7 @@ const FAQView = () => {
     <Scrollbars>
       <Page className={classes.root} title="FAQ | Recipedia">
         <Box m={2}>
-          <Container maxWidth="xl">
+          <Container maxWidth={false}>
             <Card>
               <CardContent>
                 <Box p={1}>
@@ -47,7 +47,7 @@ const FAQView = () => {
               </CardContent>
             </Card>
           </Container>
-          <Container maxWidth="xl">
+          <Container maxWidth={false}>
             <Box mb={3} mt={3}>
               <Card>
                 <CardHeader
