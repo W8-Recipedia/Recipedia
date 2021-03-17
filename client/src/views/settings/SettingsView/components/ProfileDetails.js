@@ -82,6 +82,7 @@ const ProfileDetails = ({ className, ...rest }) => {
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
                   <TextField
+                    required
                     error={Boolean(touched.firstName && errors.firstName)}
                     fullWidth
                     helperText={touched.firstName && errors.firstName}
@@ -99,6 +100,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
+                    required
                     error={Boolean(touched.lastName && errors.lastName)}
                     fullWidth
                     helperText={touched.lastName && errors.lastName}
@@ -116,6 +118,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 </Grid>
                 <Grid item md={12} xs={12}>
                   <TextField
+                    required
                     error={Boolean(touched.email && errors.email)}
                     fullWidth
                     helperText={touched.email && errors.email}
