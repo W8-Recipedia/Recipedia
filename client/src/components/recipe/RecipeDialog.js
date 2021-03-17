@@ -110,7 +110,7 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
         <Grid container className={classes.extraInfo}>
           <Grid item>
             <Typography
-              inline
+              inline="true"
               variant="subtitle2"
               color="textPrimary"
               align="left"
@@ -118,7 +118,7 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
               Servings: {recipeInfo.servings}
             </Typography>
             <Typography
-              inline
+              inline="true"
               variant="subtitle2"
               color="textPrimary"
               align="right"
