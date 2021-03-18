@@ -559,7 +559,15 @@ const Preferences = ({ className, ...rest }) => {
                 average of{" "}
                 <Box fontWeight="fontWeightBold" display="inline">
                   {Math.round(
-                    ((height * 6.25 + weight * 9.99 - age * 4.92 + 5) *
+                    (0.85 *
+                      (height * 6.25 + weight * 9.99 - age * 4.92 + 5) *
+                      (activity / 28.6 + 1.2)) /
+                      4.0
+                  )}{" "}
+                  -{" "}
+                  {Math.round(
+                    (1.15 *
+                      (height * 6.25 + weight * 9.99 - age * 4.92 + 5) *
                       (activity / 28.6 + 1.2)) /
                       4.0
                   )}{" "}
