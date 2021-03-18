@@ -284,13 +284,13 @@ const SearchView = () => {
               </Card>
             </Box>
             <Box mt={3}>
-              {!initialSearch ? (
+              {!initialSearch && (
                 <RecipeList
                   recipes={recipeList}
                   onRecipeClick={onRecipeClick}
                   loading={loadingRecipes}
                 />
-              ) : null}
+              )}
               {initialSearch || emptySearch ? (
                 <Typography
                   className={classes.placeholderText}
