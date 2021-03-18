@@ -283,7 +283,7 @@ const SearchView = () => {
                 </Box>
               </Card>
             </Box>
-            <Box mt={3}>
+            <Box mt={2}>
               {!initialSearch && (
                 <RecipeList
                   recipes={recipeList}
@@ -292,20 +292,22 @@ const SearchView = () => {
                 />
               )}
               {initialSearch || emptySearch ? (
-                <Typography
-                  className={classes.placeholderText}
-                  color="textSecondary"
-                  align="center"
-                  variant="h3"
-                >
-                  {initialSearch ? (
-                    "Start searching to find your new favourite recipes!"
-                  ) : emptySearch && recipeList.length !== 0 ? (
-                    <Box pt={2}>No more recipes found.</Box>
-                  ) : (
-                    "No recipes found (for your dietary preferences)"
-                  )}
-                </Typography>
+                <Box mt={2}>
+                  <Typography
+                    className={classes.placeholderText}
+                    color="textSecondary"
+                    align="center"
+                    variant="h3"
+                  >
+                    {initialSearch ? (
+                      "Start searching to find your new favourite recipes!"
+                    ) : emptySearch && recipeList.length !== 0 ? (
+                      <Box pt={2}>No more recipes found.</Box>
+                    ) : (
+                      "No recipes found (for your dietary preferences)"
+                    )}
+                  </Typography>
+                </Box>
               ) : null}
               <Grid item xs={12}>
                 <Box mt={3}>
