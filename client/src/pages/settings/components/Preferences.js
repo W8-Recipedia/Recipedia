@@ -121,6 +121,19 @@ const Preferences = ({ className, ...rest }) => {
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
+  const MealCalculation = () => {
+    const sexFactor = sex === "Male" ? 5 : sex === "Female" ? -161 : -78;
+    return (
+      ((height * 6.25 + weight * 9.99 - age * 4.92 + sexFactor) *
+        (activity / 28.6 + 1.2)) /
+      4.0
+    );
+  };
+
+  const BMICalculation = () => {
+    return parseFloat(weight) / Math.pow(parseFloat(height) / 100.0, 2);
+  };
+
   useLayoutEffect(() => {
     getUserData().then((response) => {
       if (response.data.message === "loggedIn") {
@@ -501,26 +514,20 @@ const Preferences = ({ className, ...rest }) => {
                             TDEE
                           </Typography>
                           <Typography color="textPrimary" variant="h3">
-                            {weight === 0 ||
-                            height === 0 ||
-                            age === 0 ||
+                            {MealCalculation() === 0 ||
+                            weight == 0 ||
+                            height == 0 ||
+                            age == 0 ||
                             !weight ||
+                            !height ||
                             !age ||
-                            !height
+                            !sex
                               ? "Undefined"
-                              : (parseFloat(weight) * 10.0) /
-                                  Math.pow(parseFloat(height) / 100.0, 2) /
-                                  10.0 >
-                                100
-                              ? "100+"
-                              : Math.round(
-                                  1.15 *
-                                    (height * 6.25 +
-                                      weight * 9.99 -
-                                      age * 4.92 +
-                                      5) *
-                                    (activity / 28.6 + 1.2)
-                                )}
+                              : MealCalculation() > 4000
+                              ? "4000+"
+                              : MealCalculation() < 0
+                              ? "0"
+                              : Math.round(MealCalculation() * 4)}
                           </Typography>
                         </Grid>
                         <Grid item>
@@ -530,7 +537,16 @@ const Preferences = ({ className, ...rest }) => {
                         </Grid>
                       </Grid>
                       <Typography color="textSecondary" variant="caption">
-                        kcal
+                        {MealCalculation() === 0 ||
+                        weight == 0 ||
+                        height == 0 ||
+                        age == 0 ||
+                        !weight ||
+                        !height ||
+                        !age ||
+                        !sex
+                          ? "Please enter your details"
+                          : "kcal"}
                       </Typography>
                     </CardContent>
                   </Card>
@@ -548,17 +564,17 @@ const Preferences = ({ className, ...rest }) => {
                             BMI
                           </Typography>
                           <Typography color="textPrimary" variant="h3">
-                            {weight === 0 || height === 0 || !weight || !height
+                            {BMICalculation() === 0 ||
+                            weight == 0 ||
+                            height == 0 ||
+                            !weight ||
+                            !height
                               ? "Undefined"
-                              : (parseFloat(weight) * 10.0) /
-                                  Math.pow(parseFloat(height) / 100.0, 2) /
-                                  10.0 >
-                                100
+                              : BMICalculation() > 100
                               ? "100+"
-                              : Math.round(
-                                  (parseFloat(weight) * 10.0) /
-                                    Math.pow(parseFloat(height) / 100.0, 2)
-                                ) / 10.0}
+                              : BMICalculation() < 0
+                              ? "0"
+                              : Math.round(10 * BMICalculation()) / 10.0}
                           </Typography>
                         </Grid>
                         <Grid item>
@@ -568,25 +584,17 @@ const Preferences = ({ className, ...rest }) => {
                         </Grid>
                       </Grid>
                       <Typography color="textSecondary" variant="caption">
-                        {parseFloat(weight) /
-                          Math.pow(parseFloat(height) / 100.0, 2) ===
-                          0 ||
-                        weight === 0 ||
-                        height === 0 ||
+                        {BMICalculation() === 0 ||
+                        weight == 0 ||
+                        height == 0 ||
                         !weight ||
                         !height
                           ? "Please enter your details"
-                          : parseFloat(weight) /
-                              Math.pow(parseFloat(height) / 100.0, 2) <
-                            18.5
+                          : BMICalculation() < 18.5
                           ? "Underweight"
-                          : parseFloat(weight) /
-                              Math.pow(parseFloat(height) / 100.0, 2) <
-                            25
+                          : BMICalculation() < 25
                           ? " Normal weight"
-                          : parseFloat(weight) /
-                              Math.pow(parseFloat(height) / 100.0, 2) <
-                            30
+                          : BMICalculation() < 30
                           ? " Overweight"
                           : "Obese"}
                       </Typography>
@@ -603,44 +611,37 @@ const Preferences = ({ className, ...rest }) => {
                 Calories per meal
               </Typography>
               <Typography gutterBottom color="textSecondary" variant="body2">
-                Your data suggests you should eat <b>4 meals</b> with an average
-                of{" "}
-                <Box fontWeight="fontWeightBold" display="inline">
-                  {weight === 0 ||
-                  height === 0 ||
-                  age === 0 ||
-                  !weight ||
-                  !height ||
-                  !age
-                    ? "undefined "
-                    : `${Math.max(
+                {MealCalculation() === 0 ||
+                weight == 0 ||
+                height == 0 ||
+                age == 0 ||
+                !weight ||
+                !height ||
+                !age ||
+                !sex ? (
+                  "Please enter your details for caloric intake recommendations."
+                ) : (
+                  <>
+                    Your data suggests you should eat{" "}
+                    <Box fontWeight="bold" display="inline">
+                      {MealCalculation() > 1000 ? "a lot of meals" : "4 meals"}
+                    </Box>{" "}
+                    with an average of{" "}
+                    <Box fontWeight="bold" display="inline">
+                      {Math.max(
                         100,
-                        Math.min(
-                          Math.round(
-                            (0.85 *
-                              (height * 6.25 + weight * 9.99 - age * 4.92 + 5) *
-                              (activity / 28.6 + 1.2)) /
-                              4.0
-                          ),
-                          900
-                        )
-                      )}
-                  -
-                  ${Math.max(
-                    200,
-                    Math.min(
-                      Math.round(
-                        (1.15 *
-                          (height * 6.25 + weight * 9.99 - age * 4.92 + 5) *
-                          (activity / 28.6 + 1.2)) /
-                          4.0
-                      ),
-                      1000
-                    )
-                  )}`}
-                  kcal per meal
-                </Box>
-                . You can set a range of calories for your meals here.
+                        Math.min(Math.round(0.85 * MealCalculation()), 900)
+                      )}{" "}
+                      -{" "}
+                      {Math.max(
+                        200,
+                        Math.min(Math.round(1.15 * MealCalculation()), 1000)
+                      )}{" "}
+                    </Box>{" "}
+                    kcal per meal. You can set a range of calories for your
+                    meals here.
+                  </>
+                )}
               </Typography>
               <Box pt={2} pr={1} pl={1}>
                 <Slider
