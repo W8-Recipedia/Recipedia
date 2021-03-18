@@ -14,7 +14,11 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useLayoutEffect, useState } from "react";
-import { getUserData, submitFeeback } from "src/components/ServerRequests";
+import {
+  getUserData,
+  logOut,
+  submitFeeback,
+} from "src/components/ServerRequests";
 
 import Page from "src/components/theme/page";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -51,6 +55,8 @@ const FeedbackView = ({ className, ...rest }) => {
           lastName: response.data.user.lastname,
           email: response.data.user.email,
         });
+      } else {
+        logOut();
       }
     });
     setButtonDisabled(true);
@@ -76,7 +82,7 @@ const FeedbackView = ({ className, ...rest }) => {
     <Scrollbars>
       <Page className={classes.root} title="Feedback | Recipedia">
         <Box m={2}>
-          <Container maxWidth="false">
+          <Container maxWidth={false}>
             <Card>
               <CardContent>
                 <Box p={1}>
@@ -95,7 +101,7 @@ const FeedbackView = ({ className, ...rest }) => {
               </CardContent>
             </Card>
           </Container>
-          <Container maxWidth="false">
+          <Container maxWidth={false}>
             <Box mt={3}>
               <Card>
                 <form autoComplete="off" noValidate {...rest}>

@@ -160,22 +160,27 @@ app.use((req, res, next) => {
 app.post("/recipes/getRecipesComplex", (req, res) => {
   const apiKey = `apiKey=${process.env.RECIPE_API_KEY}`;
   const recipeNumber = `&number=${process.env.RECIPE_NUMBER}`;
-  const instructions = `&instructionsRequired=${req.body.instructions}`;
-  const recipeInformation = `&addRecipeInformation=${req.body.recipeinformation}`;
-  const ingredients = `&fillIngredients=${req.body.fillingredients}`;
-
-  const diet = req.body.diet ? `&diet=${req.body.diet}` : ``;
+  const instructions = `&instructionsRequired=true`;
+  const recipeInformation = `&addRecipeInformation=true`;
+  const recipeNutrition = `&addRecipeInformation=true`;
+  const ingredients = `&fillIngredients=true`;
+  const random = `&sort=random`;
   const intolerances = req.body.intolerances
     ? `&intolerances=${req.body.intolerances}`
     : ``;
-  const type = req.body.type ? `&type=${req.body.type}` : ``;
-  const cuisine = req.body.cuisine ? `&cuisine=${req.body.cuisine}` : ``;
-  const offset = `&offset=${req.body.offset}`;
+  const diet = req.body.diet ? `&diet=${req.body.diet}` : ``;
+  const type = req.body.dishtypes ? `&type=${req.body.dishtypes}` : ``;
+  const cuisine = req.body.cuisines ? `&cuisine=${req.body.cuisines}` : ``;
   const query = req.body.query ? `&query=${req.body.query}` : ``;
-  const random = req.body.random ? `&sort=random` : ``;
-
+  const minCalories = req.body.minCalories
+    ? `&minCalories=${req.body.minCalories}`
+    : `&minCalories=0`;
+  const maxCalories = req.body.maxCalories
+    ? `&maxCalories=${req.body.maxCalories}`
+    : ``;
+  const offset = req.body.offset ? `&offset=${req.body.offset}` : ``;
   request(
-    `https://api.spoonacular.com/recipes/complexSearch?${apiKey}${instructions}${recipeInformation}${ingredients}${recipeNumber}${diet}${intolerances}${type}${cuisine}${offset}${query}${random}`,
+    `https://api.spoonacular.com/recipes/complexSearch?${apiKey}${recipeNumber}${instructions}${recipeInformation}${recipeNutrition}${ingredients}${random}${intolerances}${diet}${type}${cuisine}${query}${minCalories}${maxCalories}${offset}`,
     (error, response, body) => {
       res.json(JSON.parse(body));
     }
@@ -185,9 +190,10 @@ app.post("/recipes/getRecipesComplex", (req, res) => {
 app.post("/recipes/getRecipesByID", (req, res) => {
   const apiKey = `apiKey=${process.env.RECIPE_API_KEY}`;
   const recipeIDs = `&ids=${req.body.favourites}`;
+  const recipeNutrition = `&includeNutrition=true`;
 
   request(
-    `https://api.spoonacular.com/recipes/informationBulk?${apiKey}${recipeIDs}`,
+    `https://api.spoonacular.com/recipes/informationBulk?${apiKey}${recipeIDs}${recipeNutrition}`,
     (error, response, body) => {
       res.json(JSON.parse(body));
     }
@@ -233,7 +239,7 @@ app.post("/login", databaseSelect, (req, res) => {
 app.post("/googlelogin", (req, res) => {
   con.query(
     "SELECT * FROM users WHERE email = ?",
-    req.body.userprofile.email,
+    req.body.user.email,
     (err, result) => {
       if (err) {
         res.json({ message: err });
@@ -246,13 +252,9 @@ app.post("/googlelogin", (req, res) => {
       } else {
         res.json({
           message: "loggedIn",
-          token: jwt.sign(
-            { user: req.body.userprofile },
-            process.env.JWT_SECRET,
-            {
-              expiresIn: "30m",
-            }
-          ),
+          token: jwt.sign({ user: req.body.user }, process.env.JWT_SECRET, {
+            expiresIn: "30m",
+          }),
         });
       }
     }
@@ -444,6 +446,10 @@ app.post("/changeuserpreferences", verifyToken, (req, res) => {
         height: req.body.height,
         weight: req.body.weight,
         activity: req.body.activity,
+        age: req.body.age,
+        sex: req.body.sex,
+        minCalories: req.body.minCalories,
+        maxCalories: req.body.maxCalories,
       }),
       res.user.email,
     ],

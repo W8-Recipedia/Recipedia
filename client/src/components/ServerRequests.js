@@ -6,8 +6,8 @@ export const login = async (email, password) => {
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/login",
     {
-      email: email,
-      password: password,
+      email,
+      password,
     }
   );
   if (response.data.token) {
@@ -16,11 +16,11 @@ export const login = async (email, password) => {
   return response;
 };
 
-export const googleLogin = async (userprofile) => {
+export const googleLogin = async (user) => {
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/googlelogin",
     {
-      userprofile: userprofile,
+      user,
     }
   );
   if (response.data.token) {
@@ -33,21 +33,21 @@ export const signUp = async (firstname, lastname, email, password) => {
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/signup",
     {
-      firstname: firstname,
-      lastname: lastname,
-      email: email,
-      password: password,
+      firstname,
+      lastname,
+      email,
+      password,
     }
   );
   return response;
 };
 
-export const googleSignUp = async (gtoken, userprofile) => {
+export const googleSignUp = async (gtoken, user) => {
   if (gtoken) {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/googlesignup",
       {
-        user: userprofile,
+        user,
       }
     );
     return response;
@@ -70,7 +70,7 @@ export const resendVerificationEmail = async (email) => {
   const response = await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/resendverification",
     {
-      email: email,
+      email,
     }
   );
   return response;
@@ -103,7 +103,7 @@ export const addToFavourites = async (favourite) => {
   if (localStorage.getItem("token")) {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/addtofavourites",
-      { favourite: favourite },
+      { favourite },
       {
         headers: {
           "x-access-token": localStorage.getItem("token"),
@@ -120,7 +120,7 @@ export const removeFromFavourites = async (favourite) => {
   if (localStorage.getItem("token")) {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/removefromfavourites",
-      { favourite: favourite },
+      { favourite },
       {
         headers: {
           "x-access-token": localStorage.getItem("token"),
@@ -137,7 +137,7 @@ export const changeUserInfo = async (firstname, lastname, email) => {
   if (localStorage.getItem("token")) {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/changeuserinfo",
-      { firstname: firstname, lastname: lastname, email: email },
+      { firstname, lastname, email },
       {
         headers: { "x-access-token": localStorage.getItem("token") },
       }
@@ -153,17 +153,25 @@ export const changePreferences = async (
   allergens,
   height,
   weight,
-  activity
+  activity,
+  age,
+  sex,
+  minCalories,
+  maxCalories
 ) => {
   if (localStorage.getItem("token")) {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/changeuserpreferences",
       {
-        diet: diet,
-        allergens: allergens,
-        height: height,
-        weight: weight,
-        activity: activity,
+        diet,
+        allergens,
+        height,
+        weight,
+        activity,
+        age,
+        sex,
+        minCalories,
+        maxCalories,
       },
       {
         headers: {
@@ -182,8 +190,8 @@ export const changePassword = async (oldpassword, newpassword) => {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/changeuserpassword",
       {
-        oldpassword: oldpassword,
-        newpassword: newpassword,
+        oldpassword,
+        newpassword,
       },
       {
         headers: { "x-access-token": localStorage.getItem("token") },
@@ -200,7 +208,7 @@ export const submitFeeback = async (feedback) => {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/submitfeedback",
       {
-        feedback: feedback,
+        feedback,
       },
       {
         headers: { "x-access-token": localStorage.getItem("token") },
@@ -236,27 +244,26 @@ export const logOut = () => {
 };
 
 export const getRecipesComplex = async (
-  allergens,
+  intolerances,
   diet,
   dishtypes,
   cuisines,
   offset = 0,
   query,
-  random
+  minCalories,
+  maxCalories
 ) => {
   return await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/recipes/getRecipesComplex",
     {
-      instructions: true,
-      recipeinformation: true,
-      fillingredients: true,
-      intolerances: allergens,
-      diet: diet,
-      type: dishtypes,
-      cuisine: cuisines,
+      intolerances,
+      diet,
+      dishtypes,
+      cuisines,
       offset,
       query,
-      random: random,
+      minCalories,
+      maxCalories,
     }
   );
 };
@@ -265,7 +272,7 @@ export const getRecipesByID = async (favourites) => {
   return await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/recipes/getRecipesByID",
     {
-      favourites: favourites,
+      favourites,
     }
   );
 };

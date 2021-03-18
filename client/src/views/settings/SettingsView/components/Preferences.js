@@ -10,10 +10,14 @@ import {
   DialogContent,
   DialogContentText,
   Divider,
+  FormControl,
   FormControlLabel,
   Grid,
+  InputLabel,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
   Slider,
   TextField,
   Typography,
@@ -23,7 +27,8 @@ import {
 import React, { useLayoutEffect, useState } from "react";
 import { changePreferences, getUserData } from "src/components/ServerRequests";
 
-import EqualizerOutlinedIcon from "@material-ui/icons/EqualizerOutlined";
+import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
+import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
 import clsx from "clsx";
 
 const useStyles = makeStyles({
@@ -33,11 +38,61 @@ const useStyles = makeStyles({
     flexDirection: "column",
   },
   avatar: {
-    backgroundColor: colors.green[600],
-    height: 56,
-    width: 56,
+    backgroundColor: colors.grey[600],
+    height: 50,
+    width: 50,
   },
 });
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+  getContentAnchorEl: () => null,
+};
+
+const activityMarks = [
+  {
+    value: 0,
+    label: "0h",
+  },
+  {
+    value: 5,
+    label: "5h",
+  },
+  {
+    value: 10,
+    label: "10h",
+  },
+  {
+    value: 15,
+    label: "15h",
+  },
+  {
+    value: 20,
+    label: "20h",
+  },
+];
+
+const calorieMarks = [
+  {
+    value: 200,
+    label: "200 kcal",
+  },
+  {
+    value: 500,
+    label: "500 kcal",
+  },
+  {
+    value: 800,
+    label: "800 kcal",
+  },
+];
 
 const Preferences = ({ className, ...rest }) => {
   const classes = useStyles();
@@ -57,9 +112,12 @@ const Preferences = ({ className, ...rest }) => {
     TreeNut: false,
     Wheat: false,
   });
+  const [sex, setSex] = useState("");
+  const [age, setAge] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [activity, setActivity] = useState(0);
+  const [calorieRange, setCalorieRange] = useState([0, 1000]);
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
@@ -79,9 +137,17 @@ const Preferences = ({ className, ...rest }) => {
         }
 
         if (response.data.health) {
+          setSex(response.data.health.sex);
+          setAge(response.data.health.age);
           setHeight(response.data.health.height);
           setWeight(response.data.health.weight);
           setActivity(response.data.health.activity);
+          if (response.data.health.minCalories) {
+            setCalorieRange([
+              response.data.health.minCalories,
+              response.data.health.maxCalories,
+            ]);
+          }
         }
       }
       setButtonDisabled(true);
@@ -109,16 +175,24 @@ const Preferences = ({ className, ...rest }) => {
         }
       }
     }
-    changePreferences(diet, allergenList, height, weight, activity).then(
-      (response) => {
-        setOpenDialog(true);
-        if (response.data.message === "updateSuccess") {
-          setUpdateError(false);
-        } else if (response) {
-          setUpdateError(true);
-        }
+    changePreferences(
+      diet,
+      allergenList,
+      height,
+      weight,
+      activity,
+      age,
+      sex,
+      calorieRange[0],
+      calorieRange[1]
+    ).then((response) => {
+      setOpenDialog(true);
+      if (response.data.message === "updateSuccess") {
+        setUpdateError(false);
+      } else if (response) {
+        setUpdateError(true);
       }
-    );
+    });
   };
 
   const {
@@ -139,8 +213,8 @@ const Preferences = ({ className, ...rest }) => {
     <form className={clsx(classes.root, className)} {...rest}>
       <Card>
         <CardHeader
-          subheader="Manage your preferences here"
-          title="Preferences"
+          subheader="Personalise your experience here"
+          title="Details (optional)"
         />
         <Divider />
         <CardContent>
@@ -324,12 +398,46 @@ const Preferences = ({ className, ...rest }) => {
             </Grid>
             <Grid className={classes.item} item md={4} sm={6} xs={12}>
               <Typography color="textPrimary" gutterBottom variant="h6">
-                Health metrics
+                Health
               </Typography>
               <Grid container spacing={3}>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
+                  <FormControl margin="normal" fullWidth variant="outlined">
+                    <InputLabel>Sex</InputLabel>
+                    <Select
+                      fullWidth
+                      value={sex}
+                      onChange={(e) => {
+                        setButtonDisabled(false);
+                        setSex(e.target.value);
+                      }}
+                      label="Sex"
+                      MenuProps={MenuProps}
+                    >
+                      <MenuItem value={"Male"}>Male</MenuItem>
+                      <MenuItem value={"Female"}>Female</MenuItem>
+                      <MenuItem value={"Other"}>
+                        Other/prefer not to say
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={6}>
                   <TextField
                     margin="normal"
+                    fullWidth
+                    value={age}
+                    label="Age"
+                    type="number"
+                    variant="outlined"
+                    onChange={(e) => {
+                      setAge(e.target.value);
+                      setButtonDisabled(false);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
                     fullWidth
                     label="Height (cm)"
                     type="number"
@@ -355,6 +463,79 @@ const Preferences = ({ className, ...rest }) => {
                   />{" "}
                 </Grid>
                 <Grid item xs={12}>
+                  <Typography variant="h6" gutterBottom>
+                    Activity level
+                  </Typography>
+                  <Typography
+                    gutterBottom
+                    color="textSecondary"
+                    variant="body2"
+                  >
+                    How many hours do you exercise every week?
+                  </Typography>
+                  <Box pt={2} pr={1} pl={1}>
+                    <Slider
+                      value={activity}
+                      onChange={(e, value) => {
+                        setActivity(value);
+                        setButtonDisabled(false);
+                      }}
+                      valueLabelDisplay="auto"
+                      step={0.5}
+                      min={0}
+                      max={20}
+                      marks={activityMarks}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <Card className={clsx(classes.root, className)} {...rest}>
+                    <CardContent>
+                      <Grid container justify="space-between" spacing={3}>
+                        <Grid item>
+                          <Typography
+                            color="textSecondary"
+                            gutterBottom
+                            variant="h6"
+                          >
+                            TDEE
+                          </Typography>
+                          <Typography color="textPrimary" variant="h3">
+                            {weight === 0 ||
+                            height === 0 ||
+                            age === 0 ||
+                            !weight ||
+                            !age ||
+                            !height
+                              ? "Undefined"
+                              : (parseFloat(weight) * 10.0) /
+                                  Math.pow(parseFloat(height) / 100.0, 2) /
+                                  10.0 >
+                                100
+                              ? "100+"
+                              : Math.round(
+                                  1.15 *
+                                    (height * 6.25 +
+                                      weight * 9.99 -
+                                      age * 4.92 +
+                                      5) *
+                                    (activity / 28.6 + 1.2)
+                                )}
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <Avatar className={classes.avatar}>
+                            <DirectionsRunIcon />
+                          </Avatar>
+                        </Grid>
+                      </Grid>
+                      <Typography color="textSecondary" variant="caption">
+                        kcal
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item md={6} xs={12}>
                   <Card className={clsx(classes.root, className)} {...rest}>
                     <CardContent>
                       <Grid container justify="space-between" spacing={3}>
@@ -382,7 +563,7 @@ const Preferences = ({ className, ...rest }) => {
                         </Grid>
                         <Grid item>
                           <Avatar className={classes.avatar}>
-                            <EqualizerOutlinedIcon />
+                            <FitnessCenterIcon />
                           </Avatar>
                         </Grid>
                       </Grid>
@@ -412,32 +593,68 @@ const Preferences = ({ className, ...rest }) => {
                     </CardContent>
                   </Card>
                 </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="h6" gutterBottom>
-                    Activity level
-                  </Typography>
-                  <Typography
-                    gutterBottom
-                    color="textSecondary"
-                    variant="body2"
-                  >
-                    How many hours do you exercise every week?
-                  </Typography>
-                  <Box pt={2} pr={1} pl={1}>
-                    <Slider
-                      value={activity}
-                      onChange={(e, value) => {
-                        setActivity(value);
-                        setButtonDisabled(false);
-                      }}
-                      valueLabelDisplay="auto"
-                      step={0.5}
-                      min={0}
-                      max={20}
-                    />
-                  </Box>
-                </Grid>
               </Grid>
+            </Grid>
+          </Grid>
+          <Divider style={{ marginTop: "20px", marginBottom: "20px" }} />
+          <Grid container direction="row" spacing={3}>
+            <Grid item xs>
+              <Typography variant="h6" gutterBottom>
+                Calories per meal
+              </Typography>
+              <Typography gutterBottom color="textSecondary" variant="body2">
+                Your statistics suggest you should eat <b>4 meals</b> with an
+                average of{" "}
+                <Box fontWeight="fontWeightBold" display="inline">
+                  {weight === 0 ||
+                  height === 0 ||
+                  age === 0 ||
+                  !weight ||
+                  !height ||
+                  !age
+                    ? "undefined "
+                    : `${Math.max(
+                        100,
+                        Math.min(
+                          Math.round(
+                            (0.85 *
+                              (height * 6.25 + weight * 9.99 - age * 4.92 + 5) *
+                              (activity / 28.6 + 1.2)) /
+                              4.0
+                          ),
+                          900
+                        )
+                      )}
+                  -
+                  ${Math.max(
+                    200,
+                    Math.min(
+                      Math.round(
+                        (1.15 *
+                          (height * 6.25 + weight * 9.99 - age * 4.92 + 5) *
+                          (activity / 28.6 + 1.2)) /
+                          4.0
+                      ),
+                      1000
+                    )
+                  )}`}
+                  kcal per meal
+                </Box>
+                . You can set a range for your meals here.
+              </Typography>
+              <Box pt={2} pr={1} pl={1}>
+                <Slider
+                  value={calorieRange}
+                  valueLabelDisplay="auto"
+                  onChange={(e, value) => {
+                    setCalorieRange(value);
+                    setButtonDisabled(false);
+                  }}
+                  min={0}
+                  max={1000}
+                  marks={calorieMarks}
+                />
+              </Box>
             </Grid>
           </Grid>
         </CardContent>

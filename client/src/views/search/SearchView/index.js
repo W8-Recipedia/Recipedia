@@ -126,6 +126,8 @@ const SearchView = () => {
   const [initialSearch, setInitialSearch] = useState(true);
   const [emptySearch, setEmptySearch] = useState(false);
   const [APIKeyUsed, setAPIKeyUsed] = useState(false);
+  const [minCalories, setMinCalories] = useState(0);
+  const [maxCalories, setMaxCalories] = useState(1000);
 
   const loadRecipes = (query = undefined, offset) => {
     setLoadingRecipes(true);
@@ -136,7 +138,8 @@ const SearchView = () => {
       cuisineName.join(","),
       offset,
       query ? query : searchQuery,
-      false
+      minCalories ? minCalories : 0,
+      maxCalories ? maxCalories : 1000
     )
       .then((response) => {
         if (response.data.code === 402) {
@@ -173,10 +176,19 @@ const SearchView = () => {
     }, 500);
     navigate(`/app/search`);
   };
+
   useLayoutEffect(() => {
     getUserData().then((response) => {
-      setIntolerances(response.data.allergens);
-      setDiet(response.data.diet);
+      if (response.data.message === "loggedIn") {
+        setIntolerances(response.data.allergens);
+        setDiet(response.data.diet);
+        if (response.data.health) {
+          setMinCalories(response.data.health.minCalories);
+          setMaxCalories(response.data.health.maxCalories);
+        }
+      } else {
+        logOut();
+      }
     });
   }, []);
 
@@ -197,7 +209,7 @@ const SearchView = () => {
     setSearchQuery(query);
     setInitialSearch(false);
     setEmptySearch(false);
-    loadRecipes(query);
+    loadRecipes(query, 0);
   };
 
   const loadMoreRecipes = () => {
@@ -214,7 +226,7 @@ const SearchView = () => {
     <Scrollbars>
       <Page className={classes.root} title="Search | Recipedia">
         <Box m={2}>
-          <Container maxWidth="false">
+          <Container maxWidth={false}>
             <Card>
               <CardContent>
                 <Box p={1}>
@@ -283,29 +295,34 @@ const SearchView = () => {
                 </Box>
               </Card>
             </Box>
-            <Box mt={3}>
-              {!initialSearch ? (
+            <Box mt={2}>
+              {!initialSearch && (
                 <RecipeList
                   recipes={recipeList}
                   onRecipeClick={onRecipeClick}
                   loading={loadingRecipes}
                 />
-              ) : null}
+              )}
               {initialSearch || emptySearch ? (
-                <Typography
-                  className={classes.placeholderText}
-                  color="textSecondary"
-                  align="center"
-                  variant="h3"
-                >
-                  {initialSearch ? (
-                    "Start searching to find your new favourite recipes!"
-                  ) : emptySearch && recipeList.length !== 0 ? (
-                    <Box pt={2}>No more recipes found.</Box>
-                  ) : (
-                    "No recipes found (for your dietary preferences)"
-                  )}
-                </Typography>
+                <Box mt={2}>
+                  <Typography
+                    className={classes.placeholderText}
+                    color="textSecondary"
+                    align="center"
+                    variant="h3"
+                  >
+                    {initialSearch ? (
+                      "Start searching to find your new favourite recipes!"
+                    ) : emptySearch && recipeList.length !== 0 ? (
+                      <Box pt={2}>
+                        No more recipes found for your health/dietary
+                        preferences.
+                      </Box>
+                    ) : (
+                      "We couldn't find any recipes for your health/dietary preferences."
+                    )}
+                  </Typography>
+                </Box>
               ) : null}
               <Grid item xs={12}>
                 <Box mt={3}>

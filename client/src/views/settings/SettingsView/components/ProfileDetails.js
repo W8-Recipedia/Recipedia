@@ -17,7 +17,7 @@ import { Form, Formik } from "formik";
 import React, { useLayoutEffect, useState } from "react";
 import { changeUserInfo, getUserData } from "src/components/ServerRequests";
 
-const ProfileDetails = ({ className, ...rest }) => {
+const ProfileDetails = () => {
   const [googleAccount, setGoogleAccount] = useState(false);
   const [changeUserInfoSuccess, setChangeDetailsSuccess] = useState(false);
   const [open, setOpen] = useState(false);
@@ -43,7 +43,7 @@ const ProfileDetails = ({ className, ...rest }) => {
     setButtonDisabled(true);
   }, []);
 
-  const handleSubmit = (values, actions) => {
+  const handleSubmit = (values) => {
     changeUserInfo(values.firstName, values.lastName, values.email).then(
       (response) => {
         if (response.data.message === "updateSuccess") {
@@ -116,6 +116,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 </Grid>
                 <Grid item md={12} xs={12}>
                   <TextField
+                    required
                     error={Boolean(touched.email && errors.email)}
                     fullWidth
                     helperText={touched.email && errors.email}

@@ -109,21 +109,33 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
       <DialogContent>
         <Grid container className={classes.extraInfo}>
           <Grid item>
+            {recipeInfo.nutrition ? (
+              <Typography
+                inline
+                variant="subtitle2"
+                color="textPrimary"
+                align="left"
+              >
+                {`Calories: ${Math.round(
+                  recipeInfo.nutrition.nutrients[0].amount
+                )} kcal`}
+              </Typography>
+            ) : null}
             <Typography
-              inline
+              inline="true"
               variant="subtitle2"
               color="textPrimary"
               align="left"
             >
-              Servings: {recipeInfo.servings}
+              {`Servings: ${recipeInfo.servings}`}
             </Typography>
             <Typography
-              inline
+              inline="true"
               variant="subtitle2"
               color="textPrimary"
-              align="right"
+              align="left"
             >
-              Time: {convertTime(recipeInfo.readyInMinutes)}
+              {`Time: ${convertTime(recipeInfo.readyInMinutes)}`}
             </Typography>
           </Grid>
         </Grid>

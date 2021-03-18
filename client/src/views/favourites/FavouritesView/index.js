@@ -63,7 +63,7 @@ const Favourites = () => {
 
   const loadMultipleRecipes = (idsArray) => {
     setLoadingFavourites(true);
-    getRecipesByID(idsArray ? idsArray.join(",") : null)
+    getRecipesByID(idsArray ? idsArray.reverse().join(",") : null)
       .then((response) => {
         if (response.data.code === 402) {
           setAPIKeyUsed(true);
@@ -84,14 +84,18 @@ const Favourites = () => {
 
   useLayoutEffect(() => {
     getUserData().then((response) => {
-      if (response.data.favourites) {
-        if (response.data.favourites.length > 0) {
-          loadMultipleRecipes(response.data.favourites);
+      if (response.data.message === "loggedIn") {
+        if (response.data.favourites) {
+          if (response.data.favourites.length > 0) {
+            loadMultipleRecipes(response.data.favourites);
+          } else {
+            setHasFavourites(false);
+          }
         } else {
           setHasFavourites(false);
         }
       } else {
-        setHasFavourites(false);
+        logOut();
       }
     });
   }, []);
@@ -104,7 +108,7 @@ const Favourites = () => {
     <Scrollbars>
       <Page className={classes.root} title="Favourites | Recipedia ">
         <Box m={2}>
-          <Container maxWidth="false">
+          <Container maxWidth={false}>
             <Card>
               <CardContent>
                 <Box p={1}>
