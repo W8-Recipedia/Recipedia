@@ -1,14 +1,15 @@
-import React from "react";
 import {
   Box,
   Button,
   Container,
+  Grid,
   Typography,
   makeStyles,
-  Grid,
 } from "@material-ui/core";
-import Page from "src/components/theme/page";
+
 import { Link } from "react-router-dom";
+import Page from "src/components/theme/page";
+import React from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 
 const useStyles = makeStyles((theme) => ({

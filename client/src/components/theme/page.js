@@ -1,4 +1,5 @@
 import React, { forwardRef } from "react";
+
 import { Helmet } from "react-helmet";
 
 const Page = forwardRef(({ children, title = "", ...rest }, ref) => {

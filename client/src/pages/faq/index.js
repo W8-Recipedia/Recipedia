@@ -40,8 +40,8 @@ const FAQView = () => {
                     color="textSecondary"
                     component="p"
                   >
-                    If you have any questions, you'll find that they're likely answered
-                    right here.
+                    If you have any questions, you'll find that they're likely
+                    answered right here.
                   </Typography>
                 </Box>
               </CardContent>

@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Container,
   Dialog,
   DialogContent,
@@ -18,7 +19,6 @@ import {
   logOut,
 } from "src/components/ServerRequests";
 
-import CircularProgress from "@material-ui/core/CircularProgress";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Page from "src/components/theme/page";
 import RecipeDialog from "src/components/recipe/RecipeDialog";

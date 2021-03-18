@@ -9,10 +9,10 @@ import {
 } from "@material-ui/core";
 
 import Page from "src/components/theme/page";
-import Password from "src/views/settings/SettingsView/components/Password";
-import Preferences from "src/views/settings/SettingsView/components/Preferences";
-import ProfileCard from "src/views/settings/SettingsView/components/ProfileCard";
-import ProfileDetails from "src/views/settings/SettingsView/components/ProfileDetails";
+import Password from "src/pages/settings/components/Password";
+import Preferences from "src/pages/settings/components/Preferences";
+import ProfileCard from "src/pages/settings/components/ProfileCard";
+import ProfileDetails from "src/pages/settings/components/ProfileDetails";
 import React from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 
