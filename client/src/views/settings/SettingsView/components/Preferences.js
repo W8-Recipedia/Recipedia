@@ -80,16 +80,16 @@ const activityMarks = [
 
 const calorieMarks = [
   {
-    value: 250,
-    label: "250 kcal",
+    value: 200,
+    label: "200 kcal",
   },
   {
     value: 500,
     label: "500 kcal",
   },
   {
-    value: 750,
-    label: "750 kcal",
+    value: 800,
+    label: "800 kcal",
   },
 ];
 
