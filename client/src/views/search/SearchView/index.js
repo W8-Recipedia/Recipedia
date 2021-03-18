@@ -136,7 +136,8 @@ const SearchView = () => {
       cuisineName.join(","),
       offset,
       query ? query : searchQuery,
-      false
+      0, // minCalories
+      1000 // maxCalories
     )
       .then((response) => {
         if (response.data.code === 402) {

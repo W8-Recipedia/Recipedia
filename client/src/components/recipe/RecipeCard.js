@@ -19,6 +19,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import IconButton from "@material-ui/core/IconButton";
 import LocalDiningIcon from "@material-ui/icons/LocalDining";
 import ScheduleIcon from "@material-ui/icons/Schedule";
+import WhatshotIcon from "@material-ui/icons/Whatshot";
 import { useSnackbar } from "notistack";
 
 const convertTime = (num) => {
@@ -30,7 +31,7 @@ const convertTime = (num) => {
   let minutes = (hours - rHours) * 60;
   let rMinutes = Math.round(minutes);
   return `${rHours}h ${rMinutes}m`;
-}
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -130,8 +131,31 @@ const RecipeCard = ({ recipe, ...props }) => {
       </CardContent>
       <CardActions>
         <Grid container justify="center">
+          <Grid item md={12}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              pr={3}
+            >
+              <IconButton disabled>
+                <WhatshotIcon color="primary" />
+              </IconButton>
+              <Typography
+                color="textSecondary"
+                display="inline"
+                variant="body2"
+              >
+                {`Calories: ${Math.round(recipe.nutrition.nutrients[0].amount)} kcal`}
+              </Typography>
+            </Box>
+          </Grid>
           <Grid item md={6}>
-            <Box justifyContent="flex-start" alignItems="center">
+            <Box
+              display="flex"
+              justifyContent="flex-start"
+              alignItems="center"
+            >
               <IconButton disabled>
                 <LocalDiningIcon color="primary" />
               </IconButton>
@@ -144,9 +168,13 @@ const RecipeCard = ({ recipe, ...props }) => {
               </Typography>
             </Box>
           </Grid>
-          <Box justifyContent="center" alignItems="center"></Box>
           <Grid item md={6}>
-            <Box justifyContent="flex-end" alignItems="center">
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              alignItems="center"
+              pr={2}
+            >
               <IconButton disabled>
                 <ScheduleIcon color="primary" />
               </IconButton>

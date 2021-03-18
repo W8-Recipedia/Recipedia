@@ -75,7 +75,8 @@ const Home = () => {
       null,
       recipeOffset,
       null,
-      true
+      0, // minCalories
+      1000 // maxCalories
     )
       .then((response) => {
         if (response.data.code === 402) {

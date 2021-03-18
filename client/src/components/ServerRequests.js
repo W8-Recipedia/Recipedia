@@ -236,27 +236,26 @@ export const logOut = () => {
 };
 
 export const getRecipesComplex = async (
-  allergens,
+  intolerances,
   diet,
   dishtypes,
   cuisines,
   offset = 0,
   query,
-  random
+  minCalories,
+  maxCalories
 ) => {
   return await Axios.post(
     process.env.REACT_APP_SERVER_URL + "/recipes/getRecipesComplex",
     {
-      instructions: true,
-      recipeinformation: true,
-      fillingredients: true,
-      intolerances: allergens,
-      diet: diet,
-      type: dishtypes,
-      cuisine: cuisines,
+      intolerances,
+      diet,
+      dishtypes,
+      cuisines,
       offset,
       query,
-      random: random,
+      minCalories,
+      maxCalories,
     }
   );
 };
