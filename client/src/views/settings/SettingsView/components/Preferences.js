@@ -27,6 +27,7 @@ import {
 import React, { useLayoutEffect, useState } from "react";
 import { changePreferences, getUserData } from "src/components/ServerRequests";
 
+import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
 import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
 import clsx from "clsx";
 
@@ -38,8 +39,8 @@ const useStyles = makeStyles({
   },
   avatar: {
     backgroundColor: colors.grey[600],
-    height: 56,
-    width: 56,
+    height: 50,
+    width: 50,
   },
 });
 
@@ -461,7 +462,7 @@ const Preferences = ({ className, ...rest }) => {
                     value={weight}
                   />{" "}
                 </Grid>
-                <Grid item xs>
+                <Grid item xs={12}>
                   <Typography variant="h6" gutterBottom>
                     Activity level
                   </Typography>
@@ -487,7 +488,54 @@ const Preferences = ({ className, ...rest }) => {
                     />
                   </Box>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item md={6} xs={12}>
+                  <Card className={clsx(classes.root, className)} {...rest}>
+                    <CardContent>
+                      <Grid container justify="space-between" spacing={3}>
+                        <Grid item>
+                          <Typography
+                            color="textSecondary"
+                            gutterBottom
+                            variant="h6"
+                          >
+                            TDEE
+                          </Typography>
+                          <Typography color="textPrimary" variant="h3">
+                            {weight === 0 ||
+                            height === 0 ||
+                            age === 0 ||
+                            !weight ||
+                            !age ||
+                            !height
+                              ? "Undefined"
+                              : (parseFloat(weight) * 10.0) /
+                                  Math.pow(parseFloat(height) / 100.0, 2) /
+                                  10.0 >
+                                100
+                              ? "100+"
+                              : Math.round(
+                                  1.15 *
+                                    (height * 6.25 +
+                                      weight * 9.99 -
+                                      age * 4.92 +
+                                      5) *
+                                    (activity / 28.6 + 1.2)
+                                )}
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <Avatar className={classes.avatar}>
+                            <DirectionsRunIcon />
+                          </Avatar>
+                        </Grid>
+                      </Grid>
+                      <Typography color="textSecondary" variant="caption">
+                        kcal
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item md={6} xs={12}>
                   <Card className={clsx(classes.root, className)} {...rest}>
                     <CardContent>
                       <Grid container justify="space-between" spacing={3}>
@@ -548,7 +596,7 @@ const Preferences = ({ className, ...rest }) => {
               </Grid>
             </Grid>
           </Grid>
-          <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
+          <Divider style={{ marginTop: "20px", marginBottom: "20px" }} />
           <Grid container direction="row" spacing={3}>
             <Grid item xs>
               <Typography variant="h6" gutterBottom>
