@@ -13,16 +13,16 @@ import {
   FormControl,
   FormControlLabel,
   Grid,
+  InputLabel,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
   Slider,
   TextField,
   Typography,
   colors,
   makeStyles,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@material-ui/core";
 import React, { useLayoutEffect, useState } from "react";
 import { changePreferences, getUserData } from "src/components/ServerRequests";
@@ -37,7 +37,7 @@ const useStyles = makeStyles({
     flexDirection: "column",
   },
   avatar: {
-    backgroundColor: colors.teal[600],
+    backgroundColor: colors.grey[600],
     height: 56,
     width: 56,
   },
@@ -61,8 +61,16 @@ const activityMarks = [
     label: "0h",
   },
   {
+    value: 5,
+    label: "5h",
+  },
+  {
     value: 10,
     label: "10h",
+  },
+  {
+    value: 15,
+    label: "15h",
   },
   {
     value: 20,
@@ -72,8 +80,16 @@ const activityMarks = [
 
 const calorieMarks = [
   {
+    value: 250,
+    label: "250 kcal",
+  },
+  {
     value: 500,
-    label: "500KCal",
+    label: "500 kcal",
+  },
+  {
+    value: 750,
+    label: "750 kcal",
   },
 ];
 
@@ -95,12 +111,12 @@ const Preferences = ({ className, ...rest }) => {
     TreeNut: false,
     Wheat: false,
   });
-  // const [sex, setSex] = useState("");
-  // const [age, setAge] = useState("");
+  const [sex, setSex] = useState("");
+  const [age, setAge] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [activity, setActivity] = useState(0);
-  // const [calorieRange, setCalorieRange] = useState(["", ""]);
+  const [calorieRange, setCalorieRange] = useState([0, 1000]);
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
@@ -120,16 +136,17 @@ const Preferences = ({ className, ...rest }) => {
         }
 
         if (response.data.health) {
-          // setSex(response.data.health.sex);
-          // setAge(response.data.health.age);
+          setSex(response.data.health.sex);
+          setAge(response.data.health.age);
           setHeight(response.data.health.height);
           setWeight(response.data.health.weight);
-          setActivity(response.data.health.activity); // set activity (integer 1-5)
-          // set age
-          // set sex
-          // set min calories
-          // set max calories
-          // setCalorieRange(response.data.health.calories);
+          setActivity(response.data.health.activity);
+          if (response.data.health.minCalories) {
+            setCalorieRange([
+              response.data.health.minCalories,
+              response.data.health.maxCalories,
+            ]);
+          }
         }
       }
       setButtonDisabled(true);
@@ -145,11 +162,6 @@ const Preferences = ({ className, ...rest }) => {
     setButtonDisabled(false);
     setAllergens({ ...allergens, [event.target.name]: event.target.checked });
   };
-
-  // const handleSexChange = (event) => {
-  //   setButtonDisabled(false);
-  //   setSex(event.target.value);
-  // };
 
   const handleSubmit = () => {
     var allergenList = [];
@@ -167,11 +179,11 @@ const Preferences = ({ className, ...rest }) => {
       allergenList,
       height,
       weight,
-      1, // activity (integer 1-5)
-      18, // age
-      "male", // sex
-      300, // minCalories
-      700 // maxCalories
+      activity,
+      age,
+      sex,
+      calorieRange[0],
+      calorieRange[1]
     ).then((response) => {
       setOpenDialog(true);
       if (response.data.message === "updateSuccess") {
@@ -393,15 +405,18 @@ const Preferences = ({ className, ...rest }) => {
                     <InputLabel>Sex</InputLabel>
                     <Select
                       fullWidth
-                      // value={sex}
-                      // onChange={handleSexChange}
+                      value={sex}
+                      onChange={(e) => {
+                        setButtonDisabled(false);
+                        setSex(e.target.value);
+                      }}
                       label="Sex"
                       MenuProps={MenuProps}
                     >
-                      <MenuItem>Male</MenuItem> {/* value={sex} */}
-                      <MenuItem>Female</MenuItem> {/* value={sex} */}
-                      <MenuItem> {/* value={sex} */}
-                        <em>Other / prefer not to say</em>
+                      <MenuItem value={"Male"}>Male</MenuItem>
+                      <MenuItem value={"Female"}>Female</MenuItem>
+                      <MenuItem value={"Other"}>
+                        Other/prefer not to say
                       </MenuItem>
                     </Select>
                   </FormControl>
@@ -410,12 +425,12 @@ const Preferences = ({ className, ...rest }) => {
                   <TextField
                     margin="normal"
                     fullWidth
-                    // value={age}
-                    label="Age (yrs)"
+                    value={age}
+                    label="Age"
                     type="number"
                     variant="outlined"
                     onChange={(e) => {
-                      // setAge(e.target.value);
+                      setAge(e.target.value);
                       setButtonDisabled(false);
                     }}
                   />
@@ -537,24 +552,29 @@ const Preferences = ({ className, ...rest }) => {
           <Grid container direction="row" spacing={3}>
             <Grid item xs>
               <Typography variant="h6" gutterBottom>
-                Calorie range per meal
+                Calories per meal
               </Typography>
               <Typography gutterBottom color="textSecondary" variant="body2">
-                Your statistics suggest you should average{" "}
+                Your statistics suggest you should eat <b>4 meals</b> with an
+                average of{" "}
                 <Box fontWeight="fontWeightBold" display="inline">
-                  633 KCal
-                </Box>{" "}
-                per meal today
+                  {Math.round(
+                    ((height * 6.25 + weight * 9.99 - age * 4.92 + 5) *
+                      (activity / 28.6 + 1.2)) /
+                      4.0
+                  )}{" "}
+                  kcal per meal
+                </Box>
+                . You can set a range for your meals here.
               </Typography>
               <Box pt={2} pr={1} pl={1}>
                 <Slider
-                  // value={calorieRange}
+                  value={calorieRange}
+                  valueLabelDisplay="auto"
                   onChange={(e, value) => {
-                    // setCalorieRange(value);
+                    setCalorieRange(value);
                     setButtonDisabled(false);
                   }}
-                  valueLabelDisplay="auto"
-                  step={5}
                   min={0}
                   max={1000}
                   marks={calorieMarks}
