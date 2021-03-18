@@ -603,7 +603,7 @@ const Preferences = ({ className, ...rest }) => {
                 Calories per meal
               </Typography>
               <Typography gutterBottom color="textSecondary" variant="body2">
-                Your statistics suggest you should eat <b>4 meals</b> with an
+                Your data suggests you should eat <b>4 meals</b> with an
                 average of{" "}
                 <Box fontWeight="fontWeightBold" display="inline">
                   {weight === 0 ||
