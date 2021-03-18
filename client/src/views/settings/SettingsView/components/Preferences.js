@@ -640,7 +640,7 @@ const Preferences = ({ className, ...rest }) => {
                   )}`}
                   kcal per meal
                 </Box>
-                . You can set a range for your meals here.
+                . You can set a range of calories for your meals here.
               </Typography>
               <Box pt={2} pr={1} pl={1}>
                 <Slider
