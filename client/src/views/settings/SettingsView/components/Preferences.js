@@ -387,9 +387,9 @@ const Preferences = ({ className, ...rest }) => {
                       label="Sex"
                       MenuProps={MenuProps}
                     >
-                      <MenuItem value={20}>Male</MenuItem>
-                      <MenuItem value={30}>Female</MenuItem>
-                      <MenuItem value="Other">
+                      <MenuItem>Male</MenuItem> {/* value={sex} */}
+                      <MenuItem>Female</MenuItem> {/* value={sex} */}
+                      <MenuItem> {/* value={sex} */}
                         <em>Other / prefer not to say</em>
                       </MenuItem>
                     </Select>
