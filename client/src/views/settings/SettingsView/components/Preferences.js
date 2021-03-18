@@ -124,7 +124,11 @@ const Preferences = ({ className, ...rest }) => {
           // setAge(response.data.health.age);
           setHeight(response.data.health.height);
           setWeight(response.data.health.weight);
-          setActivity(response.data.health.activity);
+          setActivity(response.data.health.activity); // set activity (integer 1-5)
+          // set age
+          // set sex
+          // set min calories
+          // set max calories
           // setCalorieRange(response.data.health.calories);
         }
       }
@@ -158,17 +162,24 @@ const Preferences = ({ className, ...rest }) => {
         }
       }
     }
-    changePreferences(diet, allergenList, height, weight, activity).then(
-      // Add sex, age & calorieRange
-      (response) => {
-        setOpenDialog(true);
-        if (response.data.message === "updateSuccess") {
-          setUpdateError(false);
-        } else if (response) {
-          setUpdateError(true);
-        }
+    changePreferences(
+      diet,
+      allergenList,
+      height,
+      weight,
+      1, // activity (integer 1-5)
+      18, // age
+      "male", // sex
+      300, // minCalories
+      700 // maxCalories
+    ).then((response) => {
+      setOpenDialog(true);
+      if (response.data.message === "updateSuccess") {
+        setUpdateError(false);
+      } else if (response) {
+        setUpdateError(true);
       }
-    );
+    });
   };
 
   const {

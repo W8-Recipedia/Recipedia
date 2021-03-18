@@ -63,7 +63,7 @@ const Favourites = () => {
 
   const loadMultipleRecipes = (idsArray) => {
     setLoadingFavourites(true);
-    getRecipesByID(idsArray ? idsArray.join(",") : null)
+    getRecipesByID(idsArray ? idsArray.reverse().join(",") : null)
       .then((response) => {
         if (response.data.code === 402) {
           setAPIKeyUsed(true);
