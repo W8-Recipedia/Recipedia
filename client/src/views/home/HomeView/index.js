@@ -116,7 +116,6 @@ const Home = () => {
       if (response.data.message === "loggedIn") {
         setAllergens(response.data.allergens);
         setDiet(response.data.diet);
-        console.log(response.data.health);
         if (response.data.health) {
           setMinCalories(response.data.health.minCalories);
           setMaxCalories(response.data.health.maxCalories);

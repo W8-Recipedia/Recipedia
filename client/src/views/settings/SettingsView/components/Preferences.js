@@ -38,7 +38,7 @@ const useStyles = makeStyles({
     flexDirection: "column",
   },
   avatar: {
-    backgroundColor: colors.grey[600],
+    backgroundColor: colors.grey[700],
     height: 50,
     width: 50,
   },
@@ -488,7 +488,7 @@ const Preferences = ({ className, ...rest }) => {
                     />
                   </Box>
                 </Grid>
-                <Grid item md={6} xs={12}>
+                <Grid item xs={12}>
                   <Card className={clsx(classes.root, className)} {...rest}>
                     <CardContent>
                       <Grid container justify="space-between" spacing={3}>
@@ -535,7 +535,7 @@ const Preferences = ({ className, ...rest }) => {
                     </CardContent>
                   </Card>
                 </Grid>
-                <Grid item md={6} xs={12}>
+                <Grid item xs={12}>
                   <Card className={clsx(classes.root, className)} {...rest}>
                     <CardContent>
                       <Grid container justify="space-between" spacing={3}>

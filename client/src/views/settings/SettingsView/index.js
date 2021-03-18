@@ -57,7 +57,6 @@ const SettingsView = () => {
                 <Grid item lg={4} md={6} xs={12}>
                   <ProfileCard />
                 </Grid>
-
                 <Grid item lg={8} md={6} xs={12}>
                   <ProfileDetails />
                 </Grid>

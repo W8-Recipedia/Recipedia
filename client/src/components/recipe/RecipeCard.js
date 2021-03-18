@@ -30,6 +30,9 @@ const convertTime = (num) => {
   let rHours = Math.floor(hours);
   let minutes = (hours - rHours) * 60;
   let rMinutes = Math.round(minutes);
+  if (rMinutes === 0) {
+    return `${rHours}h`;
+  }
   return `${rHours}h ${rMinutes}m`;
 };
 
@@ -146,16 +149,14 @@ const RecipeCard = ({ recipe, ...props }) => {
                 display="inline"
                 variant="body2"
               >
-                {`Calories: ${Math.round(recipe.nutrition.nutrients[0].amount)} kcal`}
+                {`Calories: ${Math.round(
+                  recipe.nutrition.nutrients[0].amount
+                )} kcal`}
               </Typography>
             </Box>
           </Grid>
           <Grid item md={6}>
-            <Box
-              display="flex"
-              justifyContent="flex-start"
-              alignItems="center"
-            >
+            <Box display="flex" justifyContent="flex-start" alignItems="center">
               <IconButton disabled>
                 <LocalDiningIcon color="primary" />
               </IconButton>
@@ -178,13 +179,36 @@ const RecipeCard = ({ recipe, ...props }) => {
               <IconButton disabled>
                 <ScheduleIcon color="primary" />
               </IconButton>
-              <Typography
-                color="textSecondary"
-                display="inline"
-                variant="body2"
-              >
-                Time: {convertTime(recipe.readyInMinutes)}
-              </Typography>
+              {convertTime(recipe.readyInMinutes).length > 5 ? (
+                <Grid container>
+                  <Grid item>
+                    <Box>
+                      <Typography
+                        color="textSecondary"
+                        display="block"
+                        variant="body2"
+                      >
+                        Time:
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item>
+                    <Box>
+                      <Typography
+                        color="textSecondary"
+                        display="block"
+                        variant="body2"
+                      >
+                        {convertTime(recipe.readyInMinutes)}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                </Grid>
+              ) : (
+                <Typography color="textSecondary" variant="body2">
+                  Time: {convertTime(recipe.readyInMinutes)}
+                </Typography>
+              )}
             </Box>
           </Grid>
 
