@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import LandingView from "src/views/landing/LandingView";
-import LoginView from "src/views/login/LoginView";
+import LandingView from "src/pages/landing";
+import LoginView from "src/pages/login";
 import { getUserData } from "src/components/ServerRequests";
 import { useNavigate } from "react-router-dom";
 

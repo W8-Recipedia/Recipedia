@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import DashboardView from "src/components/dashboard";
+import DashboardView from "src/components/nav";
 import { getUserData } from "src/components/ServerRequests";
 import { useNavigate } from "react-router-dom";
 

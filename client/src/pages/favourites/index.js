@@ -2,6 +2,7 @@ import {
   Box,
   Card,
   CardContent,
+  CircularProgress,
   Container,
   Dialog,
   DialogContent,
@@ -17,7 +18,6 @@ import {
   logOut,
 } from "src/components/ServerRequests";
 
-import CircularProgress from "@material-ui/core/CircularProgress";
 import Page from "src/components/theme/page";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";

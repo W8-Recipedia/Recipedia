@@ -20,7 +20,7 @@ import {
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
-import NavItem from "src/components/dashboard/components/NavItem";
+import NavItem from "src/components/nav/components/NavItem";
 import { Scrollbars } from "react-custom-scrollbars";
 import { getUserData } from "src/components/ServerRequests";
 

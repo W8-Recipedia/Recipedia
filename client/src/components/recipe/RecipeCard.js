@@ -5,6 +5,7 @@ import {
   CardContent,
   Grid,
   Hidden,
+  IconButton,
   Typography,
   makeStyles,
 } from "@material-ui/core";
@@ -17,7 +18,6 @@ import {
 
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import IconButton from "@material-ui/core/IconButton";
 import LocalDiningIcon from "@material-ui/icons/LocalDining";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
@@ -177,11 +177,7 @@ const RecipeCard = ({ recipe, ...props }) => {
               </Box>
             </Hidden>
             <Hidden mdDown>
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
+              <Box display="flex" justifyContent="center" alignItems="center">
                 <IconButton disabled>
                   <LocalDiningIcon color="primary" />
                 </IconButton>

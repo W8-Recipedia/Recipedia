@@ -2,21 +2,21 @@ import { Navigate, useRoutes } from "react-router-dom";
 import React, { useState } from "react";
 
 import AccessCheck from "src/components/auth/AccessCheck";
-import FAQView from "src/views/faq/FAQView";
-import FavouritesView from "src/views/favourites/FavouritesView";
-import FeedbackView from "src/views/feedback/FeedbackView";
-import HomeView from "src/views/home/HomeView";
-import LegalView from "src/views/legal/LegalView";
+import FAQView from "src/pages/faq";
+import FavouritesView from "src/pages/favourites";
+import FeedbackView from "src/pages/feedback";
+import HomeView from "src/pages/home";
+import LegalView from "src/pages/legal";
 import LoginCheck from "src/components/auth/LoginCheck";
-import NotFoundView from "src/views/error/ErrorView";
-import SearchView from "src/views/search/SearchView";
-import SettingsView from "src/views/settings/SettingsView";
-import SignUpView from "src/views/signup/SignUpView";
+import NotFoundView from "src/pages/error";
+import SearchView from "src/pages/search";
+import SettingsView from "src/pages/settings";
+import SignUpView from "src/pages/signup";
+import { SnackbarProvider } from "notistack";
 import Styles from "src/components/theme/styles";
 import Theme from "src/components/theme";
 import { ThemeProvider } from "@material-ui/core";
-import { SnackbarProvider } from "notistack";
-import VerifyView from "src/views/verify/VerifyView";
+import VerifyView from "src/pages/verify";
 
 const App = () => {
   const [theme, setTheme] = useState(Theme.light);

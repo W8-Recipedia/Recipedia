@@ -30,7 +30,7 @@ import Page from "src/components/theme/page";
 import RecipeDialog from "src/components/recipe/RecipeDialog";
 import RecipeList from "src/components/recipe/RecipeList";
 import { Scrollbars } from "react-custom-scrollbars";
-import Searchbar from "src/views/search/SearchView/components/Searchbar";
+import Searchbar from "src/pages/search/components/Searchbar";
 import { useNavigate } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
