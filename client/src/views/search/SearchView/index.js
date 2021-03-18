@@ -209,7 +209,7 @@ const SearchView = () => {
     setSearchQuery(query);
     setInitialSearch(false);
     setEmptySearch(false);
-    loadRecipes(query);
+    loadRecipes(query, 0);
   };
 
   const loadMoreRecipes = () => {
