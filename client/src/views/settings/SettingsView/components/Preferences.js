@@ -558,18 +558,30 @@ const Preferences = ({ className, ...rest }) => {
                 Your statistics suggest you should eat <b>4 meals</b> with an
                 average of{" "}
                 <Box fontWeight="fontWeightBold" display="inline">
-                  {Math.round(
-                    (0.85 *
-                      (height * 6.25 + weight * 9.99 - age * 4.92 + 5) *
-                      (activity / 28.6 + 1.2)) /
-                      4.0
+                  {Math.max(
+                    100,
+                    Math.min(
+                      Math.round(
+                        (0.85 *
+                          (height * 6.25 + weight * 9.99 - age * 4.92 + 5) *
+                          (activity / 28.6 + 1.2)) /
+                          4.0
+                      ),
+                      900
+                    )
                   )}{" "}
                   -{" "}
-                  {Math.round(
-                    (1.15 *
-                      (height * 6.25 + weight * 9.99 - age * 4.92 + 5) *
-                      (activity / 28.6 + 1.2)) /
-                      4.0
+                  {Math.max(
+                    200,
+                    Math.min(
+                      Math.round(
+                        (1.15 *
+                          (height * 6.25 + weight * 9.99 - age * 4.92 + 5) *
+                          (activity / 28.6 + 1.2)) /
+                          4.0
+                      ),
+                      1000
+                    )
                   )}{" "}
                   kcal per meal
                 </Box>
