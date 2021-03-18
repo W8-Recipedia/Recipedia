@@ -122,7 +122,7 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
               </Typography>
             ) : null}
             <Typography
-              inline
+              inline="true"
               variant="subtitle2"
               color="textPrimary"
               align="left"
@@ -130,7 +130,7 @@ const RecipeDialog = ({ open, handleClose, recipeId, recipeInfo }) => {
               {`Servings: ${recipeInfo.servings}`}
             </Typography>
             <Typography
-              inline
+              inline="true"
               variant="subtitle2"
               color="textPrimary"
               align="left"

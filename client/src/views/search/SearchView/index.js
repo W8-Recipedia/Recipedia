@@ -215,7 +215,7 @@ const SearchView = () => {
     <Scrollbars>
       <Page className={classes.root} title="Search | Recipedia">
         <Box m={2}>
-          <Container maxWidth="false">
+          <Container maxWidth={false}>
             <Card>
               <CardContent>
                 <Box p={1}>
@@ -284,29 +284,31 @@ const SearchView = () => {
                 </Box>
               </Card>
             </Box>
-            <Box mt={3}>
-              {!initialSearch ? (
+            <Box mt={2}>
+              {!initialSearch && (
                 <RecipeList
                   recipes={recipeList}
                   onRecipeClick={onRecipeClick}
                   loading={loadingRecipes}
                 />
-              ) : null}
+              )}
               {initialSearch || emptySearch ? (
-                <Typography
-                  className={classes.placeholderText}
-                  color="textSecondary"
-                  align="center"
-                  variant="h3"
-                >
-                  {initialSearch ? (
-                    "Start searching to find your new favourite recipes!"
-                  ) : emptySearch && recipeList.length !== 0 ? (
-                    <Box pt={2}>No more recipes found.</Box>
-                  ) : (
-                    "No recipes found (for your dietary preferences)"
-                  )}
-                </Typography>
+                <Box mt={2}>
+                  <Typography
+                    className={classes.placeholderText}
+                    color="textSecondary"
+                    align="center"
+                    variant="h3"
+                  >
+                    {initialSearch ? (
+                      "Start searching to find your new favourite recipes!"
+                    ) : emptySearch && recipeList.length !== 0 ? (
+                      <Box pt={2}>No more recipes found.</Box>
+                    ) : (
+                      "No recipes found (for your health / dietary preferences)."
+                    )}
+                  </Typography>
+                </Box>
               ) : null}
               <Grid item xs={12}>
                 <Box mt={3}>

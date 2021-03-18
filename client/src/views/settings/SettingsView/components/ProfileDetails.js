@@ -116,6 +116,7 @@ const ProfileDetails = ({ className, ...rest }) => {
                 </Grid>
                 <Grid item md={12} xs={12}>
                   <TextField
+                    required
                     error={Boolean(touched.email && errors.email)}
                     fullWidth
                     helperText={touched.email && errors.email}

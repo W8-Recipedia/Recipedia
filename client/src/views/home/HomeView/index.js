@@ -125,7 +125,7 @@ const Home = () => {
     <Scrollbars>
       <Page className={classes.root} title="Home | Recipedia">
         <Box m={2}>
-          <Container maxWidth="false">
+          <Container maxWidth={false}>
             <Card>
               <CardContent>
                 <Box p={1}>
@@ -155,7 +155,7 @@ const Home = () => {
                       align="center"
                       variant="h3"
                     >
-                      We couldn't find any recipes for your dietary preferences.
+                      No recipes found (for your health / dietary preferences).
                     </Typography>
                   </Box>
                 </>

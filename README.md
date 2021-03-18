@@ -28,15 +28,9 @@ git clone https://github.com/W8-Recipedia/Recipedia.git
 
 Environment variables:
 
-Add a `.env` file to your client and server directories, and replace `[...]` with the relevant values.
+Add a `.env` file to your root and client directories, and replace `[...]` with the relevant values.
 
-client/.env
-
-```dosini
-REACT_APP_SERVER_URL=http://localhost:3001
-```
-
-server/.env
+.env
 
 ```dosini
 DATABASE_HOST=[DATABASE URL]
@@ -53,6 +47,12 @@ RECIPEDIA_EMAIL=[USER VERIFICATION EMAIL ADDRESS]
 RECIPEDIA_PASSWORD=[USER VERIFICATION EMAIL PASSWORD]
 ```
 
+client/.env
+
+```dosini
+REACT_APP_SERVER_URL=http://localhost:3001
+```
+
 ---
 
 Database setup (replace `+XX:XX` with your time zone):
@@ -60,11 +60,6 @@ Database setup (replace `+XX:XX` with your time zone):
 ```sql
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+XX:XX";
-
-CREATE TABLE `feedback` (
-  `email` varchar(254) COLLATE utf8_unicode_ci NOT NULL,
-  `message` text COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `users` (
   `userid` int(11) NOT NULL,
