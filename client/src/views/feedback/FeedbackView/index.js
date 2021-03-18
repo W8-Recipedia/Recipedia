@@ -51,6 +51,8 @@ const FeedbackView = ({ className, ...rest }) => {
           lastName: response.data.user.lastname,
           email: response.data.user.email,
         });
+      } else {
+        logOut();
       }
     });
     setButtonDisabled(true);

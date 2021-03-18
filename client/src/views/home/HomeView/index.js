@@ -113,20 +113,24 @@ const Home = () => {
   };
   useLayoutEffect(() => {
     getUserData().then((response) => {
-      setAllergens(response.data.allergens);
-      setDiet(response.data.diet);
-      console.log(response.data.health);
-      if (response.data.health) {
-        setMinCalories(response.data.health.minCalories);
-        setMaxCalories(response.data.health.maxCalories);
-        loadRecipes(
-          response.data.allergens,
-          response.data.diet,
-          response.data.health.minCalories,
-          response.data.health.maxCalories
-        );
+      if (response.data.message === "loggedIn") {
+        setAllergens(response.data.allergens);
+        setDiet(response.data.diet);
+        console.log(response.data.health);
+        if (response.data.health) {
+          setMinCalories(response.data.health.minCalories);
+          setMaxCalories(response.data.health.maxCalories);
+          loadRecipes(
+            response.data.allergens,
+            response.data.diet,
+            response.data.health.minCalories,
+            response.data.health.maxCalories
+          );
+        } else {
+          loadRecipes(response.data.allergens, response.data.diet);
+        }
       } else {
-        loadRecipes(response.data.allergens, response.data.diet);
+        logOut();
       }
     });
   }, []);

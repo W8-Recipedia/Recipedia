@@ -176,13 +176,18 @@ const SearchView = () => {
     }, 500);
     navigate(`/app/search`);
   };
+
   useLayoutEffect(() => {
     getUserData().then((response) => {
-      setIntolerances(response.data.allergens);
-      setDiet(response.data.diet);
-      if (response.data.health) {
-        setMinCalories(response.data.health.minCalories);
-        setMaxCalories(response.data.health.maxCalories);
+      if (response.data.message === "loggedIn") {
+        setIntolerances(response.data.allergens);
+        setDiet(response.data.diet);
+        if (response.data.health) {
+          setMinCalories(response.data.health.minCalories);
+          setMaxCalories(response.data.health.maxCalories);
+        }
+      } else {
+        logOut();
       }
     });
   }, []);

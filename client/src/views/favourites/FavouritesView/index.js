@@ -84,14 +84,18 @@ const Favourites = () => {
 
   useLayoutEffect(() => {
     getUserData().then((response) => {
-      if (response.data.favourites) {
-        if (response.data.favourites.length > 0) {
-          loadMultipleRecipes(response.data.favourites);
+      if (response.data.message === "loggedIn") {
+        if (response.data.favourites) {
+          if (response.data.favourites.length > 0) {
+            loadMultipleRecipes(response.data.favourites);
+          } else {
+            setHasFavourites(false);
+          }
         } else {
           setHasFavourites(false);
         }
       } else {
-        setHasFavourites(false);
+        logOut();
       }
     });
   }, []);

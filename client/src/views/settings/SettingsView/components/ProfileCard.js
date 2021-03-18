@@ -11,7 +11,11 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { deleteAccount, getUserData } from "src/components/ServerRequests";
+import {
+  deleteAccount,
+  getUserData,
+  logOut,
+} from "src/components/ServerRequests";
 
 import { red } from "@material-ui/core/colors";
 import { useNavigate } from "react-router-dom";
@@ -44,6 +48,8 @@ const ProfileCard = ({ className, ...rest }) => {
         if (response.data.user.imageUrl) {
           setImageURL(response.data.user.imageUrl);
         }
+      } else {
+        logOut();
       }
     });
     getUserData().then((res) => {
@@ -79,7 +85,12 @@ const ProfileCard = ({ className, ...rest }) => {
             <Avatar className={classes.avatar} src={imageURL} />
           </Box>
           <Box pb={1}>
-            <Typography color="textPrimary" gutterBottom variant="h3" align="center">
+            <Typography
+              color="textPrimary"
+              gutterBottom
+              variant="h3"
+              align="center"
+            >
               {userName}
             </Typography>
           </Box>
