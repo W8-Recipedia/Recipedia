@@ -8,8 +8,8 @@ import {
   Dialog,
   DialogContent,
   DialogContentText,
+  FormControl,
   Grid,
-  Input,
   InputLabel,
   LinearProgress,
   ListItemText,
@@ -92,20 +92,37 @@ const cuisineNames = [
 ];
 
 const typeNames = [
-  "Main course",
-  "Side dish",
-  "Dessert",
   "Appetizer",
-  "Salad",
+  "Beverage",
   "Bread",
   "Breakfast",
-  "Soup",
-  "Beverage",
-  "Sauce",
-  "Marinade",
-  "Fingerfood",
-  "Snack",
+  "Dessert",
   "Drink",
+  "Fingerfood",
+  "Main course",
+  "Marinade",
+  "Salad",
+  "Sauce",
+  "Side dish",
+  "Snack",
+  "Soup",
+];
+
+const ingredientNames = [
+  "Tomato",
+  "Cheese",
+  "Potato",
+  "Egg",
+  "Chicken",
+  "Onion",
+  "Garlic",
+  "Flour",
+  "Butter",
+  "Salmon",
+  "Cod",
+  "Haddock",
+  "Milk",
+  "Beans",
 ];
 
 const SearchView = () => {
@@ -119,6 +136,7 @@ const SearchView = () => {
   const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
   const [cuisineName, setCuisineName] = useState([]);
   const [typeName, setTypeName] = useState([]);
+  const [ingredientName, setIngredientName] = useState([]);
   const [intolerances, setIntolerances] = useState([]);
   const [diet, setDiet] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -136,6 +154,7 @@ const SearchView = () => {
       diet,
       typeName.join(",").toLowerCase(),
       cuisineName.join(","),
+      ingredientName.join(",").toLowerCase(),
       offset,
       query ? query : searchQuery,
       minCalories ? minCalories : 0,
@@ -204,6 +223,10 @@ const SearchView = () => {
     setTypeName(event.target.value);
   };
 
+  const handleChangeIngredient = (event) => {
+    setIngredientName(event.target.value);
+  };
+
   const handleQuerySearch = (query) => {
     setRecipeList([]);
     setSearchQuery(query);
@@ -252,45 +275,72 @@ const SearchView = () => {
                   <Grid container spacing={3}>
                     <Searchbar onSubmit={handleQuerySearch} />
                     <Grid item md={3} xs={12}>
-                      <InputLabel>Type</InputLabel>
-                      <Select
-                        multiple
-                        fullWidth
-                        value={typeName}
-                        onChange={handleChangeType}
-                        input={<Input />}
-                        renderValue={(selected) => selected.join(", ")}
-                        MenuProps={MenuProps}
-                      >
-                        {typeNames.map((name) => (
-                          <MenuItem key={name} value={name}>
-                            <Checkbox checked={typeName.indexOf(name) > -1} />
-                            <ListItemText primary={name} />
-                          </MenuItem>
-                        ))}
-                      </Select>
+                      <FormControl fullWidth variant="outlined">
+                        <InputLabel>Type</InputLabel>
+                        <Select
+                          multiple
+                          fullWidth
+                          label="Type"
+                          value={typeName}
+                          onChange={handleChangeType}
+                          renderValue={(selected) => selected.join(", ")}
+                          MenuProps={MenuProps}
+                        >
+                          {typeNames.map((name) => (
+                            <MenuItem key={name} value={name}>
+                              <Checkbox checked={typeName.indexOf(name) > -1} />
+                              <ListItemText primary={name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
                     </Grid>
                     <Grid item md={3} xs={12}>
-                      <InputLabel>Cuisine</InputLabel>
-                      <Select
-                        multiple
-                        fullWidth
-                        value={cuisineName}
-                        onChange={handleChangeCuisine}
-                        input={<Input />}
-                        renderValue={(selected) => selected.join(", ")}
-                        MenuProps={MenuProps}
-                      >
-                        {cuisineNames.map((name) => (
-                          <MenuItem key={name} value={name}>
-                            <Checkbox
-                              checked={cuisineName.indexOf(name) > -1}
-                            />
-                            <ListItemText primary={name} />
-                          </MenuItem>
-                        ))}
-                      </Select>
+                      <FormControl fullWidth variant="outlined">
+                        <InputLabel>Cuisine</InputLabel>
+                        <Select
+                          multiple
+                          fullWidth
+                          label="Cuisine"
+                          value={cuisineName}
+                          onChange={handleChangeCuisine}
+                          renderValue={(selected) => selected.join(", ")}
+                          MenuProps={MenuProps}
+                        >
+                          {cuisineNames.map((name) => (
+                            <MenuItem key={name} value={name}>
+                              <Checkbox
+                                checked={cuisineName.indexOf(name) > -1}
+                              />
+                              <ListItemText primary={name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
                     </Grid>
+                    {/* <Grid item md={2} xs={12}>
+                      <FormControl fullWidth variant="outlined">
+                        <InputLabel>Ingredients</InputLabel>
+                        <Select
+                          multiple
+                          fullWidth
+                          label="Ingredients"
+                          value={ingredientName}
+                          onChange={handleChangeIngredient}
+                          renderValue={(selected) => selected.join(", ")}
+                          MenuProps={MenuProps}
+                        >
+                          {ingredientNames.map((name) => (
+                            <MenuItem key={name} value={name}>
+                              <Checkbox
+                                checked={ingredientName.indexOf(name) > -1}
+                              />
+                              <ListItemText primary={name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid> */}
                   </Grid>
                 </Box>
               </Card>

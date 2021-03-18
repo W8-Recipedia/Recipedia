@@ -163,7 +163,7 @@ app.post("/recipes/getRecipesComplex", (req, res) => {
   const instructions = `&instructionsRequired=true`;
   const recipeInformation = `&addRecipeInformation=true`;
   const recipeNutrition = `&addRecipeInformation=true`;
-  const ingredients = `&fillIngredients=true`;
+  const fillIngredients = `&fillIngredients=true`;
   const random = `&sort=random`;
   const intolerances = req.body.intolerances
     ? `&intolerances=${req.body.intolerances}`
@@ -171,6 +171,10 @@ app.post("/recipes/getRecipesComplex", (req, res) => {
   const diet = req.body.diet ? `&diet=${req.body.diet}` : ``;
   const type = req.body.dishtypes ? `&type=${req.body.dishtypes}` : ``;
   const cuisine = req.body.cuisines ? `&cuisine=${req.body.cuisines}` : ``;
+  // const ingredients = req.body.ingredients
+  //   ? `&includeIngredients=${req.body.ingredients}`
+  //   : ``;
+  const ingredients = ``;
   const query = req.body.query ? `&query=${req.body.query}` : ``;
   const minCalories = req.body.minCalories
     ? `&minCalories=${req.body.minCalories}`
@@ -180,7 +184,7 @@ app.post("/recipes/getRecipesComplex", (req, res) => {
     : ``;
   const offset = req.body.offset ? `&offset=${req.body.offset}` : ``;
   request(
-    `https://api.spoonacular.com/recipes/complexSearch?${apiKey}${recipeNumber}${instructions}${recipeInformation}${recipeNutrition}${ingredients}${random}${intolerances}${diet}${type}${cuisine}${query}${minCalories}${maxCalories}${offset}`,
+    `https://api.spoonacular.com/recipes/complexSearch?${apiKey}${recipeNumber}${instructions}${recipeInformation}${recipeNutrition}${fillIngredients}${random}${intolerances}${diet}${type}${cuisine}${ingredients}${query}${minCalories}${maxCalories}${offset}`,
     (error, response, body) => {
       res.json(JSON.parse(body));
     }
