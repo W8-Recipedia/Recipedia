@@ -239,7 +239,7 @@ app.post("/login", databaseSelect, (req, res) => {
 app.post("/googlelogin", (req, res) => {
   con.query(
     "SELECT * FROM users WHERE email = ?",
-    req.body.userprofile.email,
+    req.body.user.email,
     (err, result) => {
       if (err) {
         res.json({ message: err });
@@ -252,13 +252,9 @@ app.post("/googlelogin", (req, res) => {
       } else {
         res.json({
           message: "loggedIn",
-          token: jwt.sign(
-            { user: req.body.userprofile },
-            process.env.JWT_SECRET,
-            {
-              expiresIn: "30m",
-            }
-          ),
+          token: jwt.sign({ user: req.body.user }, process.env.JWT_SECRET, {
+            expiresIn: "30m",
+          }),
         });
       }
     }
@@ -450,6 +446,10 @@ app.post("/changeuserpreferences", verifyToken, (req, res) => {
         height: req.body.height,
         weight: req.body.weight,
         activity: req.body.activity,
+        age: req.body.age,
+        sex: req.body.sex,
+        minCalories: req.body.minCalories,
+        maxCalories: req.body.maxCalories,
       }),
       res.user.email,
     ],
