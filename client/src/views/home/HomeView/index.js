@@ -57,6 +57,8 @@ const Home = () => {
   const [diet, setDiet] = useState("");
   const [noResultsFound, setNoResultsFound] = useState(false);
   const [APIKeyUsed, setAPIKeyUsed] = useState(false);
+  const [minCalories, setMinCalories] = useState(0);
+  const [maxCalories, setMaxCalories] = useState(1000);
 
   const handleRecipeClick = (id) => {
     navigate(`/app/home/${id}`);
@@ -66,17 +68,22 @@ const Home = () => {
       handleRecipeClose();
     });
   };
-  const loadRecipes = () => {
+  const loadRecipes = (
+    newAllergens,
+    newDiet,
+    newMinCalories,
+    newMaxCalories
+  ) => {
     setLoading(true);
     getRecipesComplex(
-      allergens ? allergens.join(",") : null,
-      diet,
+      newAllergens ? newAllergens.join(",") : allergens,
+      newDiet ? newDiet : diet,
       null,
       null,
       recipeOffset,
       null,
-      0, // minCalories
-      1000 // maxCalories
+      newMinCalories ? newMinCalories : minCalories ? minCalories : 0,
+      newMaxCalories ? newMaxCalories : maxCalories ? maxCalories : 1000
     )
       .then((response) => {
         if (response.data.code === 402) {
@@ -108,7 +115,19 @@ const Home = () => {
     getUserData().then((response) => {
       setAllergens(response.data.allergens);
       setDiet(response.data.diet);
-      loadRecipes(response.data.allergens, response.data.diet);
+      console.log(response.data.health);
+      if (response.data.health) {
+        setMinCalories(response.data.health.minCalories);
+        setMaxCalories(response.data.health.maxCalories);
+        loadRecipes(
+          response.data.allergens,
+          response.data.diet,
+          response.data.health.minCalories,
+          response.data.health.maxCalories
+        );
+      } else {
+        loadRecipes(response.data.allergens, response.data.diet);
+      }
     });
   }, []);
 

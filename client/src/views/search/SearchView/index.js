@@ -126,6 +126,8 @@ const SearchView = () => {
   const [initialSearch, setInitialSearch] = useState(true);
   const [emptySearch, setEmptySearch] = useState(false);
   const [APIKeyUsed, setAPIKeyUsed] = useState(false);
+  const [minCalories, setMinCalories] = useState(0);
+  const [maxCalories, setMaxCalories] = useState(1000);
 
   const loadRecipes = (query = undefined, offset) => {
     setLoadingRecipes(true);
@@ -136,8 +138,8 @@ const SearchView = () => {
       cuisineName.join(","),
       offset,
       query ? query : searchQuery,
-      0, // minCalories
-      1000 // maxCalories
+      minCalories ? minCalories : 0,
+      maxCalories ? maxCalories : 1000
     )
       .then((response) => {
         if (response.data.code === 402) {
@@ -178,6 +180,10 @@ const SearchView = () => {
     getUserData().then((response) => {
       setIntolerances(response.data.allergens);
       setDiet(response.data.diet);
+      if (response.data.health) {
+        setMinCalories(response.data.health.minCalories);
+        setMaxCalories(response.data.health.maxCalories);
+      }
     });
   }, []);
 
@@ -303,7 +309,10 @@ const SearchView = () => {
                     {initialSearch ? (
                       "Start searching to find your new favourite recipes!"
                     ) : emptySearch && recipeList.length !== 0 ? (
-                      <Box pt={2}>No more recipes found.</Box>
+                      <Box pt={2}>
+                        No more recipes found for your health/dietary
+                        preferences.
+                      </Box>
                     ) : (
                       "We couldn't find any recipes for your health/dietary preferences."
                     )}
