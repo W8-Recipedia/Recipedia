@@ -4,6 +4,7 @@ import {
   CardActions,
   CardContent,
   Grid,
+  Hidden,
   Typography,
   makeStyles,
 } from "@material-ui/core";
@@ -139,7 +140,7 @@ const RecipeCard = ({ recipe, ...props }) => {
               display="flex"
               justifyContent="center"
               alignItems="center"
-              pr={3}
+              pr={2}
             >
               <IconButton disabled>
                 <WhatshotIcon color="primary" />
@@ -155,24 +156,49 @@ const RecipeCard = ({ recipe, ...props }) => {
               </Typography>
             </Box>
           </Grid>
-          <Grid item md={6}>
-            <Box display="flex" justifyContent="flex-start" alignItems="center">
-              <IconButton disabled>
-                <LocalDiningIcon color="primary" />
-              </IconButton>
-              <Typography
-                color="textSecondary"
-                display="inline"
-                variant="body2"
+          <Grid item md={6} xs={12}>
+            <Hidden mdUp>
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                pr={2}
               >
-                Servings: {recipe.servings}
-              </Typography>
-            </Box>
+                <IconButton disabled>
+                  <LocalDiningIcon color="primary" />
+                </IconButton>
+                <Typography
+                  color="textSecondary"
+                  display="inline"
+                  variant="body2"
+                >
+                  Servings: {recipe.servings}
+                </Typography>
+              </Box>
+            </Hidden>
+            <Hidden mdDown>
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <IconButton disabled>
+                  <LocalDiningIcon color="primary" />
+                </IconButton>
+                <Typography
+                  color="textSecondary"
+                  display="inline"
+                  variant="body2"
+                >
+                  Servings: {recipe.servings}
+                </Typography>
+              </Box>
+            </Hidden>
           </Grid>
           <Grid item md={6}>
             <Box
               display="flex"
-              justifyContent="flex-end"
+              justifyContent="center"
               alignItems="center"
               pr={2}
             >
@@ -212,14 +238,16 @@ const RecipeCard = ({ recipe, ...props }) => {
             </Box>
           </Grid>
 
-          <Grid item>
-            <IconButton onClick={handleFavouriteClick}>
-              {favourited ? (
-                <FavoriteIcon style={{ color: "red" }} />
-              ) : (
-                <FavoriteBorderIcon style={{ color: "red" }} />
-              )}
-            </IconButton>
+          <Grid item xs={12}>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <IconButton onClick={handleFavouriteClick}>
+                {favourited ? (
+                  <FavoriteIcon style={{ color: "red" }} />
+                ) : (
+                  <FavoriteBorderIcon style={{ color: "red" }} />
+                )}
+              </IconButton>
+            </Box>
           </Grid>
         </Grid>
       </CardActions>
