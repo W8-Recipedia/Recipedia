@@ -305,7 +305,7 @@ const SearchView = () => {
                     ) : emptySearch && recipeList.length !== 0 ? (
                       <Box pt={2}>No more recipes found.</Box>
                     ) : (
-                      "No recipes found (for your health / dietary preferences)."
+                      "We couldn't find any recipes for your health/dietary preferences."
                     )}
                   </Typography>
                 </Box>

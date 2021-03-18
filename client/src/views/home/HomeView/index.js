@@ -155,7 +155,8 @@ const Home = () => {
                       align="center"
                       variant="h3"
                     >
-                      No recipes found (for your health / dietary preferences).
+                      We couldn't find any recipes for your health/dietary
+                      preferences.
                     </Typography>
                   </Box>
                 </>
