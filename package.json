@@ -2,10 +2,9 @@
   "name": "recipedia",
   "version": "0.1.0",
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "client": "npm run start --prefix client",
     "server": "npm run server --prefix server",
-    "start": "concurrently \"npm start --prefix client\" \"node server\"",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
     "install:root": "npm install",
     "install:client": "cd client && npm install",
     "install:server": "cd server && npm install",
