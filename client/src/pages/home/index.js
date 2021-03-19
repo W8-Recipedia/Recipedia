@@ -120,6 +120,7 @@ const Home = () => {
     }, 500);
     navigate(`/app/home`);
   };
+
   useLayoutEffect(() => {
     getUserData().then((response) => {
       if (response.data.message === "loggedIn") {
@@ -184,6 +185,11 @@ const Home = () => {
           </Container>
           <Container maxWidth={false}>
             <Box mt={3}>
+              <RecipeList
+                recipes={recipeList}
+                onRecipeClick={handleRecipeClick}
+                loading={loading}
+              />
               {noResultsFound ? (
                 <>
                   <Box mt={2}>
@@ -193,20 +199,12 @@ const Home = () => {
                       align="center"
                       variant="h3"
                     >
-                      We couldn't find any recipes for your health/dietary
+                      We couldn't find any more recipes for your health/dietary
                       preferences.
                     </Typography>
                   </Box>
                 </>
-              ) : (
-                <>
-                  <RecipeList
-                    recipes={recipeList}
-                    onRecipeClick={handleRecipeClick}
-                    loading={loading}
-                  />
-                </>
-              )}
+              ) : null}
             </Box>
             <Grid item xs={12} className={classes.loadMoreButton}>
               <Box mt={3} style={{ display: noResultsFound && "none" }}>
