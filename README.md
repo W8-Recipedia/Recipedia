@@ -93,7 +93,7 @@ npm run install-all
 Starting Recipedia:
 
 ```cmd
-npm run dev
+npm start
 ```
 
 ## Built With
