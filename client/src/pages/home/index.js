@@ -72,18 +72,24 @@ const Home = () => {
     newAllergens,
     newDiet,
     newMinCalories,
-    newMaxCalories
+    newMaxCalories,
+    offset
   ) => {
     setLoading(true);
     getRecipesComplex(
-      newAllergens ? newAllergens.join(",") : allergens,
-      newDiet ? newDiet : diet,
+      newAllergens
+        ? newAllergens.join(",")
+        : allergens
+        ? allergens.join(",")
+        : null,
+      newDiet ? newDiet : diet ? diet : null,
       null,
       null,
-      recipeOffset,
       null,
-      newMinCalories ? newMinCalories : minCalories ? minCalories : 0,
-      newMaxCalories ? newMaxCalories : maxCalories ? maxCalories : 1000
+      offset,
+      null,
+      newMinCalories ? newMinCalories : minCalories ? minCalories : null,
+      newMaxCalories ? newMaxCalories : maxCalories ? maxCalories : null
     )
       .then((response) => {
         if (response.data.code === 402) {
@@ -91,9 +97,8 @@ const Home = () => {
         } else if (response.data.results) {
           if (response.data.results.length === 0) {
             setNoResultsFound(true);
-          } else {
-            setRecipeList([...recipeList, ...response.data.results]);
           }
+          setRecipeList([...recipeList, ...response.data.results]);
         } else {
           setNoResultsFound(true);
         }
@@ -127,10 +132,17 @@ const Home = () => {
             response.data.allergens,
             response.data.diet,
             response.data.health.minCalories,
-            response.data.health.maxCalories
+            response.data.health.maxCalories,
+            0
           );
         } else {
-          loadRecipes(response.data.allergens, response.data.diet);
+          loadRecipes(
+            response.data.allergens,
+            response.data.diet,
+            null,
+            null,
+            0
+          );
         }
       } else {
         logOut();
@@ -144,7 +156,7 @@ const Home = () => {
 
   const loadMoreRecipes = () => {
     setRecipeOffset(recipeOffset + recipeList.length);
-    loadRecipes();
+    loadRecipes(null, null, null, null, recipeOffset + recipeList.length);
   };
 
   return (

@@ -81,16 +81,12 @@ const activityMarks = [
 
 const calorieMarks = [
   {
-    value: 200,
-    label: "200 kcal",
-  },
-  {
     value: 500,
     label: "500 kcal",
   },
   {
-    value: 800,
-    label: "800 kcal",
+    value: 1000,
+    label: "1000 kcal",
   },
 ];
 
@@ -624,18 +620,18 @@ const Preferences = ({ className, ...rest }) => {
                   <>
                     Your data suggests you should eat{" "}
                     <Box fontWeight="bold" display="inline">
-                      {MealCalculation() > 1000 ? "a lot of meals" : "4 meals"}
+                      {MealCalculation() > 2000 ? "a lot of meals" : "4 meals"}
                     </Box>{" "}
                     with an average of{" "}
                     <Box fontWeight="bold" display="inline">
                       {Math.max(
                         100,
-                        Math.min(Math.round(0.85 * MealCalculation()), 900)
+                        Math.min(Math.round(0.85 * MealCalculation()), 1400)
                       )}{" "}
                       -{" "}
                       {Math.max(
                         200,
-                        Math.min(Math.round(1.15 * MealCalculation()), 1000)
+                        Math.min(Math.round(1.15 * MealCalculation()), 1500)
                       )}{" "}
                     </Box>{" "}
                     kcal per meal. You can set a range of calories for your
@@ -652,7 +648,7 @@ const Preferences = ({ className, ...rest }) => {
                     setButtonDisabled(false);
                   }}
                   min={0}
-                  max={1000}
+                  max={1500}
                   marks={calorieMarks}
                 />
               </Box>
