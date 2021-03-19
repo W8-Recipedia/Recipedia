@@ -47,7 +47,7 @@ const Home = () => {
   const navigate = useNavigate();
   const classes = useStyles();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedRecipeID, setSelectedRecipeID] = useState(0);
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState({});
   const [recipeList, setRecipeList] = useState([]);
@@ -190,20 +190,19 @@ const Home = () => {
                 onRecipeClick={handleRecipeClick}
                 loading={loading}
               />
-              {noResultsFound ? (
-                <>
-                  <Box mt={2}>
-                    <Typography
-                      className={classes.placeholderText}
-                      color="textSecondary"
-                      align="center"
-                      variant="h3"
-                    >
-                      We couldn't find any more recipes for your health/dietary
-                      preferences.
-                    </Typography>
-                  </Box>
-                </>
+              {(noResultsFound || recipeList.length === 0) && !loading ? (
+                <Box mt={2}>
+                  <Typography
+                    className={classes.placeholderText}
+                    color="textSecondary"
+                    align="center"
+                    variant="h3"
+                  >
+                    {noResultsFound
+                      ? "We couldn't find any more recipes for your health/dietary preferences."
+                      : "We couldn't find any recipes for your health/dietary preferences."}
+                  </Typography>
+                </Box>
               ) : null}
             </Box>
             <Grid item xs={12} className={classes.loadMoreButton}>

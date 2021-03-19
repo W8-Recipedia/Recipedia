@@ -647,7 +647,7 @@ const Preferences = ({ className, ...rest }) => {
                     setCalorieRange(value);
                     setButtonDisabled(false);
                   }}
-                  min={0}
+                  min={100}
                   max={1500}
                   marks={calorieMarks}
                 />
