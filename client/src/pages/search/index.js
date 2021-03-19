@@ -147,7 +147,7 @@ const SearchView = () => {
   const [minCalories, setMinCalories] = useState(0);
   const [maxCalories, setMaxCalories] = useState(1000);
 
-  const loadRecipes = (query = undefined, offset) => {
+  const loadRecipes = (query = null, offset) => {
     setLoadingRecipes(true);
     getRecipesComplex(
       intolerances ? intolerances.join(",") : null,
