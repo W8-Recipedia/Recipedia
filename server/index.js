@@ -183,9 +183,6 @@ app.post("/recipes/getRecipesComplex", (req, res) => {
     ? `&maxCalories=${req.body.maxCalories}`
     : `&minCalories=1500`;
   const offset = req.body.offset ? `&offset=${req.body.offset}` : ``;
-  console.log(
-    `https://api.spoonacular.com/recipes/complexSearch?${apiKey}${recipeNumber}${instructions}${recipeInformation}${fillIngredients}${random}${intolerances}${diet}${type}${cuisine}${ingredients}${query}${minCalories}${maxCalories}${offset}`
-  );
   request(
     `https://api.spoonacular.com/recipes/complexSearch?${apiKey}${recipeNumber}${instructions}${recipeInformation}${fillIngredients}${random}${intolerances}${diet}${type}${cuisine}${ingredients}${query}${minCalories}${maxCalories}${offset}`,
     (error, response, body) => {
