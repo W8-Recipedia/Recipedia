@@ -28,9 +28,15 @@ git clone https://github.com/W8-Recipedia/Recipedia.git
 
 Environment variables:
 
-Add a `.env` file to your root and client directories, and replace `[...]` with the relevant values.
+Add a `.env` file to your client and server directories, and replace `[...]` with the relevant values.
 
-.env
+client/.env
+
+```dosini
+REACT_APP_SERVER_URL=http://localhost:3001
+```
+
+server/.env
 
 ```dosini
 DATABASE_HOST=[DATABASE URL]
@@ -45,12 +51,6 @@ RECIPE_API_KEY=[SPOONACULAR API KEY]
 RECIPE_NUMBER=24
 RECIPEDIA_EMAIL=[USER VERIFICATION EMAIL ADDRESS]
 RECIPEDIA_PASSWORD=[USER VERIFICATION EMAIL PASSWORD]
-```
-
-client/.env
-
-```dosini
-REACT_APP_SERVER_URL=http://localhost:3001
 ```
 
 ---
