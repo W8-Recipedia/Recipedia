@@ -163,8 +163,7 @@ const SearchView = () => {
       .then((response) => {
         if (response.data.code === 402) {
           setAPIKeyUsed(true);
-        }
-        if (response.data.results) {
+        } else if (response.data.results) {
           if (response.data.results.length === 0) {
             setEmptySearch(true);
           } else {
@@ -173,6 +172,8 @@ const SearchView = () => {
               : setRecipeList(response.data.results);
             setLoadMore(true);
           }
+        } else {
+          setEmptySearch(true);
         }
       })
       .finally(() => {

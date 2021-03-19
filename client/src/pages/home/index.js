@@ -88,10 +88,14 @@ const Home = () => {
       .then((response) => {
         if (response.data.code === 402) {
           setAPIKeyUsed(true);
-        } else if (!response.data.results) {
-          setNoResultsFound(true);
+        } else if (response.data.results) {
+          if (response.data.results.length === 0) {
+            setNoResultsFound(true);
+          } else {
+            setRecipeList([...recipeList, ...response.data.results]);
+          }
         } else {
-          setRecipeList([...recipeList, ...response.data.results]);
+          setNoResultsFound(true);
         }
       })
       .finally(() => {
