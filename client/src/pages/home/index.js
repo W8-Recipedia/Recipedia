@@ -198,7 +198,7 @@ const Home = () => {
                     align="center"
                     variant="h3"
                   >
-                    {noResultsFound
+                    {recipeList.length !== 0
                       ? "We couldn't find any more recipes for your health/dietary preferences."
                       : "We couldn't find any recipes for your health/dietary preferences."}
                   </Typography>
