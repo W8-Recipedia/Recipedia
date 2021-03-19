@@ -4,7 +4,7 @@
   "scripts": {
     "client": "npm run start --prefix client",
     "server": "npm run server --prefix server",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "concurrently \"npm run client\" \"npm run server\"",
     "install:root": "npm install",
     "install:client": "cd client && npm install",
     "install:server": "cd server && npm install",
