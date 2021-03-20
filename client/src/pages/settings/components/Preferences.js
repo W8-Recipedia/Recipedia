@@ -519,9 +519,9 @@ const Preferences = ({ className, ...rest }) => {
                             !age ||
                             !sex
                               ? "Undefined"
-                              : MealCalculation() > 4000
+                              : MealCalculation() * 4 > 4000
                               ? "4000+"
-                              : MealCalculation() < 0
+                              : MealCalculation() * 4 < 0
                               ? "0"
                               : Math.round(MealCalculation() * 4)}
                           </Typography>
