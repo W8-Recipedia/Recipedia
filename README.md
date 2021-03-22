@@ -6,7 +6,7 @@
 !["Version"](https://img.shields.io/github/package-json/v/W8-Recipedia/Recipedia)
 !["Deploy"](https://img.shields.io/netlify/f95d5909-051d-4a94-ad17-4f8c86c80fc1)
 
-Recipedia is a web application that seeks to revolutionize the way that people find personalised recipes. It recommends the most suitable recipes to users based on their dietary preferences, allergies, and health data. It also has a search function, which allows users to filter recipes by cuisine and/or diet.
+Recipedia is a web application that revolutionizes the way that people find recipes. It recommends the most suitable recipes to users based on their dietary preferences, allergies, and health data. It also has a search function, which allows users to filter recipes by cuisine and/or diet.
 
 ## Getting Started
 
