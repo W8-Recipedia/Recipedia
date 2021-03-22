@@ -40,8 +40,8 @@ const FAQView = () => {
                     color="textSecondary"
                     component="p"
                   >
-                    If you have any questions, you'll find that they're likely
-                    answered right here.
+                    If you have any questions, you'll most likely find that
+                    they're answered right here.
                   </Typography>
                 </Box>
               </CardContent>
@@ -52,7 +52,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="What is Recipedia?"
-                  subheader="Recipedia is a web application that seeks to revolutionize the way that people find personalised recipes. It recommends the most suitable recipes to users based on their dietary preferences, allergies, and much more. It also has a search function, which allows users to filter recipes by cuisine, diet, or calories."
+                  subheader="Recipedia is a web application that revolutionizes the way that people find recipes. It recommends the most suitable recipes to users based on their dietary preferences, allergies, health data, and much more."
                 />
               </Card>
             </Box>
@@ -60,15 +60,15 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="How do I use Recipedia?"
-                  subheader="Recipedia is a lucid, quick and easy to navigate website.To get started with your Recipedia experience you should navigate to settings and fill in your preferences and health related information. Then navigate to the homepage where we curate and recommend delightful assortments based on your information entered within Recipedia's settings. You should examine each of the recommended recipes and save them for later by selecting the red heart displayed towards the bottom of the card. If you have a recipe you cannot find you can use the search page to find them."
+                  subheader="To get started, head over to settings and fill in all the relevant information that you would like to provide. Once you are done, you are ready to start your Recipedia experience! From now on, the home page will display recipes curated just for you. If you'd like to find any particular recipes, then the search page is your next destination. You can save any recipes that pique your interest using the heart icon, where they can be quickly found on the favourites page."
                 />
               </Card>
             </Box>
             <Box mb={3}>
               <Card>
                 <CardHeader
-                  title="Why are you asking for my details?"
-                  subheader="We ask for your details to vastly improve and personalise your experience with Recipedia. You will still be able to use Recipedia's functions without entering your preferences however you will not be able to utilise Recipedia to its full potential."
+                  title="Why does Recipedia ask for my details?"
+                  subheader="Your details help personalise your recipe searching experience. Recipedia is still entirely usable without the provision of your personal details, but the strength of recommendations will be limited."
                 />
               </Card>
             </Box>
@@ -76,7 +76,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="Will my information be secure?"
-                  subheader="Any infomation related to your account will be completely encrypted and safely stored within our databases."
+                  subheader="Any infomation that you choose to provide will be protected behind military-grade encryption and hashing algorithms."
                 />
               </Card>
             </Box>
@@ -84,7 +84,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="What is TDEE?"
-                  subheader="TDEE stands for total daily energy expenditure, it is a calculation that uses your age, weight, height and your BMI (BMI explained below). This calculation represents the amount of calories you burn per day. If you enter your age, weight and height in the settings panel we will calculate your TDEE and use this information to aid in the recommendation of recipes to you and further improve your experience with Recipedia."
+                  subheader="TDEE stands for 'Total Daily Energy Expenditure. It is a health metric that uses your sex, age and BMI in order to determine the number of calories that you should burn each day. If you choose to provide this information, then you will be given a caloric range recommendation for each meal of the day, which you can use to further tailor your Recipedia experience."
                 />
               </Card>
             </Box>
@@ -92,39 +92,39 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="What is BMI?"
-                  subheader="BMI stands for body mass index, it is a calculation that uses your height and weight to determine if your weight is of a healthy standard. This calculation is used to calculate your TDEE (see above)."
+                  subheader="BMI stands for 'Body Mass Index', which uses your height and weight to determine your nutritional status. This calculation also forms part of your TDEE."
                 />
               </Card>
             </Box>
             <Box mb={3}>
               <Card>
                 <CardHeader
-                  title="Where does Recipedia get its recipes from?"
-                  subheader="Recipedia utilises spoonacular API (https://spoonacular.com). Spoonacular is the best fit for Recipedia as their engineers have many years of knowledge on every aspect of food and its recipes. Additionally, their API consists of more than 5000 unique recipes which we filter through and find the best recipes for you."
+                  title="Where do the recipes come from?"
+                  subheader="Recipedia uses the Spoonacular API to filter through thousands of recipes, before parsing and displaying them beautifully for you to enjoy."
                 />
               </Card>
             </Box>
             <Box mb={3}>
               <Card>
                 <CardHeader
-                  title="Why isn't diet X or allergen Y or cuisine Z included?"
-                  subheader="The recipes listed on Recipdia are scraped from spoonacular API, therefore our recipes, allergies and cuisines are limited to their filters/parameters. However as Recipedia progresses we aim to expand our recipes, allergy and cuisine options."
+                  title="Why is my diet, allergen, or cuisine not available?"
+                  subheader="The recipes shown on Recipedia are limited by Spoonacular's list of diets, allergens and cuisines. We are continually working to implement a wider variety of filters, and appreciate your patience in the meantime."
                 />
               </Card>
             </Box>
             <Box mb={3}>
               <Card>
                 <CardHeader
-                  title="Why can't I change my name/email/password?"
-                  subheader="The reason you are unable to change your name, email or password is because you have signed into Recipedia using a Google Account. If you would like to change any of these details you will need to navigate to your Google account settings: https://myaccount.google.com"
+                  title="Why can I not change my name, email or password?"
+                  subheader="You have most likely signed in through Google, meaning that your personal data is synced with your Google account. If you'd like to change any of these details, including your avatar, you can do so through your Google settings."
                 />
               </Card>
             </Box>
             <Box mb={3}>
               <Card>
                 <CardHeader
-                  title="How do I report bugs/suggest features?"
-                  subheader="If you encounter a bug or simply want to suggest features, we would greatly appreciate it if you would inform us of this, to do this head over to the Feedback page and type your issue into the feedback field, your name and email will already be filled out for you."
+                  title="How do I report bugs or suggest features?"
+                  subheader="We are sorry that you found an issue with Recipedia. We would greatly appreciate if you could let us know about it through the feedback page. We thank you for helping make Recipedia better."
                 />
               </Card>
             </Box>
@@ -132,7 +132,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="Who built Recipedia?"
-                  subheader="Recipedia is developed by a group of students studying at the University of Manchester as a project in their first year."
+                  subheader="Recipedia was developed by a group of aspirational computer science students at the University of Manchester."
                 />
               </Card>
             </Box>
@@ -140,7 +140,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="How is Recipedia built?"
-                  subheader="Recipedia is built using the PERN stack, this entails the usage of PostgreSQL, Express, React and Nodejs. Recipedia is hosted using HerokuApp."
+                  subheader="Recipedia was created using React with Material-UI for the front-end, Express for the back-end, and MySQL for database management. The client is hosted on Netlify, and is connected to a server on Heroku."
                 />
               </Card>
             </Box>
