@@ -68,7 +68,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="Why does Recipedia ask for my details?"
-                  subheader="Your details help personalise your recipe searching experience. Recipedia is still entirely usable without the provision of your personal details, but the strength of recommendations will be limited."
+                  subheader="Your details help personalize your recipe searching experience. Recipedia is still entirely usable without the provision of your personal details, but the strength of recommendations will be limited."
                 />
               </Card>
             </Box>
