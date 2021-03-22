@@ -60,7 +60,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="How do I use Recipedia?"
-                  subheader="To get started, head over to settings and fill in all the relevant information that you would like to provide. Once you are done, you are ready to start your Recipedia experience! From now on, the home page will display recipes curated just for you. If you'd like to find any particular recipes, then the search page is your next destination. You can save any recipes that pique your interest using the heart icon, where they can be quickly found on the favourites page."
+                  subheader="To get started, head over to the settings page and fill in all the relevant information that you would like to provide us. You are now ready to start your Recipedia experience! From now on, the home page will display recipes curated just for you. If you'd like to find any particular recipes, then the search page is your next destination. You can save any recipes that pique your interest using the heart icon; these can quickly be found on the favourites page."
                 />
               </Card>
             </Box>
@@ -68,7 +68,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="Why does Recipedia ask for my details?"
-                  subheader="Your details help personalize your recipe searching experience. Recipedia is still entirely usable without the provision of your personal details, but the strength of recommendations will be limited."
+                  subheader="Your details help personalize your recipe finding experience. Recipedia is still entirely usable without the provision of your personal details, but the strength of recommendations will be severely limited."
                 />
               </Card>
             </Box>
@@ -76,7 +76,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="Will my information be secure?"
-                  subheader="Any infomation that you choose to provide will be protected behind military-grade encryption and hashing algorithms."
+                  subheader="Any infomation that you choose to provide will be protected using military-grade encryption algorithms."
                 />
               </Card>
             </Box>
@@ -84,7 +84,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="What is TDEE?"
-                  subheader="TDEE stands for 'Total Daily Energy Expenditure. It is a health metric that uses your sex, age and BMI in order to determine the number of calories that you should burn each day. If you choose to provide this information, then you will be given a caloric range recommendation for each meal of the day, which you can use to further tailor your Recipedia experience."
+                  subheader="TDEE stands for 'Total Daily Energy Expenditure'. It is a health metric that uses your sex, age and BMI in order to determine (approximately) the number of calories you burn each day. If you choose to provide the aforementioned details, you will be given a caloric range recommendation for each meal of the day, which you can use to further tailor the recipes shown to you."
                 />
               </Card>
             </Box>
@@ -92,7 +92,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="What is BMI?"
-                  subheader="BMI stands for 'Body Mass Index', which uses your height and weight to determine your nutritional status. This calculation also forms part of your TDEE."
+                  subheader="BMI stands for 'Body Mass Index', which uses your height and weight to determine your nutritional status. This calculation forms part of your TDEE."
                 />
               </Card>
             </Box>
@@ -116,7 +116,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="Why can I not change my name, email or password?"
-                  subheader="You have most likely signed in through Google, meaning that your personal data is synced with your Google account. If you'd like to change any of these details, including your avatar, you can do so through your Google settings."
+                  subheader="You have most likely signed in through Google, meaning that your personal data is synced with your Google account. If you'd like to change any of these details, including your profile picture, you can do so through your Google settings."
                 />
               </Card>
             </Box>
@@ -124,7 +124,15 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="How do I report bugs or suggest features?"
-                  subheader="We are sorry that you found an issue with Recipedia. We would greatly appreciate if you could let us know about it through the feedback page. We thank you for helping make Recipedia better."
+                  subheader="We are sorry that you found an issue with Recipedia! We would greatly appreciate if you would let us know about it through the feedback page. We thank you for helping make Recipedia a better platform."
+                />
+              </Card>
+            </Box>
+            <Box mb={3}>
+              <Card>
+                <CardHeader
+                  title="How is Recipedia built?"
+                  subheader="Recipedia was created using React with Material-UI for the front-end, Express for the back-end, and MySQL for the database management system. The client is hosted on Netlify, and is connected to a server on Heroku."
                 />
               </Card>
             </Box>
@@ -133,14 +141,6 @@ const FAQView = () => {
                 <CardHeader
                   title="Who built Recipedia?"
                   subheader="Recipedia was developed by a group of aspirational computer science students at the University of Manchester."
-                />
-              </Card>
-            </Box>
-            <Box mb={3}>
-              <Card>
-                <CardHeader
-                  title="How is Recipedia built?"
-                  subheader="Recipedia was created using React with Material-UI for the front-end, Express for the back-end, and MySQL for database management. The client is hosted on Netlify, and is connected to a server on Heroku."
                 />
               </Card>
             </Box>
