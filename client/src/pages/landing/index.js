@@ -175,16 +175,13 @@ const LandingView = ({ toggleDarkMode }) => {
                       <EmojiObjectsIcon style={{ fontSize: 50 }} />
                     </Avatar>
                   </Box>
-                  <Typography
-                    gutterBottom
-                    variant="h3"
-                    align="center"
-                  >
+                  <Typography gutterBottom variant="h3" align="center">
                     Smart recommendations
                   </Typography>
 
                   <Typography align="center">
-                    Get personalized recommendations for your health &amp; goals.
+                    Get personalized recommendations for your health &amp;
+                    goals.
                   </Typography>
                 </Box>
               </Card>
@@ -197,16 +194,12 @@ const LandingView = ({ toggleDarkMode }) => {
                       <BrushIcon style={{ fontSize: 50 }} />
                     </Avatar>
                   </Box>
-                  <Typography
-                    gutterBottom
-                    variant="h3"
-                    align="center"
-                  >
+                  <Typography gutterBottom variant="h3" align="center">
                     Easy customization
                   </Typography>
                   <Typography align="center">
-                    Specify your allergens, diet, and health data to find
-                    the best meals for you!
+                    Specify your allergens, diet, and health data to find the
+                    best meals for you!
                   </Typography>
                 </Box>
               </Card>
@@ -219,11 +212,7 @@ const LandingView = ({ toggleDarkMode }) => {
                       <SearchIcon style={{ fontSize: 50 }} />
                     </Avatar>
                   </Box>
-                  <Typography
-                    gutterBottom
-                    variant="h3"
-                    align="center"
-                  >
+                  <Typography gutterBottom variant="h3" align="center">
                     Unbounded search
                   </Typography>
 
@@ -242,11 +231,7 @@ const LandingView = ({ toggleDarkMode }) => {
                       <SaveIcon style={{ fontSize: 50 }} />
                     </Avatar>
                   </Box>
-                  <Typography
-                    gutterBottom
-                    variant="h3"
-                    align="center"
-                  >
+                  <Typography gutterBottom variant="h3" align="center">
                     Recipe saving
                   </Typography>
                   <Typography align="center">
