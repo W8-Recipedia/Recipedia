@@ -1,28 +1,30 @@
 import { Avatar, IconButton, Toolbar } from "@material-ui/core";
 import { Moon, Sun } from "react-feather";
 import { React, useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
+import {
+  AppBar,
+  Box,
+  Button,
+  Card,
+  Container,
+  Grid,
+  Typography,
+} from "@material-ui/core";
 import {
   ThemeProvider,
   createMuiTheme,
   responsiveFontSizes,
+  makeStyles,
 } from "@material-ui/core/styles";
 
-import AppBar from "@material-ui/core/AppBar";
-import Box from "@material-ui/core/Box";
 import BrushIcon from "@material-ui/icons/Brush";
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import Container from "@material-ui/core/Container";
 import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
-import Grid from "@material-ui/core/Grid";
-import Page from "src/components/theme/page";
 import RestaurantIcon from "@material-ui/icons/Restaurant";
-import { Link as RouterLink } from "react-router-dom";
 import SaveIcon from "@material-ui/icons/Save";
-import { Scrollbars } from "react-custom-scrollbars";
 import SearchIcon from "@material-ui/icons/Search";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import Page from "src/components/theme/page";
+import { Scrollbars } from "react-custom-scrollbars";
 
 const theme = responsiveFontSizes(
   createMuiTheme({
