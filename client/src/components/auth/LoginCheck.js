@@ -5,7 +5,7 @@ import LoginView from "src/pages/login";
 import { getUserData } from "src/components/ServerRequests";
 import { useNavigate } from "react-router-dom";
 
-export const LoginCheck = () => {
+export const LoginCheck = ({ toggleDarkMode }) => {
   const navigate = useNavigate();
   const [isloggedIn, setIsLoggedIn] = useState(() => {
     getUserData().then((response) => {
@@ -22,7 +22,7 @@ export const LoginCheck = () => {
     window.location.pathname === "/login" ? (
       <LoginView />
     ) : (
-      <LandingView />
+      <LandingView toggleDarkMode={toggleDarkMode} />
     )
   ) : null;
 };
