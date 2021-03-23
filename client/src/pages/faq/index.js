@@ -1,12 +1,17 @@
 import {
+  Avatar,
   Box,
   Card,
   CardContent,
   CardHeader,
   Container,
+  Divider,
+  Grid,
+  IconButton,
   Typography,
   makeStyles,
 } from "@material-ui/core";
+import { GitHub, Language, LinkedIn } from "@material-ui/icons";
 
 import Page from "src/components/theme/page";
 import React from "react";
@@ -18,6 +23,27 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "100%",
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
+  },
+  avatar: {
+    cursor: "pointer",
+    width: 100,
+    height: 100,
+  },
+  infobox1: {
+    [theme.breakpoints.up("xs")]: {
+      paddingBottom: theme.spacing(2),
+    },
+    [theme.breakpoints.up("md")]: {
+      paddingRight: theme.spacing(1),
+    },
+  },
+  infobox2: {
+    [theme.breakpoints.up("xs")]: {
+      paddingBottom: theme.spacing(2),
+    },
+    [theme.breakpoints.up("md")]: {
+      paddingLeft: theme.spacing(1),
+    },
   },
 }));
 
@@ -49,6 +75,203 @@ const FAQView = () => {
           </Container>
           <Container maxWidth={false}>
             <Box mb={3} mt={3}>
+              <Card>
+                <CardHeader
+                  title="Who built Recipedia?"
+                  subheader="Recipedia was developed by aspirational computer science students at the University of Manchester."
+                />
+              </Card>
+            </Box>
+            <Box mb={1} display="flex">
+              <Grid container>
+                <Grid item xs={12} md={6}>
+                  <Box className={classes.infobox1}>
+                    <Card>
+                      <Grid container>
+                        <Grid item xs={8} md={4}>
+                          <Box
+                            display="flex"
+                            justifyContent="center"
+                            pr={2}
+                            pt={2}
+                            pb={1}
+                          >
+                            <Typography
+                              color="textPrimary"
+                              gutterBottom
+                              variant="h4"
+                              align="center"
+                            >
+                              Aryan Agrawal
+                            </Typography>
+                          </Box>
+                          <Box
+                            display="flex"
+                            justifyContent="center"
+                            pr={2}
+                            pt={1}
+                            pb={2}
+                          >
+                            <Avatar
+                              className={classes.avatar}
+                              src="https://avatars.githubusercontent.com/u/57862028?s=500"
+                            />
+                          </Box>
+                        </Grid>
+                        <Grid item xs={4} md={1}>
+                          <Box pt={1} pb={2} pr={2}>
+                            <Box display="flex" justifyContent="center" pb={1}>
+                              <IconButton
+                                color="inherit"
+                                onClick={() => {
+                                  window.open(
+                                    "https://ary4n99.github.io/",
+                                    "_blank"
+                                  );
+                                }}
+                              >
+                                <Language />
+                              </IconButton>
+                            </Box>
+                            <Box display="flex" justifyContent="center" pb={1}>
+                              <IconButton
+                                color="inherit"
+                                onClick={() => {
+                                  window.open(
+                                    "https://github.com/ary4n99",
+                                    "_blank"
+                                  );
+                                }}
+                              >
+                                <GitHub />
+                              </IconButton>
+                            </Box>
+                            <Box display="flex" justifyContent="center">
+                              <IconButton
+                                color="inherit"
+                                onClick={() => {
+                                  window.open(
+                                    "https://www.linkedin.com/in/aryan-a",
+                                    "_blank"
+                                  );
+                                }}
+                              >
+                                <LinkedIn />
+                              </IconButton>
+                            </Box>
+                          </Box>
+                        </Grid>
+                        <Grid item xs={12} md={7}>
+                          <Box display="flex" justifyContent="center" p={2}>
+                            <Typography color="textPrimary" gutterBottom>
+                              Lorem ipsum dolor sit amet, consectetur adipiscing
+                              elit. Sed in eleifend odio. Ut fringilla lorem
+                              purus, non vestibulum augue rutrum eu. Morbi
+                              blandit nulla tellus, id molestie leo sagittis ac.
+                              Proin placerat laoreet orci sit amet vestibulum.
+                            </Typography>
+                          </Box>
+                        </Grid>
+                      </Grid>
+                    </Card>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box className={classes.infobox2}>
+                    <Card>
+                      <Grid container>
+                        <Grid item xs={8} md={4}>
+                          <Box
+                            display="flex"
+                            justifyContent="center"
+                            pr={2}
+                            pt={2}
+                            pb={1}
+                          >
+                            <Typography
+                              color="textPrimary"
+                              gutterBottom
+                              variant="h4"
+                              align="center"
+                            >
+                              Shadi Abumattar
+                            </Typography>
+                          </Box>
+                          <Box
+                            display="flex"
+                            justifyContent="center"
+                            pr={2}
+                            pt={1}
+                            pb={2}
+                          >
+                            <Avatar
+                              className={classes.avatar}
+                              src="https://avatars.githubusercontent.com/u/40639965?s=500"
+                            />
+                          </Box>
+                        </Grid>
+                        <Grid item xs={4} md={1}>
+                          <Box pt={1} pb={2} pr={2}>
+                            <Box display="flex" justifyContent="center" pb={1}>
+                              <IconButton
+                                color="inherit"
+                                onClick={() => {
+                                  window.open(
+                                    "https://abumattarsa.github.io",
+                                    "_blank"
+                                  );
+                                }}
+                              >
+                                <Language />
+                              </IconButton>
+                            </Box>
+                            <Box display="flex" justifyContent="center" pb={1}>
+                              <IconButton
+                                color="inherit"
+                                onClick={() => {
+                                  window.open(
+                                    "https://github.com/AbumattarSA",
+                                    "_blank"
+                                  );
+                                }}
+                              >
+                                <GitHub />
+                              </IconButton>
+                            </Box>
+                            <Box display="flex" justifyContent="center">
+                              <IconButton
+                                color="inherit"
+                                onClick={() => {
+                                  window.open(
+                                    " https://www.linkedin.com/in/AbumattarSA",
+                                    "_blank"
+                                  );
+                                }}
+                              >
+                                <LinkedIn />
+                              </IconButton>
+                            </Box>
+                          </Box>
+                        </Grid>
+                        <Grid item xs={12} md={7}>
+                          <Box display="flex" justifyContent="center" p={2}>
+                            <Typography color="textPrimary" gutterBottom>
+                              Lorem ipsum dolor sit amet, consectetur adipiscing
+                              elit. Sed in eleifend odio. Ut fringilla lorem
+                              purus, non vestibulum augue rutrum eu. Morbi
+                              blandit nulla tellus, id molestie leo sagittis ac.
+                              Proin placerat laoreet orci sit amet vestibulum.
+                            </Typography>
+                          </Box>
+                        </Grid>
+                      </Grid>
+                    </Card>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
+              <Divider style={{ marginTop: "20px", marginBottom: "35px" }} />
+            <Box mb={3}>
               <Card>
                 <CardHeader
                   title="What is Recipedia?"
@@ -133,14 +356,6 @@ const FAQView = () => {
                 <CardHeader
                   title="How is Recipedia built?"
                   subheader="Recipedia was created using React with Material-UI for the front-end, Express for the back-end, and MySQL for the database management system. The client is hosted on Netlify, and is connected to a server on Heroku."
-                />
-              </Card>
-            </Box>
-            <Box mb={3}>
-              <Card>
-                <CardHeader
-                  title="Who built Recipedia?"
-                  subheader="Recipedia was developed by a group of aspirational computer science students at the University of Manchester."
                 />
               </Card>
             </Box>
