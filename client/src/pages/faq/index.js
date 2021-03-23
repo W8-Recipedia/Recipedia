@@ -113,6 +113,7 @@ const FAQView = () => {
                             pb={2}
                           >
                             <Avatar
+                              alt="Aryan Agrawal"
                               className={classes.avatar}
                               src="https://avatars.githubusercontent.com/u/57862028?s=500"
                             />
@@ -205,6 +206,7 @@ const FAQView = () => {
                             pb={2}
                           >
                             <Avatar
+                              alt="Shadi Abumattar"
                               className={classes.avatar}
                               src="https://avatars.githubusercontent.com/u/40639965?s=500"
                             />
@@ -270,7 +272,7 @@ const FAQView = () => {
                 </Grid>
               </Grid>
             </Box>
-              <Divider style={{ marginTop: "20px", marginBottom: "35px" }} />
+            <Divider style={{ marginTop: "20px", marginBottom: "35px" }} />
             <Box mb={3}>
               <Card>
                 <CardHeader
