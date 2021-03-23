@@ -177,14 +177,18 @@ const LandingView = ({ toggleDarkMode }) => {
           </Container>
         </Box>
         <Box>
-            <Typography color="textSecondary" className={classes.midTitle} variant="h1">
-              Welcome to the new way to cook.
-            </Typography>
+          <Typography
+            color="textSecondary"
+            className={classes.midTitle}
+            variant="h1"
+          >
+            Your one-stop destination for recipes.
+          </Typography>
         </Box>
         <Box m={10} mt={8} mb={12}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={3}>
-              <Card>
+              <Card raised>
                 <Box p={2}>
                   <Box display="flex" justifyContent="center" pb={2}>
                     <Avatar className={classes.avatar}>
@@ -192,7 +196,7 @@ const LandingView = ({ toggleDarkMode }) => {
                     </Avatar>
                   </Box>
                   <Typography gutterBottom variant="h3" align="center">
-                    Smart recommendations
+                    Smart suggestions
                   </Typography>
 
                   <Typography className={classes.cardDescriptions}>
@@ -203,7 +207,7 @@ const LandingView = ({ toggleDarkMode }) => {
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Card>
+              <Card raised>
                 <Box p={2}>
                   <Box display="flex" justifyContent="center" pb={2}>
                     <Avatar className={classes.avatar}>
@@ -221,7 +225,7 @@ const LandingView = ({ toggleDarkMode }) => {
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Card>
+              <Card raised>
                 <Box p={2}>
                   <Box display="flex" justifyContent="center" pb={2}>
                     <Avatar className={classes.avatar}>
@@ -239,7 +243,7 @@ const LandingView = ({ toggleDarkMode }) => {
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Card>
+              <Card raised>
                 <Box p={2}>
                   <Box display="flex" justifyContent="center" pb={2}>
                     <Avatar className={classes.avatar}>
