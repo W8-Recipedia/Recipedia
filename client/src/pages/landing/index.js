@@ -59,6 +59,10 @@ const useStyles = makeStyles((theme) => ({
   cardIcons: {
     fontSize: 50,
   },
+  cardDescriptions: {
+    paddingTop: "12px",
+    textAlign: "center",
+  },
   heroContent: {
     backgroundColor: theme.palette.background.paper,
   },
@@ -181,7 +185,7 @@ const LandingView = ({ toggleDarkMode }) => {
                     Smart recommendations
                   </Typography>
 
-                  <Typography align="center">
+                  <Typography className={classes.cardDescriptions}>
                     Get personalized recommendations for your health &amp;
                     goals.
                   </Typography>
@@ -197,9 +201,9 @@ const LandingView = ({ toggleDarkMode }) => {
                     </Avatar>
                   </Box>
                   <Typography gutterBottom variant="h3" align="center">
-                    Easy customization
+                    Effortless customization
                   </Typography>
-                  <Typography align="center">
+                  <Typography className={classes.cardDescriptions}>
                     Specify your allergens, diet, and health data to find the
                     best meals for you!
                   </Typography>
@@ -215,10 +219,9 @@ const LandingView = ({ toggleDarkMode }) => {
                     </Avatar>
                   </Box>
                   <Typography gutterBottom variant="h3" align="center">
-                    Unbounded search
+                    Boundless search
                   </Typography>
-
-                  <Typography align="center">
+                  <Typography className={classes.cardDescriptions}>
                     Filter by cuisines and dish types to find the recipes you
                     really want to eat!
                   </Typography>
@@ -236,9 +239,9 @@ const LandingView = ({ toggleDarkMode }) => {
                   <Typography gutterBottom variant="h3" align="center">
                     Recipe saving
                   </Typography>
-                  <Typography align="center">
-                    Save your favourite recipes for quick and easy access in the
-                    future.
+                  <Typography className={classes.cardDescriptions}>
+                    Save your favourite recipes for easy access anytime and
+                    anywhere.
                   </Typography>
                 </Box>
               </Card>
