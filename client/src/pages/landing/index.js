@@ -21,7 +21,7 @@ import {
 import BrushIcon from "@material-ui/icons/Brush";
 import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
 import RestaurantIcon from "@material-ui/icons/Restaurant";
-import SaveIcon from "@material-ui/icons/Save";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 import SearchIcon from "@material-ui/icons/Search";
 import Page from "src/components/theme/page";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -249,15 +249,15 @@ const LandingView = ({ toggleDarkMode }) => {
                 <Box p={2}>
                   <Box display="flex" justifyContent="center" pb={2}>
                     <Avatar className={classes.avatar}>
-                      <SaveIcon className={classes.cardIcons} />
+                      <FavoriteIcon className={classes.cardIcons} />
                     </Avatar>
                   </Box>
                   <Typography gutterBottom variant="h3" align="center">
-                    Recipe saving
+                    Favourite recipes
                   </Typography>
                   <Typography className={classes.cardDescriptions}>
-                    Save your favourite recipes for easy access anytime and
-                    anywhere.
+                    Save the recipes you can't get enough of for easy access any
+                    time and anywhere.
                   </Typography>
                 </Box>
               </Card>
