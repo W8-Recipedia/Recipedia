@@ -15,7 +15,6 @@ import Card from "@material-ui/core/Card";
 import Container from "@material-ui/core/Container";
 import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
 import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
 import Page from "src/components/theme/page";
 import RestaurantIcon from "@material-ui/icons/Restaurant";
 import { Link as RouterLink } from "react-router-dom";
@@ -56,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     height: 100,
     width: 100,
+  },
+  cardIcons: {
+    fontSize: 50,
   },
   heroContent: {
     backgroundColor: theme.palette.background.paper,
@@ -131,8 +133,8 @@ const LandingView = ({ toggleDarkMode }) => {
                 color="textSecondary"
                 paragraph
               >
-                Recipedia is a revolutionary recipe recommendation site built
-                using React and Express.
+                A revolutionary recipe recommendation site built using React and
+                Express.
               </Typography>
             </Box>
             <Grid container spacing={3} justify="center">
@@ -172,7 +174,7 @@ const LandingView = ({ toggleDarkMode }) => {
                 <Box p={2}>
                   <Box display="flex" justifyContent="center" pb={2}>
                     <Avatar className={classes.avatar}>
-                      <EmojiObjectsIcon style={{ fontSize: 50 }} />
+                      <EmojiObjectsIcon className={classes.cardIcons} />
                     </Avatar>
                   </Box>
                   <Typography gutterBottom variant="h3" align="center">
@@ -191,7 +193,7 @@ const LandingView = ({ toggleDarkMode }) => {
                 <Box p={2}>
                   <Box display="flex" justifyContent="center" pb={2}>
                     <Avatar className={classes.avatar}>
-                      <BrushIcon style={{ fontSize: 50 }} />
+                      <BrushIcon className={classes.cardIcons} />
                     </Avatar>
                   </Box>
                   <Typography gutterBottom variant="h3" align="center">
@@ -209,7 +211,7 @@ const LandingView = ({ toggleDarkMode }) => {
                 <Box p={2}>
                   <Box display="flex" justifyContent="center" pb={2}>
                     <Avatar className={classes.avatar}>
-                      <SearchIcon style={{ fontSize: 50 }} />
+                      <SearchIcon className={classes.cardIcons} />
                     </Avatar>
                   </Box>
                   <Typography gutterBottom variant="h3" align="center">
@@ -228,7 +230,7 @@ const LandingView = ({ toggleDarkMode }) => {
                 <Box p={2}>
                   <Box display="flex" justifyContent="center" pb={2}>
                     <Avatar className={classes.avatar}>
-                      <SaveIcon style={{ fontSize: 50 }} />
+                      <SaveIcon className={classes.cardIcons} />
                     </Avatar>
                   </Box>
                   <Typography gutterBottom variant="h3" align="center">
