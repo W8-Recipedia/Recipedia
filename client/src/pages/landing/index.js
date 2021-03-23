@@ -246,10 +246,7 @@ const LandingView = ({ toggleDarkMode }) => {
         <Box className={classes.footer}>
           <Typography variant="body2" color="textSecondary" align="center">
             {"Copyright © "}
-            <Link color="inherit" href="https://material-ui.com/">
-              Recipedia
-            </Link>{" "}
-            {new Date().getFullYear()}
+            Recipedia {new Date().getFullYear()}
           </Typography>
         </Box>
       </Page>
