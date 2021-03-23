@@ -43,6 +43,11 @@ const useStyles = makeStyles((theme) => ({
   topBarTitle: {
     flexGrow: 1,
   },
+  midTitle: {
+    fontWeight: 390,
+    textAlign: "center",
+    paddingTop: "50px",
+  },
   heroTitle: {
     fontSize: 84,
     [theme.breakpoints.up("xs")]: {
@@ -171,7 +176,12 @@ const LandingView = ({ toggleDarkMode }) => {
             </Grid>
           </Container>
         </Box>
-        <Box m={10} mt={12} mb={12}>
+        <Box>
+            <Typography color="textSecondary" className={classes.midTitle} variant="h1">
+              Welcome to the new way to cook.
+            </Typography>
+        </Box>
+        <Box m={10} mt={8} mb={12}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={3}>
               <Card>
