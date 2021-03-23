@@ -126,7 +126,7 @@ const FAQView = () => {
                                 color="inherit"
                                 onClick={() => {
                                   window.open(
-                                    "https://ary4n99.github.io/",
+                                    "https://ary4n99.github.io",
                                     "_blank"
                                   );
                                 }}
@@ -258,11 +258,13 @@ const FAQView = () => {
                         <Grid item xs={12} md={7}>
                           <Box display="flex" justifyContent="center" p={2}>
                             <Typography color="textPrimary" gutterBottom>
-                              Lorem ipsum dolor sit amet, consectetur adipiscing
-                              elit. Sed in eleifend odio. Ut fringilla lorem
-                              purus, non vestibulum augue rutrum eu. Morbi
-                              blandit nulla tellus, id molestie leo sagittis ac.
-                              Proin placerat laoreet orci sit amet vestibulum.
+                              "This is the product of motivated individuals
+                              driven by the desire to create a recipe
+                              application that is both modern and convenient for
+                              students and other consumers alike. I hope you
+                              find that Recipedia transforms the way in which
+                              you now look for recipes, much like it did for
+                              me."
                             </Typography>
                           </Box>
                         </Grid>
