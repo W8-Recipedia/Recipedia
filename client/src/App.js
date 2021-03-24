@@ -56,7 +56,18 @@ const App = () => {
               { path: "login", element: <LoginCheck /> },
               { path: "legal", element: <LegalView /> },
               { path: "verify/*", element: <VerifyView /> },
-              { path: "", element: <LoginCheck /> },
+              {
+                path: "",
+                element: (
+                  <LoginCheck
+                    toggleDarkMode={() => {
+                      theme === Theme.light
+                        ? setTheme(Theme.dark)
+                        : setTheme(Theme.light);
+                    }}
+                  />
+                ),
+              },
               { path: "*", element: <NotFoundView /> },
             ],
           },
