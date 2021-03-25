@@ -17,7 +17,7 @@ import React, { useLayoutEffect, useState } from "react";
 import {
   getUserData,
   logOut,
-  submitFeeback,
+  submitFeedback,
 } from "src/components/ServerRequests";
 
 import Page from "src/components/theme/page";
@@ -71,7 +71,7 @@ const FeedbackView = ({ className, ...rest }) => {
     if (values.feedback.length < 150) {
       setFeedbackError(true);
     } else {
-      submitFeeback(values.feedback).then((response) => {
+      submitFeedback(values.feedback).then((response) => {
         setFeedbackStatus(response.data.message);
         setFeedbackDialogOpen(true);
       });
