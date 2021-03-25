@@ -78,7 +78,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="Who built Recipedia?"
-                  subheader="Recipedia was developed by aspirational computer science students at the University of Manchester."
+                  subheader="Recipedia was developed by a group of aspirational computer science students at the University of Manchester."
                 />
               </Card>
             </Box>
