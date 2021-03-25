@@ -165,11 +165,11 @@ const FAQView = () => {
                         <Grid item xs={12} md={7}>
                           <Box display="flex" justifyContent="center" p={2}>
                             <Typography color="textPrimary" gutterBottom>
-                              Lorem ipsum dolor sit amet, consectetur adipiscing
-                              elit. Sed in eleifend odio. Ut fringilla lorem
-                              purus, non vestibulum augue rutrum eu. Morbi
-                              blandit nulla tellus, id molestie leo sagittis ac.
-                              Proin placerat laoreet orci sit amet vestibulum.
+                              With one of my first coding projects being a website,
+                              I've always been passionate about web development;
+                              Recipedia has amplified that enthusiasm further
+                              than ever. Some of my other interests include
+                              quantitative analysis and AI/ML.
                             </Typography>
                           </Box>
                         </Grid>
