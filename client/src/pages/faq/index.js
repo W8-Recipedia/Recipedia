@@ -165,11 +165,11 @@ const FAQView = () => {
                         <Grid item xs={12} md={7}>
                           <Box display="flex" justifyContent="center" p={2}>
                             <Typography color="textPrimary" gutterBottom>
-                              With one of my first coding projects being a website,
-                              I've always been passionate about web development;
-                              Recipedia has amplified that enthusiasm further
-                              than ever. Some of my other interests include
-                              quantitative analysis and AI/ML.
+                              With one of my first coding projects being a
+                              website, I've always been passionate about web
+                              development; Recipedia has amplified that
+                              enthusiasm further than ever. Some of my other
+                              interests include quantitative analysis and AI/ML.
                             </Typography>
                           </Box>
                         </Grid>
@@ -258,13 +258,11 @@ const FAQView = () => {
                         <Grid item xs={12} md={7}>
                           <Box display="flex" justifyContent="center" p={2}>
                             <Typography color="textPrimary" gutterBottom>
-                              "This is the product of motivated individuals
-                              driven by the desire to create a recipe
-                              application that is both modern and convenient for
-                              students and other consumers alike. I hope you
-                              find that Recipedia transforms the way in which
-                              you now look for recipes, much like it did for
-                              me."
+                              This passion project solved my dilemma of finding
+                              the best recipes to cook at university, with the
+                              added benefit of uncovering my new-found love for
+                              full stack development. My other interests include
+                              data engineering and AI/ML.
                             </Typography>
                           </Box>
                         </Grid>
