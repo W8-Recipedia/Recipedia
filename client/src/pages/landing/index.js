@@ -178,7 +178,7 @@ const LandingView = ({ toggleDarkMode }) => {
             </Grid>
           </Container>
         </Box>
-        <Box>
+        <Box p={2}>
           <Typography
             color="textSecondary"
             className={classes.midTitle}
