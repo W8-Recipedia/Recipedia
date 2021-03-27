@@ -169,7 +169,8 @@ const FAQView = () => {
                               website, I've always been passionate about web
                               development; Recipedia has amplified that
                               enthusiasm further than ever. Some of my other
-                              interests include quantitative analysis and AI/ML.
+                              interests include quantitative analysis and
+                              machine learning.
                             </Typography>
                           </Box>
                         </Grid>
@@ -262,7 +263,7 @@ const FAQView = () => {
                               the best recipes to cook at university, with the
                               added benefit of uncovering my new-found love for
                               full stack development. My other interests include
-                              data engineering and AI/ML.
+                              data engineering and AI.
                             </Typography>
                           </Box>
                         </Grid>
@@ -301,7 +302,7 @@ const FAQView = () => {
               <Card>
                 <CardHeader
                   title="Will my information be secure?"
-                  subheader="Any infomation that you choose to provide will be protected using military-grade encryption algorithms."
+                  subheader="Any information that you choose to provide will be protected using military-grade encryption algorithms."
                 />
               </Card>
             </Box>
