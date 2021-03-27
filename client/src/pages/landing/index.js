@@ -80,6 +80,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(4),
   },
+  card: {
+    height: "100%",
+  },
 }));
 
 const LandingView = ({ toggleDarkMode }) => {
@@ -190,7 +193,7 @@ const LandingView = ({ toggleDarkMode }) => {
         <Box m={10} mt={8} mb={12}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={3}>
-              <Card raised>
+              <Card raised className={classes.card}>
                 <Box p={2}>
                   <Box display="flex" justifyContent="center" pb={2}>
                     <Avatar className={classes.avatar}>
@@ -203,13 +206,13 @@ const LandingView = ({ toggleDarkMode }) => {
 
                   <Typography className={classes.cardDescriptions}>
                     Get personalized recommendations for your health &amp;
-                    goals.
+                    fitness goals.
                   </Typography>
                 </Box>
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Card raised>
+              <Card raised className={classes.card}>
                 <Box p={2}>
                   <Box display="flex" justifyContent="center" pb={2}>
                     <Avatar className={classes.avatar}>
@@ -227,7 +230,7 @@ const LandingView = ({ toggleDarkMode }) => {
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Card raised>
+              <Card raised className={classes.card}>
                 <Box p={2}>
                   <Box display="flex" justifyContent="center" pb={2}>
                     <Avatar className={classes.avatar}>
@@ -245,7 +248,7 @@ const LandingView = ({ toggleDarkMode }) => {
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Card raised>
+              <Card raised className={classes.card}>
                 <Box p={2}>
                   <Box display="flex" justifyContent="center" pb={2}>
                     <Avatar className={classes.avatar}>
@@ -256,8 +259,8 @@ const LandingView = ({ toggleDarkMode }) => {
                     Favourite recipes
                   </Typography>
                   <Typography className={classes.cardDescriptions}>
-                    Save the recipes you can't get enough of for easy access any
-                    time and anywhere.
+                    Save the recipes you can't get enough of for easy access
+                    anytime and anywhere.
                   </Typography>
                 </Box>
               </Card>
