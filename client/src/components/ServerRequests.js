@@ -203,7 +203,7 @@ export const changePassword = async (oldpassword, newpassword) => {
   }
 };
 
-export const submitFeeback = async (feedback) => {
+export const submitFeedback = async (feedback) => {
   if (localStorage.getItem("token")) {
     const response = await Axios.post(
       process.env.REACT_APP_SERVER_URL + "/submitfeedback",
