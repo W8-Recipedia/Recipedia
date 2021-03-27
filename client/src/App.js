@@ -55,7 +55,6 @@ const App = () => {
               { path: "signup", element: <SignUpView /> },
               { path: "login", element: <LoginCheck /> },
               { path: "legal", element: <LegalView /> },
-              { path: "faq", element: <FAQView /> },
               { path: "verify/*", element: <VerifyView /> },
               { path: "", element: <LoginCheck /> },
               { path: "*", element: <NotFoundView /> },
