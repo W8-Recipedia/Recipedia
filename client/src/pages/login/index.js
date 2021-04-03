@@ -238,7 +238,7 @@ const LoginView = () => {
                       ? "Please log in with your Google account!"
                       : loginStatus === "accountNotVerified"
                       ? "Please verify your email before logging in!"
-                      : "Unkown error."}
+                      : "Unknown error."}
                   </Box>
                 </DialogContentText>
               </DialogContent>

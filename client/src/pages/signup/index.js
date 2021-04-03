@@ -453,7 +453,7 @@ const SignUpView = () => {
                     ? "Account created! Please verify your email before logging in. You can now close this tab."
                     : signUpStatus === "ER_DUP_ENTRY"
                     ? "There is already an account linked to this email address! Please log in to use Recipedia."
-                    : "Unkown error."}
+                    : "Unknown error."}
                 </Box>
               </DialogContentText>
             </DialogContent>

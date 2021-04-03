@@ -157,7 +157,7 @@ const VerifyView = () => {
                     ? "Please sign up first!"
                     : emailStatus === "emailSuccess"
                     ? "A verification email has been sent to your email adress. You can now close this tab."
-                    : "Unkown error."}
+                    : "Unknown error."}
                 </Box>
               </DialogContentText>
             </DialogContent>
