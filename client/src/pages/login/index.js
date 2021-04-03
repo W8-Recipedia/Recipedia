@@ -106,7 +106,7 @@ const LoginView = () => {
                   <Grid container spacing={3}>
                     <Grid item xs={12}>
                       <GoogleLogin
-                        clientId="265952619085-t28mi10gaiq8i88615gkf095289ulddj.apps.googleusercontent.com"
+                        clientId="26004639001-sv0fv7st0emr0mi17n8jlgd6sipafam6.apps.googleusercontent.com"
                         buttonText="Log in with Google"
                         onSuccess={handleGoogleLogin}
                         onFailure={handleGoogleLogin}
