@@ -24,9 +24,7 @@ const con = mysql.createConnection({
 });
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  port: 587,
-  secure: false,
+  service: "Sendgrid",
   auth: {
     user: process.env.RECIPEDIA_EMAIL,
     pass: process.env.RECIPEDIA_PASSWORD,
