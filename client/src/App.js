@@ -52,8 +52,8 @@ const App = () => {
           {
             path: "/",
             children: [
-              { path: "signup", element: <SignUpView /> },
               { path: "login", element: <LoginCheck /> },
+              { path: "signup", element: <Navigate to="/login" /> },
               { path: "legal", element: <LegalView /> },
               { path: "verify/*", element: <VerifyView /> },
               {
